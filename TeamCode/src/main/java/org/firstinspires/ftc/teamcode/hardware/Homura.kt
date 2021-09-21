@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware
 
-import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.control.system.Subsystem
 import org.firstinspires.ftc.teamcode.util.hw.DTPowers
+import org.firstinspires.ftc.teamcode.util.hw.HWUtil
 import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 import kotlin.math.max
@@ -25,10 +25,11 @@ class Homura : Subsystem() {
     }
 
     override fun init(vararg motors: ExpansionHubMotor) {
-        for (m in motors) {
-            m.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            m.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        }
+//        for (m in motors) {
+//            m.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//            m.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        }
+        HWUtil.defaultMotorSetup(motors)
     }
 
     override fun update() {

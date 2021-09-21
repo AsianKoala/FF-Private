@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.control.system
+package org.firstinspires.ftc.teamcode.deprecated
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.control.path.Path
+import org.firstinspires.ftc.teamcode.control.system.BaseOpMode
 
 @Disabled
 @Deprecated("need to have a working version for akemi")

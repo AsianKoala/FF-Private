@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.control.path.builders.PurePursuitBuilder
 import org.firstinspires.ftc.teamcode.control.path.waypoints.LockedWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.StopWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
-import org.firstinspires.ftc.teamcode.control.system.BaseAuto
 import org.firstinspires.ftc.teamcode.util.debug.Debuggable
 import org.firstinspires.ftc.teamcode.util.math.Angle
 import org.firstinspires.ftc.teamcode.util.math.AngleUnit
