@@ -1,5 +1,5 @@
 import com.qualcomm.robotcore.util.Range
-import org.firstinspires.ftc.teamcode.control.test.PIDFController
+import org.firstinspires.ftc.teamcode.control.motion.PIDFController
 import kotlin.math.abs
 
 object PIDFControllerTest {

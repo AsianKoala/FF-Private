@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.deprecated
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -19,6 +19,7 @@ import kotlin.math.PI
 @Debuggable
 @Autonomous
 @Disabled
+@Deprecated("yep")
 class AzusaAuto : BaseAuto() {
     override val startPose = Pose(Point(38.0, 58.0), Angle(PI, AngleUnit.RAD))
 

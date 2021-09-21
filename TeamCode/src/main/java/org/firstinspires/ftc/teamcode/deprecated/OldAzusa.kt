@@ -1,27 +1,29 @@
-package org.firstinspires.ftc.teamcode.hardware
+package org.firstinspires.ftc.teamcode.deprecated
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.control.localization.Speedometer
 import org.firstinspires.ftc.teamcode.control.localization.ThreeWheelOdometry
+import org.firstinspires.ftc.teamcode.hardware.BaseRobot
+import org.firstinspires.ftc.teamcode.opmodes.outreach.DriveTrain
 import org.firstinspires.ftc.teamcode.util.math.Angle
 import org.firstinspires.ftc.teamcode.util.math.AngleUnit
 import org.firstinspires.ftc.teamcode.util.math.MathUtil.toRadians
 import org.firstinspires.ftc.teamcode.util.math.Point
 import org.firstinspires.ftc.teamcode.util.math.Pose
-import org.firstinspires.ftc.teamcode.util.opmode.AllianceSide
 import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
+import org.firstinspires.ftc.teamcode.util.opmode.AllianceSide
 import org.firstinspires.ftc.teamcode.util.opmode.Globals
 import org.firstinspires.ftc.teamcode.util.opmode.OpModePacket
 import org.openftc.revextensions2.ExpansionHubEx
-import org.openftc.revextensions2.ExpansionHubMotor
 import org.openftc.revextensions2.RevBulkData
 import java.util.*
 import kotlin.math.*
 
 @Config
-class OldAzusa(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
+@Deprecated("@see Akemi")
+abstract class OldAzusa(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
 
     lateinit var currPose: Pose
     lateinit var currVel: Pose
@@ -46,76 +48,88 @@ class OldAzusa(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
 
     var lastUpdateTime: Long = 0
 
-    override fun init() {
-        azuTelemetry = dataPacket.telemetry
+//    override fun init() {
+//        azuTelemetry = dataPacket.telemetry
+//
+//        masterHub = dataPacket.hwMap.get(ExpansionHubEx::class.java, "masterHub")
+//        masterBulkData = masterHub.bulkInputData
+//
+//        odometry = ThreeWheelOdometry(
+//            dataPacket.startPose,
+//            masterBulkData.getMotorCurrentPosition(1),
+//            masterBulkData.getMotorCurrentPosition(3),
+//            masterBulkData.getMotorCurrentPosition(2),
+//        )
+//
+//        speedometer = Speedometer()
+//
+//        currPose = dataPacket.startPose
+//
+//        currVel = Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW))
+//
+//        driveTrain = DriveTrain(
+//            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "FL"),
+//            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "FR"),
+//            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "BL"),
+//            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "BR")
+//        )
+//
+// //        allHardware.add(driveTrain)
+//
+//        dashboard = FtcDashboard.getInstance()
+//    }
 
-        masterHub = dataPacket.hwMap.get(ExpansionHubEx::class.java, "masterHub")
-        masterBulkData = masterHub.bulkInputData
-
-        odometry = ThreeWheelOdometry(
-            dataPacket.startPose,
-            masterBulkData.getMotorCurrentPosition(1),
-            masterBulkData.getMotorCurrentPosition(3),
-            masterBulkData.getMotorCurrentPosition(2),
-        )
-
-        speedometer = Speedometer()
-
-        currPose = dataPacket.startPose
-
-        currVel = Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW))
-
-        driveTrain = DriveTrain(
-            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "FL"),
-            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "FR"),
-            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "BL"),
-            dataPacket.hwMap.get(ExpansionHubMotor::class.java, "BR")
-        )
-
-        allHardware.add(driveTrain)
-
-        dashboard = FtcDashboard.getInstance()
-    }
-
-    override fun update() {
-        if (dataPacket.debugging) {
-            debugPhysics()
-        } else {
-            updateOdo()
-        }
-        updateHW()
-        updateTelemetry()
-    }
-
-    private fun updateTelemetry() {
-        azuTelemetry.addData("x", currPose.x)
-        azuTelemetry.addData("y", currPose.y)
-        azuTelemetry.addData("h", currPose.h.deg)
-        azuTelemetry.addData("powers", driveTrain.powers.toRawString)
-
-        val (x, y) = currPose.p.dbNormalize
-        val radius = 5
-        azuTelemetry.fieldOverlay()
-            .setFill("blue")
-            .fillCircle(x, y, 3.0)
-            .setStroke("purple")
-            .setStrokeWidth(1)
-            .strokeLine(
-                x, y, x + radius * currPose.h.sin, y - radius * currPose.h.cos
-            )
-
-//        if (System.currentTimeMillis() - lastllupdate > 250) {
-//            lastllupdate = System.currentTimeMillis()
-//            lastPositions.add(currPose.p.copy)
+//    override fun init(vararg motors: ExpansionHubMotor) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun update() {
+//        if (dataPacket.debugging) {
+//            debugPhysics()
+//        } else {
+//            updateOdo()
 //        }
+// //        updateHW()
+//        updateTelemetry()
+//    }
 
-//        val iterator = lastPositions.iterator()
-//        while (iterator.hasNext()) {
-//            val curr = iterator.next()
-//            azuTelemetry.fieldOverlay()
-//                .setStroke("red")
-//                .strokeCircle(curr.dbNormalize.x, curr.dbNormalize.y, 1.0)
-//        }
+//    override fun updateTelemetry(): HashMap<String, Any> {
+//        TODO("Not yet implemented")
+//    }
+
+//    private fun updateTelemetry() {
+//        azuTelemetry.addData("x", currPose.x)
+//        azuTelemetry.addData("y", currPose.y)
+//        azuTelemetry.addData("h", currPose.h.deg)
+//        azuTelemetry.addData("powers", driveTrain.powers.toRawString)
+//
+//        val (x, y) = currPose.p.dbNormalize
+//        val radius = 5
+//        azuTelemetry.fieldOverlay()
+//            .setFill("blue")
+//            .fillCircle(x, y, 3.0)
+//            .setStroke("purple")
+//            .setStrokeWidth(1)
+//            .strokeLine(
+//                x, y, x + radius * currPose.h.sin, y - radius * currPose.h.cos
+//            )
+//
+// //        if (System.currentTimeMillis() - lastllupdate > 250) {
+// //            lastllupdate = System.currentTimeMillis()
+// //            lastPositions.add(currPose.p.copy)
+// //        }
+//
+// //        val iterator = lastPositions.iterator()
+// //        while (iterator.hasNext()) {
+// //            val curr = iterator.next()
+// //            azuTelemetry.fieldOverlay()
+// //                .setStroke("red")
+// //                .strokeCircle(curr.dbNormalize.x, curr.dbNormalize.y, 1.0)
+// //        }
+//    }
+
+    override fun stop() {
+        TODO("Not yet implemented")
     }
 
     private fun updateOdo() {
@@ -133,9 +147,9 @@ class OldAzusa(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
         speedometer.update(currPose)
     }
 
-    private fun updateHW() {
-        allHardware.forEach { it.update(azuTelemetry) }
-    }
+//    private fun updateHW() {
+//        allHardware.forEach { it.update(azuTelemetry) }
+//    }
 
     fun teleopControl(driveScale: Double, fieldOriented: Boolean) {
         if (fieldOriented) {

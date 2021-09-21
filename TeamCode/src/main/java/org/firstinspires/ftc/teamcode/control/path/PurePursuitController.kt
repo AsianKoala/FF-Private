@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control.path
 
 import org.firstinspires.ftc.teamcode.control.path.waypoints.LockedWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
-import org.firstinspires.ftc.teamcode.hardware.OldAzusa
+import org.firstinspires.ftc.teamcode.deprecated.OldAzusa
 import org.firstinspires.ftc.teamcode.util.math.*
 import org.firstinspires.ftc.teamcode.util.math.MathUtil.toRadians
 import kotlin.math.PI

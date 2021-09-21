@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.control.test
+package org.firstinspires.ftc.teamcode.control.motion
 
 class KalmanFilter(var x: Double, val Q: Double, val R: Double, var P: Double, var K: Double) {
 

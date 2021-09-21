@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.hardware
+package org.firstinspires.ftc.teamcode.opmodes.outreach
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.util.math.Angle
 import org.firstinspires.ftc.teamcode.util.math.AngleUnit
 import org.firstinspires.ftc.teamcode.util.math.Point
 import org.firstinspires.ftc.teamcode.util.math.Pose
-import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
 import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 
@@ -14,12 +13,12 @@ class DriveTrain(
     frontRight: ExpansionHubMotor,
     backLeft: ExpansionHubMotor,
     backRight: ExpansionHubMotor
-) : Hardware() {
+) {
 
     var powers: Pose
     private val motors = arrayOf(frontLeft, frontRight, backLeft, backRight)
 
-    override fun update(azuTelemetry: AkemiTelemetry) {
+    fun update() {
         val rawFrontLeft: Double = -powers.y - powers.x + powers.h.angle
         val rawFrontRight: Double = powers.y - powers.x + powers.h.angle
         val rawBackLeft: Double = -powers.y + powers.x + powers.h.angle

@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.control.system
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.control.path.Path
-import org.firstinspires.ftc.teamcode.util.opmode.Globals
 
 @Disabled
+@Deprecated("need to have a working version for akemi")
 abstract class BaseAuto : BaseOpMode() {
     abstract fun initialPath(): Path
 
@@ -29,17 +29,17 @@ abstract class BaseAuto : BaseOpMode() {
     }
 
     override fun onLoop() {
-        if (pathCache.isFinished) {
-            azusa.driveTrain.setZeroPowers()
-            requestOpModeStop()
-        }
+//        if (pathCache.isFinished) {
+//            azusa.driveTrain.setZeroPowers()
+//            requestOpModeStop()
+//        }
 
-        pathCache.update(azusa)
+//        pathCache.update(azusa)
         updateDashboardPath()
     }
 
     override fun onStop() {
-        Globals.AUTO_END_POSE = azusa.currPose.copy
+//        Globals.AUTO_END_POSE = azusa.currPose.copy
     }
 
     private fun updateDashboardPath() {

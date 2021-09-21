@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
 import org.firstinspires.ftc.teamcode.hardware.Akemi
-import org.firstinspires.ftc.teamcode.hardware.BaseRobot
-import org.firstinspires.ftc.teamcode.hardware.Firefly
-import org.firstinspires.ftc.teamcode.hardware.OldAzusa
 import org.firstinspires.ftc.teamcode.util.debug.Debuggable
 import org.firstinspires.ftc.teamcode.util.math.Pose
 import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
@@ -18,10 +15,7 @@ import org.firstinspires.ftc.teamcode.util.opmode.Status
 abstract class BaseOpMode : TunableLinearOpMode() {
     abstract val startPose: Pose
 
-    private lateinit var robot: BaseRobot
     lateinit var akemi: Akemi
-    lateinit var azusa: OldAzusa
-    lateinit var firefly: Firefly
 
     lateinit var akemiTelemetry: AkemiTelemetry
 
@@ -38,34 +32,20 @@ abstract class BaseOpMode : TunableLinearOpMode() {
     var debugging = false
 
     override fun runOpMode() {
-        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
-
-        akemiTelemetry = AkemiTelemetry(this)
-
-        val packet = OpModePacket(startPose, debugging, hardwareMap, akemiTelemetry, gamepad1, gamepad2)
-
         val manager = (internalOpModeServices as OpModeManagerImpl)
-        val nm = manager.activeOpModeName
-        robot = when {
-            nm.startsWith("azusa", true) -> {
-                azusa = OldAzusa(packet)
-                azusa
-            }
-            nm.startsWith("firefly", true) -> {
-                firefly = Firefly(packet)
-                firefly
-            }
-            else -> {
-                akemi = Akemi(packet)
-                akemi
-            }
-        }
 
+        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
         opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
             OpModeType.AUTO
         } else OpModeType.TELEOP
 
-        robot.init()
+        akemiTelemetry = AkemiTelemetry(telemetry)
+
+        val packet = OpModePacket(startPose, debugging, hardwareMap, akemiTelemetry, gamepad1, gamepad2)
+        akemi = Akemi(packet)
+
+        akemi.init()
+
         onInit()
 
         mainLoop@ while (true) {
@@ -87,7 +67,6 @@ abstract class BaseOpMode : TunableLinearOpMode() {
                     break@mainLoop
                 }
             }
-            robot.update()
             akemiTelemetry.update()
         }
 

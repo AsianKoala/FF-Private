@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.control.path
 
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
-import org.firstinspires.ftc.teamcode.hardware.OldAzusa
+import org.firstinspires.ftc.teamcode.deprecated.OldAzusa
 import kotlin.collections.ArrayList
 
 abstract class Path(val waypoints: ArrayList<Waypoint>) {

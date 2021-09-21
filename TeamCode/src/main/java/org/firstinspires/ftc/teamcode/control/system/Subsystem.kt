@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.control.system
 
-import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
+import org.openftc.revextensions2.ExpansionHubMotor
 
 abstract class Subsystem {
+    abstract fun init(vararg motors: ExpansionHubMotor)
     abstract fun update()
-    abstract fun updateTelemetry(): AkemiTelemetry
+    abstract fun updateTelemetry(): HashMap<String, Any>
     abstract fun stop()
 }

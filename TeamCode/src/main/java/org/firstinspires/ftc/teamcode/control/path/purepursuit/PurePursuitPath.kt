@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.control.path.funcs.SimpleFunction
 import org.firstinspires.ftc.teamcode.control.path.waypoints.PointTurnWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.StopWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
-import org.firstinspires.ftc.teamcode.hardware.OldAzusa
+import org.firstinspires.ftc.teamcode.deprecated.OldAzusa
 import org.firstinspires.ftc.teamcode.util.math.*
 import org.firstinspires.ftc.teamcode.util.math.MathUtil.toRadians
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.control.test
+package org.firstinspires.ftc.teamcode.control.motion
 
 import kotlin.math.abs
 import kotlin.math.sign

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.deprecated
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -18,6 +18,7 @@ import kotlin.math.PI
 
 @TeleOp
 @Disabled
+@Deprecated("azusa is ded")
 class AzusaTele : BaseOpMode() {
 
     override val startPose = if (Globals.IS_COMP) Globals.AUTO_END_POSE.copy else Pose(Point(38.0, 58.0), Angle.EAST)
@@ -40,6 +41,6 @@ class AzusaTele : BaseOpMode() {
     }
 
     override fun onLoop() {
-        azusa.teleopControl(0.5, true)
+//        azusa.teleopControl(0.5, true)
     }
 }

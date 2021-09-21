@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode.control.system
 
-class HardwareManager(vararg val subsystems: Subsystem) : State() {
-    override fun run() {
-        subsystems.forEach {
-            it.update()
-            it.updateTelemetry()
-        }
+import com.qualcomm.robotcore.hardware.HardwareMap
+
+abstract class HardwareManager(vararg val subsystems: Subsystem) {
+
+    abstract fun setupMapping(hwMap: HardwareMap)
+
+    fun updateAll() {
+        subsystems.forEach { it.update() }
     }
 
-    override fun onKill() {
+    fun updateTelemetryAll() {
+        subsystems.forEach { it.updateTelemetry() }
+    }
+
+    fun stopAll() {
         subsystems.forEach { it.stop() }
     }
 }
