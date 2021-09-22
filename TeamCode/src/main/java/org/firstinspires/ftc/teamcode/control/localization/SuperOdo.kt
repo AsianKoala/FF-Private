@@ -6,6 +6,9 @@ import org.firstinspires.ftc.teamcode.util.math.AngleUnit
 import org.firstinspires.ftc.teamcode.util.math.Pose
 import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
 
+/**
+ * tfw you have custom kalman filter imu reset god odo but gdc is shit
+ */
 class SuperOdo(private val startPose: Pose, private val startL: Int, private val startR: Int, private val startA: Int) {
     companion object {
         const val TICKS_PER_INCH = 1103.8839

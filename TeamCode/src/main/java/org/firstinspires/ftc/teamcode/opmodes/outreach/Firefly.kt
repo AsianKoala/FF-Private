@@ -36,6 +36,4 @@ class Firefly : OpMode() {
             Angle(-gamepad1.right_stick_x * driveScale, AngleUnit.RAW)
         )
     }
-
-    private val Boolean.b2d get() = if (this) 1.0 else 0.0
 }

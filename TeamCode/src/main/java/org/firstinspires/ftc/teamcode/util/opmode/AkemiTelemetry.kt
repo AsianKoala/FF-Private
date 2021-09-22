@@ -11,9 +11,9 @@ class AkemiTelemetry(telemImpl: Telemetry) {
     private var telemAdapter: TelemAdapter = TelemAdapter()
     private val internalTelemetry: Telemetry = telemImpl
 
-    fun addData(key: String, `val`: Any) {
-        internalTelemetry.addData(key, `val`)
-        telemAdapter.addData(key, `val`)
+    fun addData(k: String, v: Any) {
+        internalTelemetry.addData(k, v)
+        telemAdapter.addData(k, v)
     }
 
     fun addAll(other: HashMap<String, Any>) {

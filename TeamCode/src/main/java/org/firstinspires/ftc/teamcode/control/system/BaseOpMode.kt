@@ -42,10 +42,10 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         akemiTelemetry = AkemiTelemetry(telemetry)
 
         val packet = OpModePacket(startPose, debugging, hardwareMap, akemiTelemetry, gamepad1, gamepad2)
+
         akemi = Akemi(packet)
 
         akemi.init()
-
         onInit()
 
         mainLoop@ while (true) {
@@ -67,6 +67,7 @@ abstract class BaseOpMode : TunableLinearOpMode() {
                     break@mainLoop
                 }
             }
+            akemi.loop()
             akemiTelemetry.update()
         }
 

@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.control.system
 
 abstract class State {
-    protected abstract fun run()
+    abstract fun run()
+    abstract fun onStart()
+    abstract fun onKill()
 
-    open val name: String = ""
-    open val killCond: Boolean = true
-    open val runCond: Boolean = true
-
-    open fun onStart() {}
-    open fun onKill() {}
+    abstract val name: String
+    abstract val killCond: Boolean
+    abstract val runCond: Boolean
 
     var started: Boolean = false
         private set

@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.control.system
 
-import org.openftc.revextensions2.ExpansionHubMotor
+import com.qualcomm.robotcore.hardware.HardwareMap
 
 abstract class Subsystem {
-    abstract fun init(vararg motors: ExpansionHubMotor)
+    abstract fun init(hwMap: HardwareMap)
     abstract fun update()
     abstract fun updateTelemetry(): HashMap<String, Any>
     abstract fun stop()
+    abstract fun setHWValues()
 }

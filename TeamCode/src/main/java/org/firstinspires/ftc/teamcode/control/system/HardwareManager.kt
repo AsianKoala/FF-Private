@@ -1,17 +1,20 @@
 package org.firstinspires.ftc.teamcode.control.system
 
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
 
-abstract class HardwareManager(vararg val subsystems: Subsystem) {
+class HardwareManager(private val hwMap: HardwareMap, private val akemiTelemetry: AkemiTelemetry, private vararg val subsystems: Subsystem) {
 
-    abstract fun setupMapping(hwMap: HardwareMap)
+    fun setupMapping() {
+        subsystems.forEach { it.init(hwMap) }
+    }
 
     fun updateAll() {
         subsystems.forEach { it.update() }
     }
 
     fun updateTelemetryAll() {
-        subsystems.forEach { it.updateTelemetry() }
+        subsystems.forEach { akemiTelemetry.addAll(it.updateTelemetry()) }
     }
 
     fun stopAll() {
