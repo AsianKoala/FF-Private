@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.control.localization
 
-import org.firstinspires.ftc.teamcode.util.math.Point
+import robotuprising.lib.math.Point
 import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin

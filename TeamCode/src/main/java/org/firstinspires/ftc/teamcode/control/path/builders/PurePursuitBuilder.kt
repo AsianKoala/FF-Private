@@ -4,8 +4,8 @@ import org.firstinspires.ftc.teamcode.control.path.Path
 import org.firstinspires.ftc.teamcode.control.path.purepursuit.PurePursuitPath
 import org.firstinspires.ftc.teamcode.control.path.waypoints.LockedWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
-import org.firstinspires.ftc.teamcode.util.math.Angle
-import org.firstinspires.ftc.teamcode.util.math.AngleUnit
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
 import kotlin.math.PI
 
 class PurePursuitBuilder : PathBuilder() {

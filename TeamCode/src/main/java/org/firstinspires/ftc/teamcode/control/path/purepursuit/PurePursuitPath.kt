@@ -1,47 +1,44 @@
 package org.firstinspires.ftc.teamcode.control.path.purepursuit
 
 import org.firstinspires.ftc.teamcode.control.path.Path
-import org.firstinspires.ftc.teamcode.control.path.PurePursuitController
-import org.firstinspires.ftc.teamcode.control.path.funcs.LoopUntilFunction
-import org.firstinspires.ftc.teamcode.control.path.funcs.RepeatFunction
-import org.firstinspires.ftc.teamcode.control.path.funcs.SimpleFunction
+import org.firstinspires.ftc.teamcode.control.PurePursuitController
 import org.firstinspires.ftc.teamcode.control.path.waypoints.PointTurnWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.StopWaypoint
 import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
 import org.firstinspires.ftc.teamcode.deprecated.OldAzusa
-import org.firstinspires.ftc.teamcode.util.math.*
-import org.firstinspires.ftc.teamcode.util.math.MathUtil.toRadians
+import robotuprising.lib.math.*
+import robotuprising.lib.math.MathUtil.toRadians
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
     override fun update(azusa: OldAzusa) {
         val currPose = azusa.currPose
 
         var skip: Boolean
-        do {
-            val target = waypoints[currWaypoint + 1]
-
-            skip = when (target) {
-                is StopWaypoint -> currPose.distance(target) < 0.8 && MathUtil.angleThresh(currPose.h, target.h, target.dh)
-                is PointTurnWaypoint -> MathUtil.angleThresh(currPose.h, target.h, target.dh)
-                else -> currPose.distance(target) < target.followDistance
-            }
-            5
-            val startAction = waypoints[currWaypoint].func
-            if (startAction is RepeatFunction) {
-                startAction.run(azusa, this)
-            } else if (startAction is LoopUntilFunction) {
-                skip = startAction.run(azusa, this)
-            }
-
-            if (skip) {
-                currWaypoint++
-
-                val currAction = waypoints[currWaypoint].func
-                if (currAction is SimpleFunction) {
-                    currAction.run(azusa, this)
-                }
-            }
-        } while (skip && currWaypoint < waypoints.size - 1)
+//        do {
+//            val target = waypoints[currWaypoint + 1]
+//
+//            skip = when (target) {
+//                is StopWaypoint -> currPose.distance(target) < 0.8 && MathUtil.angleThresh(currPose.h, target.h, target.dh)
+//                is PointTurnWaypoint -> MathUtil.angleThresh(currPose.h, target.h, target.dh)
+//                else -> currPose.distance(target) < target.followDistance
+//            }
+//            5
+//            val startAction = waypoints[currWaypoint].func
+//            if (startAction is RepeatFunction) {
+//                startAction.run(azusa, this)
+//            } else if (startAction is LoopUntilFunction) {
+//                skip = startAction.run(azusa, this)
+//            }
+//
+//            if (skip) {
+//                currWaypoint++
+//
+//                val currAction = waypoints[currWaypoint].func
+//                if (currAction is SimpleFunction) {
+//                    currAction.run(azusa, this)
+//                }
+//            }
+//        } while (skip && currWaypoint < waypoints.size - 1)
         if (isFinished) return
 
         val start = waypoints[currWaypoint]

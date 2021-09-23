@@ -1,21 +1,28 @@
 package org.firstinspires.ftc.teamcode.hardware
 
-import org.firstinspires.ftc.teamcode.control.system.HardwareManager
 import org.firstinspires.ftc.teamcode.util.opmode.OpModePacket
 
 abstract class BaseRobot(val dataPacket: OpModePacket) {
-    protected abstract val hwManager: HardwareManager
+    protected abstract val superstructure: Superstructure
 
     open fun init() {
-        hwManager.setupMapping()
+        superstructure.init(dataPacket.hwMap)
+    }
+
+    open fun init_loop() {
+
+    }
+
+    open fun start() {
+
     }
 
     open fun loop() {
-        hwManager.updateAll()
-        hwManager.updateTelemetryAll()
+        superstructure.update()
+        superstructure.sendDashboardPacket()
     }
 
     open fun stop() {
-        hwManager.stopAll()
+        superstructure.stop()
     }
 }

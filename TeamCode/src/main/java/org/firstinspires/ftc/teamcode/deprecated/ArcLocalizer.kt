@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.deprecated
 
 import com.acmerobotics.roadrunner.util.epsilonEquals
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.util.math.Angle
-import org.firstinspires.ftc.teamcode.util.math.MathUtil
-import org.firstinspires.ftc.teamcode.util.math.Point
-import org.firstinspires.ftc.teamcode.util.math.Pose
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.MathUtil
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
 import kotlin.math.cos
 import kotlin.math.sin
 

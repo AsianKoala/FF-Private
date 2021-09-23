@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.teamcode.control.system.Subsystem
-import org.firstinspires.ftc.teamcode.util.hw.DTPowers
-import org.firstinspires.ftc.teamcode.util.math.Point
+import robotuprising.lib.system.Subsystem
+import robotuprising.lib.util.hardware.DTPowers
+import robotuprising.lib.math.Point
+import robotuprising.lib.util.telemetry.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 import kotlin.math.max
@@ -55,7 +56,7 @@ class Homura : Subsystem() {
         }
     }
 
-    override fun updateTelemetry(): HashMap<String, Any> {
+    override fun sendDashboardPacket() {
         val r = HashMap<String, Any>()
         r["internal fwd"] = internalPowers.fwd
         r["internal turn"] = internalPowers.turn
@@ -65,14 +66,14 @@ class Homura : Subsystem() {
         r["bl"] = motorPowers[1]
         r["fr"] = motorPowers[2]
         r["br"] = motorPowers[3]
-        return r
+        AkemiDashboard.addAll(r)
     }
 
     override fun stop() {
         setPowers(DTPowers(Point.ORIGIN))
     }
 
-    override fun setHWValues() {
+    private fun setHWValues() {
         motors.forEachIndexed { i, it -> it.power = motorPowers[i] }
     }
 }

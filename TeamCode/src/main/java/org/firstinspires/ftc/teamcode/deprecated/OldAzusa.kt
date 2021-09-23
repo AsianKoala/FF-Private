@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.control.localization.Speedometer
 import org.firstinspires.ftc.teamcode.control.localization.ThreeWheelOdometry
 import org.firstinspires.ftc.teamcode.hardware.BaseRobot
-import org.firstinspires.ftc.teamcode.opmodes.outreach.DriveTrain
-import org.firstinspires.ftc.teamcode.util.math.Angle
-import org.firstinspires.ftc.teamcode.util.math.AngleUnit
-import org.firstinspires.ftc.teamcode.util.math.MathUtil.toRadians
-import org.firstinspires.ftc.teamcode.util.math.Point
-import org.firstinspires.ftc.teamcode.util.math.Pose
-import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
-import org.firstinspires.ftc.teamcode.util.opmode.AllianceSide
+import org.firstinspires.ftc.teamcode.opmodes.DriveTrain
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.MathUtil.toRadians
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
+import robotuprising.lib.util.telemetry.AkemiDashboard
+import robotuprising.lib.util.AllianceSide
 import org.firstinspires.ftc.teamcode.util.opmode.Globals
 import org.firstinspires.ftc.teamcode.util.opmode.OpModePacket
 import org.openftc.revextensions2.ExpansionHubEx
@@ -37,7 +37,7 @@ abstract class OldAzusa(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
     lateinit var driveTrain: DriveTrain
 
     lateinit var dashboard: FtcDashboard
-    lateinit var azuTelemetry: AkemiTelemetry
+    lateinit var azuTelemetry: AkemiDashboard
 
     private val lastPositions = LinkedList<Point>()
     var lastllupdate: Long = 0

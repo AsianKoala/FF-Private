@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.control.path.funcs
 
 import org.firstinspires.ftc.teamcode.control.path.Path
-import org.firstinspires.ftc.teamcode.deprecated.OldAzusa
+import org.firstinspires.ftc.teamcode.hardware.Superstructure
 
 fun interface RepeatFunction : Func {
-    fun run(azusa: OldAzusa, path: Path)
+    fun run(akemi: Superstructure, path: Path)
 }

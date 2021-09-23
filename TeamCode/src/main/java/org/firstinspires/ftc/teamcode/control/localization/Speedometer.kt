@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.control.localization
 
-import org.firstinspires.ftc.teamcode.util.math.Angle
-import org.firstinspires.ftc.teamcode.util.math.Point
-import org.firstinspires.ftc.teamcode.util.math.Pose
-import org.firstinspires.ftc.teamcode.util.math.TimePose
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
+import robotuprising.lib.math.TimePose
 import kotlin.math.max
 
 class Speedometer {

@@ -1,4 +1,4 @@
-import org.firstinspires.ftc.teamcode.util.math.Point
+import robotuprising.lib.math.Point
 
 object ReferenceTest {
     @JvmStatic

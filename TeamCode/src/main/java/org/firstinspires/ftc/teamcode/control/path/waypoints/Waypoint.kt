@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.control.path.waypoints
 
 import org.firstinspires.ftc.teamcode.control.path.funcs.Func
-import org.firstinspires.ftc.teamcode.util.math.Point
-import org.firstinspires.ftc.teamcode.util.math.Pose
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
 
 // id love for this to be a dataclass but yeah sucks to suck
 open class Waypoint(

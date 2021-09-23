@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.deprecated
 
-import org.firstinspires.ftc.teamcode.util.math.Pose
+import robotuprising.lib.math.Pose
 
 @Deprecated("fuck you")
 class Odometry(start: Pose, odometrySet: OdometrySet) {

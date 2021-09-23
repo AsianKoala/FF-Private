@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.control.localization
 
 import com.acmerobotics.dashboard.config.Config
-import org.firstinspires.ftc.teamcode.util.math.*
-import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Pose
+import robotuprising.lib.util.telemetry.AkemiDashboard
 
 @Config
 class ThreeWheelOdometry(private val startPose: Pose, private val startL: Int, private val startR: Int, private val startA: Int) {
@@ -20,7 +22,7 @@ class ThreeWheelOdometry(private val startPose: Pose, private val startL: Int, p
 
     var accumHeading = 0.0
 
-    fun update(azuTelemetry: AkemiTelemetry, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int): Pose {
+    fun update(azuTelemetry: AkemiDashboard, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int): Pose {
 
         val actualCurrLeft = -(currLeftEncoder - startL)
         val actualCurrRight = (currRightEncoder - startR)

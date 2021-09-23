@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.teamcode.control.system.Subsystem
+import robotuprising.lib.system.Subsystem
+import robotuprising.lib.util.telemetry.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
 
 class Intake : Subsystem() {
@@ -48,19 +49,19 @@ class Intake : Subsystem() {
         lastState = intakeState
     }
 
-    override fun updateTelemetry(): HashMap<String, Any> {
+    override fun sendDashboardPacket() {
         val r = HashMap<String, Any>()
         r["max"] = max
         r["intakeStates"] = intakeState
         r["power"] = power
-        return r
+        AkemiDashboard.addAll(r)
     }
 
     override fun stop() {
         turnOff()
     }
 
-    override fun setHWValues() {
+    private fun setHWValues() {
         intakeMotor.power = power
     }
 }

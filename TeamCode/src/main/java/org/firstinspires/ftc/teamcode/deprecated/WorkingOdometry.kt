@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.deprecated
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.teamcode.util.math.Pose
+import robotuprising.lib.math.Pose
 
 /*
  * Sample tracking wheel localizer implementation assuming the standard configuration:

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.control.localization
 
-import org.firstinspires.ftc.teamcode.control.motion.KalmanFilter
-import org.firstinspires.ftc.teamcode.util.math.Angle
-import org.firstinspires.ftc.teamcode.util.math.AngleUnit
-import org.firstinspires.ftc.teamcode.util.math.Pose
-import org.firstinspires.ftc.teamcode.util.opmode.AkemiTelemetry
+import robotuprising.lib.motion.KalmanFilter
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Pose
+import robotuprising.lib.util.telemetry.AkemiDashboard
 
 /**
  * tfw you have custom kalman filter imu reset god odo but gdc is shit
@@ -34,7 +34,7 @@ class SuperOdo(private val startPose: Pose, private val startL: Int, private val
     var lastIMUAngle = 0.0
     var imuBias = Angle.EAST
 
-    fun update(azuTelemetry: AkemiTelemetry, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int, imuHeading: Double): Pose {
+    fun update(azuTelemetry: AkemiDashboard, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int, imuHeading: Double): Pose {
 
         val actualCurrLeft = -(currLeftEncoder - startL)
         val actualCurrRight = (currRightEncoder - startR)
