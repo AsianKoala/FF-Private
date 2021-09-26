@@ -3,21 +3,21 @@ package robotuprising.lib.system
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
-import org.firstinspires.ftc.teamcode.hardware.BaseRobot
+import robotuprising.ftc2021.hardware.BaseRobot
 import robotuprising.lib.util.debug.Debuggable
-import org.firstinspires.ftc.teamcode.util.opmode.Globals
-import robotuprising.lib.util.OpModeType
-import org.firstinspires.ftc.teamcode.util.opmode.Status
+import robotuprising.ftc2021.util.Globals
+import robotuprising.lib.util.opmode.OpModeType
+import robotuprising.lib.util.opmode.OpModeStatus
 
 abstract class BaseOpMode : TunableLinearOpMode() {
 
     abstract val robot: BaseRobot
 
-    private val status: Status
+    private val opModeStatus: OpModeStatus
         get() = when {
-            isStopRequested -> Status.STOP
-            isStarted -> Status.LOOP
-            else -> Status.INIT_LOOP
+            isStopRequested -> OpModeStatus.STOP
+            isStarted -> OpModeStatus.LOOP
+            else -> OpModeStatus.INIT_LOOP
         }
 
     private var hasStarted = false
@@ -37,12 +37,12 @@ abstract class BaseOpMode : TunableLinearOpMode() {
 
         robot.init()
         mainLoop@ while (true) {
-            when (status) {
-                Status.INIT_LOOP -> {
+            when (opModeStatus) {
+                OpModeStatus.INIT_LOOP -> {
                     robot.init_loop()
                 }
 
-                Status.LOOP -> {
+                OpModeStatus.LOOP -> {
                     if (hasStarted) {
                         robot.loop()
                     } else {
@@ -51,7 +51,7 @@ abstract class BaseOpMode : TunableLinearOpMode() {
                     }
                 }
 
-                Status.STOP -> {
+                OpModeStatus.STOP -> {
                     break@mainLoop
                 }
             }

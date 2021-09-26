@@ -1,4 +1,4 @@
-import org.firstinspires.ftc.teamcode.control.path.builders.PurePursuitBuilder
+import robotuprising.lib.movement.path.PurePursuitBuilder
 
 object WaypointTest {
     @JvmStatic

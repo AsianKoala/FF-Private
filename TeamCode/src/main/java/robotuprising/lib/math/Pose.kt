@@ -1,6 +1,6 @@
 package robotuprising.lib.math
 
-import org.firstinspires.ftc.teamcode.control.path.waypoints.Waypoint
+import robotuprising.lib.movement.waypoints.Waypoint
 
 data class Pose(
         var p: Point,

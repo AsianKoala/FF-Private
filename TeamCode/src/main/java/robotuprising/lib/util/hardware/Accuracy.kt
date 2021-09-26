@@ -4,5 +4,5 @@ enum class Accuracy {
     HIGH,
     MEDIUM,
     LOW,
-    NONE
+    BALLSTOTHEWALLS
 }
