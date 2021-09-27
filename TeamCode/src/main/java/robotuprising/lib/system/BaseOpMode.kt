@@ -58,7 +58,8 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
         robot.stop()
+        val autoName = manager.activeOpModeName.substring(0,manager.activeOpModeName.indexOf("TeleOp"))
         if (opModeType == OpModeType.AUTO && Globals.IS_COMP)
-            manager.initActiveOpMode(Globals.TELEOP_NAME)
+            manager.initActiveOpMode(autoName + "Auto")
     }
 }
