@@ -2,6 +2,7 @@ package robotuprising.ftc2021.hardware
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
+import robotuprising.lib.util.hardware.MecanumPowers
 import robotuprising.lib.util.hardware.Status
 
 /**
@@ -17,6 +18,10 @@ class Superstructure : Subsystem() {
         subsystems.forEach { it.init(hwMap) }
     }
 
+    override fun start() {
+        subsystems.forEach { it.start() }
+    }
+
     override fun update() {
         subsystems.forEach { it.update() }
     }
@@ -29,18 +34,7 @@ class Superstructure : Subsystem() {
         subsystems.forEach { it.sendDashboardPacket() }
     }
 
-    override val status: Status
-        get() {
-            subsystems.forEach {
-                when(it.status) {
-                    Status.STALLING -> return Status.STALLING
-                    Status.FAILING -> return Status.FAILING
-                    Status.DEAD -> return Status.DEAD
-                    else -> {}
-                }
-            }
-            return Status.WORKING
-        }
+    override var status: Status = Status.INIT
 
     fun requestIntakeOn() {
         intake.turnOn()
@@ -54,7 +48,7 @@ class Superstructure : Subsystem() {
         intake.reverse()
     }
 
-    fun requestHomuraPowers(dtPowers: `6WDPowers`) {
+    fun requestHomuraPowers(dtPowers: MecanumPowers) {
         homura.setPowers(dtPowers)
     }
 

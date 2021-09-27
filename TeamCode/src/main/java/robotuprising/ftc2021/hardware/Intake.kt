@@ -62,8 +62,7 @@ class Intake : Subsystem() {
         turnOff()
     }
 
-    override val status: Status
-        get() = TODO("Not yet implemented")
+    override var status: Status = Status.INIT
 
     private fun setHWValues() {
         intakeMotor.power = power

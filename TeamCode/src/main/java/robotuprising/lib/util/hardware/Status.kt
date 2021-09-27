@@ -1,8 +1,12 @@
 package robotuprising.lib.util.hardware
 
 enum class Status {
-    WORKING,
+    INIT,
+    RUNNING,
     STALLING,
-    FAILING,
-    DEAD
+    STOPPED,
+    DEAD;
+
+    val shouldUpdate
+        get() = INIT.ordinal < ordinal && ordinal < STOPPED.ordinal
 }

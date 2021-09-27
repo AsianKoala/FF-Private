@@ -14,7 +14,7 @@ abstract class BaseRobot(val dataPacket: OpModePacket) {
     }
 
     open fun start() {
-
+        superstructure.start()
     }
 
     open fun loop() {
