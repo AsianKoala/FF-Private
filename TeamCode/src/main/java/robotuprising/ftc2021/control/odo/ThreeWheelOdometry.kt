@@ -1,28 +1,20 @@
-package robotuprising.ftc2021.control.localization
+package robotuprising.ftc2021.control.odo
 
+import com.acmerobotics.dashboard.config.Config
 import robotuprising.lib.control.odometry.EulerIntegration
-import robotuprising.lib.control.motion.KalmanFilter
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Pose
 import robotuprising.lib.opmode.AkemiDashboard
 
-/**
- * tfw you have custom kalman filter imu reset god odo but gdc is shit
- */
-class SuperOdo(private val startPose: Pose, private val startL: Int, private val startR: Int, private val startA: Int) {
+@Config
+@Deprecated("this is very sad")
+class ThreeWheelOdometry(private val startPose: Pose, private val startL: Int, private val startR: Int, private val startA: Int) {
     companion object {
         const val TICKS_PER_INCH = 1103.8839
         @JvmField var turnScalar: Double = 14.9691931
         @JvmField var perpScalar: Double = 3.85
-
-        @JvmField var Q = 0.1
-        @JvmField var R = 0.4
-        @JvmField var P = 1.0
-        @JvmField var K = 1.0
     }
-
-    val kalmanFilter = KalmanFilter(startPose.h.angle, Q, R, P, K)
 
     private var currentPosition: Pose = startPose.copy
 
@@ -30,12 +22,9 @@ class SuperOdo(private val startPose: Pose, private val startL: Int, private val
     var lastRightEncoder = 0
     var lastPerpEncoder = 0
 
-    var mintime = 0.0
-    var lastIMURead: Long = 0
-    var lastIMUAngle = 0.0
-    var imuBias = Angle.EAST
+    var accumHeading = 0.0
 
-    fun update(azuTelemetry: AkemiDashboard, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int, imuHeading: Double): Pose {
+    fun update(azuTelemetry: AkemiDashboard, currLeftEncoder: Int, currRightEncoder: Int, currPerpEncoder: Int): Pose {
 
         val actualCurrLeft = -(currLeftEncoder - startL)
         val actualCurrRight = (currRightEncoder - startR)
@@ -49,24 +38,14 @@ class SuperOdo(private val startPose: Pose, private val startL: Int, private val
         val rightTotal = actualCurrRight / TICKS_PER_INCH
 
         val lastAngle = currentPosition.h.copy
+        currentPosition.h = -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h
 
         val angleIncrement = (lWheelDelta - rWheelDelta) / turnScalar
-        val odocalcangle = -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h + imuBias
-
-        if (System.currentTimeMillis() - mintime > lastIMURead) {
-            lastIMUAngle = imuHeading
-            lastIMURead = System.currentTimeMillis()
-
-            imuBias = Angle(lastIMUAngle, AngleUnit.RAD) - odocalcangle
-        } else {
-            lastIMUAngle += angleIncrement
-        }
-
-        val finalAngle = kalmanFilter.update(odocalcangle.angle, lastIMUAngle)
-        azuTelemetry.addData("finalAngle: ", finalAngle)
-
         val perpPredict = angleIncrement * perpScalar
         val dx = aWheelDelta - perpPredict
+
+//        accumHeading += angleIncrement
+//        azuTelemetry.addData("calc turnScalar", (accumHeading / (2 * PI * 15)) * turnScalar)
 
         val (deltaX, deltaY) = EulerIntegration.update(dx, lWheelDelta, rWheelDelta, angleIncrement)
 

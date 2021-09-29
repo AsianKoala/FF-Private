@@ -2,7 +2,7 @@ package robotuprising.ftc2021.hardware
 
 import robotuprising.lib.system.BaseOpMode
 
-abstract class BaseRobot: BaseOpMode() {
+abstract class Robot: BaseOpMode() {
     private val superstructure = Akemi
 
     override fun m_init() {
