@@ -1,5 +1,5 @@
 import com.qualcomm.robotcore.util.Range
-import robotuprising.lib.control.PIDFController
+import robotuprising.lib.control.motion.PIDFController
 import kotlin.math.abs
 
 object PIDFControllerTest {

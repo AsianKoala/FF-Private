@@ -1,20 +1,64 @@
 package robotuprising.ftc2021.hardware
 
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
-import robotuprising.lib.util.hardware.MecanumPowers
-import robotuprising.lib.util.opmode.OpModePacket
+import com.qualcomm.robotcore.hardware.HardwareMap
+import robotuprising.lib.hardware.Accuracy
+import robotuprising.lib.hardware.MecanumPowers
+import robotuprising.lib.hardware.Status
+import robotuprising.lib.system.Subsystem
 
-class Akemi(dataPacket: OpModePacket) : BaseRobot(dataPacket) {
-    override val superstructure = Superstructure()
+/**
+ * @see 254's Superstructure class
+ */
+object Akemi : Subsystem() {
 
-    override fun teleopLoop() {
-        val dtpowers = MecanumPowers(
-                        dataPacket.gamepad.left_stick_x * 0.75,
-                        -dataPacket.gamepad.left_stick_y * 0.75,
-                Angle(-dataPacket.gamepad.right_stick_x * 0.75, AngleUnit.RAW))
-        superstructure.requestHomuraPowers(dtpowers)
+    private val homura = Homura
+    private val intake = Intake
+    private val subsystems = mutableListOf(homura, intake)
+
+    override fun init(hwMap: HardwareMap) {
+        subsystems.forEach { it.init(hwMap) }
+    }
+
+    override fun init_loop() {
+        subsystems.forEach { it.init_loop() }
+    }
+
+    override fun start() {
+        subsystems.forEach { it.start() }
+    }
+
+    override fun update() {
+        subsystems.forEach { it.update() }
+    }
+
+    override fun sendDashboardPacket() {
+        subsystems.forEach { it.sendDashboardPacket() }
+    }
+
+    override fun stop() {
+        subsystems.forEach { it.sendDashboardPacket() }
+    }
+
+    override var status: Status = Status.RUNNING
+    override var acc: Accuracy = Accuracy.HIGH
+
+    fun requestIntakeOn() {
+        intake.turnOn()
+    }
+
+    fun requestIntakeOff() {
+        intake.turnOff()
+    }
+
+    fun requestIntakeReverse() {
+        intake.reverse()
+    }
+
+    fun requestHomuraPowers(dtPowers: MecanumPowers) {
+        homura.setPowers(dtPowers)
+    }
+
+    fun requestsHomuraStop() {
+        homura.stop()
     }
 }

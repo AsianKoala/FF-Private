@@ -2,11 +2,12 @@ package robotuprising.ftc2021.hardware
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
-import robotuprising.lib.util.telemetry.AkemiDashboard
+import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.util.hardware.Status
+import robotuprising.lib.hardware.Accuracy
+import robotuprising.lib.hardware.Status
 
-class Intake : Subsystem() {
+object Intake : Subsystem() {
     private lateinit var intakeMotor: ExpansionHubMotor
 
     private enum class IntakeStates {
@@ -63,6 +64,7 @@ class Intake : Subsystem() {
     }
 
     override var status: Status = Status.INIT
+    override var acc: Accuracy = Accuracy.LOW
 
     private fun setHWValues() {
         intakeMotor.power = power

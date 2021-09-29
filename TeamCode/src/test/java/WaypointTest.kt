@@ -1,4 +1,4 @@
-import robotuprising.lib.movement.path.PurePursuitBuilder
+import robotuprising.lib.control.auto.path.PurePursuitBuilder
 
 object WaypointTest {
     @JvmStatic

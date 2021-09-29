@@ -1,3 +1,5 @@
 
 base teleop / auto
 accuracy asd
+
+CONVERT EVERything TO SINGLETONES AND MAKE UR LIF E1000X EASIER XDDDDDD

@@ -1,11 +1,11 @@
 package robotuprising.ftc2021.control.localization
 
 import com.acmerobotics.dashboard.config.Config
-import robotuprising.lib.movement.odometry.EulerIntegration
+import robotuprising.lib.control.odometry.EulerIntegration
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Pose
-import robotuprising.lib.util.telemetry.AkemiDashboard
+import robotuprising.lib.opmode.AkemiDashboard
 
 @Config
 class ThreeWheelOdometry(private val startPose: Pose, private val startL: Int, private val startR: Int, private val startA: Int) {

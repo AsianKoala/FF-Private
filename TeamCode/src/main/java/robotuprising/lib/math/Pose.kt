@@ -1,6 +1,6 @@
 package robotuprising.lib.math
 
-import robotuprising.lib.movement.waypoints.Waypoint
+import robotuprising.lib.control.auto.waypoints.Waypoint
 
 data class Pose(
         var p: Point,

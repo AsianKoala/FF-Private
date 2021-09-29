@@ -1,11 +1,11 @@
 package robotuprising.ftc2021.control.localization
 
-import robotuprising.lib.movement.odometry.EulerIntegration
-import robotuprising.lib.control.KalmanFilter
+import robotuprising.lib.control.odometry.EulerIntegration
+import robotuprising.lib.control.motion.KalmanFilter
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Pose
-import robotuprising.lib.util.telemetry.AkemiDashboard
+import robotuprising.lib.opmode.AkemiDashboard
 
 /**
  * tfw you have custom kalman filter imu reset god odo but gdc is shit

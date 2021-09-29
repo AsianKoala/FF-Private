@@ -2,13 +2,15 @@ package robotuprising.ftc2021.hardware
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
-import robotuprising.lib.util.telemetry.AkemiDashboard
+import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.util.hardware.MecanumPowers
-import robotuprising.lib.util.hardware.Status
+import robotuprising.lib.hardware.Accuracy
+import robotuprising.lib.hardware.MecanumPowers
+import robotuprising.lib.hardware.Status
 import kotlin.math.absoluteValue
 
-class Homura : Subsystem() {
+object Homura : Subsystem() {
+
     private lateinit var motors: MutableList<ExpansionHubMotor>
 
     private val appliedPowers = DoubleArray(4)
@@ -63,4 +65,5 @@ class Homura : Subsystem() {
     }
 
     override var status: Status = Status.INIT
+    override var acc: Accuracy = Accuracy.HIGH
 }

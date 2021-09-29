@@ -3,7 +3,7 @@ package robotuprising.ftc2021.util
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
-import robotuprising.lib.util.opmode.AllianceSide
+import robotuprising.lib.opmode.AllianceSide
 
 object Globals {
     const val TELEOP_NAME = "AkemiTele"

@@ -1,32 +1,29 @@
 package robotuprising.ftc2021.hardware
 
-import robotuprising.lib.util.opmode.OpModePacket
+import robotuprising.lib.system.BaseOpMode
 
-abstract class BaseRobot(val dataPacket: OpModePacket) {
-    protected abstract val superstructure: Superstructure
+abstract class BaseRobot: BaseOpMode() {
+    private val superstructure = Akemi
 
-    open fun init() {
-        superstructure.init(dataPacket.hwMap)
+    override fun m_init() {
+        superstructure.init(hardwareMap)
     }
 
-    open fun init_loop() {
-
+    override fun m_init_loop() {
+        superstructure.init_loop()
+        superstructure.sendDashboardPacket()
     }
 
-    open fun start() {
+    override fun m_start() {
         superstructure.start()
     }
 
-    open fun loop() {
+    override fun m_loop() {
         superstructure.update()
         superstructure.sendDashboardPacket()
     }
 
-    open fun stop() {
+    override fun m_stop() {
         superstructure.stop()
-    }
-
-    open fun teleopLoop() {
-
     }
 }
