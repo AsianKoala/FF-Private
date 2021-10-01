@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware
+package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
@@ -42,7 +42,7 @@ object Homura : Subsystem() {
         }
 
         val difference = newMotors.mapIndexed { i, x -> (x - prevAppliedPowers[i]).absoluteValue }
-        if (difference.maxOrNull()!! > minThresh && status.shouldUpdate) {
+        if (difference.maxOrNull()!! > minThresh) {
             for(i in 0..4) {
                 appliedPowers[i] = newMotors[i]
                 motors[i].power = appliedPowers[i]
@@ -64,6 +64,6 @@ object Homura : Subsystem() {
         setPowers(MecanumPowers())
     }
 
-    override var status: Status = Status.INIT
+    override var status: Status = Status.ALIVE
     override var acc: Accuracy = Accuracy.HIGH
 }

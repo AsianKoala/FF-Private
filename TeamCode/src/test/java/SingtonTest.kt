@@ -1,4 +1,4 @@
-import robotuprising.ftc2021.hardware.Homura
+import robotuprising.ftc2021.hardware.subsystems.Homura
 import robotuprising.lib.hardware.MecanumPowers
 
 object SingtonTest {

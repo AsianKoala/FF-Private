@@ -27,7 +27,7 @@ class Firefly : OpMode() {
         teleopControl(0.25)
     }
 
-    fun teleopControl(driveScale: Double) {
+    private fun teleopControl(driveScale: Double) {
         driveTrain.powers = Pose(
             Point(
                 gamepad1.left_stick_x * driveScale,

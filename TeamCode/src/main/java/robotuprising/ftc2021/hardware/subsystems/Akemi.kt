@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware
+package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.hardware.Accuracy
@@ -28,7 +28,7 @@ object Akemi : Subsystem() {
     }
 
     override fun update() {
-        subsystems.forEach { it.update() }
+        subsystems.forEach { if(it.status==Status.ALIVE) it.update() }
     }
 
     override fun sendDashboardPacket() {
@@ -36,29 +36,29 @@ object Akemi : Subsystem() {
     }
 
     override fun stop() {
-        subsystems.forEach { it.sendDashboardPacket() }
+        subsystems.forEach { it.stop() }
     }
 
-    override var status: Status = Status.RUNNING
+    override var status: Status = Status.ALIVE
     override var acc: Accuracy = Accuracy.HIGH
 
     fun requestIntakeOn() {
-        intake.turnOn()
+        Intake.turnOn()
     }
 
     fun requestIntakeOff() {
-        intake.turnOff()
+        Intake.turnOff()
     }
 
     fun requestIntakeReverse() {
-        intake.reverse()
+        Intake.reverse()
     }
 
     fun requestHomuraPowers(dtPowers: MecanumPowers) {
-        homura.setPowers(dtPowers)
+        Homura.setPowers(dtPowers)
     }
 
     fun requestsHomuraStop() {
-        homura.stop()
+        Homura.stop()
     }
 }

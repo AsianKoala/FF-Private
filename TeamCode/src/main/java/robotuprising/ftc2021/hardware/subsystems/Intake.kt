@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware
+package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
@@ -16,7 +16,7 @@ object Intake : Subsystem() {
         REVERSE,
     }
 
-    private val max = 1.0
+    private var max = 1.0
     private var power = 0.0
 
     private var lastState = IntakeStates.OFF
@@ -34,6 +34,10 @@ object Intake : Subsystem() {
         intakeState = IntakeStates.REVERSE
     }
 
+    fun setMax(max: Double) {
+        Intake.max = max
+    }
+
     override fun init(hwMap: HardwareMap) {
         intakeMotor = hwMap[ExpansionHubMotor::class.java, "intake"]
     }
@@ -46,7 +50,7 @@ object Intake : Subsystem() {
         }
 
         if (lastState != intakeState) {
-            setHWValues()
+            setHWValues(power)
         }
         lastState = intakeState
     }
@@ -63,10 +67,10 @@ object Intake : Subsystem() {
         turnOff()
     }
 
-    override var status: Status = Status.INIT
+    override var status: Status = Status.ALIVE
     override var acc: Accuracy = Accuracy.LOW
 
-    private fun setHWValues() {
-        intakeMotor.power = power
+    private fun setHWValues(powerV: Double) {
+        intakeMotor.power = powerV
     }
 }

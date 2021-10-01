@@ -1,10 +1,6 @@
 package robotuprising.lib.hardware
 
 enum class Status {
-    INIT,
-    RUNNING,
+    ALIVE,
     DEAD;
-
-    val shouldUpdate
-        get() = this == RUNNING
 }
