@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.hardware.Accuracy
 import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
 import kotlin.math.absoluteValue
@@ -65,5 +64,4 @@ object Homura : Subsystem() {
     }
 
     override var status: Status = Status.ALIVE
-    override var acc: Accuracy = Accuracy.HIGH
 }

@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.control.action
+package robotuprising.ftc2021.auto.action
 
 interface Action {
     fun start()

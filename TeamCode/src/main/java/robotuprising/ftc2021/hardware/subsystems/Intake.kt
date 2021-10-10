@@ -1,10 +1,10 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.hardware.Accuracy
 import robotuprising.lib.hardware.Status
 
 object Intake : Subsystem() {
@@ -34,33 +34,42 @@ object Intake : Subsystem() {
         intakeState = IntakeStates.REVERSE
     }
 
+    fun customControl(ePower: Double) {
+        power = ePower
+
+    }
+
     fun setMax(max: Double) {
         Intake.max = max
     }
 
     override fun init(hwMap: HardwareMap) {
         intakeMotor = hwMap[ExpansionHubMotor::class.java, "intake"]
+        intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        intakeMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
 
     override fun update() {
-        power = when (intakeState) {
-            IntakeStates.ON -> max
-            IntakeStates.OFF -> 0.0
-            IntakeStates.REVERSE -> -max
-        }
-
-        if (lastState != intakeState) {
+        if(status == Status.EMERGENCY) {
             setHWValues(power)
+        } else {
+            power = when (intakeState) {
+                IntakeStates.ON -> max
+                IntakeStates.OFF -> 0.0
+                IntakeStates.REVERSE -> -max
+            }
+
+            if (lastState != intakeState) {
+                setHWValues(power)
+            }
+            lastState = intakeState
         }
-        lastState = intakeState
     }
 
     override fun sendDashboardPacket() {
-        val r = HashMap<String, Any>()
-        r["max"] = max
-        r["intakeStates"] = intakeState
-        r["power"] = power
-        AkemiDashboard.addAll(r)
+        AkemiDashboard.addData("max", max)
+        AkemiDashboard.addData("curr intake state", intakeState)
+        AkemiDashboard.addData("curr intake power", power)
     }
 
     override fun stop() {
@@ -68,7 +77,6 @@ object Intake : Subsystem() {
     }
 
     override var status: Status = Status.ALIVE
-    override var acc: Accuracy = Accuracy.LOW
 
     private fun setHWValues(powerV: Double) {
         intakeMotor.power = powerV

@@ -6,6 +6,7 @@ import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.toRadians
 import robotuprising.lib.hardware.MecanumPowers
+import robotuprising.lib.opmode.AkemiDashboard
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
 
@@ -14,31 +15,20 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
     override fun update(currPose: Pose): MecanumPowers {
 
         var skip: Boolean
-//        do {
-//            val target = waypoints[currWaypoint + 1]
-//
-//            skip = when (target) {
-//                is StopWaypoint -> currPose.distance(target) < 0.8 && MathUtil.angleThresh(currPose.h, target.h, target.dh)
-//                is PointTurnWaypoint -> MathUtil.angleThresh(currPose.h, target.h, target.dh)
-//                else -> currPose.distance(target) < target.followDistance
-//            }
-//            5
-//            val startAction = waypoints[currWaypoint].func
-//            if (startAction is RepeatFunction) {
-//                startAction.run(azusa, this)
-//            } else if (startAction is LoopUntilFunction) {
-//                skip = startAction.run(azusa, this)
-//            }
-//
-//            if (skip) {
-//                currWaypoint++
-//
-//                val currAction = waypoints[currWaypoint].func
-//                if (currAction is SimpleFunction) {
-//                    currAction.run(azusa, this)
-//                }
-//            }
-//        } while (skip && currWaypoint < waypoints.size - 1)
+        do {
+            val target = waypoints[currWaypoint + 1]
+
+            skip = when (target) {
+                is StopWaypoint -> currPose.distance(target) < 0.8 && MathUtil.angleThresh(currPose.h, target.h, target.dh)
+                is PointTurnWaypoint -> MathUtil.angleThresh(currPose.h, target.h, target.dh)
+                else -> currPose.distance(target) < target.followDistance
+            }
+
+
+            if (skip) {
+                currWaypoint++
+            }
+        } while (skip && currWaypoint < waypoints.size - 1)
         if (isFinished) return MecanumPowers()
 
         val start = waypoints[currWaypoint]
@@ -50,19 +40,19 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
         target.x = clipX
         target.y = clipY
 
-//        azusa.azuTelemetry.addData("followpoint", target.p)
-//        azusa.azuTelemetry.addData("target", end)
-//        azusa.azuTelemetry.fieldOverlay()
-//            .setStroke("white")
-//            .strokeLine(currPose.p.dbNormalize.x, currPose.p.dbNormalize.y, target.p.dbNormalize.x, target.p.dbNormalize.y)
+        AkemiDashboard.addData("followpoint", target.p)
+        AkemiDashboard.addData("target", end)
+        AkemiDashboard.fieldOverlay()
+            .setStroke("white")
+            .strokeLine(currPose.p.dbNormalize.x, currPose.p.dbNormalize.y, target.p.dbNormalize.x, target.p.dbNormalize.y)
 
         if ((end is StopWaypoint && currPose.distance(end) < end.followDistance) || end is PointTurnWaypoint) {
             return PurePursuitController.goToPosition(currPose, end)
         } else {
-//            val (nx, ny) = target.p.dbNormalize
-//            azusa.azuTelemetry.fieldOverlay()
-//                .setStroke("purple")
-//                .strokeCircle(nx, ny, 1.0)
+            val (nx, ny) = target.p.dbNormalize
+            AkemiDashboard.fieldOverlay()
+                .setStroke("purple")
+                .strokeCircle(nx, ny, 1.0)
 
             val relTarget = PurePursuitController.relVals(currPose, target.p)
 

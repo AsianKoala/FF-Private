@@ -4,7 +4,7 @@ import robotuprising.lib.util.PrimitiveExtensions.d
 import kotlin.math.abs
 import kotlin.math.sign
 
-class PIDFController(private val kp: Double, private val ki: Double, private val kd: Double, private val kv: Double=0.d, private val ka: Double=0.d, private val ks: Double=0.d) {
+class PIDFController(private val coeffs: PIDFCoeffs) {
 
     private var target = Double.NaN
     private var targetVel = Double.NaN
@@ -20,7 +20,7 @@ class PIDFController(private val kp: Double, private val ki: Double, private val
     private var lowerbound = -1.0
 
     // public members
-    val getCoeffs get() = mutableListOf(kp, ki, kd, kv, ka, ks)
+    val getCoeffs get() = coeffs
 
     fun setTargets(t: Double, tv: Double, ta: Double) {
         target = t
@@ -40,6 +40,13 @@ class PIDFController(private val kp: Double, private val ki: Double, private val
 
     fun reset() {
         target = Double.NaN
+        targetVel = Double.NaN
+        targetAccel = Double.NaN
+
+        errorsum = Double.NaN
+        lasterror = Double.NaN
+
+        lastupdate = Long.MIN_VALUE
     }
 
     fun setErrorSum(error: Double) {
@@ -62,8 +69,8 @@ class PIDFController(private val kp: Double, private val ki: Double, private val
             lasterror = error
             lastupdate = timestamp
 
-            val baseoutput = kp * error + ki * errorsum + kd * deriv + (refvel ?: targetVel) * kv + targetAccel * ka
-            val output = if (abs(baseoutput) < 1E-6) 0.0 else baseoutput + baseoutput.sign * ks
+            val rawOutput = coeffs.kp * error + coeffs.ki * errorsum + coeffs.kd * deriv + (refvel ?: targetVel) * coeffs.kv + targetAccel * coeffs.ka
+            val output = if (abs(rawOutput) < 1E-6) 0.0 else rawOutput + rawOutput.sign * coeffs.ks
 
             if (bounded) {
                 when {

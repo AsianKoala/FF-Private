@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.hardware.Accuracy
 import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
 import robotuprising.lib.system.Subsystem
@@ -13,6 +12,7 @@ object Akemi : Subsystem() {
 
     private val homura = Homura
     private val intake = Intake
+    private val lift = Lift
     private val subsystems = mutableListOf(homura, intake)
 
     override fun init(hwMap: HardwareMap) {
@@ -28,7 +28,7 @@ object Akemi : Subsystem() {
     }
 
     override fun update() {
-        subsystems.forEach { if(it.status==Status.ALIVE) it.update() }
+        subsystems.forEach { if(it.status != Status.DEAD ) it.update() }
     }
 
     override fun sendDashboardPacket() {
@@ -40,19 +40,6 @@ object Akemi : Subsystem() {
     }
 
     override var status: Status = Status.ALIVE
-    override var acc: Accuracy = Accuracy.HIGH
-
-    fun requestIntakeOn() {
-        Intake.turnOn()
-    }
-
-    fun requestIntakeOff() {
-        Intake.turnOff()
-    }
-
-    fun requestIntakeReverse() {
-        Intake.reverse()
-    }
 
     fun requestHomuraPowers(dtPowers: MecanumPowers) {
         Homura.setPowers(dtPowers)
@@ -60,5 +47,46 @@ object Akemi : Subsystem() {
 
     fun requestsHomuraStop() {
         Homura.stop()
+    }
+
+    fun requestLiftLowAlliance() {
+        lift.setLevel(Lift.LiftStages.ALLIANCE_LOW)
+    }
+
+    fun requestLiftMediumAlliance() {
+        lift.setLevel(Lift.LiftStages.ALLIANCE_MEDIUM)
+    }
+
+    fun requestLiftHighAlliance() {
+        lift.setLevel(Lift.LiftStages.ALLIANCE_HIGH)
+    }
+
+    fun requestLiftDefault() {
+        lift.setLevel(Lift.LiftStages.DEFAULT)
+    }
+
+    fun requestLiftShared() {
+        lift.setLevel(Lift.LiftStages.SHARED)
+    }
+
+    fun requestDeposit() {
+
+    }
+
+    fun requestFullIntakeSequence() {
+        TODO()
+    }
+
+    fun requestEmergencyLiftControl(power: Double) {
+        lift.emergencyControl(power)
+    }
+
+    fun requestEmergencyBDSControl() {
+        TODO()
+    }
+
+    fun requestEmergencyIntakeControl(power: Double) {
+        intake.status = Status.EMERGENCY
+        intake.customControl(power)
     }
 }

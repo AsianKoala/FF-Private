@@ -1,7 +1,6 @@
 package robotuprising.lib.system
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.hardware.Accuracy
 import robotuprising.lib.hardware.Status
 
 abstract class Subsystem {
@@ -12,5 +11,4 @@ abstract class Subsystem {
     abstract fun stop()
     abstract fun sendDashboardPacket()
     abstract var status: Status
-    abstract var acc: Accuracy
 }
