@@ -1,8 +1,8 @@
 package robotuprising.lib.util
 
-class AkemiList<E> : ArrayList<E>()  {
+class AkemiList<E> : ArrayList<E>() {
     override fun get(index: Int): E {
-        return if(index >= 0) {
+        return if (index >= 0) {
             super.get(index)
         } else {
             super.get(size + index)
@@ -11,7 +11,6 @@ class AkemiList<E> : ArrayList<E>()  {
 
     companion object {
         fun zip(a1: ArrayList<Unit>) {
-
         }
     }
 }

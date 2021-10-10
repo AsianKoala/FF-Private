@@ -1,11 +1,11 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.system.Subsystem
-import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
+import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.system.Subsystem
 import kotlin.math.absoluteValue
 
 object Homura : Subsystem() {
@@ -35,14 +35,14 @@ object Homura : Subsystem() {
     override fun update() {
         val newMotors = internalPowers.toMotor
         val max = newMotors.map { it.absoluteValue }.maxOrNull()!!
-        if(max > 1.0) {
-            for(i in 0..4)
+        if (max > 1.0) {
+            for (i in 0..4)
                 newMotors[i] /= max
         }
 
         val difference = newMotors.mapIndexed { i, x -> (x - prevAppliedPowers[i]).absoluteValue }
         if (difference.maxOrNull()!! > minThresh) {
-            for(i in 0..4) {
+            for (i in 0..4) {
                 appliedPowers[i] = newMotors[i]
                 motors[i].power = appliedPowers[i]
                 prevAppliedPowers[i] = appliedPowers[i]

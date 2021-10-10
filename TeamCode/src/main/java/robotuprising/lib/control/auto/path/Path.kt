@@ -1,8 +1,8 @@
 package robotuprising.lib.control.auto.path
 
 import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.math.Pose
 import robotuprising.lib.hardware.MecanumPowers
+import robotuprising.lib.math.Pose
 import kotlin.collections.ArrayList
 
 abstract class Path(val waypoints: ArrayList<Waypoint>) {

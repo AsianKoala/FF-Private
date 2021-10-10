@@ -3,8 +3,8 @@ package robotuprising.lib.math
 import robotuprising.lib.control.auto.waypoints.Waypoint
 
 data class Pose(
-        var p: Point,
-        var h: Angle
+    var p: Point,
+    var h: Angle
 ) {
     val x get() = p.x
     val y get() = p.y

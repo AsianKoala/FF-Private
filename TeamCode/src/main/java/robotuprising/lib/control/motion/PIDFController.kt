@@ -1,6 +1,5 @@
 package robotuprising.lib.control.motion
 
-import robotuprising.lib.util.PrimitiveExtensions.d
 import kotlin.math.abs
 import kotlin.math.sign
 

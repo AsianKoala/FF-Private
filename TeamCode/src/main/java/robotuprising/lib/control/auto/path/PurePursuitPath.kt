@@ -3,14 +3,12 @@ package robotuprising.lib.control.auto.path
 import robotuprising.lib.control.auto.waypoints.PointTurnWaypoint
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.toRadians
-import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.opmode.AkemiDashboard
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
-
-
 
     override fun update(currPose: Pose): MecanumPowers {
 
@@ -23,7 +21,6 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
                 is PointTurnWaypoint -> MathUtil.angleThresh(currPose.h, target.h, target.dh)
                 else -> currPose.distance(target) < target.followDistance
             }
-
 
             if (skip) {
                 currWaypoint++

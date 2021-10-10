@@ -2,12 +2,12 @@ package robotuprising.lib.control.auto.path
 
 import robotuprising.lib.control.auto.waypoints.LockedWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.math.MathUtil.toRadians
+import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.MathUtil.toRadians
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
-import robotuprising.lib.hardware.MecanumPowers
 import kotlin.math.PI
 
 object PurePursuitController {

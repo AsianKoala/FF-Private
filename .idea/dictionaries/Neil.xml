@@ -3,25 +3,30 @@
     <words>
       <w>atan</w>
       <w>brainlets</w>
+      <w>coeff</w>
       <w>coeffs</w>
       <w>dtheta</w>
       <w>gamepad</w>
       <w>horiz</w>
       <w>hypot</w>
+      <w>intaking</w>
       <w>ktlint</w>
       <w>linkedlists</w>
       <w>localizer</w>
       <w>maxify</w>
+      <w>mecanum</w>
       <w>mehra</w>
       <w>mins</w>
       <w>odometry</w>
       <w>opmode</w>
+      <w>outtaking</w>
       <w>perp</w>
       <w>prio</w>
       <w>refvel</w>
       <w>telem</w>
       <w>teleop</w>
       <w>transitioner</w>
+      <w>tunables</w>
       <w>vals</w>
     </words>
   </dictionary>

@@ -14,15 +14,16 @@ object Lift : Subsystem() {
 
     private lateinit var liftMotor: ExpansionHubMotor
 
-    private var liftState = LiftStages.DEFAULT
+    private var liftState = LiftStages.RESTING
     enum class LiftStages {
-        DEFAULT,
+        RESTING,
         SHARED,
         ALLIANCE_HIGH,
         ALLIANCE_MEDIUM,
         ALLIANCE_LOW
     }
 
+    private var defaultLiftTarget = LiftStages.SHARED
 
     private var internalPower: Double = 0.d
 
@@ -31,8 +32,8 @@ object Lift : Subsystem() {
 
     private var currPosition: Int = 0
     private val targetPosition: Int
-        get() = when(liftState) {
-            LiftStages.DEFAULT -> MIN_LIFT_ENC
+        get() = when (liftState) {
+            LiftStages.RESTING -> MIN_LIFT_ENC
             LiftStages.SHARED -> 100
             LiftStages.ALLIANCE_HIGH -> 500
             LiftStages.ALLIANCE_MEDIUM -> 250
@@ -41,7 +42,6 @@ object Lift : Subsystem() {
 
     private var controllerOutput: Double = 0.d
 
-
     // consts
     // TODO
     private const val MAX_LIFT_ENC: Int = Int.MAX_VALUE
@@ -49,11 +49,18 @@ object Lift : Subsystem() {
     private const val MAX_ACCEL: Double = Double.NaN
     private const val MAX_VEL: Double = Double.NaN
 
-
     fun setLevel(stage: LiftStages) {
         liftState = stage
         controller.reset()
         controller.setTargets(targetPosition.d, MAX_VEL, MAX_ACCEL)
+    }
+
+    fun goToDefault() {
+        setLevel(defaultLiftTarget)
+    }
+
+    fun setDefaultTarget(stage: LiftStages) {
+        defaultLiftTarget = stage
     }
 
     fun emergencyControl(power: Double) {
@@ -71,10 +78,15 @@ object Lift : Subsystem() {
     }
 
     override fun update() {
-        if(status != Status.EMERGENCY) {
+        if (status != Status.EMERGENCY) {
             currPosition = liftMotor.currentPosition
             internalPower = controller.update(currPosition.d, null)
+        }
 
+        if (currPosition > MAX_LIFT_ENC - 5) {
+            status = Status.EMERGENCY
+            controller.reset()
+            liftMotor.power = 0.d
         }
         setHWPowers()
     }

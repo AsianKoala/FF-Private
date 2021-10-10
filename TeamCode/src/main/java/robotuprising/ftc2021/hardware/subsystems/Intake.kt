@@ -2,10 +2,10 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.system.Subsystem
-import robotuprising.lib.opmode.AkemiDashboard
 import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.lib.hardware.Status
+import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.system.Subsystem
 
 object Intake : Subsystem() {
     private lateinit var intakeMotor: ExpansionHubMotor
@@ -36,7 +36,6 @@ object Intake : Subsystem() {
 
     fun customControl(ePower: Double) {
         power = ePower
-
     }
 
     fun setMax(max: Double) {
@@ -50,7 +49,7 @@ object Intake : Subsystem() {
     }
 
     override fun update() {
-        if(status == Status.EMERGENCY) {
+        if (status == Status.EMERGENCY) {
             setHWValues(power)
         } else {
             power = when (intakeState) {

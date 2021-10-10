@@ -3,9 +3,10 @@ package robotuprising.lib.system
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
+import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.debug.Debuggable
-import robotuprising.lib.opmode.OpModeType
 import robotuprising.lib.opmode.OpModeStatus
+import robotuprising.lib.opmode.OpModeType
 
 abstract class BaseOpMode : TunableLinearOpMode() {
 
@@ -54,12 +55,11 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
         m_stop()
-//        if (opModeType == OpModeType.AUTO && Globals.IS_COMP) {
-//            val opName = manager.activeOpModeName.substring(0,manager.activeOpModeName.indexOf("Auto"))
-//            manager.initActiveOpMode(opName + "Auto")
-//        }
+        if (opModeType == OpModeType.AUTO && Globals.IS_COMP) {
+            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
+            manager.initActiveOpMode(opName + "Auto")
+        }
     }
-
 
     abstract fun m_init()
     abstract fun m_init_loop()

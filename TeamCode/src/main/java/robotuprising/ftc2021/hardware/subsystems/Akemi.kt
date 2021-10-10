@@ -13,7 +13,8 @@ object Akemi : Subsystem() {
     private val homura = Homura
     private val intake = Intake
     private val lift = Lift
-    private val subsystems = mutableListOf(homura, intake)
+    private val intakePivot = IntakePivot
+    private val subsystems = mutableListOf(homura, intake, lift, intakePivot)
 
     override fun init(hwMap: HardwareMap) {
         subsystems.forEach { it.init(hwMap) }
@@ -28,7 +29,7 @@ object Akemi : Subsystem() {
     }
 
     override fun update() {
-        subsystems.forEach { if(it.status != Status.DEAD ) it.update() }
+        subsystems.forEach { if (it.status != Status.DEAD) it.update() }
     }
 
     override fun sendDashboardPacket() {
@@ -42,27 +43,35 @@ object Akemi : Subsystem() {
     override var status: Status = Status.ALIVE
 
     fun requestHomuraPowers(dtPowers: MecanumPowers) {
-        Homura.setPowers(dtPowers)
+        homura.setPowers(dtPowers)
     }
 
     fun requestsHomuraStop() {
-        Homura.stop()
+        homura.stop()
     }
 
-    fun requestLiftLowAlliance() {
-        lift.setLevel(Lift.LiftStages.ALLIANCE_LOW)
+    fun requestIntakeOn() {
+        intake.turnOn()
     }
 
-    fun requestLiftMediumAlliance() {
-        lift.setLevel(Lift.LiftStages.ALLIANCE_MEDIUM)
+    fun requestIntakeOff() {
+        intake.turnOff()
     }
 
-    fun requestLiftHighAlliance() {
-        lift.setLevel(Lift.LiftStages.ALLIANCE_HIGH)
+    fun requestIntakeReverse() {
+        intake.reverse()
     }
 
-    fun requestLiftDefault() {
-        lift.setLevel(Lift.LiftStages.DEFAULT)
+    fun requestDefaultLiftTarget(stage: Lift.LiftStages) {
+        lift.setDefaultTarget(stage)
+    }
+
+    fun requestLiftGoToDefault() {
+        lift.goToDefault()
+    }
+
+    fun requestLiftReset() {
+        lift.setLevel(Lift.LiftStages.RESTING)
     }
 
     fun requestLiftShared() {
@@ -70,7 +79,6 @@ object Akemi : Subsystem() {
     }
 
     fun requestDeposit() {
-
     }
 
     fun requestFullIntakeSequence() {
@@ -81,12 +89,12 @@ object Akemi : Subsystem() {
         lift.emergencyControl(power)
     }
 
-    fun requestEmergencyBDSControl() {
-        TODO()
+    fun requestStopLiftEmergency() {
+        lift.status = Status.ALIVE
+        requestLiftReset()
     }
 
-    fun requestEmergencyIntakeControl(power: Double) {
-        intake.status = Status.EMERGENCY
-        intake.customControl(power)
+    fun requestEmergencyBDSControl() {
+        TODO()
     }
 }
