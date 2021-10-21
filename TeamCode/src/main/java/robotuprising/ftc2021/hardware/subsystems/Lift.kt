@@ -15,6 +15,8 @@ object Lift : Subsystem() {
     private lateinit var liftMotor: ExpansionHubMotor
 
     private var liftState = LiftStages.RESTING
+    const val MAX_LIFT_STAGE = 4
+    const val MIN_LIFT_STAGE = 0
     enum class LiftStages {
         RESTING,
         SHARED,

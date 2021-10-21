@@ -16,6 +16,8 @@ object Akemi : Subsystem() {
     private val intakePivot = IntakePivot
     private val subsystems = mutableListOf(homura, intake, lift, intakePivot)
 
+    private var defaultLiftLevel = 0
+
     override fun init(hwMap: HardwareMap) {
         subsystems.forEach { it.init(hwMap) }
     }
@@ -42,6 +44,10 @@ object Akemi : Subsystem() {
 
     override var status: Status = Status.ALIVE
 
+    private fun changeLiftDefault() {
+        lift.setDefaultTarget(Lift.LiftStages.values()[defaultLiftLevel])
+    }
+
     fun requestHomuraPowers(dtPowers: MecanumPowers) {
         homura.setPowers(dtPowers)
     }
@@ -62,8 +68,14 @@ object Akemi : Subsystem() {
         intake.reverse()
     }
 
-    fun requestDefaultLiftTarget(stage: Lift.LiftStages) {
-        lift.setDefaultTarget(stage)
+    fun requestIncrementDefaultLiftLevel() {
+        if(defaultLiftLevel != Lift.MAX_LIFT_STAGE) defaultLiftLevel++
+        changeLiftDefault()
+    }
+
+    fun requestDecrementDefaultLiftLevel() {
+        if(defaultLiftLevel != Lift.MIN_LIFT_STAGE) defaultLiftLevel--
+        changeLiftDefault()
     }
 
     fun requestLiftGoToDefault() {
@@ -79,6 +91,7 @@ object Akemi : Subsystem() {
     }
 
     fun requestDeposit() {
+
     }
 
     fun requestFullIntakeSequence() {
@@ -92,9 +105,5 @@ object Akemi : Subsystem() {
     fun requestStopLiftEmergency() {
         lift.status = Status.ALIVE
         requestLiftReset()
-    }
-
-    fun requestEmergencyBDSControl() {
-        TODO()
     }
 }

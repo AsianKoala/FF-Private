@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.opmodes
 
 import robotuprising.ftc2021.hardware.Robot
-import robotuprising.ftc2021.hardware.subsystems.Lift
 import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
@@ -15,7 +14,6 @@ class TeleOp : Robot() {
     private var allianceXOffset = 0
     private var allianceYOffset = 0
 
-    private var defaultLiftLevel = 0
     /**
      *               main gamepad
      * intake on                        intake reverse
@@ -52,9 +50,8 @@ class TeleOp : Robot() {
 
     private fun liftControl() {
         when {
-            gamepad2.dpad_up -> defaultLiftLevel++
-            gamepad2.dpad_down -> defaultLiftLevel--
-            gamepad2.left_trigger_pressed -> superstructure.requestDefaultLiftTarget(Lift.LiftStages.values()[defaultLiftLevel])
+            gamepad1.dpad_up -> superstructure.requestIncrementDefaultLiftLevel()
+            gamepad1.dpad_down -> superstructure.requestDecrementDefaultLiftLevel()
             gamepad2.right_trigger_pressed -> superstructure.requestLiftGoToDefault()
             gamepad2.left_bumper -> superstructure.requestLiftReset()
             gamepad2.right_bumper -> superstructure.requestLiftShared()

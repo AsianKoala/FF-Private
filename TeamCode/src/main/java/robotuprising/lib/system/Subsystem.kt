@@ -11,4 +11,16 @@ abstract class Subsystem {
     abstract fun stop()
     abstract fun sendDashboardPacket()
     abstract var status: Status
+
+    fun revive() {
+        status = Status.ALIVE
+    }
+
+    fun fireAlarm() {
+        status = Status.EMERGENCY
+    }
+
+    fun kill() {
+        status = Status.DEAD
+    }
 }
