@@ -13,8 +13,7 @@ object Akemi : Subsystem() {
     private val homura = Homura
     private val intake = Intake
     private val lift = Lift
-    private val intakePivot = IntakePivot
-    private val subsystems = mutableListOf(homura, intake, lift, intakePivot)
+    private val subsystems = mutableListOf(homura, intake, lift)
 
     private var defaultLiftLevel = 0
 
@@ -65,7 +64,7 @@ object Akemi : Subsystem() {
     }
 
     fun requestIntakeReverse() {
-        intake.reverse()
+        intake.turnReverse()
     }
 
     fun requestIncrementDefaultLiftLevel() {

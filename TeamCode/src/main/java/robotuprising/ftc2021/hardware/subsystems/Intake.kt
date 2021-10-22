@@ -14,29 +14,36 @@ object Intake : Subsystem() {
     private lateinit var intakePivot: ExpansionHubServo
     private lateinit var intakeSensor: ColorSensor
 
-    private var lastState = IntakeStates.OFF
-    private var intakeState = IntakeStates.OFF
+    private const val RESTING = 1.0 // todo
+    private const val OUT = 0.0 // todo
+    private val CUBE_RGB_THRESHOLD = Triple(255, 255, 255) // todo
+    private val BALL_RGB_THRESHOLD = Triple(255, 255, 255) // todo
+
     private enum class IntakeStates {
         ON,
         OFF,
         REVERSE,
     }
 
-    private var max = 1.0
-    private var power = 0.0
-
-
-    private var pivotState = PivotStates.RESTING
     private enum class PivotStates {
-        RESTING,
+        IN,
         OUT
     }
 
-    private const val RESTING = 1.0 // todo
-    private const val OUT = 0.0 // todo
+    private enum class SensorStates {
+        NONE,
+        CUBE,
+        BALL
+    }
 
-    private var requestedPivot = false
+    private var lastState = IntakeStates.OFF
+    private var intakeState = IntakeStates.OFF
+    private var lastPivotState = PivotStates.IN
+    private var pivotState = PivotStates.IN
+    private var sensorState = SensorStates.NONE
 
+    private var max = 1.0
+    private var power = 0.0
 
     fun turnOn() {
         intakeState = IntakeStates.ON
@@ -46,7 +53,7 @@ object Intake : Subsystem() {
         intakeState = IntakeStates.OFF
     }
 
-    fun reverse() {
+    fun turnReverse() {
         intakeState = IntakeStates.REVERSE
     }
 
@@ -58,17 +65,18 @@ object Intake : Subsystem() {
         Intake.max = max
     }
 
-    private fun changePivot(state: PivotStates) {
-        pivotState = state
-    }
-
     fun rotateOut() {
-        changePivot(PivotStates.OUT)
+        pivotState = PivotStates.OUT
     }
 
-    fun rest() {
-        changePivot(PivotStates.RESTING)
+    fun rotateIn() {
+        pivotState = PivotStates.IN
     }
+
+    private val ColorSensor.rgb: Triple<Int, Int, Int> get() = Triple(red(), blue(), green())
+    
+    private fun Triple<Int, Int, Int>.thresholdCompare(other: Triple<Int, Int, Int>): Boolean =
+            first < other.first && second < other.second && third < other.third
 
     override fun init(hwMap: HardwareMap) {
         intakeMotor = hwMap[ExpansionHubMotor::class.java, "intake"]
@@ -96,12 +104,18 @@ object Intake : Subsystem() {
             lastState = intakeState
         }
 
-        if (requestedPivot) {
-            requestedPivot = false
+        if (pivotState != lastPivotState) {
+            lastPivotState = pivotState
             intakePivot.position = when (pivotState) {
-                PivotStates.RESTING -> RESTING
+                PivotStates.IN -> RESTING
                 PivotStates.OUT -> OUT
             }
+        }
+
+        sensorState = when {
+            intakeSensor.rgb.thresholdCompare(BALL_RGB_THRESHOLD) -> SensorStates.BALL
+            intakeSensor.rgb.thresholdCompare(CUBE_RGB_THRESHOLD) -> SensorStates.CUBE
+            else -> SensorStates.NONE
         }
     }
 
@@ -124,3 +138,4 @@ object Intake : Subsystem() {
         intakeMotor.power = powerV
     }
 }
+
