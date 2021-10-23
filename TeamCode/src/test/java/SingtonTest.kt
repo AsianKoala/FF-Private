@@ -5,6 +5,6 @@ object SingtonTest {
     @JvmStatic
     fun main(args: Array<String>) {
         val m_homura = Homura
-        m_homura.setPowers(MecanumPowers())
+        m_homura.setFromMecanumPowers(MecanumPowers())
     }
 }

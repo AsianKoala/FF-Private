@@ -6,21 +6,35 @@ import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
 import robotuprising.lib.opmode.AkemiDashboard
 import robotuprising.lib.system.Subsystem
+import robotuprising.lib.util.Extensions.d
+import kotlin.math.PI
 import kotlin.math.absoluteValue
 
 object Homura : Subsystem() {
-
     private lateinit var motors: MutableList<ExpansionHubMotor>
 
+    private const val MIN_THRESH = 0.01
+
+    private const val WHEEL_RADIUS = 1.88976
+    private const val GEAR_RATIO = 1.0
+    private const val TICKS_PER_REV = 537.7
+
+    private var internalPowers = mutableListOf(0.d, 0.d, 0.d, 0.d)
     private val appliedPowers = DoubleArray(4)
     private val prevAppliedPowers = DoubleArray(4)
 
-    private val minThresh = 0.01
+    private fun ticksToInches(ticks: Int): Double {
+        return WHEEL_RADIUS * 2 * PI * GEAR_RATIO * ticks / TICKS_PER_REV
+    }
 
-    private var internalPowers: MecanumPowers = MecanumPowers()
+    val wheelPositions: List<Double> = motors.map { ticksToInches(it.currentPosition) }
 
-    fun setPowers(powers: MecanumPowers) {
-        internalPowers.set(powers)
+    fun setFromMecanumPowers(powers: MecanumPowers) {
+        internalPowers = powers.toMotor
+    }
+
+    fun setDirectPowers(powers: MutableList<Double>) {
+        powers.forEachIndexed { i, it -> internalPowers[i] = it }
     }
 
     override fun init(hwMap: HardwareMap) {
@@ -33,17 +47,17 @@ object Homura : Subsystem() {
     }
 
     override fun update() {
-        val newMotors = internalPowers.toMotor
-        val max = newMotors.map { it.absoluteValue }.maxOrNull()!!
+//        val newMotors = internalPowers.toMotor
+        val max = internalPowers.map { it.absoluteValue }.maxOrNull()!!
         if (max > 1.0) {
             for (i in 0..4)
-                newMotors[i] /= max
+                internalPowers[i] /= max
         }
 
-        val difference = newMotors.mapIndexed { i, x -> (x - prevAppliedPowers[i]).absoluteValue }
-        if (difference.maxOrNull()!! > minThresh) {
+        val difference = internalPowers.mapIndexed { i, x -> (x - prevAppliedPowers[i]).absoluteValue }
+        if (difference.maxOrNull()!! > MIN_THRESH) {
             for (i in 0..4) {
-                appliedPowers[i] = newMotors[i]
+                appliedPowers[i] = internalPowers[i]
                 motors[i].power = appliedPowers[i]
                 prevAppliedPowers[i] = appliedPowers[i]
             }
@@ -60,7 +74,7 @@ object Homura : Subsystem() {
     }
 
     override fun stop() {
-        setPowers(MecanumPowers())
+        setFromMecanumPowers(MecanumPowers())
     }
 
     override var status: Status = Status.ALIVE

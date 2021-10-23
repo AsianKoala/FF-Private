@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.hardware
 
 import com.acmerobotics.dashboard.config.Config
-import robotuprising.lib.util.PrimitiveExtensions.d
+import robotuprising.lib.util.Extensions.d
 
 @Config
 object Tunables {

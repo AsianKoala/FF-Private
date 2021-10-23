@@ -8,7 +8,7 @@ import robotuprising.lib.control.motion.PIDFController
 import robotuprising.lib.hardware.Status
 import robotuprising.lib.opmode.AkemiDashboard
 import robotuprising.lib.system.Subsystem
-import robotuprising.lib.util.PrimitiveExtensions.d
+import robotuprising.lib.util.Extensions.d
 
 object Lift : Subsystem() {
 

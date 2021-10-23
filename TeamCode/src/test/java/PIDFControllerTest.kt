@@ -1,7 +1,7 @@
 import com.qualcomm.robotcore.util.Range
 import robotuprising.lib.control.motion.PIDFCoeffs
 import robotuprising.lib.control.motion.PIDFController
-import robotuprising.lib.util.PrimitiveExtensions.d
+import robotuprising.lib.util.Extensions.d
 import kotlin.math.abs
 
 object PIDFControllerTest {

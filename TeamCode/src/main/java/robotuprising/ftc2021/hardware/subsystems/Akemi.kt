@@ -48,7 +48,7 @@ object Akemi : Subsystem() {
     }
 
     fun requestHomuraPowers(dtPowers: MecanumPowers) {
-        homura.setPowers(dtPowers)
+        homura.setFromMecanumPowers(dtPowers)
     }
 
     fun requestsHomuraStop() {

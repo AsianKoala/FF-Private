@@ -74,9 +74,12 @@ object Intake : Subsystem() {
     }
 
     private val ColorSensor.rgb: Triple<Int, Int, Int> get() = Triple(red(), blue(), green())
-    
+
     private fun Triple<Int, Int, Int>.thresholdCompare(other: Triple<Int, Int, Int>): Boolean =
             first < other.first && second < other.second && third < other.third
+
+    private fun Triple<Int, Int, Int>.sumThreshCompare(other: Triple<Int, Int, Int>): Boolean =
+            (first + second + third) < (other.first + other.second + other.third)
 
     override fun init(hwMap: HardwareMap) {
         intakeMotor = hwMap[ExpansionHubMotor::class.java, "intake"]

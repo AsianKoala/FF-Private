@@ -6,7 +6,7 @@ import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
-import robotuprising.lib.util.PrimitiveExtensions.d
+import robotuprising.lib.util.Extensions.d
 
 class TeleOp : Robot() {
 
