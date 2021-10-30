@@ -1,85 +1,147 @@
 package robotuprising.lib.control.motion
 
-import kotlin.math.abs
+import com.acmerobotics.roadrunner.util.NanoClock
+import com.acmerobotics.roadrunner.util.epsilonEquals
+import kotlin.math.absoluteValue
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sign
 
-class PIDFController(private val coeffs: PIDFCoeffs) {
+/**
+ * Constructor for [PIDFController]. [kV], [kA], and [kStatic] are designed for DC motor feedforward
+ * control (the most common kind of feedforward in FTC). [kF] provides a custom feedforward term for other plants.
+ *
+ * @param pid traditional PID coefficients
+ * @param kV feedforward velocity gain
+ * @param kA feedforward acceleration gain
+ * @param kStatic additive feedforward constant
+ * @param kF custom feedforward that depends on position and/or velocity (e.g., a gravity term for arms)
+ * @param clock clock
+ */
+class PIDFController (
+        private val pid: PIDCoeffs,
+        private val kV: Double = 0.0,
+        private val kA: Double = 0.0,
+        private val kStatic: Double = 0.0,
+        private val kF: (Double, Double?) -> Double = { _, _ -> 0.0 },
+        private val clock: NanoClock = NanoClock.system()
+) {
+    private var errorSum: Double = 0.0
+    private var lastUpdateTimestamp: Double = Double.NaN
 
-    private var target = Double.NaN
-    private var targetVel = Double.NaN
-    private var targetAccel = Double.NaN
+    private var inputBounded: Boolean = false
+    private var minInput: Double = 0.0
+    private var maxInput: Double = 0.0
 
-    private var errorsum = Double.NaN
-    private var lasterror = Double.NaN
+    private var outputBounded: Boolean = false
+    private var minOutput: Double = 0.0
+    private var maxOutput: Double = 0.0
 
-    private var lastupdate: Long = Long.MIN_VALUE
+    /**
+     * Target position (that is, the controller setpoint).
+     */
+    var targetPosition: Double = 0.0
 
-    private var bounded = false
-    private var upperbound = 1.0
-    private var lowerbound = -1.0
+    /**
+     * Target velocity.
+     */
+    var targetVelocity: Double = 0.0
 
-    // public members
-    val getCoeffs get() = coeffs
+    /**
+     * Target acceleration.
+     */
+    var targetAcceleration: Double = 0.0
 
-    fun setTargets(t: Double, tv: Double, ta: Double) {
-        target = t
-        targetVel = tv
-        targetAccel = ta
+    /**
+     * Error computed in the last call to [update].
+     */
+    var lastError: Double = 0.0
+        private set
+
+    /**
+     * Sets bound on the input of the controller. The min and max values are considered modularly-equivalent (that is,
+     * the input wraps around).
+     *
+     * @param min minimum input
+     * @param max maximum input
+     */
+    fun setInputBounds(min: Double, max: Double) {
+        if (min < max) {
+            inputBounded = true
+            minInput = min
+            maxInput = max
+        }
     }
 
-    fun setBounds(upper: Double, lower: Double) {
-        bounded = true
-        upperbound = upper
-        lowerbound = lower
+    /**
+     * Sets bounds on the output of the controller.
+     *
+     * @param min minimum output
+     * @param max maximum output
+     */
+    fun setOutputBounds(min: Double, max: Double) {
+        if (min < max) {
+            outputBounded = true
+            minOutput = min
+            maxOutput = max
+        }
     }
 
-    fun unbound() {
-        bounded = false
+    private fun getPositionError(measuredPosition: Double): Double {
+        var error = targetPosition - measuredPosition
+        if (inputBounded) {
+            val inputRange = maxInput - minInput
+            while (error.absoluteValue > inputRange / 2.0) {
+                error -= sign(error) * inputRange
+            }
+        }
+        return error
     }
 
-    fun reset() {
-        target = Double.NaN
-        targetVel = Double.NaN
-        targetAccel = Double.NaN
-
-        errorsum = Double.NaN
-        lasterror = Double.NaN
-
-        lastupdate = Long.MIN_VALUE
-    }
-
-    fun setErrorSum(error: Double) {
-        errorsum = error
-    }
-
-    fun update(position: Double, refvel: Double?): Double {
-        val error = target - position
-        val timestamp = System.currentTimeMillis()
-
-        return if (lastupdate == Long.MIN_VALUE) {
-            lasterror = error
-            lastupdate = timestamp
+    /**
+     * Run a single iteration of the controller.
+     *
+     * @param measuredPosition measured position (feedback)
+     * @param measuredVelocity measured velocity
+     */
+    @JvmOverloads
+    fun update(
+            measuredPosition: Double,
+            measuredVelocity: Double? = null
+    ): Double {
+        val currentTimestamp = clock.seconds()
+        val error = getPositionError(measuredPosition)
+        return if (lastUpdateTimestamp.isNaN()) {
+            lastError = error
+            lastUpdateTimestamp = currentTimestamp
             0.0
         } else {
-            val dt = timestamp - lastupdate
-            val deriv = (error - lasterror) / dt
-            errorsum += error * dt
+            val dt = currentTimestamp - lastUpdateTimestamp
+            errorSum += 0.5 * (error + lastError) * dt
+            val errorDeriv = (error - lastError) / dt
 
-            lasterror = error
-            lastupdate = timestamp
+            lastError = error
+            lastUpdateTimestamp = currentTimestamp
 
-            val rawOutput = coeffs.kp * error + coeffs.ki * errorsum + coeffs.kd * deriv + (refvel ?: targetVel) * coeffs.kv + targetAccel * coeffs.ka
-            val output = if (abs(rawOutput) < 1E-6) 0.0 else rawOutput + rawOutput.sign * coeffs.ks
+            val baseOutput = pid.kp * error + pid.ki * errorSum +
+                    pid.kd * (measuredVelocity?.let { targetVelocity - it } ?: errorDeriv) +
+                    kV * targetVelocity + kA * targetAcceleration + kF(measuredPosition, measuredVelocity)
+            val output = if (baseOutput epsilonEquals 0.0) 0.0 else baseOutput + sign(baseOutput) * kStatic
 
-            if (bounded) {
-                when {
-                    output < lowerbound -> lowerbound
-                    output > upperbound -> upperbound
-                    else -> output
-                }
+            if (outputBounded) {
+                max(minOutput, min(output, maxOutput))
             } else {
                 output
             }
         }
+    }
+
+    /**
+     * Reset the controller's integral sum.
+     */
+    fun reset() {
+        errorSum = 0.0
+        lastError = 0.0
+        lastUpdateTimestamp = Double.NaN
     }
 }

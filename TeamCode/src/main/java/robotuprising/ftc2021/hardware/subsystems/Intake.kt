@@ -11,11 +11,14 @@ import robotuprising.lib.system.Subsystem
 
 object Intake : Subsystem() {
     private lateinit var intakeMotor: ExpansionHubMotor
-    private lateinit var intakePivot: ExpansionHubServo
+    private lateinit var intakePivotLeft: ExpansionHubServo
+    private lateinit var intakePivotRight: ExpansionHubServo
     private lateinit var intakeSensor: ColorSensor
 
-    private const val RESTING = 1.0 // todo
-    private const val OUT = 0.0 // todo
+    private const val LEFT_IN = 1.0 // todo
+    private const val LEFT_OUT = 0.0 // todo
+    private const val RIGHT_IN = 0.0 // todo
+    private const val RIGHT_OUT = 1.0 // todo
     private val CUBE_RGB_THRESHOLD = Triple(255, 255, 255) // todo
     private val BALL_RGB_THRESHOLD = Triple(255, 255, 255) // todo
 
@@ -35,7 +38,6 @@ object Intake : Subsystem() {
         CUBE,
         BALL
     }
-
     private var lastState = IntakeStates.OFF
     private var intakeState = IntakeStates.OFF
     private var lastPivotState = PivotStates.IN
@@ -56,21 +58,20 @@ object Intake : Subsystem() {
     fun turnReverse() {
         intakeState = IntakeStates.REVERSE
     }
-
-    fun customControl(ePower: Double) {
-        power = ePower
-    }
+    
 
     fun setMax(max: Double) {
         Intake.max = max
     }
 
     fun rotateOut() {
-        pivotState = PivotStates.OUT
+        if(pivotState == PivotStates.IN)
+            pivotState = PivotStates.OUT
     }
 
     fun rotateIn() {
-        pivotState = PivotStates.IN
+        if(pivotState == PivotStates.OUT)
+            pivotState = PivotStates.IN
     }
 
     private val ColorSensor.rgb: Triple<Int, Int, Int> get() = Triple(red(), blue(), green())
@@ -81,12 +82,15 @@ object Intake : Subsystem() {
     private fun Triple<Int, Int, Int>.sumThreshCompare(other: Triple<Int, Int, Int>): Boolean =
             (first + second + third) < (other.first + other.second + other.third)
 
+    val hasMineral get() = sensorState != SensorStates.NONE
+
     override fun init(hwMap: HardwareMap) {
         intakeMotor = hwMap[ExpansionHubMotor::class.java, "intake"]
         intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         intakeMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
-        intakePivot = hwMap[ExpansionHubServo::class.java, "intakePivot"]
+        intakePivotLeft = hwMap[ExpansionHubServo::class.java, "intakePivotLeft"]
+        intakePivotRight = hwMap[ExpansionHubServo::class.java, "intakePivotRight"]
 
         intakeSensor = hwMap[ColorSensor::class.java, "intakeSensor"]
     }
@@ -109,9 +113,13 @@ object Intake : Subsystem() {
 
         if (pivotState != lastPivotState) {
             lastPivotState = pivotState
-            intakePivot.position = when (pivotState) {
-                PivotStates.IN -> RESTING
-                PivotStates.OUT -> OUT
+            intakePivotLeft.position = when (pivotState) {
+                PivotStates.IN -> LEFT_IN
+                PivotStates.OUT -> LEFT_OUT
+            }
+            intakePivotRight.position = when (pivotState) {
+                PivotStates.IN -> RIGHT_IN
+                PivotStates.OUT -> RIGHT_OUT
             }
         }
 
@@ -123,12 +131,12 @@ object Intake : Subsystem() {
     }
 
     override fun sendDashboardPacket() {
-        AkemiDashboard.addData("max", max)
-        AkemiDashboard.addData("curr intake state", intakeState)
-        AkemiDashboard.addData("curr intake power", power)
-        AkemiDashboard.addData("pivot state", pivotState)
-        AkemiDashboard.addData("resting val", RESTING)
-        AkemiDashboard.addData("out val", OUT)
+        AkemiDashboard["max"] =  max
+        AkemiDashboard["curr intake state"] = intakeState
+        AkemiDashboard["curr intake power"]=  power
+        AkemiDashboard["pivot state"] = pivotState
+        AkemiDashboard["resting val"] = LEFT_IN
+        AkemiDashboard["out val"] = LEFT_OUT
     }
 
     override fun stop() {

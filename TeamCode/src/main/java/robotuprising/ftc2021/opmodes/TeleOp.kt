@@ -28,7 +28,7 @@ class TeleOp : Robot() {
      */
 
     override fun m_loop() {
-        superstructure.requestHomuraPowers(
+        superstructure.requestDriveManagerPowers(
             MecanumPowers(
                 gamepad1.left_stick_x.d,
                 gamepad1.left_stick_y.d,

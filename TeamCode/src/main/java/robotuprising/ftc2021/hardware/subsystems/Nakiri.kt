@@ -1,6 +1,7 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.openftc.revextensions2.ExpansionHubEx
 import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
 import robotuprising.lib.system.Subsystem
@@ -8,12 +9,12 @@ import robotuprising.lib.system.Subsystem
 /**
  * @see 254's Superstructure class
  */
-object Akemi : Subsystem() {
+object Nakiri : Subsystem() {
 
-    private val homura = Homura
+    private val driveManager = DriveManager
     private val intake = Intake
     private val lift = Lift
-    private val subsystems = mutableListOf(homura, intake, lift)
+    private val subsystems = mutableListOf(driveManager, intake, lift)
 
     private var defaultLiftLevel = 0
 
@@ -43,16 +44,17 @@ object Akemi : Subsystem() {
 
     override var status: Status = Status.ALIVE
 
+
     private fun changeLiftDefault() {
         lift.setDefaultTarget(Lift.LiftStages.values()[defaultLiftLevel])
     }
 
-    fun requestHomuraPowers(dtPowers: MecanumPowers) {
-        homura.setFromMecanumPowers(dtPowers)
+    fun requestDriveManagerPowers(dtPowers: MecanumPowers) {
+        driveManager.setHomuraVectors(dtPowers)
     }
 
-    fun requestsHomuraStop() {
-        homura.stop()
+    fun requestDriveManagerStop() {
+        driveManager.stop()
     }
 
     fun requestIntakeOn() {
@@ -94,7 +96,7 @@ object Akemi : Subsystem() {
     }
 
     fun requestFullIntakeSequence() {
-        TODO()
+
     }
 
     fun requestEmergencyLiftControl(power: Double) {

@@ -17,13 +17,8 @@ object AkemiDashboard {
         internalTelemetry = telemImpl
     }
 
-    fun addData(k: String, v: Any) {
-        internalTelemetry.addData(k, v)
-        telemAdapter.addData(k, v)
-    }
-
     fun addAll(other: HashMap<String, Any>) {
-        other.forEach { addData(it.key, it.value) }
+        other.forEach { set(it.key, it.value) }
         addSpace()
     }
 
@@ -41,4 +36,10 @@ object AkemiDashboard {
         FtcDashboard.getInstance().sendTelemetryPacket(telemAdapter)
         telemAdapter = TelemAdapter()
     }
+
+    operator fun set(k: String, v: Any) {
+        internalTelemetry.addData(k, v)
+        telemAdapter.addData(k, v)
+    }
+
 }

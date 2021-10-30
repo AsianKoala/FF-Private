@@ -15,4 +15,5 @@ object Extensions {
     val Int.l get() = this.toLong()
 
     val List<Double>.listAbs: List<Double> get() = map { it.absoluteValue }
+    val ArrayList<*>.deepCopy: ArrayList<Any> get() = this.map { it } as ArrayList<Any>
 }

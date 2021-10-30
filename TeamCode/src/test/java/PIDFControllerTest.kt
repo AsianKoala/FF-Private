@@ -1,5 +1,5 @@
 import com.qualcomm.robotcore.util.Range
-import robotuprising.lib.control.motion.PIDFCoeffs
+import robotuprising.lib.control.motion.PIDCoeffs
 import robotuprising.lib.control.motion.PIDFController
 import robotuprising.lib.util.Extensions.d
 import kotlin.math.abs
@@ -14,10 +14,10 @@ object PIDFControllerTest {
 
         repeat(iters) {
             var position = 0.0
-            val controller = PIDFController(PIDFCoeffs(0.d, 0.d, 0.d))
+            val controller = PIDFController(PIDCoeffs(0.d, 0.d, 0.d))
 
-            controller.setTargets(target, 0.0, 0.0)
-            controller.setBounds(1.0, -1.0)
+//            controller.setTargets(target, 0.0, 0.0)
+//            controller.setBounds(1.0, -1.0)
 
             val timestarted = System.currentTimeMillis()
             var lastupdate = timestarted

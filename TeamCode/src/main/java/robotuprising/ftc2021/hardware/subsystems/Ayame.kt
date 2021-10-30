@@ -10,7 +10,7 @@ import robotuprising.lib.util.Extensions.d
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 
-object Homura : Subsystem() {
+object Ayame : Subsystem() {
     private lateinit var motors: MutableList<ExpansionHubMotor>
 
     private const val MIN_THRESH = 0.01
@@ -22,12 +22,13 @@ object Homura : Subsystem() {
     private var internalPowers = mutableListOf(0.d, 0.d, 0.d, 0.d)
     private val appliedPowers = DoubleArray(4)
     private val prevAppliedPowers = DoubleArray(4)
+    private var skipCounter = 0
 
     private fun ticksToInches(ticks: Int): Double {
         return WHEEL_RADIUS * 2 * PI * GEAR_RATIO * ticks / TICKS_PER_REV
     }
 
-    val wheelPositions: List<Double> = motors.map { ticksToInches(it.currentPosition) }
+    val wheelPositions: List<Double> get() = motors.map { ticksToInches(it.currentPosition) }
 
     fun setFromMecanumPowers(powers: MecanumPowers) {
         internalPowers = powers.toMotor
@@ -61,16 +62,16 @@ object Homura : Subsystem() {
                 motors[i].power = appliedPowers[i]
                 prevAppliedPowers[i] = appliedPowers[i]
             }
+        } else {
+            skipCounter++
         }
     }
 
     override fun sendDashboardPacket() {
-        val r = HashMap<String, Any>()
-        r["fl"] = appliedPowers[0]
-        r["bl"] = appliedPowers[1]
-        r["fr"] = appliedPowers[2]
-        r["br"] = appliedPowers[3]
-        AkemiDashboard.addAll(r)
+        AkemiDashboard["fl"] = appliedPowers[0]
+        AkemiDashboard["bl"] = appliedPowers[1]
+        AkemiDashboard["fr"] = appliedPowers[2]
+        AkemiDashboard["br"] = appliedPowers[3]
     }
 
     override fun stop() {

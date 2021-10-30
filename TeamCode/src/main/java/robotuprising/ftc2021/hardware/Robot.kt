@@ -1,10 +1,10 @@
 package robotuprising.ftc2021.hardware
 
-import robotuprising.ftc2021.hardware.subsystems.Akemi
+import robotuprising.ftc2021.hardware.subsystems.Nakiri
 import robotuprising.lib.system.BaseOpMode
 
 abstract class Robot : BaseOpMode() {
-    val superstructure = Akemi
+    val superstructure = Nakiri
 
     override fun m_init() {
         superstructure.init(hardwareMap)

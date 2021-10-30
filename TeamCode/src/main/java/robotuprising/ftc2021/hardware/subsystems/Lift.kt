@@ -3,16 +3,16 @@ package robotuprising.ftc2021.hardware.subsystems
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.control.motion.PIDFCoeffs
+import robotuprising.lib.control.motion.PIDCoeffs
 import robotuprising.lib.control.motion.PIDFController
 import robotuprising.lib.hardware.Status
-import robotuprising.lib.opmode.AkemiDashboard
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d
 
 object Lift : Subsystem() {
 
-    private lateinit var liftMotor: ExpansionHubMotor
+    private lateinit var leftLiftMotor: ExpansionHubMotor
+    private lateinit var rightLiftMotor: ExpansionHubMotor
 
     private var liftState = LiftStages.RESTING
     const val MAX_LIFT_STAGE = 4
@@ -29,7 +29,7 @@ object Lift : Subsystem() {
 
     private var internalPower: Double = 0.d
 
-    private lateinit var pidCoeffs: PIDFCoeffs
+    private lateinit var pidCoeffs: PIDCoeffs
     private val controller = PIDFController(pidCoeffs)
 
     private var currPosition: Int = 0
@@ -54,7 +54,7 @@ object Lift : Subsystem() {
     fun setLevel(stage: LiftStages) {
         liftState = stage
         controller.reset()
-        controller.setTargets(targetPosition.d, MAX_VEL, MAX_ACCEL)
+//        controller.setTargets(targetPosition.d, MAX_VEL, MAX_ACCEL)
     }
 
     fun goToDefault() {
@@ -72,45 +72,41 @@ object Lift : Subsystem() {
     }
 
     override fun init(hwMap: HardwareMap) {
-        liftMotor = hwMap[ExpansionHubMotor::class.java, "lift"]
-        liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        leftLiftMotor = hwMap[ExpansionHubMotor::class.java, "lift"]
+        leftLiftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        leftLiftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
-        controller.setBounds(1.0, -1.0)
+//        controller.setBounds(1.0, -1.0)
     }
 
     override fun update() {
         if (status != Status.EMERGENCY) {
-            currPosition = liftMotor.currentPosition
-            internalPower = controller.update(currPosition.d, null)
+            currPosition = leftLiftMotor.currentPosition
+            internalPower = controller.update(currPosition.d)
         }
 
         if (currPosition > MAX_LIFT_ENC - 5) {
             status = Status.EMERGENCY
             controller.reset()
-            liftMotor.power = 0.d
+            leftLiftMotor.power = 0.d
         }
-        setHWPowers()
+        leftLiftMotor.power = internalPower
     }
 
     override fun stop() {
         controller.reset()
         internalPower = 0.d
-        liftMotor.power = 0.d
+        leftLiftMotor.power = 0.d
     }
 
     override fun sendDashboardPacket() {
-        AkemiDashboard.addData("lift state", liftState)
-        AkemiDashboard.addData("lift pid coeffs", pidCoeffs)
-        AkemiDashboard.addData("internal power", internalPower)
-        AkemiDashboard.addData("controller output", controllerOutput)
-        AkemiDashboard.addData("curr position", currPosition)
-        AkemiDashboard.addData("target position", targetPosition)
+//        AkemiDashboard.addData("lift state", liftState)
+//        AkemiDashboard.addData("lift pid coeffs", pidCoeffs)
+//        AkemiDashboard.addData("internal power", internalPower)
+//        AkemiDashboard.addData("controller output", controllerOutput)
+//        AkemiDashboard.addData("curr position", currPosition)
+//        AkemiDashboard.addData("target position", targetPosition)
     }
 
     override var status: Status = Status.ALIVE
-
-    fun setHWPowers() {
-        liftMotor.power = internalPower
-    }
 }

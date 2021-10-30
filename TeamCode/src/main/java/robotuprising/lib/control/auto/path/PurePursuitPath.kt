@@ -37,8 +37,8 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
         target.x = clipX
         target.y = clipY
 
-        AkemiDashboard.addData("followpoint", target.p)
-        AkemiDashboard.addData("target", end)
+        AkemiDashboard["followpoint"] = target.p
+        AkemiDashboard["target"] = end
         AkemiDashboard.fieldOverlay()
             .setStroke("white")
             .strokeLine(currPose.p.dbNormalize.x, currPose.p.dbNormalize.y, target.p.dbNormalize.x, target.p.dbNormalize.y)

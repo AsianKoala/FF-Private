@@ -1,30 +1,48 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.hardware.HardwareMap
+import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.hardware.Status
 import robotuprising.lib.math.Angle
+import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
 object DriveManager : Subsystem() {
-    private val mainDrive = Homura
+    private val mainDrive = Ayame
     private val rrDrive = VirtualDrive
 
     var imuAngle = Angle.EAST
+
+    var isAutomated = false
+
+    private fun updateRRData() {
+        rrDrive.externalHeading = imuAngle.angle
+        rrDrive.setWheelPositions(mainDrive.wheelPositions)
+        rrDrive.updatePoseEstimate()
+    }
+
+    fun setHomuraVectors(powers: MecanumPowers) {
+        mainDrive.setFromMecanumPowers(powers)
+    }
+
+    fun setRRPoseEstimate(pose: Pose) {
+        rrDrive.poseEstimate = Pose2d(pose.x, pose.y, pose.h.angle)
+    }
 
     override fun init(hwMap: HardwareMap) {
         mainDrive.init(hwMap)
     }
 
     override fun update() {
-        val drivePositions = mainDrive.wheelPositions
-        rrDrive.externalHeading = imuAngle.angle
-        rrDrive.setWheelPositions(drivePositions)
+        updateRRData()
 
-        val speeds = rrDrive.simulatedWheelPowers
-        mainDrive.setDirectPowers(speeds)
+        if(isAutomated) {
+            mainDrive.setDirectPowers(rrDrive.simulatedWheelPowers)
+        }
+
         mainDrive.update()
         status = mainDrive.status
-
     }
 
     override fun stop() {
