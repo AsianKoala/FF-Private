@@ -2,4 +2,4 @@
 
 ![azusa gif](./res/azusa.gif)
 
-<div align=center>maintained by neil</div>
+<div align=center>code for our 2021-22 robot Nakiri</div>
