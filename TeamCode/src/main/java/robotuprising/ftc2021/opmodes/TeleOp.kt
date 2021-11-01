@@ -1,12 +1,13 @@
 package robotuprising.ftc2021.opmodes
 
 import robotuprising.ftc2021.hardware.Robot
-import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
+import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
-import robotuprising.lib.util.Extensions.d
 
 class TeleOp : Robot() {
 
@@ -29,9 +30,9 @@ class TeleOp : Robot() {
 
     override fun m_loop() {
         superstructure.requestDriveManagerPowers(
-            MecanumPowers(
+            Pose(Point(
                 gamepad1.left_stick_x.d,
-                gamepad1.left_stick_y.d,
+                gamepad1.left_stick_y.d),
                 Angle(gamepad1.left_stick_x.d, AngleUnit.RAW)
             )
         )

@@ -1,7 +1,6 @@
 package robotuprising.lib.system
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.hardware.Status
 
 abstract class Subsystem {
     abstract fun init(hwMap: HardwareMap)
@@ -10,17 +9,4 @@ abstract class Subsystem {
     abstract fun update()
     abstract fun stop()
     abstract fun sendDashboardPacket()
-    abstract var status: Status
-
-    fun revive() {
-        status = Status.ALIVE
-    }
-
-    fun fireAlarm() {
-        status = Status.EMERGENCY
-    }
-
-    fun kill() {
-        status = Status.DEAD
-    }
 }

@@ -18,4 +18,8 @@ data class Pose(
 
     val toRawString = String.format("%.2f, %.2f, %.2f", x, y, h.angle)
     override fun toString() = String.format("%.2f, %.2f, %.2f", x, y, h.wrap().deg)
+
+    companion object {
+        val DEFAULT = Pose(Point.ORIGIN, Angle.EAST)
+    }
 }

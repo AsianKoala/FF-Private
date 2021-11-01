@@ -13,7 +13,7 @@ import robotuprising.lib.util.Extensions.d
  * - Get wheel positions from Homura
  * - Set Homura's wheel powers
  */
-object VirtualDrive : MecanumDrive(0.d, 0.d, 0.d, 0.d, 0.d, 0.d) {
+class VirtualDrive : MecanumDrive(0.d, 0.d, 0.d, 0.d, 0.d, 0.d) {
 
     private var realWheelPositions = mutableListOf(0.d, 0.d, 0.d, 0.d)
     var realIMUAngle = Angle.EAST

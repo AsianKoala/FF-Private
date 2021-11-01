@@ -14,6 +14,13 @@ object Extensions {
     val Long.i get() = this.toInt()
     val Int.l get() = this.toLong()
 
-    val List<Double>.listAbs: List<Double> get() = map { it.absoluteValue }
+    val List<Double>.listAbs: List<Double> get() = this.map { it.absoluteValue }
     val ArrayList<*>.deepCopy: ArrayList<Any> get() = this.map { it } as ArrayList<Any>
+    val ArrayList<Double>.average: Double get() = this.sum() / this.size
+//    val ArrayList<Int>.average: Double
+//        get() {
+//            var sum = 0.0
+//            this.forEach { sum += it }
+//            return sum / size
+//        }
 }

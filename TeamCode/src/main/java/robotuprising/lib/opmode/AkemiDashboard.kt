@@ -17,16 +17,6 @@ object AkemiDashboard {
         internalTelemetry = telemImpl
     }
 
-    fun addAll(other: HashMap<String, Any>) {
-        other.forEach { set(it.key, it.value) }
-        addSpace()
-    }
-
-    fun addSpace() {
-        internalTelemetry.addLine()
-        telemAdapter.addSpace()
-    }
-
     fun fieldOverlay(): Canvas {
         return telemAdapter.fieldOverlay()
     }
@@ -41,5 +31,4 @@ object AkemiDashboard {
         internalTelemetry.addData(k, v)
         telemAdapter.addData(k, v)
     }
-
 }

@@ -2,15 +2,17 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.lib.hardware.MecanumPowers
-import robotuprising.lib.hardware.Status
 import robotuprising.lib.math.Angle
+import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
-object DriveManager : Subsystem() {
-    private val mainDrive = Ayame
-    private val rrDrive = VirtualDrive
+/**
+ * Connects a virtual roadrunner drive to Ayame
+ */
+class DriveManager : Subsystem() {
+    private val mainDrive = Ayame()
+    private val rrDrive = VirtualDrive()
 
     var imuAngle = Angle.EAST
 
@@ -22,12 +24,8 @@ object DriveManager : Subsystem() {
         rrDrive.updatePoseEstimate()
     }
 
-    fun setHomuraVectors(powers: MecanumPowers) {
-        mainDrive.setFromMecanumPowers(powers)
-    }
-
-    fun setRRPoseEstimate(pose: Pose) {
-        rrDrive.poseEstimate = Pose2d(pose.x, pose.y, pose.h.angle)
+    fun setPowers(powers: Pose) {
+        mainDrive.powers = powers
     }
 
     override fun init(hwMap: HardwareMap) {
@@ -37,12 +35,11 @@ object DriveManager : Subsystem() {
     override fun update() {
         updateRRData()
 
-        if(isAutomated) {
-            mainDrive.setDirectPowers(rrDrive.simulatedWheelPowers)
+        if (isAutomated) {
+            mainDrive.rrPowers =  rrDrive.simulatedWheelPowers
         }
 
         mainDrive.update()
-        status = mainDrive.status
     }
 
     override fun stop() {
@@ -52,6 +49,4 @@ object DriveManager : Subsystem() {
     override fun sendDashboardPacket() {
         mainDrive.sendDashboardPacket()
     }
-
-    override var status: Status = Status.ALIVE
 }

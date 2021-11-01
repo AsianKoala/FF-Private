@@ -1,7 +1,6 @@
 package robotuprising.lib.control.auto.path
 
 import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.Pose
 import kotlin.collections.ArrayList
 
@@ -11,7 +10,7 @@ abstract class Path(val waypoints: ArrayList<Waypoint>) {
 
     val isFinished get() = currWaypoint >= waypoints.size - 1
 
-    abstract fun update(currPose: Pose): MecanumPowers
+    abstract fun update(currPose: Pose): Pose
 
     init {
         val copy = ArrayList<Waypoint>()

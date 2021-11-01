@@ -3,14 +3,14 @@ package robotuprising.lib.control.auto.path
 import robotuprising.lib.control.auto.waypoints.PointTurnWaypoint
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.toRadians
 import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.util.Extensions.d
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
 
-    override fun update(currPose: Pose): MecanumPowers {
+    override fun update(currPose: Pose): Pose {
 
         var skip: Boolean
         do {
@@ -26,7 +26,7 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
                 currWaypoint++
             }
         } while (skip && currWaypoint < waypoints.size - 1)
-        if (isFinished) return MecanumPowers()
+        if (isFinished) return Pose(Point.ORIGIN, Angle(0.d, AngleUnit.RAW))
 
         val start = waypoints[currWaypoint]
         val end = waypoints[currWaypoint + 1]
@@ -64,9 +64,9 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
                 val relClip = PurePursuitController.relVals(currPose, target.p)
                 val relMovement = relClip / 4.0
                 val finalMovement = (relMovement + movementPowers) / 2.0
-                MecanumPowers(finalMovement.x, finalMovement.y, Angle(turnPower, AngleUnit.RAW))
+                Pose(Point(finalMovement.x, finalMovement.y), Angle(turnPower, AngleUnit.RAW))
             } else {
-                MecanumPowers(movementPowers.x, movementPowers.y, Angle(turnPower, AngleUnit.RAW))
+                Pose(Point(movementPowers.x, movementPowers.y), Angle(turnPower, AngleUnit.RAW))
             }
         }
     }

@@ -3,110 +3,99 @@ package robotuprising.ftc2021.hardware.subsystems
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.openftc.revextensions2.ExpansionHubMotor
+import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.control.motion.PIDCoeffs
 import robotuprising.lib.control.motion.PIDFController
-import robotuprising.lib.hardware.Status
+import robotuprising.lib.opmode.AkemiDashboard
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d
 
-object Lift : Subsystem() {
+class Lift : Subsystem() {
+    companion object {
+        const val MAX_LIFT_STAGE = 4
+        const val MIN_LIFT_STAGE = 0
 
-    private lateinit var leftLiftMotor: ExpansionHubMotor
-    private lateinit var rightLiftMotor: ExpansionHubMotor
+        private const val MAX_ACCEL: Double = Double.NaN // todo
+        private const val MAX_VEL: Double = Double.NaN // todo
+
+        private val pidCoeffs = PIDCoeffs(1.0, 0.0, 0.0)
+    }
+
+    private val left = NakiriMotor("leftSlide", false)
+    private val right = NakiriMotor("rightSlide", false)
 
     private var liftState = LiftStages.RESTING
-    const val MAX_LIFT_STAGE = 4
-    const val MIN_LIFT_STAGE = 0
+    private var defaultLiftTarget = LiftStages.RESTING
     enum class LiftStages {
         RESTING,
         SHARED,
-        ALLIANCE_HIGH,
+        ALLIANCE_LOW,
         ALLIANCE_MEDIUM,
-        ALLIANCE_LOW
+        ALLIANCE_HIGH
     }
 
-    private var defaultLiftTarget = LiftStages.SHARED
-
-    private var internalPower: Double = 0.d
-
-    private lateinit var pidCoeffs: PIDCoeffs
-    private val controller = PIDFController(pidCoeffs)
-
-    private var currPosition: Int = 0
     private val targetPosition: Int
         get() = when (liftState) {
-            LiftStages.RESTING -> MIN_LIFT_ENC
-            LiftStages.SHARED -> 100
-            LiftStages.ALLIANCE_HIGH -> 500
-            LiftStages.ALLIANCE_MEDIUM -> 250
-            LiftStages.ALLIANCE_LOW -> 175
+            LiftStages.RESTING -> 0 //              todo
+            LiftStages.SHARED -> 100 //             todo
+            LiftStages.ALLIANCE_LOW -> 175 //       todo
+            LiftStages.ALLIANCE_MEDIUM -> 250 //    todo
+            LiftStages.ALLIANCE_HIGH -> 500 //      todo
         }
 
-    private var controllerOutput: Double = 0.d
+    private val currPosition get() = left.position
+    private var internalPower: Double = 0.d
 
-    // consts
-    // TODO
-    private const val MAX_LIFT_ENC: Int = Int.MAX_VALUE
-    private const val MIN_LIFT_ENC: Int = Int.MIN_VALUE
-    private const val MAX_ACCEL: Double = Double.NaN
-    private const val MAX_VEL: Double = Double.NaN
+    private val controller = PIDFController(pidCoeffs) // todo
+
 
     fun setLevel(stage: LiftStages) {
         liftState = stage
         controller.reset()
-//        controller.setTargets(targetPosition.d, MAX_VEL, MAX_ACCEL)
+        controller.targetPosition = targetPosition.toDouble()
     }
 
-    fun goToDefault() {
+    fun setLevelToDefault() {
         setLevel(defaultLiftTarget)
     }
 
-    fun setDefaultTarget(stage: LiftStages) {
+    fun changeDefault(stage: LiftStages) {
         defaultLiftTarget = stage
     }
 
     fun emergencyControl(power: Double) {
-        status = Status.EMERGENCY
         internalPower = power
         controller.reset()
     }
 
     override fun init(hwMap: HardwareMap) {
-        leftLiftMotor = hwMap[ExpansionHubMotor::class.java, "lift"]
-        leftLiftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        leftLiftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        left.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        left.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
-//        controller.setBounds(1.0, -1.0)
+        controller.reset()
+        controller.targetPosition = targetPosition.d
+        controller.targetVelocity = MAX_VEL
+        controller.targetAcceleration = MAX_ACCEL
     }
 
     override fun update() {
-        if (status != Status.EMERGENCY) {
-            currPosition = leftLiftMotor.currentPosition
-            internalPower = controller.update(currPosition.d)
-        }
+        internalPower = controller.update(currPosition.d)
 
-        if (currPosition > MAX_LIFT_ENC - 5) {
-            status = Status.EMERGENCY
-            controller.reset()
-            leftLiftMotor.power = 0.d
-        }
-        leftLiftMotor.power = internalPower
+        left.power = internalPower
+        right.power = right.power
     }
 
     override fun stop() {
         controller.reset()
         internalPower = 0.d
-        leftLiftMotor.power = 0.d
+        left.power = 0.d
     }
 
     override fun sendDashboardPacket() {
-//        AkemiDashboard.addData("lift state", liftState)
-//        AkemiDashboard.addData("lift pid coeffs", pidCoeffs)
-//        AkemiDashboard.addData("internal power", internalPower)
-//        AkemiDashboard.addData("controller output", controllerOutput)
-//        AkemiDashboard.addData("curr position", currPosition)
-//        AkemiDashboard.addData("target position", targetPosition)
+        AkemiDashboard["lift state"] = liftState
+        AkemiDashboard["lift pid coeffs"] = pidCoeffs
+        AkemiDashboard["lift internal power"] = internalPower
+        AkemiDashboard["curr position"] = currPosition
+        AkemiDashboard["target position"] = targetPosition
     }
-
-    override var status: Status = Status.ALIVE
 }

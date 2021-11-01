@@ -8,9 +8,4 @@ class AkemiList<E> : ArrayList<E>() {
             super.get(size + index)
         }
     }
-
-    companion object {
-        fun zip(a1: ArrayList<Unit>) {
-        }
-    }
 }

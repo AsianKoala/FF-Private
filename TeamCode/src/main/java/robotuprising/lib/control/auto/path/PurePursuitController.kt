@@ -2,7 +2,6 @@ package robotuprising.lib.control.auto.path
 
 import robotuprising.lib.control.auto.waypoints.LockedWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.hardware.MecanumPowers
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.MathUtil.toRadians
@@ -18,14 +17,14 @@ object PurePursuitController {
         return Point(-d * rh.sin, d * rh.cos)
     }
 
-    fun goToPosition(curr: Pose, target: Waypoint): MecanumPowers {
+    fun goToPosition(curr: Pose, target: Waypoint): Pose {
         val relTarget = relVals(curr, target.p)
         val movementPowers = (relTarget / 12.0)
 
         val deltaH = getDeltaH(curr, target)
         val turnPower = deltaH / 90.0.toRadians
 
-        return MecanumPowers(movementPowers.x, movementPowers.y, Angle(turnPower, AngleUnit.RAW))
+        return Pose(Point(movementPowers.x, movementPowers.y), Angle(turnPower, AngleUnit.RAW))
     }
 
     fun getDeltaH(curr: Pose, target: Waypoint): Double {

@@ -13,6 +13,5 @@ object PIDFControllerLambdaTest {
             targetVelocity = 1.d
             targetAcceleration = 1.d + 9.8
         }
-        
     }
 }

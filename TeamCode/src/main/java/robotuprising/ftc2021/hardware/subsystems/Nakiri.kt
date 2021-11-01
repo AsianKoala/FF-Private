@@ -1,9 +1,8 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.openftc.revextensions2.ExpansionHubEx
-import robotuprising.lib.hardware.MecanumPowers
-import robotuprising.lib.hardware.Status
+import robotuprising.ftc2021.util.Globals
+import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
 /**
@@ -11,14 +10,18 @@ import robotuprising.lib.system.Subsystem
  */
 object Nakiri : Subsystem() {
 
-    private val driveManager = DriveManager
-    private val intake = Intake
-    private val lift = Lift
-    private val subsystems = mutableListOf(driveManager, intake, lift)
+    private val driveManager = DriveManager()
+    private val intake = Intake()
+    private val lift = Lift()
+    private val outtake = Outtake()
+    private val duckSpinner = DuckSpinner()
+    private val arm = MarkerGrabber()
+    private val subsystems = mutableListOf(driveManager, intake, lift, outtake, duckSpinner, arm)
 
     private var defaultLiftLevel = 0
 
     override fun init(hwMap: HardwareMap) {
+        Globals.hwMap = hwMap
         subsystems.forEach { it.init(hwMap) }
     }
 
@@ -31,7 +34,7 @@ object Nakiri : Subsystem() {
     }
 
     override fun update() {
-        subsystems.forEach { if (it.status != Status.DEAD) it.update() }
+        subsystems.forEach { it.update() }
     }
 
     override fun sendDashboardPacket() {
@@ -42,15 +45,12 @@ object Nakiri : Subsystem() {
         subsystems.forEach { it.stop() }
     }
 
-    override var status: Status = Status.ALIVE
-
-
     private fun changeLiftDefault() {
-        lift.setDefaultTarget(Lift.LiftStages.values()[defaultLiftLevel])
+        lift.changeDefault(Lift.LiftStages.values()[defaultLiftLevel])
     }
 
-    fun requestDriveManagerPowers(dtPowers: MecanumPowers) {
-        driveManager.setHomuraVectors(dtPowers)
+    fun requestDriveManagerPowers(powers: Pose) {
+        driveManager.setPowers(powers)
     }
 
     fun requestDriveManagerStop() {
@@ -69,18 +69,30 @@ object Nakiri : Subsystem() {
         intake.turnReverse()
     }
 
+    fun requestIntakeRotateOut() {
+        intake.rotateOut()
+    }
+
+    fun requestIntakeRotateIn() {
+        intake.rotateIn()
+    }
+
     fun requestIncrementDefaultLiftLevel() {
-        if(defaultLiftLevel != Lift.MAX_LIFT_STAGE) defaultLiftLevel++
-        changeLiftDefault()
+        if (defaultLiftLevel != Lift.MAX_LIFT_STAGE) {
+            defaultLiftLevel++
+            changeLiftDefault()
+        }
     }
 
     fun requestDecrementDefaultLiftLevel() {
-        if(defaultLiftLevel != Lift.MIN_LIFT_STAGE) defaultLiftLevel--
-        changeLiftDefault()
+        if (defaultLiftLevel != Lift.MIN_LIFT_STAGE) {
+            defaultLiftLevel--
+            changeLiftDefault()
+        }
     }
 
     fun requestLiftGoToDefault() {
-        lift.goToDefault()
+        lift.setLevelToDefault()
     }
 
     fun requestLiftReset() {
@@ -92,19 +104,22 @@ object Nakiri : Subsystem() {
     }
 
     fun requestDeposit() {
-
+        TODO()
     }
 
     fun requestFullIntakeSequence() {
-
+        TODO()
     }
 
     fun requestEmergencyLiftControl(power: Double) {
         lift.emergencyControl(power)
     }
 
-    fun requestStopLiftEmergency() {
-        lift.status = Status.ALIVE
-        requestLiftReset()
+    fun requestSpinnerOn() {
+        duckSpinner.turnOn()
+    }
+
+    fun requestSpinnerOff() {
+        duckSpinner.turnOff()
     }
 }

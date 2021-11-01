@@ -18,13 +18,13 @@ import kotlin.math.sign
  * @param kF custom feedforward that depends on position and/or velocity (e.g., a gravity term for arms)
  * @param clock clock
  */
-class PIDFController (
-        private val pid: PIDCoeffs,
-        private val kV: Double = 0.0,
-        private val kA: Double = 0.0,
-        private val kStatic: Double = 0.0,
-        private val kF: (Double, Double?) -> Double = { _, _ -> 0.0 },
-        private val clock: NanoClock = NanoClock.system()
+class PIDFController(
+    private val pid: PIDCoeffs,
+    private val kV: Double = 0.0,
+    private val kA: Double = 0.0,
+    private val kStatic: Double = 0.0,
+    private val kF: (Double, Double?) -> Double = { _, _ -> 0.0 },
+    private val clock: NanoClock = NanoClock.system()
 ) {
     private var errorSum: Double = 0.0
     private var lastUpdateTimestamp: Double = Double.NaN
@@ -104,10 +104,9 @@ class PIDFController (
      * @param measuredPosition measured position (feedback)
      * @param measuredVelocity measured velocity
      */
-    @JvmOverloads
     fun update(
-            measuredPosition: Double,
-            measuredVelocity: Double? = null
+        measuredPosition: Double,
+        measuredVelocity: Double? = null
     ): Double {
         val currentTimestamp = clock.seconds()
         val error = getPositionError(measuredPosition)
@@ -124,8 +123,8 @@ class PIDFController (
             lastUpdateTimestamp = currentTimestamp
 
             val baseOutput = pid.kp * error + pid.ki * errorSum +
-                    pid.kd * (measuredVelocity?.let { targetVelocity - it } ?: errorDeriv) +
-                    kV * targetVelocity + kA * targetAcceleration + kF(measuredPosition, measuredVelocity)
+                pid.kd * (measuredVelocity?.let { targetVelocity - it } ?: errorDeriv) +
+                kV * targetVelocity + kA * targetAcceleration + kF(measuredPosition, measuredVelocity)
             val output = if (baseOutput epsilonEquals 0.0) 0.0 else baseOutput + sign(baseOutput) * kStatic
 
             if (outputBounded) {

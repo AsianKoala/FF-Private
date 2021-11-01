@@ -1,5 +1,4 @@
 import robotuprising.ftc2021.hardware.subsystems.Ayame
-import robotuprising.lib.hardware.MecanumPowers
 
 object SingtonTest {
     @JvmStatic
