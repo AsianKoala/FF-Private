@@ -22,7 +22,6 @@ class Ayame : Subsystem() {
         private fun ticksToInches(ticks: Int): Double {
             return WHEEL_RADIUS * 2 * PI * GEAR_RATIO * ticks / TICKS_PER_REV
         }
-
     }
 
     private val frontLeft = NakiriMotor("FL", true)
@@ -31,13 +30,11 @@ class Ayame : Subsystem() {
     private val backRight = NakiriMotor("BR", true)
     private val motors = listOf(frontLeft, frontRight, backLeft, backRight)
 
-
     val wheelPositions: List<Double> get() = motors.map { ticksToInches(it.position) }
 
     var powers = Pose(Point.ORIGIN, Angle(0.d, AngleUnit.RAW))
     var rrUpdated = false
     var rrPowers = mutableListOf(0.d, 0.d, 0.d, 0.d)
-
 
     override fun init(hwMap: HardwareMap) {
         frontRight.direction = DcMotorSimple.Direction.REVERSE
@@ -45,7 +42,7 @@ class Ayame : Subsystem() {
     }
 
     override fun update() {
-        val wheels = if(rrUpdated) {
+        val wheels = if (rrUpdated) {
             rrUpdated = false
             rrPowers
         } else {
@@ -58,7 +55,7 @@ class Ayame : Subsystem() {
 
         val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
 
-        if(absMax > 1.0) {
+        if (absMax > 1.0) {
             motors.forEachIndexed { i, it -> it.power = wheels[i] / absMax }
         } else {
             motors.forEachIndexed { i, it -> it.power = wheels[i] }

@@ -15,7 +15,6 @@ class Outtake : Subsystem() {
     private lateinit var leftServo: ExpansionHubServo
     private lateinit var rightServo: ExpansionHubServo
 
-
     private var outtakeState = OuttakeStates.IN
     private enum class OuttakeStates {
         IN,

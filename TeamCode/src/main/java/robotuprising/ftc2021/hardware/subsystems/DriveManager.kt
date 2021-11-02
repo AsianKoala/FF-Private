@@ -1,9 +1,7 @@
 package robotuprising.ftc2021.hardware.subsystems
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.math.Angle
-import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
@@ -36,7 +34,7 @@ class DriveManager : Subsystem() {
         updateRRData()
 
         if (isAutomated) {
-            mainDrive.rrPowers =  rrDrive.simulatedWheelPowers
+            mainDrive.rrPowers = rrDrive.simulatedWheelPowers
         }
 
         mainDrive.update()

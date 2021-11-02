@@ -30,9 +30,11 @@ class TeleOp : Robot() {
 
     override fun m_loop() {
         superstructure.requestDriveManagerPowers(
-            Pose(Point(
-                gamepad1.left_stick_x.d,
-                gamepad1.left_stick_y.d),
+            Pose(
+                Point(
+                    gamepad1.left_stick_x.d,
+                    gamepad1.left_stick_y.d
+                ),
                 Angle(gamepad1.left_stick_x.d, AngleUnit.RAW)
             )
         )

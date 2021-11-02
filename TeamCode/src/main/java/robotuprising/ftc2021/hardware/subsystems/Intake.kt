@@ -24,7 +24,6 @@ class Intake : Subsystem() {
     private val intakePivotRight = NakiriServo("intakePivotRight")
     private lateinit var intakeSensor: ColorSensor
 
-
     private enum class IntakeStates {
         ON,
         OFF,

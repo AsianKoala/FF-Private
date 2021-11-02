@@ -2,7 +2,6 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.control.motion.PIDCoeffs
 import robotuprising.lib.control.motion.PIDFController
@@ -48,7 +47,6 @@ class Lift : Subsystem() {
 
     private val controller = PIDFController(pidCoeffs) // todo
 
-
     fun setLevel(stage: LiftStages) {
         liftState = stage
         controller.reset()
@@ -63,7 +61,9 @@ class Lift : Subsystem() {
         defaultLiftTarget = stage
     }
 
+    private var emergency = false
     fun emergencyControl(power: Double) {
+        emergency = true
         internalPower = power
         controller.reset()
     }
@@ -79,10 +79,13 @@ class Lift : Subsystem() {
     }
 
     override fun update() {
-        internalPower = controller.update(currPosition.d)
+        if(!emergency) {
+            internalPower = controller.update(currPosition.d)
+
+        }
 
         left.power = internalPower
-        right.power = right.power
+        right.power = internalPower
     }
 
     override fun stop() {

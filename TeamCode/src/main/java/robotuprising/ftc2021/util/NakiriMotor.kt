@@ -33,7 +33,7 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
 
     val position: Int
         get() {
-            return if(onMaster) {
+            return if (onMaster) {
                 BulkDataManager.masterData.getMotorCurrentPosition(motor)
             } else {
                 BulkDataManager.slaveData.getMotorCurrentPosition(motor)
