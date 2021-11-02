@@ -2,8 +2,8 @@ package robotuprising.ftc2021.auto.util
 
 import com.acmerobotics.dashboard.canvas.Canvas
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import kotlin.jvm.JvmOverloads
 import com.acmerobotics.roadrunner.path.Path
+import kotlin.jvm.JvmOverloads
 
 /**
  * Set of helper functions for drawing Road Runner paths and trajectories on dashboard canvases.

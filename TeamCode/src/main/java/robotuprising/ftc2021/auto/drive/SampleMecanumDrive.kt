@@ -35,9 +35,9 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
     private val motors: List<DcMotorEx>
     private val imu: BNO055IMU
     private val batteryVoltageSensor: VoltageSensor
-//    fun trajectoryBuilder(startPose: Pose2d?): TrajectoryBuilder {
-//        return TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
-//    }
+    fun trajectoryBuilder(startPose: Pose2d): TrajectoryBuilder {
+        return TrajectoryBuilder(startPose, 0.0, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
+    }
 
     fun trajectoryBuilder(startPose: Pose2d, reversed: Boolean): TrajectoryBuilder {
         return TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
@@ -49,17 +49,17 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
 
     fun trajectorySequenceBuilder(startPose: Pose2d): TrajectorySequenceBuilder {
         return TrajectorySequenceBuilder(
-                startPose,
-                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                DriveConstants.MAX_ANG_VEL, DriveConstants.MAX_ANG_ACCEL
+            startPose,
+            VEL_CONSTRAINT, ACCEL_CONSTRAINT,
+            DriveConstants.MAX_ANG_VEL, DriveConstants.MAX_ANG_ACCEL
         )
     }
 
     fun turnAsync(angle: Double) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
-                trajectorySequenceBuilder(poseEstimate)
-                        .turn(angle)
-                        .build()
+            trajectorySequenceBuilder(poseEstimate)
+                .turn(angle)
+                .build()
         )
     }
 
@@ -70,9 +70,9 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
 
     fun followTrajectoryAsync(trajectory: Trajectory) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
-                trajectorySequenceBuilder(trajectory.start())
-                        .addTrajectory(trajectory)
-                        .build()
+            trajectorySequenceBuilder(trajectory.start())
+                .addTrajectory(trajectory)
+                .build()
         )
     }
 
@@ -120,24 +120,28 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
 
     fun setPIDFCoefficients(runMode: DcMotor.RunMode, coefficients: PIDFCoefficients) {
         val compensatedCoefficients = PIDFCoefficients(
-                coefficients.p, coefficients.i, coefficients.d,
-                coefficients.f * 12 / batteryVoltageSensor.getVoltage()
+            coefficients.p, coefficients.i, coefficients.d,
+            coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         )
         for (motor in motors) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients)
         }
     }
 
+    // todo look at
     fun setWeightedDrivePower(drivePower: Pose2d) {
         var vel: Pose2d = drivePower
-        if ((Math.abs(drivePower.x) + Math.abs(drivePower.y)
-                        + Math.abs(drivePower.heading)) > 1) {
+        if ((
+            Math.abs(drivePower.x) + Math.abs(drivePower.y) +
+                Math.abs(drivePower.heading)
+            ) > 1
+        ) {
             // re-normalize the powers according to the weights
             val denom: Double = VX_WEIGHT * Math.abs(drivePower.x) + VY_WEIGHT * Math.abs(drivePower.y) + OMEGA_WEIGHT * Math.abs(drivePower.heading)
             vel = Pose2d(
-                    VX_WEIGHT * drivePower.x,
-                    VY_WEIGHT * drivePower.y,
-                    OMEGA_WEIGHT * drivePower.heading
+                VX_WEIGHT * drivePower.x,
+                VY_WEIGHT * drivePower.y,
+                OMEGA_WEIGHT * drivePower.heading
             ).div(denom)
         }
         setDrivePower(vel)
@@ -151,7 +155,7 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
         return wP
     }
 
-    override fun getWheelVelocities(): List<Double>? {
+    override fun getWheelVelocities(): List<Double> {
         val wV: MutableList<Double> = ArrayList()
         for (motor in motors) {
             wV.add(DriveConstants.encoderTicksToInches(motor.velocity))
@@ -159,11 +163,11 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
         return wV
     }
 
-    override fun setMotorPowers(v: Double, v1: Double, v2: Double, v3: Double) {
-        leftFront.power = v
-        leftRear.power = v1
-        rightRear.power = v2
-        rightFront.power = v3
+    override fun setMotorPowers(frontLeft: Double, rearLeft: Double, rearRight: Double, frontRight: Double) {
+        leftFront.power = frontLeft
+        leftRear.power = rearLeft
+        rightRear.power = rearRight
+        rightFront.power = frontRight
     }
 
     override val rawExternalHeading: Double
@@ -187,23 +191,23 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
     // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
     // flat on a surface
     val externalHeadingVelocity: Double
-        get() =// TODO: This must be changed to match your configuration
-        //                           | Z axis
-        //                           |
-        //     (Motor Port Side)     |   / X axis
-        //                       ____|__/____
-        //          Y axis     / *   | /    /|   (IO Side)
-        //          _________ /______|/    //      I2C
-        //                   /___________ //     Digital
-        //                  |____________|/      Analog
-        //
-        //                 (Servo Port Side)
-        //
-        // The positive x axis points toward the USB port(s)
-        //
-        // Adjust the axis rotation rate as necessary
-        // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
-                // flat on a surface
+        get() = // TODO: This must be changed to match your configuration
+            //                           | Z axis
+            //                           |
+            //     (Motor Port Side)     |   / X axis
+            //                       ____|__/____
+            //          Y axis     / *   | /    /|   (IO Side)
+            //          _________ /______|/    //      I2C
+            //                   /___________ //     Digital
+            //                  |____________|/      Analog
+            //
+            //                 (Servo Port Side)
+            //
+            // The positive x axis points toward the USB port(s)
+            //
+            // Adjust the axis rotation rate as necessary
+            // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
+            // flat on a surface
             imu.angularVelocity.zRotationRate.d
 
     companion object {
@@ -216,10 +220,12 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
         private val VEL_CONSTRAINT: TrajectoryVelocityConstraint = getVelocityConstraint(DriveConstants.MAX_VEL, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH)
         private val ACCEL_CONSTRAINT: TrajectoryAccelerationConstraint = getAccelerationConstraint(DriveConstants.MAX_ACCEL)
         fun getVelocityConstraint(maxVel: Double, maxAngularVel: Double, trackWidth: Double): TrajectoryVelocityConstraint {
-            return MinVelocityConstraint(Arrays.asList(
+            return MinVelocityConstraint(
+                Arrays.asList(
                     AngularVelocityConstraint(maxAngularVel),
                     MecanumVelocityConstraint(maxVel, trackWidth)
-            ))
+                )
+            )
         }
 
         fun getAccelerationConstraint(maxAccel: Double): TrajectoryAccelerationConstraint {
@@ -228,8 +234,10 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
     }
 
     init {
-        follower = HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5)
+        follower = HolonomicPIDVAFollower(
+            TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+            Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5
+        )
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap)
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next()
         for (module in hardwareMap.getAll<LynxModule>(LynxModule::class.java)) {

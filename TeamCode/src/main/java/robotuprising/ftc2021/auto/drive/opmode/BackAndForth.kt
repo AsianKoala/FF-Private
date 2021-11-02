@@ -1,12 +1,11 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package robotuprising.ftc2021.auto.drive.opmode
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.trajectory.Trajectory
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -26,27 +25,24 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  */
 @Config
 @Autonomous(group = "drive")
-public class BackAndForth extends LinearOpMode {
-
-    public static double DISTANCE = 50;
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())
-                .forward(DISTANCE)
-                .build();
-
-        Trajectory trajectoryBackward = drive.trajectoryBuilder(trajectoryForward.end())
-                .back(DISTANCE)
-                .build();
-
-        waitForStart();
-
+class BackAndForth : LinearOpMode() {
+    @Throws(InterruptedException::class)
+    override fun runOpMode() {
+        val drive = SampleMecanumDrive(hardwareMap)
+        val trajectoryForward: Trajectory = drive.trajectoryBuilder(Pose2d())
+            .forward(DISTANCE)
+            .build()
+        val trajectoryBackward: Trajectory = drive.trajectoryBuilder(trajectoryForward.end())
+            .back(DISTANCE)
+            .build()
+        waitForStart()
         while (opModeIsActive() && !isStopRequested()) {
-            drive.followTrajectory(trajectoryForward);
-            drive.followTrajectory(trajectoryBackward);
+            drive.followTrajectory(trajectoryForward)
+            drive.followTrajectory(trajectoryBackward)
         }
+    }
+
+    companion object {
+        var DISTANCE = 50.0
     }
 }

@@ -1,10 +1,9 @@
 package robotuprising.ftc2021.auto.util
 
 import com.acmerobotics.roadrunner.kinematics.Kinematics.calculateMotorFeedforward
-import robotuprising.ftc2021.auto.util.RegressionUtil.RampResult
-import robotuprising.ftc2021.auto.util.RegressionUtil
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import robotuprising.ftc2021.auto.util.RegressionUtil.AccelResult
+import robotuprising.ftc2021.auto.util.RegressionUtil.RampResult
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.PrintWriter
@@ -26,8 +25,8 @@ object RegressionUtil {
         val deriv: MutableList<Double> = ArrayList(x.size)
         for (i in 1 until x.size - 1) {
             deriv.add(
-                    (y[i + 1] - y[i - 1]) /
-                            (x[i + 1] - x[i - 1])
+                (y[i + 1] - y[i - 1]) /
+                    (x[i + 1] - x[i - 1])
             )
         }
         // copy endpoints to pad output
@@ -50,9 +49,13 @@ object RegressionUtil {
      * @param fitStatic fit kStatic
      * @param file log file
      */
-    fun fitRampData(timeSamples: List<Double>, positionSamples: List<Double>,
-                    powerSamples: List<Double>, fitStatic: Boolean,
-                    file: File?): RampResult {
+    fun fitRampData(
+        timeSamples: List<Double>,
+        positionSamples: List<Double>,
+        powerSamples: List<Double>,
+        fitStatic: Boolean,
+        file: File?
+    ): RampResult {
         if (file != null) {
             try {
                 PrintWriter(file).use { pw ->
@@ -75,8 +78,10 @@ object RegressionUtil {
             val power = powerSamples[i]
             rampReg.addData(vel, power)
         }
-        return RampResult(Math.abs(rampReg.slope), Math.abs(rampReg.intercept),
-                rampReg.rSquare)
+        return RampResult(
+            Math.abs(rampReg.slope), Math.abs(rampReg.intercept),
+            rampReg.rSquare
+        )
     }
 
     /**
@@ -88,9 +93,13 @@ object RegressionUtil {
      * @param rampResult ramp result
      * @param file log file
      */
-    fun fitAccelData(timeSamples: List<Double>, positionSamples: List<Double>,
-                     powerSamples: List<Double>, rampResult: RampResult,
-                     file: File?): AccelResult {
+    fun fitAccelData(
+        timeSamples: List<Double>,
+        positionSamples: List<Double>,
+        powerSamples: List<Double>,
+        rampResult: RampResult,
+        file: File?
+    ): AccelResult {
         if (file != null) {
             try {
                 PrintWriter(file).use { pw ->
@@ -114,7 +123,8 @@ object RegressionUtil {
             val accel = accelSamples[i]
             val power = powerSamples[i]
             val powerFromVel = calculateMotorFeedforward(
-                    vel, 0.0, rampResult.kV, 0.0, rampResult.kStatic)
+                vel, 0.0, rampResult.kV, 0.0, rampResult.kStatic
+            )
             val powerFromAccel = power - powerFromVel
             accelReg.addData(accel, powerFromAccel)
         }

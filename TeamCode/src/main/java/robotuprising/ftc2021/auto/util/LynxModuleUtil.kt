@@ -1,10 +1,9 @@
 package robotuprising.ftc2021.auto.util
 
-import robotuprising.ftc2021.auto.util.LynxModuleUtil.LynxFirmwareVersion
 import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.hardware.HardwareMap
-import robotuprising.ftc2021.auto.util.LynxModuleUtil
 import org.firstinspires.ftc.robotcore.internal.system.Misc
+import robotuprising.ftc2021.auto.util.LynxModuleUtil.LynxFirmwareVersion
 import robotuprising.ftc2021.auto.util.LynxModuleUtil.LynxFirmwareVersionException
 import java.lang.NumberFormatException
 import java.lang.RuntimeException
@@ -50,12 +49,19 @@ object LynxModuleUtil {
         if (outdatedModules.size > 0) {
             val msgBuilder = StringBuilder()
             msgBuilder.append("One or more of the attached Lynx modules has outdated firmware\n")
-            msgBuilder.append(Misc.formatInvariant("Mandatory minimum firmware version for Road Runner: %s\n",
-                    MIN_VERSION.toString()))
+            msgBuilder.append(
+                Misc.formatInvariant(
+                    "Mandatory minimum firmware version for Road Runner: %s\n",
+                    MIN_VERSION.toString()
+                )
+            )
             for ((key, value) in outdatedModules) {
-                msgBuilder.append(Misc.formatInvariant(
+                msgBuilder.append(
+                    Misc.formatInvariant(
                         "\t%s: %s\n", key,
-                        value?.toString() ?: "Unknown"))
+                        value?.toString() ?: "Unknown"
+                    )
+                )
             }
             throw LynxFirmwareVersionException(msgBuilder.toString())
         }

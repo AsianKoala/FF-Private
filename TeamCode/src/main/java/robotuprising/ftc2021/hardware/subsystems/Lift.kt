@@ -79,9 +79,8 @@ class Lift : Subsystem() {
     }
 
     override fun update() {
-        if(!emergency) {
+        if (!emergency) {
             internalPower = controller.update(currPosition.d)
-
         }
 
         left.power = internalPower

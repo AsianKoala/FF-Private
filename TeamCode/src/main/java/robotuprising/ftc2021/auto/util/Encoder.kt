@@ -1,9 +1,9 @@
 package robotuprising.ftc2021.auto.util
 
-import kotlin.jvm.JvmOverloads
-import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.acmerobotics.roadrunner.util.NanoClock
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import kotlin.jvm.JvmOverloads
 
 /**
  * Wraps a motor instance to provide corrected velocity counts and allow reversing independently of the corresponding
@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 class Encoder @JvmOverloads constructor(private val motor: DcMotorEx, private val clock: NanoClock = NanoClock.system()) {
     enum class Direction(val multiplier: Int) {
         FORWARD(1), REVERSE(-1);
-
     }
 
     /**

@@ -2,7 +2,6 @@ package robotuprising.ftc2021.auto.drive
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
-import robotuprising.ftc2021.auto.drive.DriveConstants
 
 /*
  * Constants shared between multiple drive types.
@@ -32,8 +31,10 @@ object DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     const val RUN_USING_ENCODER = false
-    var MOTOR_VELO_PID = PIDFCoefficients(0.0, 0.0, 0.0,
-            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV))
+    var MOTOR_VELO_PID = PIDFCoefficients(
+        0.0, 0.0, 0.0,
+        getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV)
+    )
 
     /*
      * These are physical constants that can be determined from your robot (including the track

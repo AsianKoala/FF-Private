@@ -1,8 +1,7 @@
 package robotuprising.ftc2021.auto.trajectorysequence
 
-import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import robotuprising.ftc2021.auto.trajectorysequence.EmptySequenceException
+import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
 import java.util.*
 
 class TrajectorySequence(sequenceList: List<SequenceSegment?>) {

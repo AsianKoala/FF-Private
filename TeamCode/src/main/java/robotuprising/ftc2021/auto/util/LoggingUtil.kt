@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.auto.util
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil
-import robotuprising.ftc2021.auto.util.LoggingUtil
 import java.io.File
 import java.util.*
 
@@ -10,8 +9,9 @@ import java.util.*
  */
 object LoggingUtil {
     val ROAD_RUNNER_FOLDER = File(AppUtil.ROOT_FOLDER.toString() + "/RoadRunner/")
-    private const val LOG_QUOTA = (25 * 1024 * 1024 // 25MB log quota for now
-            ).toLong()
+    private const val LOG_QUOTA = (
+        25 * 1024 * 1024 // 25MB log quota for now
+        ).toLong()
 
     private fun buildLogList(logFiles: MutableList<File>, dir: File) {
         for (file in dir.listFiles()) {

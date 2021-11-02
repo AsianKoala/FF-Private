@@ -1,13 +1,13 @@
 package robotuprising.ftc2021.auto.util
 
-import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfigManager.loadGroupConfig
+import com.acmerobotics.roadrunner.trajectory.Trajectory
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
+import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfig
+import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfigManager.GROUP_FILENAME
 import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfigManager.loadConfig
+import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfigManager.loadGroupConfig
 import com.acmerobotics.roadrunner.trajectory.config.TrajectoryGroupConfig
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil
-import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfig
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
-import com.acmerobotics.roadrunner.trajectory.Trajectory
-import com.acmerobotics.roadrunner.trajectory.config.TrajectoryConfigManager.GROUP_FILENAME
 import java.io.IOException
 
 /**
@@ -20,7 +20,8 @@ object AssetsTrajectoryManager {
     fun loadGroupConfig(): TrajectoryGroupConfig? {
         return try {
             val inputStream = AppUtil.getDefContext().assets.open(
-                    "trajectory/$GROUP_FILENAME")
+                "trajectory/$GROUP_FILENAME"
+            )
             loadGroupConfig(inputStream)
         } catch (e: IOException) {
             null
@@ -33,7 +34,8 @@ object AssetsTrajectoryManager {
     fun loadConfig(name: String): TrajectoryConfig? {
         return try {
             val inputStream = AppUtil.getDefContext().assets.open(
-                    "trajectory/$name.yaml")
+                "trajectory/$name.yaml"
+            )
             loadConfig(inputStream)
         } catch (e: IOException) {
             null

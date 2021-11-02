@@ -1,39 +1,39 @@
 package robotuprising.ftc2021.auto.trajectorysequence
 
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
-import com.acmerobotics.roadrunner.util.Angle.norm
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
-import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
-import com.acmerobotics.roadrunner.trajectory.TemporalMarker
-import com.acmerobotics.roadrunner.trajectory.DisplacementMarker
-import com.acmerobotics.roadrunner.trajectory.SpatialMarker
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.geometry.Vector2d
-import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder.AddPathCallback
 import com.acmerobotics.roadrunner.path.PathContinuityViolationException
-import com.acmerobotics.roadrunner.trajectory.Trajectory
-import com.acmerobotics.roadrunner.trajectory.MarkerCallback
-import com.acmerobotics.roadrunner.trajectory.TimeProducer
-import com.acmerobotics.roadrunner.trajectory.DisplacementProducer
-import kotlin.jvm.JvmOverloads
 import com.acmerobotics.roadrunner.profile.MotionProfile
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
 import com.acmerobotics.roadrunner.profile.MotionState
+import com.acmerobotics.roadrunner.trajectory.DisplacementMarker
+import com.acmerobotics.roadrunner.trajectory.DisplacementProducer
+import com.acmerobotics.roadrunner.trajectory.MarkerCallback
+import com.acmerobotics.roadrunner.trajectory.SpatialMarker
+import com.acmerobotics.roadrunner.trajectory.TemporalMarker
+import com.acmerobotics.roadrunner.trajectory.TimeProducer
+import com.acmerobotics.roadrunner.trajectory.Trajectory
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
+import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
+import com.acmerobotics.roadrunner.util.Angle.norm
+import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder.AddPathCallback
+import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
+import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TrajectorySegment
 import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TurnSegment
 import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.WaitSegment
-import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker
-import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TrajectorySegment
 import java.util.ArrayList
+import kotlin.jvm.JvmOverloads
 import kotlin.math.abs
 
 class TrajectorySequenceBuilder(
-        startPose: Pose2d,
-        startTangent: Double?,
-        private val baseVelConstraint: TrajectoryVelocityConstraint,
-        private val baseAccelConstraint: TrajectoryAccelerationConstraint,
-        baseTurnConstraintMaxAngVel: Double,
-        baseTurnConstraintMaxAngAccel: Double
+    startPose: Pose2d,
+    startTangent: Double?,
+    private val baseVelConstraint: TrajectoryVelocityConstraint,
+    private val baseAccelConstraint: TrajectoryAccelerationConstraint,
+    baseTurnConstraintMaxAngVel: Double,
+    baseTurnConstraintMaxAngAccel: Double
 ) {
     private val resolution = 0.25
     private var currentVelConstraint: TrajectoryVelocityConstraint
@@ -57,15 +57,15 @@ class TrajectorySequenceBuilder(
     private var lastDisplacementTraj: Double
 
     constructor(
-            startPose: Pose2d,
-            baseVelConstraint: TrajectoryVelocityConstraint,
-            baseAccelConstraint: TrajectoryAccelerationConstraint,
-            baseTurnConstraintMaxAngVel: Double,
-            baseTurnConstraintMaxAngAccel: Double
+        startPose: Pose2d,
+        baseVelConstraint: TrajectoryVelocityConstraint,
+        baseAccelConstraint: TrajectoryAccelerationConstraint,
+        baseTurnConstraintMaxAngVel: Double,
+        baseTurnConstraintMaxAngAccel: Double
     ) : this(
-            startPose, null,
-            baseVelConstraint, baseAccelConstraint,
-            baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel
+        startPose, null,
+        baseVelConstraint, baseAccelConstraint,
+        baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel
     )
 
     fun lineTo(endPosition: Vector2d?): TrajectorySequenceBuilder {
@@ -73,9 +73,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun lineTo(
-            endPosition: Vector2d?,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPosition: Vector2d?,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.lineTo(endPosition!!, velConstraint, accelConstraint) }
     }
@@ -85,9 +85,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun lineToConstantHeading(
-            endPosition: Vector2d?,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPosition: Vector2d?,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.lineToConstantHeading(endPosition!!, velConstraint, accelConstraint) }
     }
@@ -97,9 +97,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun lineToLinearHeading(
-            endPose: Pose2d?,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPose: Pose2d?,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.lineToLinearHeading(endPose!!, velConstraint, accelConstraint) }
     }
@@ -109,9 +109,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun lineToSplineHeading(
-            endPose: Pose2d?,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPose: Pose2d?,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.lineToSplineHeading(endPose!!, velConstraint, accelConstraint) }
     }
@@ -121,9 +121,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun strafeTo(
-            endPosition: Vector2d?,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPosition: Vector2d?,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.strafeTo(endPosition!!, velConstraint, accelConstraint) }
     }
@@ -133,9 +133,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun forward(
-            distance: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        distance: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.forward(distance, velConstraint, accelConstraint) }
     }
@@ -145,9 +145,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun back(
-            distance: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        distance: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.back(distance, velConstraint, accelConstraint) }
     }
@@ -157,9 +157,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun strafeLeft(
-            distance: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        distance: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.strafeLeft(distance, velConstraint, accelConstraint) }
     }
@@ -169,9 +169,9 @@ class TrajectorySequenceBuilder(
     }
 
     fun strafeRight(
-            distance: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        distance: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.strafeRight(distance, velConstraint, accelConstraint) }
     }
@@ -181,10 +181,10 @@ class TrajectorySequenceBuilder(
     }
 
     fun splineTo(
-            endPosition: Vector2d,
-            endHeading: Double,
-            velConstraint: TrajectoryVelocityConstraint,
-            accelConstraint: TrajectoryAccelerationConstraint
+        endPosition: Vector2d,
+        endHeading: Double,
+        velConstraint: TrajectoryVelocityConstraint,
+        accelConstraint: TrajectoryAccelerationConstraint
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.splineTo(endPosition, endHeading, velConstraint, accelConstraint) }
     }
@@ -194,10 +194,10 @@ class TrajectorySequenceBuilder(
     }
 
     fun splineToConstantHeading(
-            endPosition: Vector2d?,
-            endHeading: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPosition: Vector2d?,
+        endHeading: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.splineToConstantHeading(endPosition!!, endHeading, velConstraint, accelConstraint) }
     }
@@ -207,10 +207,10 @@ class TrajectorySequenceBuilder(
     }
 
     fun splineToLinearHeading(
-            endPose: Pose2d?,
-            endHeading: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPose: Pose2d?,
+        endHeading: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.splineToLinearHeading(endPose!!, endHeading, velConstraint, accelConstraint) }
     }
@@ -220,10 +220,10 @@ class TrajectorySequenceBuilder(
     }
 
     fun splineToSplineHeading(
-            endPose: Pose2d?,
-            endHeading: Double,
-            velConstraint: TrajectoryVelocityConstraint?,
-            accelConstraint: TrajectoryAccelerationConstraint?
+        endPose: Pose2d?,
+        endHeading: Double,
+        velConstraint: TrajectoryVelocityConstraint?,
+        accelConstraint: TrajectoryAccelerationConstraint?
     ): TrajectorySequenceBuilder {
         return addPath { currentTrajectoryBuilder!!.splineToSplineHeading(endPose!!, endHeading, velConstraint, accelConstraint) }
     }
@@ -266,8 +266,8 @@ class TrajectorySequenceBuilder(
     }
 
     fun setConstraints(
-            velConstraint: TrajectoryVelocityConstraint,
-            accelConstraint: TrajectoryAccelerationConstraint
+        velConstraint: TrajectoryVelocityConstraint,
+        accelConstraint: TrajectoryAccelerationConstraint
     ): TrajectorySequenceBuilder {
         currentVelConstraint = velConstraint
         currentAccelConstraint = accelConstraint
@@ -363,15 +363,15 @@ class TrajectorySequenceBuilder(
     fun turn(angle: Double, maxAngVel: Double = currentTurnConstraintMaxAngVel, maxAngAccel: Double = currentTurnConstraintMaxAngAccel): TrajectorySequenceBuilder {
         pushPath()
         val turnProfile = generateSimpleMotionProfile(
-                MotionState(lastPose.heading, 0.0, 0.0, 0.0),
-                MotionState(lastPose.heading + angle, 0.0, 0.0, 0.0),
-                maxAngVel,
-                maxAngAccel
+            MotionState(lastPose.heading, 0.0, 0.0, 0.0),
+            MotionState(lastPose.heading + angle, 0.0, 0.0, 0.0),
+            maxAngVel,
+            maxAngAccel
         )
         sequenceSegments.add(TurnSegment(lastPose, angle, turnProfile, emptyList()))
         lastPose = Pose2d(
-                lastPose.x, lastPose.y,
-                norm(lastPose.heading + angle)
+            lastPose.x, lastPose.y,
+            norm(lastPose.heading + angle)
         )
         currentDuration += turnProfile.duration()
         return this
@@ -409,48 +409,48 @@ class TrajectorySequenceBuilder(
     fun build(): TrajectorySequence {
         pushPath()
         val globalMarkers = convertMarkersToGlobal(
-                sequenceSegments,
-                temporalMarkers, displacementMarkers, spatialMarkers
+            sequenceSegments,
+            temporalMarkers, displacementMarkers, spatialMarkers
         )
         return TrajectorySequence(projectGlobalMarkersToLocalSegments(globalMarkers, sequenceSegments))
     }
 
     private fun convertMarkersToGlobal(
-            sequenceSegments: List<SequenceSegment?>,
-            temporalMarkers: List<TemporalMarker>,
-            displacementMarkers: List<DisplacementMarker>,
-            spatialMarkers: List<SpatialMarker>
+        sequenceSegments: List<SequenceSegment?>,
+        temporalMarkers: List<TemporalMarker>,
+        displacementMarkers: List<DisplacementMarker>,
+        spatialMarkers: List<SpatialMarker>
     ): List<TrajectoryMarker> {
         val trajectoryMarkers = ArrayList<TrajectoryMarker>()
 
         // Convert temporal markers
         for ((producer, callback) in temporalMarkers) {
             trajectoryMarkers.add(
-                    TrajectoryMarker(producer.produce(currentDuration), callback)
+                TrajectoryMarker(producer.produce(currentDuration), callback)
             )
         }
 
         // Convert displacement markers
         for ((producer, callback) in displacementMarkers) {
             val time = displacementToTime(
-                    sequenceSegments,
-                    producer.produce(currentDisplacement)
+                sequenceSegments,
+                producer.produce(currentDisplacement)
             )
             trajectoryMarkers.add(
-                    TrajectoryMarker(
-                            time,
-                            callback
-                    )
+                TrajectoryMarker(
+                    time,
+                    callback
+                )
             )
         }
 
         // Convert spatial markers
         for ((point, callback) in spatialMarkers) {
             trajectoryMarkers.add(
-                    TrajectoryMarker(
-                            pointToTime(sequenceSegments, point),
-                            callback
-                    )
+                TrajectoryMarker(
+                    pointToTime(sequenceSegments, point),
+                    callback
+                )
             )
         }
         return trajectoryMarkers
@@ -480,14 +480,13 @@ class TrajectorySequenceBuilder(
                 }
             }
             var newSegment: SequenceSegment? = null
-            when(segment) {
+            when (segment) {
                 is WaitSegment -> {
                     val newMarkers: MutableList<TrajectoryMarker> = ArrayList(segment.getMarkers())
                     newMarkers.addAll(sequenceSegments[segmentIndex].markers)
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
                     val thisSegment = segment
                     newSegment = WaitSegment(thisSegment.startPose, thisSegment.duration, newMarkers)
-
                 }
 
                 is TurnSegment -> {
@@ -496,7 +495,6 @@ class TrajectorySequenceBuilder(
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
                     val thisSegment = segment
                     newSegment = TurnSegment(thisSegment.startPose, thisSegment.totalRotation, thisSegment.motionProfile, newMarkers)
-
                 }
 
                 is TrajectorySegment -> {
@@ -504,7 +502,6 @@ class TrajectorySequenceBuilder(
                     val newMarkers: MutableList<TrajectoryMarker> = ArrayList<TrajectoryMarker>(thisSegment.trajectory.markers)
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
                     newSegment = TrajectorySegment(Trajectory(thisSegment.trajectory.path, thisSegment.getTrajectory().profile, newMarkers))
-
                 }
             }
             sequenceSegments[segmentIndex] = newSegment!!
@@ -538,8 +535,8 @@ class TrajectorySequenceBuilder(
                 if (currentDisplacement + segmentLength > s) {
                     val target = s - currentDisplacement
                     val timeInSegment = motionProfileDisplacementToTime(
-                            thisSegment.trajectory.profile,
-                            target
+                        thisSegment.trajectory.profile,
+                        target
                     )
                     return currentTime + timeInSegment
                 } else {
