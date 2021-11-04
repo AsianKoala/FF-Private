@@ -2,6 +2,7 @@ package robotuprising.ftc2021.auto.sim
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.acmerobotics.roadrunner.path.QuinticSpline
 import com.noahbres.meepmeep.MeepMeep
 import com.noahbres.meepmeep.MeepMeep.Background
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark
@@ -16,7 +17,8 @@ object MeepMeepTesting {
         // TODO: If you experience poor performance, enable this flag
         // System.setProperty("sun.java2d.opengl", "true");
 
-        val deposit = Pose2d(8.0, -43.0, PI - PI / 4)
+        val firstDeposit = Pose2d(8.0, -43.0, PI - PI / 4)
+        val deposit = Pose2d(6.0, -36.0, Math.toRadians(145.0))
         val intakeFwd = Pose2d(52.0, -52.0, PI - PI / 4)
 
         val mm = MeepMeep(800) // Set field image
@@ -27,41 +29,45 @@ object MeepMeepTesting {
 
                 .followTrajectorySequence { drive: DriveShim ->
                     drive.trajectorySequenceBuilder(Pose2d(8.0, -60.0, PI / 2))
-                            .lineToLinearHeading(deposit)
+                            .lineToLinearHeading(firstDeposit)
                             .waitSeconds(0.5)
 
                             .turn(PI / 4)
                             .setReversed(true)
                             .splineToSplineHeading(intakeFwd, - PI / 4)
                             .setReversed(false)
-                            .splineToSplineHeading(Pose2d(deposit.vec(), PI), PI)
-                            .turn(-PI / 4)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
                             .waitSeconds(0.5)
 
-                            .turn(PI / 4)
                             .setReversed(true)
-                            .splineToSplineHeading(intakeFwd, - PI / 4)
+                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
                             .setReversed(false)
-                            .splineToSplineHeading(Pose2d(deposit.vec(), PI), PI)
-                            .turn(-PI / 4)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
                             .waitSeconds(0.5)
 
-                            .turn(PI / 4)
                             .setReversed(true)
-                            .splineToSplineHeading(intakeFwd, - PI / 4)
+                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
                             .setReversed(false)
-                            .splineToSplineHeading(Pose2d(deposit.vec(), PI), PI)
-                            .turn(-PI / 4)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
                             .waitSeconds(0.5)
 
-                            .turn(PI / 4)
                             .setReversed(true)
-                            .splineToSplineHeading(intakeFwd, - PI / 4)
+                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
                             .setReversed(false)
-                            .splineToSplineHeading(Pose2d(deposit.vec(), PI), PI)
-                            .turn(-PI / 4)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
                             .waitSeconds(0.5)
 
+                            .setReversed(true)
+                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
+                            .setReversed(false)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
+                            .waitSeconds(0.5)
+
+                            .setReversed(true)
+                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
+                            .setReversed(false)
+                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
+                            .waitSeconds(0.5)
 
                             .build()
             }

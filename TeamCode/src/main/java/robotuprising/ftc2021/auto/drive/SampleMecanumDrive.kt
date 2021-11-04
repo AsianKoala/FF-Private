@@ -36,7 +36,7 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
     private val imu: BNO055IMU
     private val batteryVoltageSensor: VoltageSensor
     fun trajectoryBuilder(startPose: Pose2d): TrajectoryBuilder {
-        return TrajectoryBuilder(startPose, 0.0, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
+        return TrajectoryBuilder(startPose, startPose.heading, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
     }
 
     fun trajectoryBuilder(startPose: Pose2d, reversed: Boolean): TrajectoryBuilder {
