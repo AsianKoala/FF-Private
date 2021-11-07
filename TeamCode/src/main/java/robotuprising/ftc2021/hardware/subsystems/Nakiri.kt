@@ -77,6 +77,10 @@ object Nakiri : Subsystem() {
         intake.rotateIn()
     }
 
+    fun requestIntakeSequence() {
+        intake.runIntakeStateMachine()
+    }
+
     fun requestIncrementDefaultLiftLevel() {
         if (defaultLiftLevel != Lift.MAX_LIFT_STAGE) {
             defaultLiftLevel++
@@ -103,16 +107,12 @@ object Nakiri : Subsystem() {
         lift.setLevel(Lift.LiftStages.SHARED)
     }
 
-    fun requestDeposit() {
-        TODO()
-    }
-
-    fun requestFullIntakeSequence() {
-        TODO()
-    }
-
     fun requestEmergencyLiftControl(power: Double) {
         lift.emergencyControl(power)
+    }
+
+    fun requestDeposit() {
+        TODO()
     }
 
     fun requestSpinnerOn() {

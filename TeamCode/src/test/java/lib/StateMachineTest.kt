@@ -18,16 +18,11 @@ object StateMachineTest {
         val stateMachine = buildStateMachine()
 
         stateMachine.start()
-        while(stateMachine.running) {
+        while(stateMachine.running)
             stateMachine.update()
-        }
-
-        println(stateMachine.state)
-
+        println()
         stateMachine.start()
-        while(stateMachine.running) {
-            stateMachine.update()
-        }
+        stateMachine.update()
     }
 
     private fun buildStateMachine(): StateMachine<MyStates> {
@@ -46,8 +41,6 @@ object StateMachineTest {
                 .loop { println("init looping") }
                 .onExit { println("finished init looping") }
                 .transition { true }
-
-                .exit(MyStates.START)
 
                 .build()
     }

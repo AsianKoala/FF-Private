@@ -7,6 +7,8 @@ import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.AkemiDashboard
 import robotuprising.lib.system.Subsystem
+import robotuprising.lib.system.statemachine.StateMachine
+import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 class Intake : Subsystem() {
     companion object {
@@ -81,6 +83,37 @@ class Intake : Subsystem() {
 
     private fun Triple<Int, Int, Int>.sumThreshCompare(other: Triple<Int, Int, Int>): Boolean =
         (first + second + third) < (other.first + other.second + other.third)
+
+
+    private enum class IntakeBehaviorStates {
+        INTAKING,
+        ROTATING_BACKWARDS,
+        TRANSFERRING,
+        DONE,
+    }
+
+    private val intakeStateMachine: StateMachine<IntakeBehaviorStates> = StateMachineBuilder<IntakeBehaviorStates>()
+            .state(IntakeBehaviorStates.INTAKING)
+            .onEnter { turnOn(); rotateOut() }
+            .transition { sensorState != SensorStates.NONE }
+
+            .state(IntakeBehaviorStates.ROTATING_BACKWARDS)
+            .onEnter { rotateIn() }
+            .transitionTimed(1.0)
+
+            .state(IntakeBehaviorStates.TRANSFERRING)
+            .onEnter { turnReverse() }
+            .transitionTimed(0.5)
+
+            .state(IntakeBehaviorStates.DONE)
+            .onEnter { turnOff() }
+            .transition { true }
+
+            .build()
+
+    fun runIntakeStateMachine() {
+        intakeStateMachine.smartRun()
+    }
 
     override fun init(hwMap: HardwareMap) {
         intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
