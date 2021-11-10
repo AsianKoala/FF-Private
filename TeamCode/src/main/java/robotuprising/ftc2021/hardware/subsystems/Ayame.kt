@@ -36,11 +36,6 @@ class Ayame : Subsystem() {
     var rrUpdated = false
     var rrPowers = mutableListOf(0.d, 0.d, 0.d, 0.d)
 
-    override fun init(hwMap: HardwareMap) {
-        frontRight.direction = DcMotorSimple.Direction.REVERSE
-        backRight.direction = DcMotorSimple.Direction.REVERSE
-    }
-
     override fun update() {
         val wheels = if (rrUpdated) {
             rrUpdated = false
@@ -68,5 +63,10 @@ class Ayame : Subsystem() {
 
     override fun stop() {
         powers = Pose.DEFAULT
+    }
+
+    init {
+        frontRight.direction = DcMotorSimple.Direction.REVERSE
+        backRight.direction = DcMotorSimple.Direction.REVERSE
     }
 }

@@ -37,7 +37,7 @@ class Intake : Subsystem() {
         OUT
     }
 
-    enum class SensorStates {
+    private enum class SensorStates {
         NONE,
         CUBE,
         BALL
@@ -46,8 +46,7 @@ class Intake : Subsystem() {
     private var intakeState = IntakeStates.OFF
     private var pivotState = PivotStates.IN
 
-    var sensorState = SensorStates.NONE
-        private set
+    private var sensorState = SensorStates.NONE
 
     fun turnOn() {
         intakeState = IntakeStates.ON
@@ -72,9 +71,6 @@ class Intake : Subsystem() {
     }
 
     private var usingSimpleThreshCompare = true
-    fun switchThresholdCompare() {
-        usingSimpleThreshCompare = !usingSimpleThreshCompare
-    }
 
     private val ColorSensor.rgb: Triple<Int, Int, Int> get() = Triple(red(), blue(), green())
 
@@ -83,6 +79,14 @@ class Intake : Subsystem() {
 
     private fun Triple<Int, Int, Int>.sumThreshCompare(other: Triple<Int, Int, Int>): Boolean =
         (first + second + third) < (other.first + other.second + other.third)
+
+    private fun sensorCompare(other: Triple<Int, Int, Int>): Boolean {
+        return if(usingSimpleThreshCompare) {
+            intakeSensor.rgb.simpleThreshCompare(other)
+        } else {
+            intakeSensor.rgb.sumThreshCompare(other)
+        }
+    }
 
 
     private enum class IntakeBehaviorStates {
@@ -138,18 +142,10 @@ class Intake : Subsystem() {
             PivotStates.OUT -> RIGHT_OUT
         }
 
-        sensorState = if (usingSimpleThreshCompare) {
-            when {
-                intakeSensor.rgb.simpleThreshCompare(BALL_RGB_THRESHOLD) -> SensorStates.BALL
-                intakeSensor.rgb.simpleThreshCompare(CUBE_RGB_THRESHOLD) -> SensorStates.CUBE
-                else -> SensorStates.NONE
-            }
-        } else {
-            when {
-                intakeSensor.rgb.sumThreshCompare(BALL_RGB_THRESHOLD) -> SensorStates.BALL
-                intakeSensor.rgb.sumThreshCompare(CUBE_RGB_THRESHOLD) -> SensorStates.CUBE
-                else -> SensorStates.NONE
-            }
+        sensorState = when {
+            sensorCompare(BALL_RGB_THRESHOLD) -> SensorStates.BALL
+            sensorCompare(CUBE_RGB_THRESHOLD) -> SensorStates.CUBE
+            else -> SensorStates.NONE
         }
     }
 

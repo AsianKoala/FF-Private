@@ -2,6 +2,7 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.openftc.revextensions2.ExpansionHubServo
+import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.system.Subsystem
 
 class Outtake : Subsystem() {
@@ -12,8 +13,8 @@ class Outtake : Subsystem() {
         private const val RIGHT_IN = 0.0
     }
 
-    private lateinit var leftServo: ExpansionHubServo
-    private lateinit var rightServo: ExpansionHubServo
+    private val leftServo = NakiriServo("outtakeLeft")
+    private val rightServo = NakiriServo("outtakeRight")
 
     private var outtakeState = OuttakeStates.IN
     private enum class OuttakeStates {
@@ -30,8 +31,7 @@ class Outtake : Subsystem() {
     }
 
     override fun init(hwMap: HardwareMap) {
-        leftServo = hwMap[ExpansionHubServo::class.java, "outtakeLeft"]
-        rightServo = hwMap[ExpansionHubServo::class.java, "outtakeRight"]
+
     }
 
     override fun update() {
@@ -47,6 +47,7 @@ class Outtake : Subsystem() {
     }
 
     override fun stop() {
+
     }
 
     override fun sendDashboardPacket() {
