@@ -28,8 +28,11 @@ class TrajectorySequenceRunner(private val follower: TrajectoryFollower, heading
     private var currentSegmentStartTime = 0.0
     private var currentSegmentIndex = 0
     private var lastSegmentIndex = 0
-    var lastPoseError = Pose2d()
+    var lastError = Pose2d()
         private set
+        get() {
+         return trajectorySequenceRunner.field
+     }
     var remainingMarkers: MutableList<TrajectoryMarker> = ArrayList()
     private val dashboard: FtcDashboard
     private val poseHistory = LinkedList<Pose2d>()

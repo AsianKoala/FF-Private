@@ -20,10 +20,10 @@ object Nakiri : Subsystem() {
 
     private var defaultLiftLevel = 0
 
-    override fun init(hwMap: HardwareMap) {
-        Globals.hwMap = hwMap
-        subsystems.forEach { it.init(hwMap) }
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        Globals.hwMap = hwMap
+//        subsystems.forEach { it.init(hwMap) }
+//    }
 
     override fun init_loop() {
         subsystems.forEach { it.init_loop() }

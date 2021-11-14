@@ -26,9 +26,9 @@ class DriveManager : Subsystem() {
         mainDrive.powers = powers
     }
 
-    override fun init(hwMap: HardwareMap) {
-        mainDrive.init(hwMap)
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        mainDrive.init(hwMap)
+//    }
 
     override fun update() {
         updateRRData()

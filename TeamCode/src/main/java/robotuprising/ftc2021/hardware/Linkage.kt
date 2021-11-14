@@ -14,9 +14,9 @@ class Linkage : Subsystem() {
         ALLIANCE_HUB
     }
 
-    override fun init(hwMap: HardwareMap) {
-
-    }
+//    override fun init(hwMap: HardwareMap) {
+//
+//    }
 
     override fun update() {
         TODO("Not yet implemented")

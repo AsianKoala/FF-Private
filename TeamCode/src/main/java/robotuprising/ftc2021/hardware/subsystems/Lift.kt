@@ -68,15 +68,15 @@ class Lift : Subsystem() {
         controller.reset()
     }
 
-    override fun init(hwMap: HardwareMap) {
-        left.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        left.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-
-        controller.reset()
-        controller.targetPosition = targetPosition.d
-        controller.targetVelocity = MAX_VEL
-        controller.targetAcceleration = MAX_ACCEL
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        left.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//        left.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//
+//        controller.reset()
+//        controller.targetPosition = targetPosition.d
+//        controller.targetVelocity = MAX_VEL
+//        controller.targetAcceleration = MAX_ACCEL
+//    }
 
     override fun update() {
         if (!emergency) {

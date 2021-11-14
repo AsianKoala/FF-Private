@@ -30,9 +30,9 @@ class Outtake : Subsystem() {
         outtakeState = OuttakeStates.IN
     }
 
-    override fun init(hwMap: HardwareMap) {
-
-    }
+//    override fun init(hwMap: HardwareMap) {
+//
+//    }
 
     override fun update() {
         leftServo.position = when (outtakeState) {

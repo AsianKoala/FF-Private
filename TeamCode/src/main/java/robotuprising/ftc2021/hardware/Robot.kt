@@ -7,7 +7,7 @@ abstract class Robot : BaseOpMode() {
     val superstructure = Nakiri
 
     override fun m_init() {
-        superstructure.init(hardwareMap)
+//        superstructure.init(hardwareMap)
     }
 
     override fun m_init_loop() {

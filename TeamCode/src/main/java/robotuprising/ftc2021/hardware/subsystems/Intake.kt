@@ -119,12 +119,12 @@ class Intake : Subsystem() {
         intakeStateMachine.smartRun()
     }
 
-    override fun init(hwMap: HardwareMap) {
-        intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        intakeMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-
-        intakeSensor = hwMap[ColorSensor::class.java, "intakeSensor"]
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//        intakeMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//
+//        intakeSensor = hwMap[ColorSensor::class.java, "intakeSensor"]
+//    }
 
     override fun update() {
         intakeMotor.power = when (intakeState) {

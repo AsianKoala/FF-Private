@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
 
 class MarkerGrabber : Subsystem() {
-    override fun init(hwMap: HardwareMap) {
-        TODO("Not yet implemented")
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        TODO("Not yet implemented")
+//    }
 
     override fun update() {
         TODO("Not yet implemented")

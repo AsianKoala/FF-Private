@@ -33,10 +33,10 @@ class DuckSpinner : Subsystem() {
         spinnerState = SpinnerStates.OFF
     }
 
-    override fun init(hwMap: HardwareMap) {
-        spinnerMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        spinnerMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-    }
+//    override fun init(hwMap: HardwareMap) {
+//        spinnerMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        spinnerMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//    }
 
     override fun update() {
         spinnerMotor.power = when (spinnerState) {
