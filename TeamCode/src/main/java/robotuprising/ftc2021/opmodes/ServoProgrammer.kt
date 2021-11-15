@@ -12,14 +12,14 @@ class ServoProgrammer : OpMode() {
     private lateinit var ourServoData: ServoData
     private var prevTime = System.currentTimeMillis()
     override fun init() {
-        val servo = hardwareMap.get(ExpansionHubServo::class.java, "leftPivot") // ex
+        val servo = hardwareMap.get(ExpansionHubServo::class.java, "outtakeLeft") // ex
         ourServoData = ServoData(servo, 0.05)
     }
 
     override fun loop() {
         if(System.currentTimeMillis() - prevTime > 300) {
             prevTime = System.currentTimeMillis()
-            telemetry.addLine(ourServoData!!.update(gamepad1.x, gamepad1.b, gamepad1.a))
+            telemetry.addLine(ourServoData.update(gamepad1.x, gamepad1.b, gamepad1.a))
         }
     }
 }
