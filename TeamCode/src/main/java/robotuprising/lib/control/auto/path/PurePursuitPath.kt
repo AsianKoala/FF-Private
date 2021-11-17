@@ -5,7 +5,7 @@ import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.toRadians
-import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.util.Extensions.d
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
@@ -37,9 +37,9 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
         target.x = clipX
         target.y = clipY
 
-        AkemiDashboard["followpoint"] = target.p
-        AkemiDashboard["target"] = end
-        AkemiDashboard.fieldOverlay()
+        NakiriDashboard["followpoint"] = target.p
+        NakiriDashboard["target"] = end
+        NakiriDashboard.fieldOverlay()
             .setStroke("white")
             .strokeLine(currPose.p.dbNormalize.x, currPose.p.dbNormalize.y, target.p.dbNormalize.x, target.p.dbNormalize.y)
 
@@ -47,7 +47,7 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
             return PurePursuitController.goToPosition(currPose, end)
         } else {
             val (nx, ny) = target.p.dbNormalize
-            AkemiDashboard.fieldOverlay()
+            NakiriDashboard.fieldOverlay()
                 .setStroke("purple")
                 .strokeCircle(nx, ny, 1.0)
 

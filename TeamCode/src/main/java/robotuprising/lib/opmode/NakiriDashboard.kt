@@ -9,9 +9,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
  * @property telemAdapter adapter to add data to FTCDashboard packet easier
  * @property internalTelemetry reference to telemetry implementation in opmode
  */
-object AkemiDashboard {
+object NakiriDashboard {
     private var telemAdapter: TelemAdapter = TelemAdapter()
     private lateinit var internalTelemetry: Telemetry
+
+    var name = ""
 
     fun init(telemImpl: Telemetry) {
         internalTelemetry = telemImpl
@@ -28,7 +30,7 @@ object AkemiDashboard {
     }
 
     operator fun set(k: String, v: Any) {
-        internalTelemetry.addData(k, v)
-        telemAdapter.addData(k, v)
+        internalTelemetry.addData("$name $k", v)
+        telemAdapter.addData("$name $k", v)
     }
 }

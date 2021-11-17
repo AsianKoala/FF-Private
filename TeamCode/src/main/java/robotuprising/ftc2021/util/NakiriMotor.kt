@@ -25,11 +25,6 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
             }
         }
 
-    var zeroPowerBehavior: DcMotor.ZeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-
-    var mode: DcMotor.RunMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-
-    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
 
     val position: Int
         get() {
@@ -39,4 +34,73 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
                 BulkDataManager.slaveData.getMotorCurrentPosition(motor)
             }
         }
+
+
+    val reverse: NakiriMotor
+        get() {
+            direction = DcMotorSimple.Direction.REVERSE
+            return this
+        }
+
+    val forward: NakiriMotor
+        get() {
+            direction = DcMotorSimple.Direction.FORWARD
+            return this
+        }
+
+    val float: NakiriMotor
+        get() {
+            zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+            return this
+        }
+
+    val brake: NakiriMotor
+        get() {
+            zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            return this
+        }
+
+    val openLoopControl: NakiriMotor
+        get() {
+            mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            return this
+        }
+
+    val velocityControl: NakiriMotor
+        get() {
+            mode = DcMotor.RunMode.RUN_USING_ENCODER
+            return this
+        }
+
+    val positionControl: NakiriMotor
+        get() {
+            mode = DcMotor.RunMode.RUN_TO_POSITION
+            return this
+        }
+
+    var mode: DcMotor.RunMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        set(value) {
+            if (field != value) {
+                motor.mode = value
+                field = value
+            }
+        }
+
+    var zeroPowerBehavior = DcMotor.ZeroPowerBehavior.UNKNOWN
+        set(value) {
+            if (value != field) {
+                if (value != DcMotor.ZeroPowerBehavior.UNKNOWN)
+                    motor.zeroPowerBehavior = value
+                field = value
+            }
+        }
+
+    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
+        set(value) {
+            if (value != field) {
+                motor.direction = value
+                field = value
+            }
+        }
+
 }

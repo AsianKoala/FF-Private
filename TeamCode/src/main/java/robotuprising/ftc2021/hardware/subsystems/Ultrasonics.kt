@@ -3,7 +3,7 @@ package robotuprising.ftc2021.hardware.subsystems
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.hardware.MB1242
-import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Ultrasonics : Subsystem() {
@@ -50,7 +50,7 @@ class Ultrasonics : Subsystem() {
     }
 
     override fun sendDashboardPacket() {
-        AkemiDashboard["last forward value"] = forwardReading
-        AkemiDashboard["last horizontal value"] = horizontalReading
+        NakiriDashboard["last forward value"] = forwardReading
+        NakiriDashboard["last horizontal value"] = horizontalReading
     }
 }

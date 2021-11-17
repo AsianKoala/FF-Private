@@ -12,53 +12,51 @@ import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 // TODO
 class TeleOp : Robot() {
 
-    private var pipeExitOffset = 0
-    private var allianceXOffset = 0
-    private var allianceYOffset = 0
-
-    /**
-     *               main gamepad
-     * intake on                        intake reverse
-     * n                                    n
-     *
-     *      n                               n
-     * n        n                       n       n
-     *      n                                n
-     *
-     *      dt                              dt
-     *
-     */
+    private val allianceHub = Point.ORIGIN
 
     override fun m_loop() {
-        superstructure.requestDriveManagerPowers(
-            Pose(
-                Point(
-                    gamepad1.left_stick_x.d,
-                    gamepad1.left_stick_y.d
-                ),
-                Angle(gamepad1.left_stick_x.d, AngleUnit.RAW)
-            )
-        )
-
+        driveControl()
         intakeControl()
-        liftControl()
+        outtakeControl()
     }
 
+    private fun driveControl() {
+        superstructure.requestDriveManagerPowers(
+                Pose(
+                        Point(
+                                -gamepad1.left_stick_x.d,
+                                gamepad1.left_stick_y.d
+                        ),
+                        Angle(gamepad1.left_stick_x.d, AngleUnit.RAW)
+                )
+        )
+    }
     private fun intakeControl() {
         when {
             gamepad1.left_trigger_pressed -> superstructure.requestIntakeOn()
             gamepad1.right_trigger_pressed -> superstructure.requestIntakeReverse()
+            gamepad1.left_bumper -> superstructure.requestIntakeRotateOut()
+            gamepad1.right_bumper -> superstructure.requestIntakeRotateOut()
             else -> superstructure.requestIntakeOff()
         }
     }
 
-    private fun liftControl() {
+    private fun outtakeControl() {
         when {
-            gamepad1.dpad_up -> superstructure.requestIncrementDefaultLiftLevel()
-            gamepad1.dpad_down -> superstructure.requestDecrementDefaultLiftLevel()
-            gamepad2.right_trigger_pressed -> superstructure.requestLiftGoToDefault()
-            gamepad2.left_bumper -> superstructure.requestLiftReset()
-            gamepad2.right_bumper -> superstructure.requestLiftShared()
+            gamepad1.y -> {
+                superstructure.requestLiftHigh()
+                superstructure.requestLinkageOut()
+                superstructure.requestOuttakeMedium()
+            }
+            gamepad1.a -> {
+                superstructure.requestLiftRest()
+                superstructure.requestLinkageRetract()
+                superstructure.requestOuttakeIn()
+            }
+
+            gamepad1.b -> {
+                superstructure.requestOuttakeOut()
+            }
         }
     }
 }

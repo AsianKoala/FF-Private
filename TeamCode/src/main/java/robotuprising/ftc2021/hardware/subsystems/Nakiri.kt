@@ -11,25 +11,18 @@ object Nakiri : Subsystem() {
     private val driveManager = DriveManager()
     private val intake = Intake()
     private val lift = Lift()
+    private val linkage = Linkage()
     private val outtake = Outtake()
-    private val duckSpinner = DuckSpinner()
-    private val arm = MarkerGrabber()
-    private val subsystems = mutableListOf(driveManager, intake, lift, outtake, duckSpinner, arm)
-
-    private var defaultLiftLevel = 0
-
-//    override fun init(hwMap: HardwareMap) {
-//        Globals.hwMap = hwMap
-//        subsystems.forEach { it.init(hwMap) }
-//    }
-
-    override fun init_loop() {
-        subsystems.forEach { it.init_loop() }
-    }
-
-    override fun start() {
-        subsystems.forEach { it.start() }
-    }
+//    private val duckSpinner = DuckSpinner()
+//    private val arm = MarkerGrabber()
+    private val subsystems = mutableListOf(
+            driveManager,
+            intake,
+            lift,
+            outtake,
+//            duckSpinner,
+//            arm
+    )
 
     override fun update() {
         subsystems.forEach { it.update() }
@@ -43,12 +36,8 @@ object Nakiri : Subsystem() {
         subsystems.forEach { it.stop() }
     }
 
-    private fun changeLiftDefault() {
-        lift.changeDefault(Lift.LiftStages.values()[defaultLiftLevel])
-    }
-
     fun requestDriveManagerPowers(powers: Pose) {
-        driveManager.setPowers(powers)
+        driveManager.vectorPowers = powers
     }
 
     fun requestDriveManagerStop() {
@@ -75,49 +64,44 @@ object Nakiri : Subsystem() {
         intake.rotateIn()
     }
 
-    fun requestIntakeSequence() {
-        intake.runIntakeStateMachine()
-    }
-
-    fun requestIncrementDefaultLiftLevel() {
-        if (defaultLiftLevel != Lift.MAX_LIFT_STAGE) {
-            defaultLiftLevel++
-            changeLiftDefault()
-        }
-    }
-
-    fun requestDecrementDefaultLiftLevel() {
-        if (defaultLiftLevel != Lift.MIN_LIFT_STAGE) {
-            defaultLiftLevel--
-            changeLiftDefault()
-        }
-    }
-
-    fun requestLiftGoToDefault() {
-        lift.setLevelToDefault()
-    }
-
-    fun requestLiftReset() {
+    fun requestLiftRest() {
         lift.setLevel(Lift.LiftStages.RESTING)
     }
 
-    fun requestLiftShared() {
-        lift.setLevel(Lift.LiftStages.SHARED)
+    fun requestLiftMedium() {
+        lift.setLevel(Lift.LiftStages.ALLIANCE_MEDIUM)
     }
 
-    fun requestEmergencyLiftControl(power: Double) {
-        lift.emergencyControl(power)
+    fun requestLiftHigh() {
+        lift.setLevel(Lift.LiftStages.ALLIANCE_HIGH)
     }
 
-    fun requestDeposit() {
-        TODO()
+    fun requestLinkageRetract() {
+        linkage.retract()
     }
 
-    fun requestSpinnerOn() {
-        duckSpinner.turnOn()
+    fun requestLinkageOut() {
+        linkage.extend()
     }
 
-    fun requestSpinnerOff() {
-        duckSpinner.turnOff()
+    fun requestOuttakeIn() {
+        outtake.rotateIn()
     }
+
+    fun requestOuttakeMedium() {
+        outtake.rotateMedium()
+    }
+
+    fun requestOuttakeOut() {
+        outtake.rotateOut()
+    }
+
+
+//    fun requestSpinnerOn() {
+//        duckSpinner.turnOn()
+//    }
+//
+//    fun requestSpinnerOff() {
+//        duckSpinner.turnOff()
+//    }
 }

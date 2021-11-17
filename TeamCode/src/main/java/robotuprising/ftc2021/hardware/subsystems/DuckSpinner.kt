@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import robotuprising.ftc2021.util.NakiriMotor
-import robotuprising.lib.opmode.AkemiDashboard
+import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class DuckSpinner : Subsystem() {
@@ -48,7 +48,7 @@ class DuckSpinner : Subsystem() {
     }
 
     override fun sendDashboardPacket() {
-        AkemiDashboard["spinner state"] = spinnerState
-        AkemiDashboard["spinner motor power"] = spinnerMotor.power
+        NakiriDashboard["spinner state"] = spinnerState
+        NakiriDashboard["spinner motor power"] = spinnerMotor.power
     }
 }
