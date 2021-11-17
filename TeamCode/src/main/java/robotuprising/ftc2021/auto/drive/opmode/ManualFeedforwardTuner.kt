@@ -1,28 +1,28 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.kinematics.Kinematics.calculateMotorFeedforward
-//import com.acmerobotics.roadrunner.profile.MotionProfile
-//import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
-//import com.acmerobotics.roadrunner.profile.MotionState
-//import com.acmerobotics.roadrunner.util.NanoClock
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.util.RobotLog
-//import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_ACCEL
-//import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_VEL
-//import robotuprising.ftc2021.auto.drive.DriveConstants.RUN_USING_ENCODER
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kA
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kStatic
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kV
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import robotuprising.lib.util.Extensions.d
-//import java.util.*
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.kinematics.Kinematics.calculateMotorFeedforward
+// import com.acmerobotics.roadrunner.profile.MotionProfile
+// import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
+// import com.acmerobotics.roadrunner.profile.MotionState
+// import com.acmerobotics.roadrunner.util.NanoClock
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.util.RobotLog
+// import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_ACCEL
+// import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_VEL
+// import robotuprising.ftc2021.auto.drive.DriveConstants.RUN_USING_ENCODER
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kA
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kStatic
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kV
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import robotuprising.lib.util.Extensions.d
+// import java.util.*
 //
-///*
+// /*
 // * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
 // * tuning these coefficients is just as important as the positional parameters. Like the other
 // * manual tuning routines, this op mode relies heavily upon the dashboard. To access the dashboard,
@@ -37,9 +37,9 @@
 // * user to reset the position of the bot in the event that it drifts off the path.
 // * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class ManualFeedforwardTuner : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class ManualFeedforwardTuner : LinearOpMode() {
 //    private val dashboard: FtcDashboard = FtcDashboard.getInstance()
 //    private var drive: SampleMecanumDrive? = null
 //
@@ -132,4 +132,4 @@
 //            return generateSimpleMotionProfile(start, goal, MAX_VEL, MAX_ACCEL)
 //        }
 //    }
-//}
+// }

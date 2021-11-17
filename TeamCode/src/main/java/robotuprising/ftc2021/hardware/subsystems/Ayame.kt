@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit

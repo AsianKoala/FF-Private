@@ -1,31 +1,31 @@
-//package robotuprising.ftc2021.auto.drive
+// package robotuprising.ftc2021.auto.drive
 //
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.roadrunner.control.PIDCoefficients
-//import com.acmerobotics.roadrunner.drive.TankDrive
-//import com.acmerobotics.roadrunner.followers.TankPIDVAFollower
-//import com.acmerobotics.roadrunner.followers.TrajectoryFollower
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.trajectory.Trajectory
-//import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
-//import com.acmerobotics.roadrunner.trajectory.constraints.*
-//import com.qualcomm.hardware.bosch.BNO055IMU
-//import com.qualcomm.hardware.lynx.LynxModule
-//import com.qualcomm.robotcore.hardware.*
-//import com.qualcomm.robotcore.hardware.DcMotor.RunMode
-//import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
-//import robotuprising.ftc2021.auto.drive.DriveConstants.TRACK_WIDTH
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kA
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kStatic
-//import robotuprising.ftc2021.auto.drive.DriveConstants.kV
-//import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder
-//import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceRunner
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.roadrunner.control.PIDCoefficients
+// import com.acmerobotics.roadrunner.drive.TankDrive
+// import com.acmerobotics.roadrunner.followers.TankPIDVAFollower
+// import com.acmerobotics.roadrunner.followers.TrajectoryFollower
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.trajectory.Trajectory
+// import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
+// import com.acmerobotics.roadrunner.trajectory.constraints.*
+// import com.qualcomm.hardware.bosch.BNO055IMU
+// import com.qualcomm.hardware.lynx.LynxModule
+// import com.qualcomm.robotcore.hardware.*
+// import com.qualcomm.robotcore.hardware.DcMotor.RunMode
+// import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
+// import robotuprising.ftc2021.auto.drive.DriveConstants.TRACK_WIDTH
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kA
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kStatic
+// import robotuprising.ftc2021.auto.drive.DriveConstants.kV
+// import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder
+// import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceRunner
 //
-///*
-//* Simple tank drive hardware implementation for REV hardware.
-//*/
-//@Config
-//class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRACK_WIDTH) {
+// /*
+// * Simple tank drive hardware implementation for REV hardware.
+// */
+// @Config
+// class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRACK_WIDTH) {
 //    private val trajectorySequenceRunner: TrajectorySequenceRunner
 //    private val follower: TrajectoryFollower
 //    private val motors: List<DcMotorEx>
@@ -261,4 +261,4 @@
 //        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 //        trajectorySequenceRunner = TrajectorySequenceRunner(follower, HEADING_PID)
 //    }
-//}
+// }

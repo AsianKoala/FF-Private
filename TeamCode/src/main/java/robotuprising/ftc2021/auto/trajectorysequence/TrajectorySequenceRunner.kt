@@ -1,27 +1,27 @@
-//package robotuprising.ftc2021.auto.trajectorysequence
+// package robotuprising.ftc2021.auto.trajectorysequence
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.canvas.Canvas
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.TelemetryPacket
-//import com.acmerobotics.roadrunner.control.PIDCoefficients
-//import com.acmerobotics.roadrunner.control.PIDFController
-//import com.acmerobotics.roadrunner.drive.DriveSignal
-//import com.acmerobotics.roadrunner.followers.TrajectoryFollower
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker
-//import com.acmerobotics.roadrunner.util.NanoClock
-//import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
-//import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TrajectorySegment
-//import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TurnSegment
-//import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.WaitSegment
-//import robotuprising.ftc2021.auto.util.DashboardUtil.drawPoseHistory
-//import robotuprising.ftc2021.auto.util.DashboardUtil.drawRobot
-//import robotuprising.ftc2021.auto.util.DashboardUtil.drawSampledPath
-//import java.util.*
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.canvas.Canvas
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.TelemetryPacket
+// import com.acmerobotics.roadrunner.control.PIDCoefficients
+// import com.acmerobotics.roadrunner.control.PIDFController
+// import com.acmerobotics.roadrunner.drive.DriveSignal
+// import com.acmerobotics.roadrunner.followers.TrajectoryFollower
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker
+// import com.acmerobotics.roadrunner.util.NanoClock
+// import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.SequenceSegment
+// import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TrajectorySegment
+// import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.TurnSegment
+// import robotuprising.ftc2021.auto.trajectorysequence.sequencesegment.WaitSegment
+// import robotuprising.ftc2021.auto.util.DashboardUtil.drawPoseHistory
+// import robotuprising.ftc2021.auto.util.DashboardUtil.drawRobot
+// import robotuprising.ftc2021.auto.util.DashboardUtil.drawSampledPath
+// import java.util.*
 //
-//@Config
-//class TrajectorySequenceRunner(private val follower: TrajectoryFollower, headingPIDCoefficients: PIDCoefficients?) {
+// @Config
+// class TrajectorySequenceRunner(private val follower: TrajectoryFollower, headingPIDCoefficients: PIDCoefficients?) {
 //    private val turnController: PIDFController
 //    private val clock: NanoClock
 //    private var currentTrajectorySequence: TrajectorySequence? = null
@@ -202,4 +202,4 @@
 //        dashboard = FtcDashboard.getInstance()
 //        dashboard.telemetryTransmissionInterval = 25
 //    }
-//}
+// }

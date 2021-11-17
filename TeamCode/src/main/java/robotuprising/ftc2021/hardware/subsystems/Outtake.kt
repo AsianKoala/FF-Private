@@ -1,7 +1,5 @@
 package robotuprising.ftc2021.hardware.subsystems
 
-import com.qualcomm.robotcore.hardware.HardwareMap
-import org.openftc.revextensions2.ExpansionHubServo
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.system.Subsystem
 
@@ -47,7 +45,6 @@ class Outtake : Subsystem() {
     }
 
     override fun stop() {
-
     }
 
     override fun sendDashboardPacket() {

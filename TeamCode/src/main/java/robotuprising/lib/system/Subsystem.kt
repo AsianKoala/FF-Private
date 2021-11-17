@@ -1,7 +1,5 @@
 package robotuprising.lib.system
 
-import com.qualcomm.robotcore.hardware.HardwareMap
-
 abstract class Subsystem {
     open fun start() {}
     open fun init_loop() {}

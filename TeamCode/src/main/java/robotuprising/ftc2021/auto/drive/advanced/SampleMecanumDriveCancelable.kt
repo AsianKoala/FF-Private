@@ -1,35 +1,35 @@
 package robotuprising.ftc2021.auto.drive.advanced
 
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
-import com.qualcomm.robotcore.hardware.HardwareMap
-import com.acmerobotics.roadrunner.drive.MecanumDrive
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
-import com.acmerobotics.roadrunner.util.NanoClock
-import com.acmerobotics.roadrunner.profile.MotionProfile
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower
-import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.hardware.bosch.BNO055IMU
-import com.qualcomm.robotcore.hardware.VoltageSensor
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
-import com.acmerobotics.roadrunner.profile.MotionState
-import com.acmerobotics.roadrunner.trajectory.Trajectory
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.drive.DriveSignal
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode
-import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
-import com.qualcomm.robotcore.hardware.PIDFCoefficients
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
+import com.acmerobotics.roadrunner.drive.MecanumDrive
+import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower
+import com.acmerobotics.roadrunner.followers.TrajectoryFollower
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.profile.MotionProfile
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator.generateSimpleMotionProfile
+import com.acmerobotics.roadrunner.profile.MotionState
+import com.acmerobotics.roadrunner.trajectory.Trajectory
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
+import com.acmerobotics.roadrunner.util.NanoClock
+import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.hardware.lynx.LynxModule
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode
+import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
+import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.PIDFCoefficients
+import com.qualcomm.robotcore.hardware.VoltageSensor
 import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_ACCEL
 import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_ANG_ACCEL
 import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_ANG_VEL
@@ -91,10 +91,10 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
         val heading = poseEstimate.heading
         lastPoseOnTurn = poseEstimate
         turnProfile = generateSimpleMotionProfile(
-                MotionState(heading, 0.0, 0.0, 0.0),
-                MotionState(heading + angle, 0.0, 0.0, 0.0),
-                MAX_ANG_VEL,
-                MAX_ANG_ACCEL
+            MotionState(heading, 0.0, 0.0, 0.0),
+            MotionState(heading + angle, 0.0, 0.0, 0.0),
+            MAX_ANG_VEL,
+            MAX_ANG_ACCEL
         )
         turnStart = clock.seconds()
         mode = Mode.TURN
@@ -156,11 +156,16 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
                 val correction = turnController.update(currentPose.heading)
                 val targetOmega = targetState.v
                 val targetAlpha = targetState.a
-                setDriveSignal(DriveSignal(Pose2d(
-                        0.0, 0.0, targetOmega + correction
-                ), Pose2d(
-                        0.0, 0.0, targetAlpha
-                )))
+                setDriveSignal(
+                    DriveSignal(
+                        Pose2d(
+                            0.0, 0.0, targetOmega + correction
+                        ),
+                        Pose2d(
+                            0.0, 0.0, targetAlpha
+                        )
+                    )
+                )
                 val newPose = lastPoseOnTurn.copy(lastPoseOnTurn.x, lastPoseOnTurn.y, targetState.x)
                 fieldOverlay.setStroke("#4CAF50")
                 DashboardUtil.drawRobot(fieldOverlay, newPose)
@@ -213,8 +218,8 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
 
     fun setPIDFCoefficients(runMode: RunMode?, coefficients: PIDFCoefficients) {
         val compensatedCoefficients = PIDFCoefficients(
-                coefficients.p, coefficients.i, coefficients.d,
-                coefficients.f * 12 / batteryVoltageSensor.voltage
+            coefficients.p, coefficients.i, coefficients.d,
+            coefficients.f * 12 / batteryVoltageSensor.voltage
         )
         for (motor in motors) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients)
@@ -223,14 +228,17 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
 
     fun setWeightedDrivePower(drivePower: Pose2d) {
         var vel = drivePower
-        if ((Math.abs(drivePower.x) + Math.abs(drivePower.y)
-                        + Math.abs(drivePower.heading)) > 1) {
+        if ((
+            Math.abs(drivePower.x) + Math.abs(drivePower.y) +
+                Math.abs(drivePower.heading)
+            ) > 1
+        ) {
             // re-normalize the powers according to the weights
             val denom = VX_WEIGHT * Math.abs(drivePower.x) + VY_WEIGHT * Math.abs(drivePower.y) + OMEGA_WEIGHT * Math.abs(drivePower.heading)
             vel = Pose2d(
-                    VX_WEIGHT * drivePower.x,
-                    VY_WEIGHT * drivePower.y,
-                    OMEGA_WEIGHT * drivePower.heading
+                VX_WEIGHT * drivePower.x,
+                VY_WEIGHT * drivePower.y,
+                OMEGA_WEIGHT * drivePower.heading
             ).div(denom)
         }
         setDrivePower(vel)
@@ -292,10 +300,12 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
         var OMEGA_WEIGHT = 1.0
         var POSE_HISTORY_LIMIT = 100
         fun getVelocityConstraint(maxVel: Double, maxAngularVel: Double, trackWidth: Double): TrajectoryVelocityConstraint {
-            return MinVelocityConstraint(Arrays.asList(
+            return MinVelocityConstraint(
+                Arrays.asList(
                     AngularVelocityConstraint(maxAngularVel),
                     MecanumVelocityConstraint(maxVel, trackWidth)
-            ))
+                )
+            )
         }
 
         fun getAccelerationConstraint(maxAccel: Double): TrajectoryAccelerationConstraint {
@@ -312,8 +322,10 @@ class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, 
         turnController.setInputBounds(0.0, 2 * Math.PI)
         velConstraint = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH)
         accelConstraint = getAccelerationConstraint(MAX_ACCEL)
-        follower = HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5)
+        follower = HolonomicPIDVAFollower(
+            TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+            Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5
+        )
         poseHistory = LinkedList()
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap)
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next()

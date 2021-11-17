@@ -1,19 +1,19 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.hardware.DcMotor
-//import com.qualcomm.robotcore.hardware.VoltageSensor
-//import com.qualcomm.robotcore.util.ElapsedTime
-//import robotuprising.ftc2021.auto.drive.DriveConstants
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import java.util.*
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.hardware.DcMotor
+// import com.qualcomm.robotcore.hardware.VoltageSensor
+// import com.qualcomm.robotcore.util.ElapsedTime
+// import robotuprising.ftc2021.auto.drive.DriveConstants
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import java.util.*
 //
-///**
+// /**
 // * This routine is designed to calculate the maximum velocity your bot can achieve under load. It
 // * will also calculate the effective kF value for your velocity PID.
 // *
@@ -23,9 +23,9 @@
 // *
 // * Further fine tuning of kF may be desired.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class MaxVelocityTuner : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class MaxVelocityTuner : LinearOpMode() {
 //    private lateinit var timer: ElapsedTime
 //    private var maxVelocity = 0.0
 //    private var batteryVoltageSensor: VoltageSensor? = null
@@ -65,4 +65,4 @@
 //    companion object {
 //        var RUNTIME = 2.0
 //    }
-//}
+// }

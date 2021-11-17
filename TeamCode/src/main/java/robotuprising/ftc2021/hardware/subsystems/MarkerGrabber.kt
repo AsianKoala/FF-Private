@@ -1,6 +1,5 @@
 package robotuprising.ftc2021.hardware.subsystems
 
-import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.lib.system.Subsystem
 
 class MarkerGrabber : Subsystem() {

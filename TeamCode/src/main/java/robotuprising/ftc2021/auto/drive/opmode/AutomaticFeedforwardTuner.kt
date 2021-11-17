@@ -1,24 +1,24 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.util.NanoClock
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.util.RobotLog
-//import org.firstinspires.ftc.robotcore.internal.system.Misc
-//import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_RPM
-//import robotuprising.ftc2021.auto.drive.DriveConstants.RUN_USING_ENCODER
-//import robotuprising.ftc2021.auto.drive.DriveConstants.rpmToVelocity
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import robotuprising.ftc2021.auto.util.LoggingUtil
-//import robotuprising.ftc2021.auto.util.RegressionUtil
-//import java.util.ArrayList
-//import kotlin.Throws
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.util.NanoClock
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.util.RobotLog
+// import org.firstinspires.ftc.robotcore.internal.system.Misc
+// import robotuprising.ftc2021.auto.drive.DriveConstants.MAX_RPM
+// import robotuprising.ftc2021.auto.drive.DriveConstants.RUN_USING_ENCODER
+// import robotuprising.ftc2021.auto.drive.DriveConstants.rpmToVelocity
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import robotuprising.ftc2021.auto.util.LoggingUtil
+// import robotuprising.ftc2021.auto.util.RegressionUtil
+// import java.util.ArrayList
+// import kotlin.Throws
 //
-///*
+// /*
 // * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an
 // * outline of the procedure:
 // *   1. Slowly ramp the motor power and record encoder values along the way.
@@ -28,9 +28,9 @@
 // *   4. Adjust the encoder data based on the velocity tuning data and find kA with another linear
 // *      regression.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class AutomaticFeedforwardTuner : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class AutomaticFeedforwardTuner : LinearOpMode() {
 //    @Throws(InterruptedException::class)
 //    override fun runOpMode() {
 //        if (RUN_USING_ENCODER) {
@@ -209,4 +209,4 @@
 //        var MAX_POWER = 0.7
 //        var DISTANCE = 100.0 // in
 //    }
-//}
+// }

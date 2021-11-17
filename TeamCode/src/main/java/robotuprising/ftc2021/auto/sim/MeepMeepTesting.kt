@@ -1,14 +1,10 @@
 package robotuprising.ftc2021.auto.sim
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.acmerobotics.roadrunner.path.QuinticSpline
 import com.noahbres.meepmeep.MeepMeep
 import com.noahbres.meepmeep.MeepMeep.Background
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark
-import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedDark
 import com.noahbres.meepmeep.roadrunner.DriveShim
-import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder
 import kotlin.math.PI
 
 object MeepMeepTesting {
@@ -23,24 +19,21 @@ object MeepMeepTesting {
         val exit = Pose2d(38.0, -43.0, PI)
 
         val mm = MeepMeep(800) // Set field image
-                .setBackground(Background.FIELD_FREIGHT_FRENZY) // Set theme
-                .setTheme(ColorSchemeBlueDark()) // Background opacity from 0-1
-                .setBackgroundAlpha(1f) // Set constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0)
-
-                .followTrajectorySequence { drive: DriveShim ->
-                    drive.trajectorySequenceBuilder(Pose2d(8.0, -60.0, PI / 2))
-                            .lineToLinearHeading(firstDeposit)
-                            .waitSeconds(0.5)
-
-                            .turn(PI / 4)
-                            .setReversed(true)
-                            .splineToSplineHeading(intakeFwd, - PI / 4)
-                            .setReversed(false)
-                            .splineToSplineHeading(exit, PI)
-                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
-                            .waitSeconds(0.5)
-
+            .setBackground(Background.FIELD_FREIGHT_FRENZY) // Set theme
+            .setTheme(ColorSchemeBlueDark()) // Background opacity from 0-1
+            .setBackgroundAlpha(1f) // Set constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+            .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0)
+            .followTrajectorySequence { drive: DriveShim ->
+                drive.trajectorySequenceBuilder(Pose2d(8.0, -60.0, PI / 2))
+                    .lineToLinearHeading(firstDeposit)
+                    .waitSeconds(0.5)
+                    .turn(PI / 4)
+                    .setReversed(true)
+                    .splineToSplineHeading(intakeFwd, - PI / 4)
+                    .setReversed(false)
+                    .splineToSplineHeading(exit, PI)
+                    .splineToSplineHeading(deposit, Math.toRadians(145.0))
+                    .waitSeconds(0.5)
 //                            .setReversed(true)
 //                            .splineToSplineHeading(intakeFwd, Math.toRadians(-60.0))
 //                            .setReversed(false)
@@ -70,8 +63,7 @@ object MeepMeepTesting {
 //                            .setReversed(false)
 //                            .splineToSplineHeading(deposit, Math.toRadians(145.0))
 //                            .waitSeconds(0.5)
-
-                            .build()
+                    .build()
             }
             .start()
     }

@@ -3,30 +3,48 @@ package robotuprising.lib.hardware
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType
+import com.qualcomm.robotcore.util.TypeConversion
 
 @I2cDeviceType
-@DeviceProperties(name = "MB1242 Ultrasonic Sensor", description = "ULTRASONIC SENSOR", xmlTag = "MB1242")
+@DeviceProperties(
+    name = "MB1242 I2C Ultrasonic Distance Sensor",
+    description = "Ultrasonic Distance Sensor from Maxbotics",
+    xmlTag = "MB1242"
+)
 class MB1242(deviceClient: I2cDeviceSynch) : I2cDeviceSynchDevice<I2cDeviceSynch>(deviceClient, true) {
 
-    fun poll() {
-        val data = ByteArray(1)
-        data[0] = 0x51.toByte()
-        deviceClient.write(0xE0, data)
+    init {
+        this.deviceClient.i2cAddress = I2cAddr.create8bit(0xE1)
+
+        super.registerArmingStateCallback(false)
+        this.deviceClient.engage()
     }
 
-    fun getDistance(): Int {
-        val read = deviceClient.read(0xE1)
-        val range_low_byte = read[0]
-        val range_high_byte = read[1]
-        return range_high_byte * 256 + range_low_byte
+    /**
+     * Performs a range command on the sensor. Allow at least 80-100ms before reading.
+     */
+    fun initiateRangeCommand() {
+        /*
+        MB1242 Datasheet:
+        Write to address 1110 0000 - the last 0 indicates a write
+        The byte 0101 0001 (decimal 81) - Commands the sensor to take a range measurement
+        "It is best to allow 100ms between readings to allow for proper acoustic dissipation."
+         */
+
+        deviceClient.write8(0xE0, 0x51)
     }
 
-    override fun getManufacturer(): HardwareDevice.Manufacturer {
-        return HardwareDevice.Manufacturer.Other
-    }
-
-    override fun getDeviceName(): String {
-        return "MB1242 Ultrasonic Sensor"
+    /**
+     * Reads the range from the last command in cm.
+     */
+    fun readRangeValueCm(): Int {
+        /*
+        MB1242 Datasheet:
+        Read from address 1110 0001 -  the last 1 indicates a read
+        Read two bytes of data - First is the high range and the second is the low range
+        Value is the range in cm from last range reading.
+         */
+        return TypeConversion.byteArrayToShort(deviceClient.read(0xE1, 2)).toInt()
     }
 
     @Synchronized
@@ -34,10 +52,7 @@ class MB1242(deviceClient: I2cDeviceSynch) : I2cDeviceSynchDevice<I2cDeviceSynch
         return true
     }
 
-    init {
-        super.registerArmingStateCallback(false)
-        deviceClient.i2cAddress = I2cAddr.create7bit(0x70)
-        deviceClient.engage()
+    override fun getManufacturer(): HardwareDevice.Manufacturer = HardwareDevice.Manufacturer.Unknown
 
-    }
+    override fun getDeviceName(): String = "MB1242 I2C Ultrasonic Distance Sensor"
 }

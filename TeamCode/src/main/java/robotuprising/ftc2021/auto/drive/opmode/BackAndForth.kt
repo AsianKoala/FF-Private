@@ -1,13 +1,13 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.trajectory.Trajectory
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.trajectory.Trajectory
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 //
-///*
+// /*
 // * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
 // * classes). The robot drives back and forth in a straight line indefinitely. Utilization of the
 // * dashboard is recommended for this tuning routine. To access the dashboard, connect your computer
@@ -23,9 +23,9 @@
 // * This opmode is designed as a convenient, coarse tuning for the follower PID coefficients. It
 // * is recommended that you use the FollowerPIDTuner opmode for further fine tuning.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class BackAndForth : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class BackAndForth : LinearOpMode() {
 //    @Throws(InterruptedException::class)
 //    override fun runOpMode() {
 //        val drive = SampleMecanumDrive(hardwareMap)
@@ -45,4 +45,4 @@
 //    companion object {
 //        var DISTANCE = 50.0
 //    }
-//}
+// }

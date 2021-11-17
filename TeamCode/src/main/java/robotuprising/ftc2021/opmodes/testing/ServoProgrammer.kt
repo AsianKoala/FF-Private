@@ -1,23 +1,21 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.testing
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.Range
-
-
 import org.openftc.revextensions2.ExpansionHubServo
-
 
 @TeleOp(name = "Servo Programmer")
 class ServoProgrammer : OpMode() {
     private lateinit var ourServoData: ServoData
     private var prevTime = System.currentTimeMillis()
+
     override fun init() {
         val servo = hardwareMap.get(ExpansionHubServo::class.java, "outtakeLeft") // ex
         ourServoData = ServoData(servo, 0.05)
     }
 
     override fun loop() {
-        if(System.currentTimeMillis() - prevTime > 300) {
+        if (System.currentTimeMillis() - prevTime > 300) {
             prevTime = System.currentTimeMillis()
             telemetry.addLine(ourServoData.update(gamepad1.x, gamepad1.b, gamepad1.a))
         }

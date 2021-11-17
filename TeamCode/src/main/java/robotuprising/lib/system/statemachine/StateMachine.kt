@@ -65,9 +65,8 @@ class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, pri
         return true
     }
 
-
     fun smartRun() {
-        if(!running) {
+        if (!running) {
             reset()
             start()
         }

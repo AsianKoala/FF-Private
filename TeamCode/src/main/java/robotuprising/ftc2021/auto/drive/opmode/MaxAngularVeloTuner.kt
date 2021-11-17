@@ -1,17 +1,17 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.hardware.DcMotor
-//import com.qualcomm.robotcore.util.ElapsedTime
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import java.util.*
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.hardware.DcMotor
+// import com.qualcomm.robotcore.util.ElapsedTime
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import java.util.*
 //
-///**
+// /**
 // * This routine is designed to calculate the maximum angular velocity your bot can achieve under load.
 // *
 // *
@@ -20,9 +20,9 @@
 // *
 // * Further fine tuning of MAX_ANG_VEL may be desired.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class MaxAngularVeloTuner : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class MaxAngularVeloTuner : LinearOpMode() {
 //    private lateinit var timer: ElapsedTime
 //    private var maxAngVelocity = 0.0
 //    @Throws(InterruptedException::class)
@@ -55,4 +55,4 @@
 //    companion object {
 //        var RUNTIME = 4.0
 //    }
-//}
+// }

@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.testing
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -20,6 +20,9 @@ class NakiriTesting : OpMode() {
 
     private lateinit var linkage: ExpansionHubServo
 
+    private lateinit var intake: ExpansionHubMotor
+    private lateinit var intakeLeftPivot: ExpansionHubServo
+
     override fun init() {
         fl = hardwareMap[ExpansionHubMotor::class.java, "FL"]
         fr = hardwareMap[ExpansionHubMotor::class.java, "FR"]
@@ -32,7 +35,12 @@ class NakiriTesting : OpMode() {
         liftLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         liftRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
-        linkage = hardwareMap[ExpansionHubServo::class.java,"linkage"]
+        linkage = hardwareMap[ExpansionHubServo::class.java, "linkage"]
+
+        intake = hardwareMap[ExpansionHubMotor::class.java, "intake"]
+        intakeLeftPivot = hardwareMap[ExpansionHubServo::class.java, "intakeLeftPivot"]
+
+        intake.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
     override fun loop() {
@@ -41,10 +49,10 @@ class NakiriTesting : OpMode() {
         val x = gamepad1.left_stick_x.d
         val turn = gamepad1.right_stick_x.d
 
-        fl.power = y + x - turn
-        bl.power = y - x - turn
-        fr.power = -y - x - turn
-        br.power = -y + x - turn
+        fl.power = -y - x - turn
+        bl.power = -y + x - turn
+        fr.power = y - x - turn
+        br.power = y + x - turn
 
         val liftPower = 0.75
         when {
@@ -56,7 +64,6 @@ class NakiriTesting : OpMode() {
             gamepad1.right_trigger > 0.5 -> {
                 liftLeft.power = -liftPower
                 liftRight.power = -liftPower
-
             }
 
             else -> {
@@ -68,9 +75,26 @@ class NakiriTesting : OpMode() {
         val linkageIn = 1.0
         val linkageOut = 0.5
 
-        if(gamepad1.x)
+        if (gamepad1.x)
             linkage.position = linkageIn
-        if(gamepad1.b)
+        if (gamepad1.b)
             linkage.position = linkageOut
+
+
+        if(gamepad1.a) {
+            intakeLeftPivot.position = 0.5
+        }
+
+        if(gamepad1.y) {
+            intakeLeftPivot.position = 0.0
+        }
+
+        if(gamepad1.left_bumper) {
+            intake.power = 1.0
+        } else if(gamepad1.right_bumper) {
+            intake.power = -1.0
+        } else {
+            intake.power = 0.0
+        }
     }
 }

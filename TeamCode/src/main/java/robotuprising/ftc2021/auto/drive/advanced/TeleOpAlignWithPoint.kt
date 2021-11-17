@@ -1,21 +1,21 @@
-//package robotuprising.ftc2021.auto.drive.advanced
+// package robotuprising.ftc2021.auto.drive.advanced
 //
-//import robotuprising.ftc2021.auto.util.DashboardUtil.drawRobot
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.acmerobotics.roadrunner.geometry.Vector2d
-//import kotlin.Throws
-//import com.qualcomm.robotcore.hardware.DcMotor
-//import robotuprising.ftc2021.auto.drive.advanced.PoseStorage
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.dashboard.telemetry.TelemetryPacket
-//import robotuprising.ftc2021.auto.drive.DriveConstants
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.roadrunner.control.PIDFController
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import robotuprising.ftc2021.auto.util.DashboardUtil.drawRobot
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.acmerobotics.roadrunner.geometry.Vector2d
+// import kotlin.Throws
+// import com.qualcomm.robotcore.hardware.DcMotor
+// import robotuprising.ftc2021.auto.drive.advanced.PoseStorage
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.dashboard.telemetry.TelemetryPacket
+// import robotuprising.ftc2021.auto.drive.DriveConstants
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.roadrunner.control.PIDFController
+// import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 //
-///**
+// /**
 // * This opmode demonstrates how one would implement "align to point behavior" in teleop. You specify
 // * a desired vector (x/y coordinate) via`targetPosition`. In the `ALIGN_TO_POINT` mode, the bot will
 // * switch into field centric control and independently control its heading to align itself with the
@@ -28,9 +28,9 @@
 // * Note: We don't call drive.update() here because it has its own field drawing functions. We don't
 // * want that to interfere with our graph so we just directly update localizer instead
 // */
-//@Config
-//@TeleOp(group = "advanced")
-//class TeleOpAlignWithPoint : LinearOpMode() {
+// @Config
+// @TeleOp(group = "advanced")
+// class TeleOpAlignWithPoint : LinearOpMode() {
 //    // Define 2 states, driver control or alignment control
 //    internal enum class Mode {
 //        NORMAL_CONTROL, ALIGN_TO_POINT
@@ -165,4 +165,4 @@
 //    companion object {
 //        var DRAWING_TARGET_RADIUS = 2.0
 //    }
-//}
+// }

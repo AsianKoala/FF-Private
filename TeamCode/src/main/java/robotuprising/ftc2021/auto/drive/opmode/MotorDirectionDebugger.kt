@@ -1,16 +1,16 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.qualcomm.robotcore.eventloop.opmode.Disabled
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-//import org.firstinspires.ftc.robotcore.external.Telemetry
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import robotuprising.lib.util.Extensions.d
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.qualcomm.robotcore.eventloop.opmode.Disabled
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+// import org.firstinspires.ftc.robotcore.external.Telemetry
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import robotuprising.lib.util.Extensions.d
 //
-///**
+// /**
 // * This is a simple teleop routine for debugging your motor configuration.
 // * Pressing each of the buttons will power its respective motor.
 // *
@@ -38,10 +38,10 @@
 // *
 // * Uncomment the @Disabled tag below to use this opmode.
 // */
-//@Disabled
-//@Config
-//@TeleOp(group = "drive")
-//class MotorDirectionDebugger : LinearOpMode() {
+// @Disabled
+// @Config
+// @TeleOp(group = "drive")
+// class MotorDirectionDebugger : LinearOpMode() {
 //    @Throws(InterruptedException::class)
 //    override fun runOpMode() {
 //        telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry())
@@ -84,4 +84,4 @@
 //    companion object {
 //        var MOTOR_POWER = 0.7
 //    }
-//}
+// }

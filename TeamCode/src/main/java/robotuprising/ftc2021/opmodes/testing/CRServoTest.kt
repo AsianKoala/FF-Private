@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.testing
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.CRServo

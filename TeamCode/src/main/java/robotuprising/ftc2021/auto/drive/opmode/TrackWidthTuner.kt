@@ -1,19 +1,19 @@
-//package robotuprising.ftc2021.auto.drive.opmode
+// package robotuprising.ftc2021.auto.drive.opmode
 //
-//import com.acmerobotics.dashboard.FtcDashboard
-//import com.acmerobotics.dashboard.config.Config
-//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-//import com.acmerobotics.roadrunner.geometry.Pose2d
-//import com.acmerobotics.roadrunner.util.Angle.norm
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-//import com.qualcomm.robotcore.util.MovingStatistics
-//import org.firstinspires.ftc.robotcore.internal.system.Misc
-//import robotuprising.ftc2021.auto.drive.DriveConstants
-//import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
-//import kotlin.Throws
+// import com.acmerobotics.dashboard.FtcDashboard
+// import com.acmerobotics.dashboard.config.Config
+// import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+// import com.acmerobotics.roadrunner.geometry.Pose2d
+// import com.acmerobotics.roadrunner.util.Angle.norm
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+// import com.qualcomm.robotcore.util.MovingStatistics
+// import org.firstinspires.ftc.robotcore.internal.system.Misc
+// import robotuprising.ftc2021.auto.drive.DriveConstants
+// import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
+// import kotlin.Throws
 //
-///*
+// /*
 // * This routine determines the effective track width. The procedure works by executing a point turn
 // * with a given angle and measuring the difference between that angle and the actual angle (as
 // * indicated by an external IMU/gyro, track wheels, or some other localizer). The quotient
@@ -22,9 +22,9 @@
 // * this procedure a few times and averages the values for additional accuracy. Note: a relatively
 // * accurate track width estimate is important or else the angular constraints will be thrown off.
 // */
-//@Config
-//@Autonomous(group = "drive")
-//class TrackWidthTuner : LinearOpMode() {
+// @Config
+// @Autonomous(group = "drive")
+// class TrackWidthTuner : LinearOpMode() {
 //    @Throws(InterruptedException::class)
 //    override fun runOpMode() {
 //        telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry)
@@ -41,7 +41,7 @@
 //        telemetry.update()
 //        val trackWidthStats = MovingStatistics(NUM_TRIALS)
 //        for (i in 0 until NUM_TRIALS) {
-////            drive.setPoseEstimate(Pose2d())
+// //            drive.setPoseEstimate(Pose2d())
 //            drive.poseEstimate = Pose2d()
 //
 //            // it is important to handle heading wraparounds
@@ -49,7 +49,7 @@
 //            var lastHeading = 0.0
 //            drive.turnAsync(Math.toRadians(ANGLE))
 //            while (!isStopRequested && drive.isBusy) {
-////                val heading: Double = drive.getPoseEstimate().getHeading()
+// //                val heading: Double = drive.getPoseEstimate().getHeading()
 //                val heading: Double = drive.poseEstimate.heading
 //                headingAccumulator += norm(heading - lastHeading)
 //                lastHeading = heading
@@ -79,4 +79,4 @@
 //        var NUM_TRIALS = 5
 //        var DELAY = 1000 // ms
 //    }
-//}
+// }

@@ -1,6 +1,5 @@
 package robotuprising.ftc2021.hardware
 
-import com.qualcomm.robotcore.hardware.HardwareMap
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.system.Subsystem
 

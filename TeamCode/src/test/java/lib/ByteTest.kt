@@ -8,7 +8,7 @@ object ByteTest {
         val dv = 711
         val ba = ByteBuffer.allocate(4).putInt(dv).array()
 
-        for(a in ba)
+        for (a in ba)
             println(a)
     }
 }
