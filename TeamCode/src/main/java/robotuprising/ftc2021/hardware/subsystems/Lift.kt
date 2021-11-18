@@ -1,30 +1,32 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients
+import com.acmerobotics.roadrunner.control.PIDFController
 import robotuprising.ftc2021.util.NakiriMotor
-import robotuprising.lib.control.motion.PIDCoeffs
-import robotuprising.lib.control.motion.PIDFController
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d
 
 class Lift : Subsystem() {
 
-    private val left = NakiriMotor("leftSlide", false).brake.openLoopControl
-    private val right = NakiriMotor("rightSlide", false).brake.openLoopControl
+    private val left = NakiriMotor("leftSlide", false).float.openLoopControl
+    private val right = NakiriMotor("rightSlide", false).float.openLoopControl
 
     private var liftState = LiftStages.RESTING
     enum class LiftStages(val position: Int) {
-        RESTING(0),
-        ALLIANCE_MEDIUM(250),
-        ALLIANCE_HIGH(500)
+        RESTING(20),
+        ALLIANCE_MEDIUM(200),
+        ALLIANCE_HIGH(400)
     }
 
 
     private val currPosition get() = left.position
     private var internalPower: Double = 0.d
 
-    private val pidCoeffs = PIDCoeffs(0.5, 0.0, 0.0)
-    private val controller = PIDFController(pidCoeffs) // todo
+//    private val pidCoeffs = PIDCoeffs(0.5, 0.0, 0.0)
+//    private val controller = PIDFController(pidCoeffs) // todo
+    private val pidCoeffs = PIDCoefficients(0.5, 0.0, 0.0)
+    private val controller = PIDFController(pidCoeffs, kStatic = 0.0)
 
     fun setLevel(stage: LiftStages) {
         liftState = stage
@@ -47,9 +49,9 @@ class Lift : Subsystem() {
 
     override fun sendDashboardPacket() {
         NakiriDashboard.name = "lift"
-        NakiriDashboard["lift state"] = liftState
-        NakiriDashboard["lift pid coeffs"] = pidCoeffs
-        NakiriDashboard["lift internal power"] = internalPower
+        NakiriDashboard["state"] = liftState
+        NakiriDashboard["pid coeffs"] = pidCoeffs
+        NakiriDashboard["internal power"] = internalPower
         NakiriDashboard["curr position"] = currPosition
         NakiriDashboard["target position"] = liftState.position
     }

@@ -3,9 +3,6 @@ package robotuprising.ftc2021.hardware.subsystems
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
-/**
- * @see 254's Superstructure class
- */
 object Nakiri : Subsystem() {
 
     private val driveManager = DriveManager()
