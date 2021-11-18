@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
@@ -10,9 +11,9 @@ class Outtake : Subsystem() {
 
     private var outtakeState = OuttakeStates.IN
     private enum class OuttakeStates(val leftPos: Double, val rightPos: Double) {
-        IN(1.0, 0.0),
-        MEDIUM(0.5, 0.5),
-        OUT(1.0, 0.5)
+        IN(Globals.OUTTAKE_LEFT_IN, Globals.OUTTAKE_RIGHT_IN),
+        MEDIUM(Globals.OUTTAKE_LEFT_MED, Globals.OUTTAKE_RIGHT_MED),
+        OUT(Globals.OUTTAKE_LEFT_OUT, Globals.OUTTAKE_RIGHT_OUT)
     }
 
     fun rotateIn() {

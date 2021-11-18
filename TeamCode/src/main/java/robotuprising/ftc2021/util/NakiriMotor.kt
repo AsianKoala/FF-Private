@@ -7,7 +7,9 @@ import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 
 class NakiriMotor(name: String, private val onMaster: Boolean) {
-    private val motor = Globals.hwMap[ExpansionHubMotor::class.java, name]
+//    private val motor = Globals.hwMap[ExpansionHubMotor::class.java, name]
+    private val motor = BulkDataButScuffed.hwMap[ExpansionHubMotor::class.java, name]
+
 
     var power: Double = 0.0
         set(value) {
@@ -26,12 +28,21 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
         }
 
 
+//    val position: Int
+//        get() {
+//            return if (onMaster) {
+//                BulkDataManager.masterData.getMotorCurrentPosition(motor)
+//            } else {
+//                BulkDataManager.slaveData.getMotorCurrentPosition(motor)
+//            }
+//        }
+
     val position: Int
         get() {
-            return if (onMaster) {
-                BulkDataManager.masterData.getMotorCurrentPosition(motor)
+            return if(onMaster) {
+                BulkDataButScuffed.masterData.getMotorCurrentPosition(motor)
             } else {
-                BulkDataManager.slaveData.getMotorCurrentPosition(motor)
+                BulkDataButScuffed.slaveData.getMotorCurrentPosition(motor)
             }
         }
 
@@ -75,6 +86,12 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
     val positionControl: NakiriMotor
         get() {
             mode = DcMotor.RunMode.RUN_TO_POSITION
+            return this
+        }
+
+    val resetControl: NakiriMotor
+        get() {
+            mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             return this
         }
 

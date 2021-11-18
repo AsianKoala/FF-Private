@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
@@ -9,16 +10,21 @@ class Linkage : Subsystem() {
 
     private var linkageState = LinkageStates.IN
     private enum class LinkageStates(val pos: Double) {
-        IN(0.0),
-        ALLIANCE_HUB(1.0)
-    }
-
-    fun extend() {
-        linkageState = LinkageStates.ALLIANCE_HUB
+        IN(Globals.LINKAGE_RETRACT),
+        MED(Globals.LINKAGE_MED),
+        ALLIANCE_HUB(Globals.LINKAGE_EXTEND)
     }
 
     fun retract() {
         linkageState = LinkageStates.IN
+    }
+
+    fun extendMed() {
+        linkageState = LinkageStates.MED
+    }
+
+    fun extend() {
+        linkageState = LinkageStates.ALLIANCE_HUB
     }
 
     override fun update() {

@@ -2,6 +2,7 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
@@ -14,9 +15,9 @@ class Lift : Subsystem() {
 
     private var liftState = LiftStages.RESTING
     enum class LiftStages(val position: Int) {
-        RESTING(20),
-        ALLIANCE_MEDIUM(200),
-        ALLIANCE_HIGH(400)
+        RESTING(Globals.LIFT_LOW),
+        ALLIANCE_MEDIUM(Globals.LIFT_MED),
+        ALLIANCE_HIGH(Globals.LIFT_HIGH)
     }
 
 

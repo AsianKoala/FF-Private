@@ -1,16 +1,15 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Intake : Subsystem() {
-
     private val intakeMotor = NakiriMotor("intakeMotor", false).brake.openLoopControl
     private val intakePivotLeft = NakiriServo("intakePivotLeft")
     private val intakePivotRight = NakiriServo("intakePivotRight")
-//    private lateinit var intakeSensor: ColorSensor
 
     private enum class IntakeStates(val power: Double) {
         ON(1.0),
@@ -19,21 +18,13 @@ class Intake : Subsystem() {
     }
 
     private enum class PivotStates(val leftPos: Double, val rightPos: Double) {
-        IN(0.7, 0.3),
-        OUT(0.2, 0.8)
+        IN(Globals.INTAKE_PIVOT_LEFT_IN, Globals.INTAKE_PIVOT_RIGHT_IN),
+        OUT(Globals.INTAKE_PIVOT_LEFT_OUT, Globals.INTAKE_PIVOT_RIGHT_OUT)
     }
 
 
     private var intakeState = IntakeStates.OFF
     private var pivotState = PivotStates.IN
-
-
-//    private enum class SensorStates {
-//        NONE,
-//        CUBE,
-//        BALL
-//    }
-//    private var sensorState = SensorStates.NONE
 
     fun turnOn() {
         intakeState = IntakeStates.ON
@@ -57,23 +48,6 @@ class Intake : Subsystem() {
             pivotState = PivotStates.IN
     }
 
-//    private var usingSimpleThreshCompare = true
-//
-//    private val ColorSensor.rgb: Triple<Int, Int, Int> get() = Triple(red(), blue(), green())
-//
-//    private fun Triple<Int, Int, Int>.simpleThreshCompare(other: Triple<Int, Int, Int>): Boolean =
-//        first < other.first && second < other.second && third < other.third
-//
-//    private fun Triple<Int, Int, Int>.sumThreshCompare(other: Triple<Int, Int, Int>): Boolean =
-//        (first + second + third) < (other.first + other.second + other.third)
-//
-//    private fun sensorCompare(other: Triple<Int, Int, Int>): Boolean {
-//        return if (usingSimpleThreshCompare) {
-//            intakeSensor.rgb.simpleThreshCompare(other)
-//        } else {
-//            intakeSensor.rgb.sumThreshCompare(other)
-//        }
-//    }
 //
 //    private enum class IntakeBehaviorStates {
 //        INTAKING,
@@ -126,7 +100,6 @@ class Intake : Subsystem() {
         NakiriDashboard["pivot state"] = pivotState
         NakiriDashboard["left pos"] = pivotState.leftPos
         NakiriDashboard["right pos"] = pivotState.rightPos
-//        AkemiDashboard["color sensor"] = intakeSensor.rgb
     }
 
     override fun stop() {
