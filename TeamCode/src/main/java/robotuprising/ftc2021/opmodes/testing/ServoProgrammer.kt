@@ -6,23 +6,44 @@ import org.openftc.revextensions2.ExpansionHubServo
 
 @TeleOp(name = "Servo Programmer")
 class ServoProgrammer : OpMode() {
-    private lateinit var ourServoData: ServoData
+    private lateinit var sLeftData: ServoData
+    private lateinit var sRightData: ServoData
     private var prevTime = System.currentTimeMillis()
+    val servo1Name = "outtakeLeft"
+    val servo2Name = "outtakeRight"
+
+    /*
+
+    outtakeLeft:
+    >=0.5 goes to robot
+    0.0 out
+    0.35 in
+
+    outtakeRight:
+    <=0.5 goes to robot
+    0.60 out
+    0.25 in
+
+
+     */
 
     override fun init() {
-        val servo = hardwareMap.get(ExpansionHubServo::class.java, "outtakeLeft") // ex
-        ourServoData = ServoData(servo, 0.05)
+        val servoLeft = hardwareMap[ExpansionHubServo::class.java, servo1Name]
+        val servoRight = hardwareMap[ExpansionHubServo::class.java, servo2Name]
+        sLeftData = ServoData(servoLeft, 0.05, servo1Name)
+        sRightData = ServoData(servoRight, 0.05, servo2Name)
     }
 
     override fun loop() {
         if (System.currentTimeMillis() - prevTime > 300) {
             prevTime = System.currentTimeMillis()
-            telemetry.addLine(ourServoData.update(gamepad1.x, gamepad1.b, gamepad1.a))
+            telemetry.addLine(sLeftData.update(gamepad1.x, gamepad1.b, gamepad1.a))
+            telemetry.addLine(sRightData.update(gamepad1.dpad_left, gamepad1.dpad_right, gamepad1.dpad_down))
         }
     }
 }
 
-private class ServoData(private val servo: ExpansionHubServo, private val increment: Double) {
+private class ServoData(private val servo: ExpansionHubServo, private val increment: Double, private val name: String) {
     private var servoPos = 0.5
     fun update(isDecrease: Boolean, isIncrease: Boolean, set: Boolean): String {
         if (isDecrease) {
@@ -33,6 +54,6 @@ private class ServoData(private val servo: ExpansionHubServo, private val increm
         if (set) {
             servo.position = servoPos
         }
-        return servo.deviceName + ": " + servoPos
+        return "$name: $servoPos"
     }
 }

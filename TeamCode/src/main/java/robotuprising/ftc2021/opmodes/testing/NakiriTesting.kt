@@ -22,6 +22,10 @@ class NakiriTesting : OpMode() {
 
     private lateinit var intake: ExpansionHubMotor
     private lateinit var intakeLeftPivot: ExpansionHubServo
+    private lateinit var intakeRightPivot: ExpansionHubServo
+
+    private lateinit var outtakeLeft: ExpansionHubServo
+    private lateinit var outtakeRight: ExpansionHubServo
 
     override fun init() {
         fl = hardwareMap[ExpansionHubMotor::class.java, "FL"]
@@ -29,22 +33,41 @@ class NakiriTesting : OpMode() {
         bl = hardwareMap[ExpansionHubMotor::class.java, "BL"]
         br = hardwareMap[ExpansionHubMotor::class.java, "BR"]
 
+        fl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        fr.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        bl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        br.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
         liftLeft = hardwareMap[ExpansionHubMotor::class.java, "liftLeft"]
         liftRight = hardwareMap[ExpansionHubMotor::class.java, "liftRight"]
+        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftLeft.mode = DcMotor.RunMode.RUN_TO_POSITION
+        liftRight.mode = DcMotor.RunMode.RUN_TO_POSITION
         liftRight.direction = DcMotorSimple.Direction.REVERSE
-        liftLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        liftRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        liftLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        liftRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
 
         linkage = hardwareMap[ExpansionHubServo::class.java, "linkage"]
 
         intake = hardwareMap[ExpansionHubMotor::class.java, "intake"]
         intakeLeftPivot = hardwareMap[ExpansionHubServo::class.java, "intakeLeftPivot"]
+        intakeRightPivot = hardwareMap[ExpansionHubServo::class.java, "intakeRightPivot"]
+
+        outtakeLeft = hardwareMap[ExpansionHubServo::class.java, "outtakeLeft"]
+        outtakeRight = hardwareMap[ExpansionHubServo::class.java, "outtakeRight"]
 
         intake.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
     override fun loop() {
+        driveControl()
+        outtakeControl()
+        intakeControl()
+        liftControl()
+    }
 
+    private fun driveControl() {
         val y = -gamepad1.left_stick_y.d
         val x = gamepad1.left_stick_x.d
         val turn = gamepad1.right_stick_x.d
@@ -53,40 +76,34 @@ class NakiriTesting : OpMode() {
         bl.power = -y + x - turn
         fr.power = y - x - turn
         br.power = y + x - turn
+    }
 
-        val liftPower = 0.75
-        when {
-            gamepad1.left_trigger > 0.5 -> {
-                liftLeft.power = liftPower
-                liftRight.power = liftPower
-            }
+    private fun outtakeControl() {
+        if (gamepad1.x)
+            linkage.position = 1.0
+        if (gamepad1.b)
+            linkage.position = 0.5
 
-            gamepad1.right_trigger > 0.5 -> {
-                liftLeft.power = -liftPower
-                liftRight.power = -liftPower
-            }
-
-            else -> {
-                liftLeft.power = 0.0
-                liftRight.power = 0.0
-            }
+        if(gamepad1.dpad_left) {
+            outtakeLeft.position = 0.35
+            outtakeRight.position = 0.25
         }
 
-        val linkageIn = 1.0
-        val linkageOut = 0.5
+        if(gamepad1.dpad_right) {
+            outtakeLeft.position = 0.0
+            outtakeRight.position = 0.60
+        }
+    }
 
-        if (gamepad1.x)
-            linkage.position = linkageIn
-        if (gamepad1.b)
-            linkage.position = linkageOut
-
-
+    private fun intakeControl() {
         if(gamepad1.a) {
-            intakeLeftPivot.position = 0.5
+            intakeLeftPivot.position = 0.88
+            intakeRightPivot.position = 0.02
         }
 
         if(gamepad1.y) {
-            intakeLeftPivot.position = 0.0
+            intakeLeftPivot.position = 0.1
+            intakeRightPivot.position = 0.75
         }
 
         if(gamepad1.left_bumper) {
@@ -96,5 +113,24 @@ class NakiriTesting : OpMode() {
         } else {
             intake.power = 0.0
         }
+    }
+
+    private fun liftControl() {
+        if(gamepad1.right_trigger > 0.5) {
+            liftLeft.targetPosition = -380
+            liftRight.targetPosition = -380
+            liftLeft.power = 0.75
+            liftRight.power = 0.75
+        }
+
+        if(gamepad1.left_trigger > 0.5) {
+            liftLeft.targetPosition = -10
+            liftRight.targetPosition = -10
+            liftLeft.power = -0.25
+            liftRight.power = -0.25
+        }
+
+        telemetry.addData("lift left", liftLeft.currentPosition)
+        telemetry.addData("lift right", liftRight.currentPosition)
     }
 }
