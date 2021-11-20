@@ -96,6 +96,10 @@ class Nakiri : Subsystem() {
         duckSpinner.turnOn()
     }
 
+    fun requestSpinnerReverse() {
+        duckSpinner.reverse()
+    }
+
     fun requestSpinnerOff() {
         duckSpinner.turnOff()
     }

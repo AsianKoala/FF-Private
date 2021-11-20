@@ -10,7 +10,8 @@ class DuckSpinner : Subsystem() {
     private var spinnerState = SpinnerStates.OFF
     private enum class SpinnerStates(val power: Double) {
         ON(0.2),
-        OFF(0.0)
+        OFF(0.0),
+        REVERSE(-0.2)
     }
 
     fun turnOn() {
@@ -19,6 +20,10 @@ class DuckSpinner : Subsystem() {
 
     fun turnOff() {
         spinnerState = SpinnerStates.OFF
+    }
+
+    fun reverse() {
+        spinnerState = SpinnerStates.REVERSE
     }
 
     override fun update() {

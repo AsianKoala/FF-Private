@@ -28,11 +28,11 @@ object Globals {
     const val OUTTAKE_LEFT_MED = (OUTTAKE_LEFT_IN + OUTTAKE_LEFT_OUT) / 2.0
     const val OUTTAKE_RIGHT_MED = (OUTTAKE_RIGHT_IN + OUTTAKE_RIGHT_OUT) / 2.0
 
-    const val INTAKE_PIVOT_LEFT_IN = 0.82
-    const val INTAKE_PIVOT_RIGHT_IN = 0.03
+    const val INTAKE_PIVOT_LEFT_OUT = 0.85
+    const val INTAKE_PIVOT_RIGHT_OUT = 0.00
 
-    const val INTAKE_PIVOT_LEFT_OUT = 0.07
-    const val INTAKE_PIVOT_RIGHT_OUT = 0.78
+    const val INTAKE_PIVOT_LEFT_IN = 0.07
+    const val INTAKE_PIVOT_RIGHT_IN = 0.78
 
     const val INTAKE_IN_POWER = 1.0
     const val INTAKE_TRANSFER_POWER = -0.75

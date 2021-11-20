@@ -21,11 +21,6 @@ class NakiriTeleOp : NakiriOpMode() {
     }
 
     private fun driveControl() {
-        val turn = if(gamepad1.right_bumper) {
-            1.0
-        } else {
-            0.75
-        }
 
         superstructure.requestDriveManagerPowers(
                 Pose(
@@ -33,7 +28,7 @@ class NakiriTeleOp : NakiriOpMode() {
                                 gamepad1.left_stick_x.d,
                                 -gamepad1.left_stick_y.d
                         ),
-                        Angle(gamepad1.right_stick_x.d * turn,
+                        Angle(gamepad1.right_stick_x.d * 0.7,
                                 AngleUnit.RAW)
                 )
         )
@@ -58,27 +53,28 @@ class NakiriTeleOp : NakiriOpMode() {
     private fun winstonControl() {
         // linkage
         when {
-            gamepad2.x -> superstructure.requestLinkageRetract()
+            gamepad2.b -> superstructure.requestLinkageRetract()
             gamepad2.y -> superstructure.requestLinkageMedium()
-            gamepad2.b -> superstructure.requestLinkageOut()
+            gamepad2.x -> superstructure.requestLinkageOut()
         }
 
         // outtake
         when {
-            gamepad2.left_trigger_pressed -> superstructure.requestOuttakeOut()
-            gamepad2.right_trigger_pressed -> superstructure.requestOuttakeIn()
+            gamepad2.dpad_right -> superstructure.requestOuttakeIn()
+            gamepad2.dpad_left -> superstructure.requestOuttakeOut()
             gamepad2.dpad_up -> superstructure.requestOuttakeMedium()
         }
 
         //lift
         when {
-            gamepad2.left_bumper -> superstructure.requestLiftHigh()
-            gamepad2.right_bumper -> superstructure.requestLiftLow()
+            gamepad2.left_trigger_pressed -> superstructure.requestLiftLow()
+            gamepad2.right_trigger_pressed -> superstructure.requestLiftHigh()
         }
 
         when {
-            gamepad2.dpad_left -> superstructure.requestSpinnerOff()
-            gamepad2.dpad_right -> superstructure.requestSpinnerOn()
+            gamepad1.dpad_left -> superstructure.requestSpinnerReverse()
+            gamepad1.dpad_right -> superstructure.requestSpinnerOn()
+            gamepad1.dpad_down -> superstructure.requestSpinnerOff()
         }
     }
 }
