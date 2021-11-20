@@ -9,7 +9,7 @@ class Outtake : Subsystem() {
     private val leftServo = NakiriServo("outtakeLeft")
     private val rightServo = NakiriServo("outtakeRight")
 
-    private var outtakeState = OuttakeStates.IN
+    private var outtakeState = OuttakeStates.MEDIUM
     private enum class OuttakeStates(val leftPos: Double, val rightPos: Double) {
         IN(Globals.OUTTAKE_LEFT_IN, Globals.OUTTAKE_RIGHT_IN),
         MEDIUM(Globals.OUTTAKE_LEFT_MED, Globals.OUTTAKE_RIGHT_MED),

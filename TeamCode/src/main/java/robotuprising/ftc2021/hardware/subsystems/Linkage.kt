@@ -12,7 +12,7 @@ class Linkage : Subsystem() {
     private enum class LinkageStates(val pos: Double) {
         IN(Globals.LINKAGE_RETRACT),
         MED(Globals.LINKAGE_MED),
-        ALLIANCE_HUB(Globals.LINKAGE_EXTEND)
+        OUT(Globals.LINKAGE_EXTEND)
     }
 
     fun retract() {
@@ -24,7 +24,7 @@ class Linkage : Subsystem() {
     }
 
     fun extend() {
-        linkageState = LinkageStates.ALLIANCE_HUB
+        linkageState = LinkageStates.OUT
     }
 
     override fun update() {

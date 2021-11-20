@@ -17,8 +17,8 @@ class Ayame : Subsystem() {
             return WHEEL_RADIUS * 2 * PI * GEAR_RATIO * ticks / TICKS_PER_REV
         }
 
-        fun convertVectorPowersToWheels(powers: Pose): List<Double> {
-            return listOf(
+        fun convertVectorPowersToWheels(powers: Pose): MutableList<Double> {
+            return mutableListOf(
                     -powers.y - powers.x - powers.h.angle,
                     -powers.y + powers.x - powers.h.angle,
                     powers.y - powers.x - powers.h.angle,
@@ -27,15 +27,15 @@ class Ayame : Subsystem() {
         }
     }
 
-    private val frontLeft = NakiriMotor("FL", true).brake.openLoopControl
-    private val frontRight = NakiriMotor("FR", true).brake.openLoopControl
-    private val backLeft = NakiriMotor("BL", true).brake.openLoopControl
-    private val backRight = NakiriMotor("BR", true).brake.openLoopControl
-    private val motors = listOf(frontLeft, frontRight, backLeft, backRight)
+    private val fl = NakiriMotor("FL", true).brake.openLoopControl
+    private val bl = NakiriMotor("BL", true).brake.openLoopControl
+    private val fr = NakiriMotor("FR", true).brake.openLoopControl
+    private val br = NakiriMotor("BR", true).brake.openLoopControl
+    private val motors = listOf(fl, bl, fr, br)
 
-    val wheelPositions: List<Double> get() = motors.map { ticksToInches(it.position) }
+//    val wheelPositions: List<Double> get() = motors.map { ticksToInches(it.position) }
 
-    var wheels: List<Double> = mutableListOf()
+    var wheels: List<Double> = mutableListOf(0.0, 0.0, 0.0, 0.0)
 
     override fun update() {
         val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
@@ -53,6 +53,6 @@ class Ayame : Subsystem() {
     }
 
     override fun stop() {
-        wheels = mutableListOf()
+
     }
 }

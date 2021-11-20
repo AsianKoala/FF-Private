@@ -4,7 +4,7 @@ import org.openftc.revextensions2.ExpansionHubServo
 
 class NakiriServo(name: String) {
 //    private val servo = Globals.hwMap[ExpansionHubServo::class.java, name]
-    private val servo = BulkDataButScuffed.hwMap[ExpansionHubServo::class.java, name]
+    private val servo = BulkDataManager.hwMap[ExpansionHubServo::class.java, name]
 
     var position: Double = 0.0
         set(value) {

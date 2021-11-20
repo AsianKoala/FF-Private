@@ -1,10 +1,12 @@
 package robotuprising.ftc2021.opmodes.testing
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.Range
 import org.openftc.revextensions2.ExpansionHubServo
 
 @TeleOp(name = "Servo Programmer")
+@Disabled
 class ServoProgrammer : OpMode() {
     private lateinit var sLeftData: ServoData
     private lateinit var sRightData: ServoData

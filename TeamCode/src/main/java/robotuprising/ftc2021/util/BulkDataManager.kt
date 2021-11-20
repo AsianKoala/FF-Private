@@ -4,15 +4,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import org.openftc.revextensions2.ExpansionHubEx
 import org.openftc.revextensions2.RevBulkData
 
-// todo
 object BulkDataManager {
-    var hwMap: HardwareMap = Globals.hwMap
+    lateinit var hwMap: HardwareMap
+    lateinit var masterHub: ExpansionHubEx
+    lateinit var slaveHub: ExpansionHubEx
+    lateinit var masterData: RevBulkData
+    lateinit var slaveData: RevBulkData
 
-    private val masterHub: ExpansionHubEx = hwMap[ExpansionHubEx::class.java, "masterHub"]
-    private val slaveHub: ExpansionHubEx = hwMap[ExpansionHubEx::class.java, "slaveHub"]
-
-    var masterData: RevBulkData = masterHub.bulkInputData
-    var slaveData: RevBulkData = slaveHub.bulkInputData
+    fun init(hardwareMap: HardwareMap) {
+        hwMap = hardwareMap
+        masterHub = hwMap[ExpansionHubEx::class.java, "masterHub"]
+        slaveHub = hwMap[ExpansionHubEx::class.java, "slaveHub"]
+        read()
+    }
 
     fun read() {
         masterData = masterHub.bulkInputData

@@ -1,27 +1,30 @@
 package robotuprising.ftc2021.hardware
 
 import robotuprising.ftc2021.hardware.subsystems.Nakiri
+import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.system.BaseOpMode
 
-abstract class Robot : BaseOpMode() {
-    val superstructure = Nakiri
+abstract class NakiriOpMode : BaseOpMode() {
+    lateinit var superstructure: Nakiri
 
     override fun m_init() {
-        Globals.hwMap = hardwareMap
+        BulkDataManager.init(hardwareMap)
+        Globals.telemetry = telemetry
+        superstructure = Nakiri()
     }
 
     override fun m_init_loop() {
-        superstructure.sendDashboardPacket()
+        BulkDataManager.read()
     }
 
     override fun m_start() {
-//        superstructure.start()
+        // would disable camera here : TODO
     }
 
     override fun m_loop() {
+        BulkDataManager.read()
         superstructure.update()
-        superstructure.sendDashboardPacket()
     }
 
     override fun m_stop() {

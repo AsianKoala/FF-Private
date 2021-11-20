@@ -3,22 +3,21 @@ package robotuprising.ftc2021.hardware.subsystems
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 
-object Nakiri : Subsystem() {
+class Nakiri : Subsystem() {
 
     private val driveManager = DriveManager()
     private val intake = Intake()
     private val lift = Lift()
     private val linkage = Linkage()
     private val outtake = Outtake()
-//    private val duckSpinner = DuckSpinner()
-//    private val arm = MarkerGrabber()
+    private val duckSpinner = DuckSpinner()
     private val subsystems = mutableListOf(
-            driveManager,
-            intake,
-            lift,
-            outtake,
-//            duckSpinner,
-//            arm
+        driveManager,
+        intake,
+        lift,
+        linkage,
+        outtake,
+        duckSpinner,
     )
 
     override fun update() {
@@ -61,16 +60,12 @@ object Nakiri : Subsystem() {
         intake.rotateIn()
     }
 
-    fun requestLiftRest() {
-        lift.setLevel(Lift.LiftStages.RESTING)
-    }
-
-    fun requestLiftMedium() {
-        lift.setLevel(Lift.LiftStages.ALLIANCE_MEDIUM)
+    fun requestLiftLow() {
+        lift.setLevel(Lift.LiftStages.LOW)
     }
 
     fun requestLiftHigh() {
-        lift.setLevel(Lift.LiftStages.ALLIANCE_HIGH)
+        lift.setLevel(Lift.LiftStages.HIGH)
     }
 
     fun requestLinkageRetract() {
@@ -79,6 +74,10 @@ object Nakiri : Subsystem() {
 
     fun requestLinkageOut() {
         linkage.extend()
+    }
+
+    fun requestLinkageMedium() {
+        linkage.extendMed()
     }
 
     fun requestOuttakeIn() {
@@ -93,12 +92,11 @@ object Nakiri : Subsystem() {
         outtake.rotateOut()
     }
 
+    fun requestSpinnerOn() {
+        duckSpinner.turnOn()
+    }
 
-//    fun requestSpinnerOn() {
-//        duckSpinner.turnOn()
-//    }
-//
-//    fun requestSpinnerOff() {
-//        duckSpinner.turnOff()
-//    }
+    fun requestSpinnerOff() {
+        duckSpinner.turnOff()
+    }
 }

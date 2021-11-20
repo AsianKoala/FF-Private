@@ -5,22 +5,12 @@ import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class DuckSpinner : Subsystem() {
-    companion object {
-        private const val MAX_POWER = 0.3
-    }
+    private val spinnerMotor = NakiriMotor("duck", false)
 
-    private val spinnerMotor = NakiriMotor("duckSpinner", false)
-
-    private var changedState = false
     private var spinnerState = SpinnerStates.OFF
-        set(value) {
-            changedState = true
-            field = value
-        }
-
-    private enum class SpinnerStates {
-        ON,
-        OFF
+    private enum class SpinnerStates(val power: Double) {
+        ON(0.2),
+        OFF(0.0)
     }
 
     fun turnOn() {
@@ -31,16 +21,8 @@ class DuckSpinner : Subsystem() {
         spinnerState = SpinnerStates.OFF
     }
 
-//    override fun init(hwMap: HardwareMap) {
-//        spinnerMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-//        spinnerMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//    }
-
     override fun update() {
-        spinnerMotor.power = when (spinnerState) {
-            SpinnerStates.ON -> MAX_POWER
-            SpinnerStates.OFF -> 0.0
-        }
+        spinnerMotor.power = spinnerState.power
     }
 
     override fun stop() {

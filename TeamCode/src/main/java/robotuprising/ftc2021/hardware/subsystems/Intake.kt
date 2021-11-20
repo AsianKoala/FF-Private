@@ -7,19 +7,19 @@ import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Intake : Subsystem() {
-    private val intakeMotor = NakiriMotor("intakeMotor", false).brake.openLoopControl
-    private val intakePivotLeft = NakiriServo("intakePivotLeft")
-    private val intakePivotRight = NakiriServo("intakePivotRight")
+    private val intakeMotor = NakiriMotor("intake", false).brake.openLoopControl
+    private val intakePivotLeft = NakiriServo("intakeLeftPivot")
+    private val intakePivotRight = NakiriServo("intakeRightPivot")
 
     private enum class IntakeStates(val power: Double) {
-        ON(1.0),
-        OFF(0.0),
-        REVERSE(-1.0),
+        ON(Globals.INTAKE_IN_POWER),
+        OFF(Globals.INTAKE_NO_POWER),
+        REVERSE(Globals.INTAKE_TRANSFER_POWER),
     }
 
     private enum class PivotStates(val leftPos: Double, val rightPos: Double) {
-        IN(Globals.INTAKE_PIVOT_LEFT_IN, Globals.INTAKE_PIVOT_RIGHT_IN),
-        OUT(Globals.INTAKE_PIVOT_LEFT_OUT, Globals.INTAKE_PIVOT_RIGHT_OUT)
+        IN(Globals.INTAKE_PIVOT_LEFT_OUT, Globals.INTAKE_PIVOT_RIGHT_OUT),
+        OUT(Globals.INTAKE_PIVOT_LEFT_IN, Globals.INTAKE_PIVOT_RIGHT_IN)
     }
 
 

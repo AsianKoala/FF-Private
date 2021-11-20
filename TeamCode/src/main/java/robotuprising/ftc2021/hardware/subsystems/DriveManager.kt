@@ -12,16 +12,23 @@ import robotuprising.lib.system.Subsystem
  */
 // TODO
 // TODO LITERALLY JUST FUCKING CREATE A CLASS FOR UPDATING DT MOTOR POWERS CAUSE THIS IS PAINFUL AF PAIN PAIN PAIN
-class DriveManager : Subsystem() {
+class DriveManager() : Subsystem() {
     private val mainDrive = Ayame()
-    private val rrDrive = VirtualDrive()
+//    private val rrDrive = VirtualDrive()
+//
+//    var imuAngle = Angle.EAST
+//
+//    var isDriveAutomated = false
+//
+//    private var internalWheelPowers: List<Double> = mutableListOf()
+//
+//    var vectorPowers: Pose = Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW))
+//        set(value) {
+//            internalWheelPowers = Ayame.convertVectorPowersToWheels(value)
+//            field = value
+//        }
 
-    var imuAngle = Angle.EAST
-
-    var isDriveAutomated = false
-
-    private var internalWheelPowers: List<Double> = mutableListOf()
-
+    private var internalWheelPowers = mutableListOf(0.0, 0.0, 0.0, 0.0)
     var vectorPowers: Pose = Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW))
         set(value) {
             internalWheelPowers = Ayame.convertVectorPowersToWheels(value)
@@ -29,13 +36,16 @@ class DriveManager : Subsystem() {
         }
 
     override fun update() {
-        if(isDriveAutomated) {
-            internalWheelPowers = rrDrive.simulatedWheelPowers
-        }
-
-        rrDrive.externalHeading = imuAngle.angle
-        rrDrive.setWheelPositions(mainDrive.wheelPositions)
-        rrDrive.updatePoseEstimate()
+//        if(isDriveAutomated) {
+//            internalWheelPowers = rrDrive.simulatedWheelPowers
+//        }
+//
+//        rrDrive.externalHeading = imuAngle.angle
+//        rrDrive.setWheelPositions(mainDrive.wheelPositions)
+//        rrDrive.updatePoseEstimate()
+//
+//        mainDrive.wheels = internalWheelPowers
+//        mainDrive.update()
 
         mainDrive.wheels = internalWheelPowers
         mainDrive.update()

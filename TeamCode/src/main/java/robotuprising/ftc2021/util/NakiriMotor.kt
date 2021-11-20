@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.util.Range
 import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 
-class NakiriMotor(name: String, private val onMaster: Boolean) {
+class NakiriMotor(private val name: String, private val onMaster: Boolean) {
 //    private val motor = Globals.hwMap[ExpansionHubMotor::class.java, name]
-    private val motor = BulkDataButScuffed.hwMap[ExpansionHubMotor::class.java, name]
+    private val motor = BulkDataManager.hwMap[ExpansionHubMotor::class.java, name]
 
 
     var power: Double = 0.0
@@ -27,24 +27,25 @@ class NakiriMotor(name: String, private val onMaster: Boolean) {
             }
         }
 
+    val bulkPosition: Int
+        get() {
+            return if(onMaster) {
+                BulkDataManager.masterData.getMotorCurrentPosition(Globals.MASTER_MAPPINGS.indexOf(name))
+            } else {
+                BulkDataManager.slaveData.getMotorCurrentPosition(Globals.SLAVE_MAPPINGS.indexOf(name))
+            }
+        }
 
 //    val position: Int
 //        get() {
-//            return if (onMaster) {
+//            return if(onMaster) {
 //                BulkDataManager.masterData.getMotorCurrentPosition(motor)
 //            } else {
 //                BulkDataManager.slaveData.getMotorCurrentPosition(motor)
 //            }
 //        }
 
-    val position: Int
-        get() {
-            return if(onMaster) {
-                BulkDataButScuffed.masterData.getMotorCurrentPosition(motor)
-            } else {
-                BulkDataButScuffed.slaveData.getMotorCurrentPosition(motor)
-            }
-        }
+    val position: Int get() = motor.currentPosition
 
 
     val reverse: NakiriMotor

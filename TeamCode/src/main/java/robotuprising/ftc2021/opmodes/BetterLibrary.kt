@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.opmodes
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -7,6 +8,7 @@ import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.lib.util.Extensions.d
 
 @TeleOp
+@Disabled
 class BetterLibrary : OpMode() {
     private lateinit var fl: ExpansionHubMotor
     private lateinit var bl: ExpansionHubMotor

@@ -1,14 +1,15 @@
 package robotuprising.ftc2021.hardware.subsystems
 
 import com.qualcomm.robotcore.util.ElapsedTime
+import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.hardware.MB1242
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Ultrasonics : Subsystem() {
-    private val forward: MB1242 = Globals.hwMap[MB1242::class.java, "forwardSensor"]
-    private val horizontal: MB1242 = Globals.hwMap[MB1242::class.java, "horizontalSensor"]
+    private val forward: MB1242 = BulkDataManager.hwMap[MB1242::class.java, "forwardSensor"]
+    private val horizontal: MB1242 = BulkDataManager.hwMap[MB1242::class.java, "sideSensor"]
 
     private val timer = ElapsedTime()
     private val readingInterval = 100

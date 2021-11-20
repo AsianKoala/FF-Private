@@ -8,7 +8,7 @@ import kotlin.math.min
 import kotlin.math.sign
 
 /**
- * Constructor for [PIDFController]. [kV], [kA], and [kStatic] are designed for DC motor feedforward
+ * Constructor for [dep]. [kV], [kA], and [kStatic] are designed for DC motor feedforward
  * control (the most common kind of feedforward in FTC). [kF] provides a custom feedforward term for other plants.
  *
  * @param pid traditional PID coefficients
@@ -18,13 +18,13 @@ import kotlin.math.sign
  * @param kF custom feedforward that depends on position and/or velocity (e.g., a gravity term for arms)
  * @param clock clock
  */
-class PIDFController(
-    private val pid: PIDCoeffs,
-    private val kV: Double = 0.0,
-    private val kA: Double = 0.0,
-    private val kStatic: Double = 0.0,
-    private val kF: (Double, Double?) -> Double = { _, _ -> 0.0 },
-    private val clock: NanoClock = NanoClock.system()
+class dep(
+        private val pid: dep2,
+        private val kV: Double = 0.0,
+        private val kA: Double = 0.0,
+        private val kStatic: Double = 0.0,
+        private val kF: (Double, Double?) -> Double = { _, _ -> 0.0 },
+        private val clock: NanoClock = NanoClock.system()
 ) {
     private var errorSum: Double = 0.0
     private var lastUpdateTimestamp: Double = Double.NaN

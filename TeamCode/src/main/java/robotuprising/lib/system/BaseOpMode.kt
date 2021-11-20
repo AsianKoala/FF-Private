@@ -17,18 +17,18 @@ abstract class BaseOpMode : TunableLinearOpMode() {
 
     private var hasStarted = false
 
-    private lateinit var opModeType: OpModeType
-    private var debugging = false
+//    private lateinit var opModeType: OpModeType
+//    private var debugging = false
 
     override fun runOpMode() {
-        val manager = (internalOpModeServices as OpModeManagerImpl)
-
-        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
-        opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
-            OpModeType.AUTO
-        } else {
-            OpModeType.TELEOP
-        }
+//        val manager = (internalOpModeServices as OpModeManagerImpl)
+//
+//        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
+//        opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
+//            OpModeType.AUTO
+//        } else {
+//            OpModeType.TELEOP
+//        }
 
         m_init()
         mainLoop@ while (true) {
@@ -50,21 +50,24 @@ abstract class BaseOpMode : TunableLinearOpMode() {
                     break@mainLoop
                 }
             }
+
+            telemetry.update()
         }
 
         m_stop()
-        if (opModeType == OpModeType.AUTO && is_comp) {
-            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
-            manager.initActiveOpMode(opName + "Auto")
-        }
-    }
+//        if (opModeType == OpModeType.AUTO && is_comp) {
+//            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
+//            manager.initActiveOpMode(opName + "Auto")
+//        }
 
-    private fun debuggingTelem() {
-        telemetry.addData("debugging", debugging)
-        telemetry.addData("opModeType", opModeType)
-        telemetry.addData("has started", hasStarted)
-        telemetry.addData("is comp", is_comp)
     }
+//
+//    private fun debuggingTelem() {
+//        telemetry.addData("debugging", debugging)
+//        telemetry.addData("opModeType", opModeType)
+//        telemetry.addData("has started", hasStarted)
+//        telemetry.addData("is comp", is_comp)
+//    }
 
     abstract val is_comp: Boolean
     abstract fun m_init()

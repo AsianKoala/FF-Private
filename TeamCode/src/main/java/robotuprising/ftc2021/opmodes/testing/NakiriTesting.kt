@@ -1,86 +1,76 @@
 package robotuprising.ftc2021.opmodes.testing
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients
+import com.acmerobotics.roadrunner.control.PIDFController
+import com.acmerobotics.roadrunner.util.epsilonEquals
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.openftc.revextensions2.ExpansionHubMotor
-import org.openftc.revextensions2.ExpansionHubServo
+import com.qualcomm.robotcore.util.Range
+import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.util.Extensions.d
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 @TeleOp
+@Disabled
 class NakiriTesting : OpMode() {
-//    private lateinit var fl: ExpansionHubMotor
-//    private lateinit var fr: ExpansionHubMotor
-//    private lateinit var bl: ExpansionHubMotor
-//    private lateinit var br: ExpansionHubMotor
-//
-//    private lateinit var liftLeft: ExpansionHubMotor
-//    private lateinit var liftRight: ExpansionHubMotor
-//
-//    private lateinit var linkage: ExpansionHubServo
-//
-//    private lateinit var intake: ExpansionHubMotor
-//    private lateinit var intakeLeftPivot: ExpansionHubServo
-//    private lateinit var intakeRightPivot: ExpansionHubServo
-//
-//    private lateinit var outtakeLeft: ExpansionHubServo
-//    private lateinit var outtakeRight: ExpansionHubServo
 
-    private val fl = NakiriMotor("FL", true).brake.openLoopControl
-    private val fr = NakiriMotor("FR", true).brake.openLoopControl
-    private val bl = NakiriMotor("BL", true).brake.openLoopControl
-    private val br = NakiriMotor("BR", true).brake.openLoopControl
+    private lateinit var fl: NakiriMotor
+    private lateinit var fr: NakiriMotor
+    private lateinit var bl: NakiriMotor
+    private lateinit var br: NakiriMotor
 
-    private val liftLeft = NakiriMotor("liftLeft", false).float.resetControl.openLoopControl
-    private val liftRight = NakiriMotor("liftRight", false).float.resetControl.openLoopControl
+    private lateinit var liftLeft: NakiriMotor
+    private lateinit var liftRight: NakiriMotor
 
-    private val intake = NakiriMotor("intake", false).brake.openLoopControl
-    private val intakeLeftPivot = NakiriServo("intakeLeftPivot")
-    private val intakeRightPivot = NakiriServo("intakeRightPivot")
+    private lateinit var intake: NakiriMotor
+    private lateinit var intakeLeftPivot: NakiriServo
+    private lateinit var intakeRightPivot: NakiriServo
 
-    private val linkage = NakiriServo("linkage")
-    private val outtakeLeft = NakiriServo("outtakeLeft")
-    private val outtakeRight = NakiriServo("outtakeRight")
+    private lateinit var linkage: NakiriServo
+    private lateinit var outtakeLeft: NakiriServo
+    private lateinit var outtakeRight: NakiriServo
 
-    private val duckSpinner = NakiriMotor("duck", false).brake.openLoopControl
+    private val controller = PIDFController(PIDCoefficients(0.05, 0.0, 0.0))
+    private var controllerOutput = 0.0
 
     override fun init() {
-//        fl = hardwareMap[ExpansionHubMotor::class.java, "FL"]
-//        fr = hardwareMap[ExpansionHubMotor::class.java, "FR"]
-//        bl = hardwareMap[ExpansionHubMotor::class.java, "BL"]
-//        br = hardwareMap[ExpansionHubMotor::class.java, "BR"]
-//
-//        fl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        fr.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        bl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        br.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        BulkDataManager.init(hardwareMap)
+        fl = NakiriMotor("FL", true).brake.openLoopControl
+        fr = NakiriMotor("FR", true).brake.openLoopControl
+        bl = NakiriMotor("BL", true).brake.openLoopControl
+        br = NakiriMotor("BR", true).brake.openLoopControl
 
-//        liftLeft = hardwareMap[ExpansionHubMotor::class.java, "liftLeft"]
-//        liftRight = hardwareMap[ExpansionHubMotor::class.java, "liftRight"]
-//        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-//        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-//        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-//        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-//        liftRight.direction = DcMotorSimple.Direction.REVERSE
-//        liftLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-//        liftRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        liftLeft = NakiriMotor("liftLeft", false).float
+        liftRight = NakiriMotor("liftRight", false).float
+        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        liftLeft.direction = DcMotorSimple.Direction.REVERSE
 
-//        linkage = hardwareMap[ExpansionHubServo::class.java, "linkage"]
-//
-//        intake = hardwareMap[ExpansionHubMotor::class.java, "intake"]
-//        intakeLeftPivot = hardwareMap[ExpansionHubServo::class.java, "intakeLeftPivot"]
-//        intakeRightPivot = hardwareMap[ExpansionHubServo::class.java, "intakeRightPivot"]
-//
-//        outtakeLeft = hardwareMap[ExpansionHubServo::class.java, "outtakeLeft"]
-//        outtakeRight = hardwareMap[ExpansionHubServo::class.java, "outtakeRight"]
+        intake = NakiriMotor("intake", false).brake.openLoopControl
 
-//        intake.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        intakeLeftPivot = NakiriServo("intakeLeftPivot")
+        intakeRightPivot = NakiriServo("intakeRightPivot")
+
+        linkage = NakiriServo("linkage")
+        outtakeLeft = NakiriServo("outtakeLeft")
+        outtakeRight = NakiriServo("outtakeRight")
+    }
+
+    override fun init_loop() {
+        telemetry.addLine(liftLeft.zeroPowerBehavior.toString())
     }
 
     override fun loop() {
+        BulkDataManager.read()
         driveControl()
         outtakeControl()
         intakeControl()
@@ -90,7 +80,11 @@ class NakiriTesting : OpMode() {
     private fun driveControl() {
         val y = -gamepad1.left_stick_y.d
         val x = gamepad1.left_stick_x.d
-        val turn = gamepad1.right_stick_x.d
+        var turn = gamepad1.right_stick_x.d * 0.75
+
+        if(gamepad1.right_bumper) {
+            turn = gamepad1.right_stick_x.d
+        }
 
         fl.power = -y - x - turn
         bl.power = -y + x - turn
@@ -98,59 +92,72 @@ class NakiriTesting : OpMode() {
         br.power = y + x - turn
     }
 
-    private fun outtakeControl() {
-        if (gamepad1.x)
-            linkage.position = 1.0
-        if (gamepad1.b)
-            linkage.position = 0.5
-
-        if(gamepad1.dpad_left) {
-            outtakeLeft.position = 0.35
-            outtakeRight.position = 0.25
-        }
-
-        if(gamepad1.dpad_right) {
-            outtakeLeft.position = 0.0
-            outtakeRight.position = 0.60
-        }
-    }
-
     private fun intakeControl() {
         if(gamepad1.a) {
-            intakeLeftPivot.position = 0.88
-            intakeRightPivot.position = 0.02
+            intakeLeftPivot.position = Globals.INTAKE_PIVOT_LEFT_OUT
+            intakeRightPivot.position = Globals.INTAKE_PIVOT_RIGHT_OUT
         }
 
         if(gamepad1.y) {
-            intakeLeftPivot.position = 0.1
-            intakeRightPivot.position = 0.75
+            intakeLeftPivot.position = Globals.INTAKE_PIVOT_LEFT_IN
+            intakeRightPivot.position = Globals.INTAKE_PIVOT_RIGHT_IN
         }
 
-        if(gamepad1.left_bumper) {
-            intake.power = 1.0
-        } else if(gamepad1.right_bumper) {
-            intake.power = -1.0
-        } else {
-            intake.power = 0.0
+        intake.power = when {
+            gamepad1.left_bumper -> Globals.INTAKE_TRANSFER_POWER
+            gamepad1.right_bumper -> Globals.INTAKE_IN_POWER
+            else -> Globals.INTAKE_NO_POWER
+        }
+    }
+
+    private fun outtakeControl() {
+        if (gamepad1.x)
+            linkage.position = Globals.LINKAGE_RETRACT
+        if (gamepad1.b)
+            linkage.position = Globals.LINKAGE_EXTEND
+
+        if (gamepad1.dpad_left) {
+            outtakeLeft.position = Globals.OUTTAKE_LEFT_IN
+            outtakeRight.position = Globals.OUTTAKE_RIGHT_IN
+        }
+
+        if (gamepad1.dpad_up) {
+            outtakeLeft.position = Globals.OUTTAKE_LEFT_MED
+            outtakeRight.position = Globals.OUTTAKE_RIGHT_MED
+        }
+
+        if (gamepad1.dpad_right) {
+            outtakeLeft.position = Globals.OUTTAKE_LEFT_OUT
+            outtakeRight.position = Globals.OUTTAKE_RIGHT_OUT
         }
     }
 
     private fun liftControl() {
-        if(gamepad1.right_trigger > 0.5) {
-            liftLeft.targetPosition = -380
-            liftRight.targetPosition = -380
-            liftLeft.power = 0.75
-            liftRight.power = 0.75
-        }
-
         if(gamepad1.left_trigger > 0.5) {
-            liftLeft.targetPosition = -10
-            liftRight.targetPosition = -10
-            liftLeft.power = -0.25
-            liftRight.power = -0.25
+            controller.reset()
+            controller.targetPosition = 60.0
         }
 
-        telemetry.addData("lift left", liftLeft.position)
-        telemetry.addData("lift right", liftRight.position)
+        if(gamepad1.right_trigger > 0.5) {
+            controller.reset()
+            controller.targetPosition = 400.0
+        }
+
+        controllerOutput = controller.update(-liftLeft.position.d)
+
+        if(!(controllerOutput epsilonEquals 0.0)) {
+            if(controller.targetPosition == 50.0) {
+                liftLeft.power = Range.clip(controllerOutput, 0.1, 0.75)
+                liftRight.power = Range.clip(controllerOutput, 0.1, 0.75)
+            } else {
+                liftLeft.power = Range.clip(controllerOutput, -0.25, 0.8)
+                liftRight.power = Range.clip(controllerOutput, -0.25, 0.8)
+            }
+        }
+
+        telemetry.addData("liftLeft pos", liftLeft.position)
+        telemetry.addData("controller output", controllerOutput)
     }
 }
+// 330
+// 530
