@@ -16,17 +16,17 @@ object Globals {
      */
 
     const val LINKAGE_RETRACT = 1.0
-    const val LINKAGE_MED = 0.7
+    const val LINKAGE_MED = 0.8
     const val LINKAGE_EXTEND = 0.5
 
-    const val OUTTAKE_LEFT_IN = 0.35
-    const val OUTTAKE_RIGHT_IN = 0.25
+    const val OUTTAKE_LEFT_IN = 0.50
+    const val OUTTAKE_RIGHT_IN = 0.10
 
     const val OUTTAKE_LEFT_OUT = 0.0
     const val OUTTAKE_RIGHT_OUT = 0.60
 
-    const val OUTTAKE_LEFT_MED = (OUTTAKE_LEFT_IN + OUTTAKE_LEFT_OUT) / 2.0
-    const val OUTTAKE_RIGHT_MED = (OUTTAKE_RIGHT_IN + OUTTAKE_RIGHT_OUT) / 2.0
+    const val OUTTAKE_LEFT_MED = 0.30
+    const val OUTTAKE_RIGHT_MED = 0.30
 
     const val INTAKE_PIVOT_LEFT_OUT = 0.85
     const val INTAKE_PIVOT_RIGHT_OUT = 0.00
@@ -45,4 +45,21 @@ object Globals {
 
     val MASTER_MAPPINGS = listOf("FL", "FR", "BR", "BL")
     val SLAVE_MAPPINGS = listOf("intake", "liftLeft", "liftRight", "duck")
+
+    /*
+
+     cube:
+     1.7k -> 9.5k red
+     3k -> 11k green
+     2k -> 4k blue
+
+     ball:
+     1.7k -> 2.6k red
+     3.2k -> 6.5k green
+     2.3k -> 3.3k blue
+
+     */
+    val NONE_RGB = Triple(1520, 2790, 2027)
+    val BALL_RGB = Triple(2235, 4018, 2844)
+    val CUBE_RGB = Triple(3159, 4817, 2579)
 }

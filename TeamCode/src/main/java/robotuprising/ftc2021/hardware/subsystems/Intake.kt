@@ -1,15 +1,20 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import com.qualcomm.hardware.rev.RevColorSensorV3
+import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
+import kotlin.math.absoluteValue
 
 class Intake : Subsystem() {
     private val intakeMotor = NakiriMotor("intake", false).brake.openLoopControl
     private val intakePivotLeft = NakiriServo("intakeLeftPivot")
     private val intakePivotRight = NakiriServo("intakeRightPivot")
+
+    private val intakeSensor = BulkDataManager.hwMap[RevColorSensorV3::class.java, "intakeSensor"]
 
     private enum class IntakeStates(val power: Double) {
         ON(Globals.INTAKE_IN_POWER),
@@ -22,9 +27,25 @@ class Intake : Subsystem() {
         OUT(Globals.INTAKE_PIVOT_LEFT_IN, Globals.INTAKE_PIVOT_RIGHT_IN)
     }
 
+    private enum class SensorStates {
+        NONE,
+        BALL,
+        CUBE,
+        DEBUG
+    }
 
     private var intakeState = IntakeStates.OFF
     private var pivotState = PivotStates.IN
+    private var sensorState = SensorStates.NONE
+
+    private val RevColorSensorV3.rgb get() = Triple(red(), green(), blue())
+
+    private fun compareTriple(first: Triple<Int, Int, Int>, second: Triple<Int, Int, Int>, threshold: Int): Boolean {
+        return (first.first - second.first).absoluteValue +
+                (first.second - second.second).absoluteValue +
+                (first.third - second.third).absoluteValue < threshold
+    }
+
 
     fun turnOn() {
         intakeState = IntakeStates.ON
@@ -48,50 +69,22 @@ class Intake : Subsystem() {
             pivotState = PivotStates.IN
     }
 
-//
-//    private enum class IntakeBehaviorStates {
-//        INTAKING,
-//        ROTATING_BACKWARDS,
-//        TRANSFERRING,
-//        DONE,
-//    }
-//
-//    private val intakeStateMachine: StateMachine<IntakeBehaviorStates> = StateMachineBuilder<IntakeBehaviorStates>()
-//        .state(IntakeBehaviorStates.INTAKING)
-//        .onEnter { turnOn(); rotateOut() }
-//        .transition { sensorState != SensorStates.NONE }
-//        .state(IntakeBehaviorStates.ROTATING_BACKWARDS)
-//        .onEnter { rotateIn() }
-//        .transitionTimed(1.0)
-//        .state(IntakeBehaviorStates.TRANSFERRING)
-//        .onEnter { turnReverse() }
-//        .transitionTimed(0.5)
-//        .state(IntakeBehaviorStates.DONE)
-//        .onEnter { turnOff() }
-//        .transition { true }
-//        .build()
-//
-//    fun runIntakeStateMachine() {
-//        intakeStateMachine.smartRun()
-//    }
-
-//    override fun init(hwMap: HardwareMap) {
-//        intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        intakeMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-//
-//        intakeSensor = hwMap[ColorSensor::class.java, "intakeSensor"]
-//    }
 
     override fun update() {
         intakeMotor.power = intakeState.power
         intakePivotLeft.position = pivotState.leftPos
         intakePivotRight.position = pivotState.rightPos
-//
-//        sensorState = when {
-//            sensorCompare(BALL_RGB_THRESHOLD) -> SensorStates.BALL
-//            sensorCompare(CUBE_RGB_THRESHOLD) -> SensorStates.CUBE
-//            else -> SensorStates.NONE
-//        }
+
+        val sensorRead = intakeSensor.rgb
+        sensorState = when {
+            compareTriple(sensorRead, Globals.NONE_RGB, 300) -> SensorStates.NONE
+            compareTriple(sensorRead, Globals.BALL_RGB, 300) -> SensorStates.BALL
+            compareTriple(sensorRead, Globals.CUBE_RGB, 300) -> SensorStates.CUBE
+            else -> SensorStates.DEBUG
+        }
+
+        Globals.telemetry.addData("intake sensor state", sensorState)
+        Globals.telemetry.addData("current sensor reading", sensorRead)
     }
 
     override fun sendDashboardPacket() {

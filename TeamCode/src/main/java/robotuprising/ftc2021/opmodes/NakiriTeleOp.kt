@@ -6,6 +6,7 @@ import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
+import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
@@ -21,14 +22,18 @@ class NakiriTeleOp : NakiriOpMode() {
     }
 
     private fun driveControl() {
-
+        val scale = if(gamepad1.right_bumper) {
+            1.0
+        } else {
+            0.7
+        }
         superstructure.requestDriveManagerPowers(
                 Pose(
                         Point(
-                                gamepad1.left_stick_x.d,
-                                -gamepad1.left_stick_y.d
+                                gamepad1.left_stick_x.d * scale,
+                                -gamepad1.left_stick_y.d * scale
                         ),
-                        Angle(gamepad1.right_stick_x.d * 0.7,
+                        Angle(gamepad1.right_stick_x.d * scale * 0.9,
                                 AngleUnit.RAW)
                 )
         )
@@ -50,31 +55,53 @@ class NakiriTeleOp : NakiriOpMode() {
         }
     }
 
+
+    private enum class IntakeSequenceStates {
+        INTAKING,
+        ROTATING,
+        TRANSFERRING,
+        OUTTAKE_TO_MEDIUM
+    }
+    private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
+            .state(IntakeSequenceStates.INTAKING)
+            .build()
+
+    private enum class OuttakeSequenceStates {
+        LIFT_UP,
+        LINKAGE_OUT,
+        DEPOSIT,
+        RESET
+    }
+
+    private val outtakeSequence = StateMachineBuilder<OuttakeSequenceStates>()
+            .state(OuttakeSequenceStates.LIFT_UP)
+            .onEnter { superstructure.requestLiftHigh() }
+            .transitionTimed(1.25)
+            .state(OuttakeSequenceStates.LINKAGE_OUT)
+            .onEnter { superstructure.requestLinkageMedium() }
+            .transitionTimed(0.5)
+            .state(OuttakeSequenceStates.DEPOSIT)
+            .onEnter { superstructure.requestOuttakeOut() }
+            .transitionTimed(0.75)
+            .state(OuttakeSequenceStates.RESET)
+            .onEnter {
+                superstructure.requestOuttakeMedium()
+                superstructure.requestLinkageRetract()
+                superstructure.requestLiftLow()
+            }
+            .build()
+
     private fun winstonControl() {
-        // linkage
-        when {
-            gamepad2.b -> superstructure.requestLinkageRetract()
-            gamepad2.y -> superstructure.requestLinkageMedium()
-            gamepad2.x -> superstructure.requestLinkageOut()
-        }
-
-        // outtake
-        when {
-            gamepad2.dpad_right -> superstructure.requestOuttakeIn()
-            gamepad2.dpad_left -> superstructure.requestOuttakeOut()
-            gamepad2.dpad_up -> superstructure.requestOuttakeMedium()
-        }
-
-        //lift
-        when {
-            gamepad2.left_trigger_pressed -> superstructure.requestLiftLow()
-            gamepad2.right_trigger_pressed -> superstructure.requestLiftHigh()
-        }
 
         when {
-            gamepad1.dpad_left -> superstructure.requestSpinnerReverse()
-            gamepad1.dpad_right -> superstructure.requestSpinnerOn()
-            gamepad1.dpad_down -> superstructure.requestSpinnerOff()
+            gamepad2.dpad_down -> {
+                outtakeSequence.reset()
+                outtakeSequence.start()
+            }
+        }
+
+        if(outtakeSequence.running) {
+            outtakeSequence.update()
         }
     }
 }
