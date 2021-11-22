@@ -1,15 +1,10 @@
 package robotuprising.ftc2021.util
 
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.Range
 import org.openftc.revextensions2.ExpansionHubMotor
 import kotlin.math.absoluteValue
 
-class NakiriMotor(private val name: String, private val onMaster: Boolean) {
-//    private val motor = Globals.hwMap[ExpansionHubMotor::class.java, name]
-    private val motor = BulkDataManager.hwMap[ExpansionHubMotor::class.java, name]
-
+class NakiriMotor(private val name: String, private val onMaster: Boolean, private val motor: ExpansionHubMotor) {
 
     var power: Double = 0.0
         set(value) {
@@ -29,96 +24,12 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
 
     val bulkPosition: Int
         get() {
-            return if(onMaster) {
+            return if (onMaster) {
                 BulkDataManager.masterData.getMotorCurrentPosition(Globals.MASTER_MAPPINGS.indexOf(name))
             } else {
                 BulkDataManager.slaveData.getMotorCurrentPosition(Globals.SLAVE_MAPPINGS.indexOf(name))
             }
         }
 
-//    val position: Int
-//        get() {
-//            return if(onMaster) {
-//                BulkDataManager.masterData.getMotorCurrentPosition(motor)
-//            } else {
-//                BulkDataManager.slaveData.getMotorCurrentPosition(motor)
-//            }
-//        }
-
     val position: Int get() = motor.currentPosition
-
-
-    val reverse: NakiriMotor
-        get() {
-            direction = DcMotorSimple.Direction.REVERSE
-            return this
-        }
-
-    val forward: NakiriMotor
-        get() {
-            direction = DcMotorSimple.Direction.FORWARD
-            return this
-        }
-
-    val float: NakiriMotor
-        get() {
-            zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-            return this
-        }
-
-    val brake: NakiriMotor
-        get() {
-            zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            return this
-        }
-
-    val openLoopControl: NakiriMotor
-        get() {
-            mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-            return this
-        }
-
-    val velocityControl: NakiriMotor
-        get() {
-            mode = DcMotor.RunMode.RUN_USING_ENCODER
-            return this
-        }
-
-    val positionControl: NakiriMotor
-        get() {
-            mode = DcMotor.RunMode.RUN_TO_POSITION
-            return this
-        }
-
-    val resetControl: NakiriMotor
-        get() {
-            mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            return this
-        }
-
-    var mode: DcMotor.RunMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        set(value) {
-            if (field != value) {
-                motor.mode = value
-                field = value
-            }
-        }
-
-    var zeroPowerBehavior = DcMotor.ZeroPowerBehavior.UNKNOWN
-        set(value) {
-            if (value != field) {
-                if (value != DcMotor.ZeroPowerBehavior.UNKNOWN)
-                    motor.zeroPowerBehavior = value
-                field = value
-            }
-        }
-
-    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
-        set(value) {
-            if (value != field) {
-                motor.direction = value
-                field = value
-            }
-        }
-
 }

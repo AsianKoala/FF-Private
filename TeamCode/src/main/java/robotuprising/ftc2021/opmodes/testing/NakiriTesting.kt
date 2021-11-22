@@ -14,8 +14,6 @@ import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.util.Extensions.d
-import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 @TeleOp
 @Disabled
@@ -42,31 +40,31 @@ class NakiriTesting : OpMode() {
 
     override fun init() {
         BulkDataManager.init(hardwareMap)
-        fl = NakiriMotor("FL", true).brake.openLoopControl
-        fr = NakiriMotor("FR", true).brake.openLoopControl
-        bl = NakiriMotor("BL", true).brake.openLoopControl
-        br = NakiriMotor("BR", true).brake.openLoopControl
-
-        liftLeft = NakiriMotor("liftLeft", false).float
-        liftRight = NakiriMotor("liftRight", false).float
-        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftLeft.direction = DcMotorSimple.Direction.REVERSE
-
-        intake = NakiriMotor("intake", false).brake.openLoopControl
-
-        intakeLeftPivot = NakiriServo("intakeLeftPivot")
-        intakeRightPivot = NakiriServo("intakeRightPivot")
-
-        linkage = NakiriServo("linkage")
-        outtakeLeft = NakiriServo("outtakeLeft")
-        outtakeRight = NakiriServo("outtakeRight")
+//        fl = NakiriMotor("FL", true).brake.openLoopControl
+//        fr = NakiriMotor("FR", true).brake.openLoopControl
+//        bl = NakiriMotor("BL", true).brake.openLoopControl
+//        br = NakiriMotor("BR", true).brake.openLoopControl
+//
+//        liftLeft = NakiriMotor("liftLeft", false).float
+//        liftRight = NakiriMotor("liftRight", false).float
+//        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+//        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+//        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        liftLeft.direction = DcMotorSimple.Direction.REVERSE
+//
+//        intake = NakiriMotor("intake", false).brake.openLoopControl
+//
+//        intakeLeftPivot = NakiriServo("intakeLeftPivot")
+//        intakeRightPivot = NakiriServo("intakeRightPivot")
+//
+//        linkage = NakiriServo("linkage")
+//        outtakeLeft = NakiriServo("outtakeLeft")
+//        outtakeRight = NakiriServo("outtakeRight")
     }
 
     override fun init_loop() {
-        telemetry.addLine(liftLeft.zeroPowerBehavior.toString())
+//        telemetry.addLine(liftLeft.zeroPowerBehavior.toString())
     }
 
     override fun loop() {
@@ -82,7 +80,7 @@ class NakiriTesting : OpMode() {
         val x = gamepad1.left_stick_x.d
         var turn = gamepad1.right_stick_x.d * 0.75
 
-        if(gamepad1.right_bumper) {
+        if (gamepad1.right_bumper) {
             turn = gamepad1.right_stick_x.d
         }
 
@@ -93,12 +91,12 @@ class NakiriTesting : OpMode() {
     }
 
     private fun intakeControl() {
-        if(gamepad1.a) {
+        if (gamepad1.a) {
             intakeLeftPivot.position = Globals.INTAKE_PIVOT_LEFT_OUT
             intakeRightPivot.position = Globals.INTAKE_PIVOT_RIGHT_OUT
         }
 
-        if(gamepad1.y) {
+        if (gamepad1.y) {
             intakeLeftPivot.position = Globals.INTAKE_PIVOT_LEFT_IN
             intakeRightPivot.position = Globals.INTAKE_PIVOT_RIGHT_IN
         }
@@ -133,20 +131,20 @@ class NakiriTesting : OpMode() {
     }
 
     private fun liftControl() {
-        if(gamepad1.left_trigger > 0.5) {
+        if (gamepad1.left_trigger > 0.5) {
             controller.reset()
             controller.targetPosition = 60.0
         }
 
-        if(gamepad1.right_trigger > 0.5) {
+        if (gamepad1.right_trigger > 0.5) {
             controller.reset()
             controller.targetPosition = 400.0
         }
 
         controllerOutput = controller.update(-liftLeft.position.d)
 
-        if(!(controllerOutput epsilonEquals 0.0)) {
-            if(controller.targetPosition == 50.0) {
+        if (!(controllerOutput epsilonEquals 0.0)) {
+            if (controller.targetPosition == 50.0) {
                 liftLeft.power = Range.clip(controllerOutput, 0.1, 0.75)
                 liftRight.power = Range.clip(controllerOutput, 0.1, 0.75)
             } else {

@@ -2,8 +2,9 @@ package robotuprising.ftc2021.hardware.subsystems
 
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
+import robotuprising.lib.system.statemachine.StateMachineBuilder
 
-class Nakiri : Subsystem() {
+class Nakiri : Subsystem {
 
     private val driveManager = DriveManager()
     private val intake = Intake()
@@ -20,17 +21,83 @@ class Nakiri : Subsystem() {
         duckSpinner,
     )
 
-    override fun update() {
-        subsystems.forEach { it.update() }
+    private enum class IntakeSequenceStates {
+        INTAKE_OUTTAKE_RESET,
+        INTAKE,
+        ROTATING,
+        TRANSFERRING,
+        OUTTAKE_TO_MEDIUM
     }
 
-    override fun sendDashboardPacket() {
-        subsystems.forEach { it.sendDashboardPacket() }
+    private enum class OuttakeSequenceStates {
+        LIFT_UP,
+        LINKAGE_OUT,
+        DEPOSIT,
+        OUTTAKE_DOWN_LINKAGE_IN,
+        RESET
     }
 
-    override fun stop() {
-        subsystems.forEach { it.stop() }
+    private enum class SharedOuttakeState {
+        OUTTAKE_OUT,
+        OUTTAKE_IN
     }
+
+    private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
+        .state(IntakeSequenceStates.INTAKE_OUTTAKE_RESET)
+        .onEnter {
+            requestIntakeRotateOut()
+            requestOuttakeIn()
+        }
+        .transitionTimed(0.5)
+        .state(IntakeSequenceStates.INTAKE)
+        .onEnter { requestIntakeOn() }
+        .transition { isMineralIn() }
+        .state(IntakeSequenceStates.ROTATING)
+        .onEnter {
+            requestIntakeRotateIn()
+            requestIntakeOff()
+        }
+        .transitionTimed(1.5)
+        .state(IntakeSequenceStates.TRANSFERRING)
+        .onEnter { requestIntakeReverse() }
+        .transitionTimed(0.8)
+        .state(IntakeSequenceStates.OUTTAKE_TO_MEDIUM)
+        .onEnter {
+            requestOuttakeMedium()
+            requestIntakeOff()
+        }
+        .transition { true }
+        .build()
+
+    private val sharedOuttakeSequence = StateMachineBuilder<SharedOuttakeState>()
+        .state(SharedOuttakeState.OUTTAKE_OUT)
+        .onEnter { requestOuttakeOut() }
+        .transitionTimed(0.75)
+        .state(SharedOuttakeState.OUTTAKE_IN)
+        .onEnter { requestOuttakeIn() }
+        .transition { true }
+        .build()
+
+    private val closeOuttakeSequence = StateMachineBuilder<OuttakeSequenceStates>()
+        .state(OuttakeSequenceStates.LIFT_UP)
+        .onEnter { requestLiftHigh() }
+        .transitionTimed(1.25)
+        .state(OuttakeSequenceStates.LINKAGE_OUT)
+        .onEnter { requestLinkageMedium() }
+        .transitionTimed(0.5)
+        .state(OuttakeSequenceStates.DEPOSIT)
+        .onEnter { requestOuttakeOut() }
+        .transitionTimed(0.75)
+        .state(OuttakeSequenceStates.OUTTAKE_DOWN_LINKAGE_IN)
+        .onEnter {
+            requestOuttakeIn()
+            requestLinkageRetract()
+        }
+        .transitionTimed(0.5)
+        .state(OuttakeSequenceStates.RESET)
+        .onEnter { requestLiftLow() }
+        .transition { true }
+        .build()
 
     fun requestDriveManagerPowers(powers: Pose) {
         driveManager.vectorPowers = powers
@@ -58,6 +125,10 @@ class Nakiri : Subsystem() {
 
     fun requestIntakeRotateIn() {
         intake.rotateIn()
+    }
+
+    fun isMineralIn(): Boolean {
+        return intake.isMineralIn()
     }
 
     fun requestLiftLow() {
@@ -102,5 +173,29 @@ class Nakiri : Subsystem() {
 
     fun requestSpinnerOff() {
         duckSpinner.turnOff()
+    }
+
+    fun runIntakeSequence(shouldStart: Boolean) {
+        intakeSequence.smartRun(shouldStart)
+    }
+
+    fun runSharedOuttakeSequence(shouldStart: Boolean) {
+        sharedOuttakeSequence.smartRun(shouldStart)
+    }
+
+    fun runCloseOuttakeSequence(shouldStart: Boolean) {
+        closeOuttakeSequence.smartRun(shouldStart)
+    }
+
+    override fun update() {
+        subsystems.forEach { it.update() }
+    }
+
+    override fun sendDashboardPacket() {
+        subsystems.forEach { it.sendDashboardPacket() }
+    }
+
+    override fun stop() {
+        subsystems.forEach { it.stop() }
     }
 }

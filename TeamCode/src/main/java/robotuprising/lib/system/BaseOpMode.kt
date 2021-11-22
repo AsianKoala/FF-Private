@@ -1,11 +1,7 @@
 package robotuprising.lib.system
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
-import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
-import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.OpModeStatus
-import robotuprising.lib.opmode.OpModeType
 
 abstract class BaseOpMode : TunableLinearOpMode() {
     private val opModeStatus: OpModeStatus
@@ -59,7 +55,6 @@ abstract class BaseOpMode : TunableLinearOpMode() {
 //            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
 //            manager.initActiveOpMode(opName + "Auto")
 //        }
-
     }
 //
 //    private fun debuggingTelem() {

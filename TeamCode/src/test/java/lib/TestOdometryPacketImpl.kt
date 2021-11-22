@@ -8,7 +8,7 @@ class OdometryPacketImpl : OdometryPacket() {
     override var currPerpEncoder: Int = 3
 }
 
-object t {
+object TestOdometryPacketImpl {
     @JvmStatic
     fun main(args: Array<String>) {
         val asd = OdometryPacketImpl()

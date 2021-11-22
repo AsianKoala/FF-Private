@@ -12,7 +12,7 @@ import robotuprising.lib.system.Subsystem
  */
 // TODO
 // TODO LITERALLY JUST FUCKING CREATE A CLASS FOR UPDATING DT MOTOR POWERS CAUSE THIS IS PAINFUL AF PAIN PAIN PAIN
-class DriveManager() : Subsystem() {
+class DriveManager : Subsystem {
     private val mainDrive = Ayame()
 //    private val rrDrive = VirtualDrive()
 //

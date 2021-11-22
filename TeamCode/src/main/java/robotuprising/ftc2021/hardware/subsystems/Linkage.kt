@@ -5,7 +5,7 @@ import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
-class Linkage : Subsystem() {
+class Linkage : Subsystem {
     private val linkageServo = NakiriServo("linkage")
 
     private var linkageState = LinkageStates.IN
@@ -32,7 +32,6 @@ class Linkage : Subsystem() {
     }
 
     override fun stop() {
-
     }
 
     override fun sendDashboardPacket() {

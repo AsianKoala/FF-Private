@@ -15,6 +15,7 @@ object BulkDataManager {
         hwMap = hardwareMap
         masterHub = hwMap[ExpansionHubEx::class.java, "masterHub"]
         slaveHub = hwMap[ExpansionHubEx::class.java, "slaveHub"]
+        NakiriMotorFactory.linkHardwareMap(hwMap)
         read()
     }
 

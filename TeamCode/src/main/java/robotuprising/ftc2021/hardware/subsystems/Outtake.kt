@@ -5,7 +5,7 @@ import robotuprising.ftc2021.util.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
-class Outtake : Subsystem() {
+class Outtake : Subsystem {
     private val leftServo = NakiriServo("outtakeLeft")
     private val rightServo = NakiriServo("outtakeRight")
 
@@ -34,7 +34,6 @@ class Outtake : Subsystem() {
     }
 
     override fun stop() {
-
     }
 
     override fun sendDashboardPacket() {

@@ -1,6 +1,6 @@
 import com.qualcomm.robotcore.util.Range
-import robotuprising.lib.control.motion.dep2
 import robotuprising.lib.control.motion.dep
+import robotuprising.lib.control.motion.dep2
 import robotuprising.lib.util.Extensions.d
 import kotlin.math.abs
 

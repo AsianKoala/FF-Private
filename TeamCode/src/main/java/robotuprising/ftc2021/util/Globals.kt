@@ -10,14 +10,14 @@ object Globals {
     var ALLIANCE_SIDE = AllianceSide.BLUE
     lateinit var telemetry: Telemetry
 
-
     /**
      * RANDOM CONSTANTS CAUSE IM LAZY
      */
 
     const val LINKAGE_RETRACT = 1.0
-    const val LINKAGE_MED = 0.8
+    const val LINKAGE_MED = 0.75
     const val LINKAGE_EXTEND = 0.5
+    var LINKAGE_CUSTOM = 0.75
 
     const val OUTTAKE_LEFT_IN = 0.50
     const val OUTTAKE_RIGHT_IN = 0.10
@@ -25,20 +25,20 @@ object Globals {
     const val OUTTAKE_LEFT_OUT = 0.0
     const val OUTTAKE_RIGHT_OUT = 0.60
 
-    const val OUTTAKE_LEFT_MED = 0.30
-    const val OUTTAKE_RIGHT_MED = 0.30
+    const val OUTTAKE_LEFT_MED = 0.35 // 0.30 / 0.30
+    const val OUTTAKE_RIGHT_MED = 0.25
 
-    const val INTAKE_PIVOT_LEFT_OUT = 0.85
-    const val INTAKE_PIVOT_RIGHT_OUT = 0.00
+    const val INTAKE_PIVOT_LEFT_OUT = 0.83
+    const val INTAKE_PIVOT_RIGHT_OUT = 0.02
 
     const val INTAKE_PIVOT_LEFT_IN = 0.07
-    const val INTAKE_PIVOT_RIGHT_IN = 0.78
+    const val INTAKE_PIVOT_RIGHT_IN = 0.76
 
     const val INTAKE_IN_POWER = 1.0
     const val INTAKE_TRANSFER_POWER = -0.75
     const val INTAKE_NO_POWER = 0.0
 
-    const val LIFT_LOW = 60
+    const val LIFT_LOW = 45
     const val LIFT_HIGH = 400
 
     val PID_COEFFS = PIDCoefficients(0.05, 0.0, 0.0)

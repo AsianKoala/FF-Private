@@ -7,18 +7,18 @@ import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.hardware.bosch.BNO055IMU
 import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriLocalizerPacket
-import robotuprising.lib.hardware.MB1242
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Pose
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.Subsystem
 import kotlin.math.PI
 import kotlin.math.cos
 
-class NakiriLocalizer(private val ultrasonics: Ultrasonics,
-                      private val imu: BNO055IMU,
-                      private var nakiriLocalizerPacket: NakiriLocalizerPacket): Subsystem() {
+class NakiriLocalizer(
+    private val ultrasonics: Ultrasonics,
+    private val imu: BNO055IMU,
+    private var nakiriLocalizerPacket: NakiriLocalizerPacket
+) : Subsystem {
 
     private lateinit var lastWheelPositions: List<Double>
     private var lastHeading = Angle(Double.NaN, AngleUnit.RAD)
@@ -47,7 +47,6 @@ class NakiriLocalizer(private val ultrasonics: Ultrasonics,
             get() = _poseVelocity
 
         override fun update() {
-
         }
     }
 
@@ -56,16 +55,16 @@ class NakiriLocalizer(private val ultrasonics: Ultrasonics,
         var dForward = -1
         var dHoriz = -1
 
-        if(!ultrasonics.isReading) {
+        if (!ultrasonics.isReading) {
             ultrasonics.startReading()
         }
 
-        if(ultrasonics.finishedReadInterval) {
+        if (ultrasonics.finishedReadInterval) {
             dForward = ultrasonics.forwardReading
             dHoriz = ultrasonics.horizontalReading
             ultrasonics.stopReading()
 
-            _poseEstimate = if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
+            _poseEstimate = if (Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
                 Pose2d(
                     dForward * lastHeading.sin,
                     dHoriz * (lastHeading + Angle(PI / 2, AngleUnit.RAD)).sin,
@@ -86,18 +85,18 @@ class NakiriLocalizer(private val ultrasonics: Ultrasonics,
         val heading = packet.heading
         if (lastWheelPositions.isNotEmpty()) {
             val wheelDeltas = wheelPositions
-                    .zip(lastWheelPositions)
-                    .map { it.first - it.second }
+                .zip(lastWheelPositions)
+                .map { it.first - it.second }
             val robotPoseDelta = MecanumKinematics.wheelToRobotVelocities(
-                    wheelDeltas,
-                    packet.trackWidth,
-                    packet.wheelBase,
-                    packet.lateralMultiplier
+                wheelDeltas,
+                packet.trackWidth,
+                packet.wheelBase,
+                packet.lateralMultiplier
             )
             val finalHeadingDelta = heading - lastHeading
             _poseEstimate = Kinematics.relativeOdometryUpdate(
-                    _poseEstimate,
-                    Pose2d(robotPoseDelta.vec(), finalHeadingDelta.angle)
+                _poseEstimate,
+                Pose2d(robotPoseDelta.vec(), finalHeadingDelta.angle)
             )
         }
 
@@ -105,10 +104,10 @@ class NakiriLocalizer(private val ultrasonics: Ultrasonics,
         val headingVelocity = packet.headingVelocity
         if (wheelVelocities != null) {
             _poseVelocity = MecanumKinematics.wheelToRobotVelocities(
-                    wheelVelocities,
-                    packet.trackWidth,
-                    packet.wheelBase,
-                    packet.lateralMultiplier
+                wheelVelocities,
+                packet.trackWidth,
+                packet.wheelBase,
+                packet.lateralMultiplier
             )
             if (headingVelocity != null) {
                 _poseVelocity = Pose2d(_poseVelocity.vec(), headingVelocity)
@@ -121,14 +120,13 @@ class NakiriLocalizer(private val ultrasonics: Ultrasonics,
 
     // TODO
     private fun regionLogic() {
-
     }
 
     override fun update() {
-        when(nakiriRegion) {
+        when (nakiriRegion) {
             Regions.MAIN -> localizeWithDrive(nakiriLocalizerPacket)
             Regions.CRATER -> {
-                if(!hasLocalizedInCraterYet) {
+                if (!hasLocalizedInCraterYet) {
                     localizeWithUltrasonics()
                     hasLocalizedInCraterYet = true
                 } else {

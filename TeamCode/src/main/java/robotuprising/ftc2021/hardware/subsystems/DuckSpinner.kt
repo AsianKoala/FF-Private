@@ -1,11 +1,12 @@
 package robotuprising.ftc2021.hardware.subsystems
 
-import robotuprising.ftc2021.util.NakiriMotor
+import robotuprising.ftc2021.util.NakiriMotorFactory
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
-class DuckSpinner : Subsystem() {
-    private val spinnerMotor = NakiriMotor("duck", false)
+// todo change to velocity control
+class DuckSpinner : Subsystem {
+    private val spinnerMotor = NakiriMotorFactory.name("duck").slave.float.velocityControl.create
 
     private var spinnerState = SpinnerStates.OFF
     private enum class SpinnerStates(val power: Double) {

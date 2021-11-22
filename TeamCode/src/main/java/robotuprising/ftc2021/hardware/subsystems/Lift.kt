@@ -6,13 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.Range
 import robotuprising.ftc2021.util.Globals
-import robotuprising.ftc2021.util.NakiriMotor
+import robotuprising.ftc2021.util.NakiriMotorFactory
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d
 
-class Lift : Subsystem() {
-    private val liftLeft = NakiriMotor("liftLeft", false).float
-    private val liftRight = NakiriMotor("liftRight", false).float
+// todo change lift pid to inches so i can actually tune without wondering wtf the coeffs are
+class Lift : Subsystem {
+    private val liftLeft = NakiriMotorFactory.name("liftLeft").slave.resetEncoder.openLoopControl.float.reverse.create
+    private val liftRight = NakiriMotorFactory.name("liftRight").slave.resetEncoder.openLoopControl.float.create
 
     private var liftState = LiftStages.LOW
     enum class LiftStages(val position: Int) {
@@ -32,8 +33,8 @@ class Lift : Subsystem() {
     override fun update() {
         controllerOutput = controller.update(-liftLeft.position.d)
 
-        if(!(controllerOutput epsilonEquals 0.0)) {
-            if(controller.targetPosition epsilonEquals Globals.LIFT_LOW.d) {
+        if (!(controllerOutput epsilonEquals 0.0)) {
+            if (controller.targetPosition epsilonEquals Globals.LIFT_LOW.d) {
                 liftLeft.power = Range.clip(controllerOutput, 0.1, 0.75)
                 liftRight.power = Range.clip(controllerOutput, 0.1, 0.75)
             } else {
@@ -58,11 +59,11 @@ class Lift : Subsystem() {
 //        NakiriDashboard["target position"] = liftState.position
     }
 
-    init {
-        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftLeft.direction = DcMotorSimple.Direction.REVERSE
-    }
+//    init {
+//        liftLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+//        liftRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+//        liftLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        liftRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+//        liftLeft.direction = DcMotorSimple.Direction.REVERSE
+//    }
 }

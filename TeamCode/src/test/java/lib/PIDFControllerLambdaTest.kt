@@ -1,7 +1,7 @@
 package lib
 
-import robotuprising.lib.control.motion.dep2
 import robotuprising.lib.control.motion.dep
+import robotuprising.lib.control.motion.dep2
 import robotuprising.lib.util.Extensions.d
 
 object PIDFControllerLambdaTest {

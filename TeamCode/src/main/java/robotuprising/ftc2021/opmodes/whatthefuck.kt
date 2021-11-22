@@ -7,7 +7,7 @@ import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 
-@Autonomous
+@Autonomous(name = "Scrimmage Auto")
 class whatthefuck : NakiriOpMode() {
 
     var start: Long = 0
@@ -24,19 +24,19 @@ class whatthefuck : NakiriOpMode() {
     override fun m_loop() {
         super.m_loop()
 
-        when(state) {
+        when (state) {
             states.TURNING -> {
                 superstructure.requestDriveManagerPowers(
-                        Pose(
-                                Point(
-                                        0.0,
-                                        0.0
-                                ),
-                                Angle(-0.2, AngleUnit.RAW)
-                        )
+                    Pose(
+                        Point(
+                            0.0,
+                            0.0
+                        ),
+                        Angle(-0.2, AngleUnit.RAW)
+                    )
                 )
 
-                if(System.currentTimeMillis() - start > 250) {
+                if (System.currentTimeMillis() - start > 250) {
                     start = System.currentTimeMillis()
                     state = states.SPINNING
                     superstructure.requestDriveManagerPowers(Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW)))
@@ -46,8 +46,7 @@ class whatthefuck : NakiriOpMode() {
             states.SPINNING -> {
                 superstructure.requestSpinnerReverse()
 
-
-                if(System.currentTimeMillis() - start > 6000) {
+                if (System.currentTimeMillis() - start > 6000) {
                     superstructure.requestSpinnerOff()
                     requestOpModeStop()
                 }

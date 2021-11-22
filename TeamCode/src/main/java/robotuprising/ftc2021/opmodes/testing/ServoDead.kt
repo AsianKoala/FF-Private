@@ -34,6 +34,4 @@ class ServoDead : OpMode() {
     outtakeLeft
     outtakeRight
      */
-
-
 }

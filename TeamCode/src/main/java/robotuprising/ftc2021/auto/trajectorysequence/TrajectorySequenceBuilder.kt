@@ -386,7 +386,7 @@ class TrajectorySequenceBuilder(
 
     fun addTrajectory(trajectory: Trajectory?): TrajectorySequenceBuilder {
         pushPath()
-        sequenceSegments.add(TrajectorySegment(trajectory))
+        sequenceSegments.add(TrajectorySegment(trajectory!!))
         return this
     }
 
@@ -482,7 +482,7 @@ class TrajectorySequenceBuilder(
             var newSegment: SequenceSegment? = null
             when (segment) {
                 is WaitSegment -> {
-                    val newMarkers: MutableList<TrajectoryMarker> = ArrayList(segment.getMarkers())
+                    val newMarkers: MutableList<TrajectoryMarker> = ArrayList(segment.markers)
                     newMarkers.addAll(sequenceSegments[segmentIndex].markers)
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
                     val thisSegment = segment
@@ -490,7 +490,7 @@ class TrajectorySequenceBuilder(
                 }
 
                 is TurnSegment -> {
-                    val newMarkers: MutableList<TrajectoryMarker> = ArrayList(segment.getMarkers())
+                    val newMarkers: MutableList<TrajectoryMarker> = ArrayList(segment.markers)
                     newMarkers.addAll(sequenceSegments[segmentIndex].markers)
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
                     val thisSegment = segment
@@ -501,7 +501,7 @@ class TrajectorySequenceBuilder(
                     val thisSegment: TrajectorySegment = segment
                     val newMarkers: MutableList<TrajectoryMarker> = ArrayList<TrajectoryMarker>(thisSegment.trajectory.markers)
                     newMarkers.add(TrajectoryMarker(segmentOffsetTime, callback))
-                    newSegment = TrajectorySegment(Trajectory(thisSegment.trajectory.path, thisSegment.getTrajectory().profile, newMarkers))
+                    newSegment = TrajectorySegment(Trajectory(thisSegment.trajectory.path, thisSegment.trajectory.profile, newMarkers))
                 }
             }
             sequenceSegments[segmentIndex] = newSegment!!
