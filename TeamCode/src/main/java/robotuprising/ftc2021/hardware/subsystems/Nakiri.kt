@@ -1,19 +1,20 @@
 package robotuprising.ftc2021.hardware.subsystems
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 class Nakiri : Subsystem {
 
-    private val driveManager = DriveManager()
+    private val ayame = Ayame(0.0, 0.0, 0.0, 15.0)
     private val intake = Intake()
     private val lift = Lift()
     private val linkage = Linkage()
     private val outtake = Outtake()
     private val duckSpinner = DuckSpinner()
     private val subsystems = mutableListOf(
-        driveManager,
+        ayame,
         intake,
         lift,
         linkage,
@@ -99,12 +100,12 @@ class Nakiri : Subsystem {
         .transition { true }
         .build()
 
-    fun requestDriveManagerPowers(powers: Pose) {
-        driveManager.vectorPowers = powers
+    fun requestAyamePowers(powers: Pose) {
+        ayame.setDrivePower(powers.pose2d)
     }
 
-    fun requestDriveManagerStop() {
-        driveManager.stop()
+    fun requestAyameStop() {
+        ayame.setDrivePower(Pose2d())
     }
 
     fun requestIntakeOn() {
@@ -149,6 +150,10 @@ class Nakiri : Subsystem {
 
     fun requestLinkageMedium() {
         linkage.extendMed()
+    }
+
+    fun requestLinkageCustom() {
+        linkage.extendCustom()
     }
 
     fun requestOuttakeIn() {

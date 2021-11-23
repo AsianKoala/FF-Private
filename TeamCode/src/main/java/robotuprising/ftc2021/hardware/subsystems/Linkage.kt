@@ -12,7 +12,8 @@ class Linkage : Subsystem {
     private enum class LinkageStates(val pos: Double) {
         IN(Globals.LINKAGE_RETRACT),
         MED(Globals.LINKAGE_MED),
-        OUT(Globals.LINKAGE_EXTEND)
+        OUT(Globals.LINKAGE_EXTEND),
+        CUSTOM(Globals.LINKAGE_CUSTOM)
     }
 
     fun retract() {
@@ -27,11 +28,16 @@ class Linkage : Subsystem {
         linkageState = LinkageStates.OUT
     }
 
+    fun extendCustom() {
+        linkageState = LinkageStates.CUSTOM
+    }
+
     override fun update() {
         linkageServo.position = linkageState.pos
     }
 
     override fun stop() {
+
     }
 
     override fun sendDashboardPacket() {

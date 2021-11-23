@@ -48,7 +48,7 @@ class NakiriTeleOp : NakiriOpMode() {
         .build()
 
     private fun driveControl() {
-        superstructure.requestDriveManagerPowers(
+        superstructure.requestAyamePowers(
             Pose(
                 Point(
                     gamepad1.left_stick_x.d * 0.75,

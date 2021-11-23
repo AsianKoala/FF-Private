@@ -1,6 +1,7 @@
 package robotuprising.ftc2021.auto.drive.advanced
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -17,6 +18,7 @@ import kotlin.Throws
  * This opmode is essentially just LocalizationTest.java with a few additions and comments.
  */
 @TeleOp(group = "advanced")
+@Disabled
 class TeleOpDrive : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {

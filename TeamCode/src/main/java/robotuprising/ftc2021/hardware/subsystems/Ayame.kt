@@ -26,15 +26,11 @@ class Ayame(
         private const val GEAR_RATIO = 1.0
         private const val TICKS_PER_REV = 537.7
 
-        private fun ticksToInches(ticks: Int): Double {
+        private fun ticksToInches(ticks: Double): Double {
             return WHEEL_RADIUS * 2 * PI * GEAR_RATIO * ticks / TICKS_PER_REV
         }
     }
 //
-//    private val fl = NakiriMotor("FL", true).brake.openLoopControl
-//    private val bl = NakiriMotor("BL", true).brake.openLoopControl
-//    private val fr = NakiriMotor("FR", true).brake.openLoopControl
-//    private val br = NakiriMotor("BR", true).brake.openLoopControl
     private val fl = NakiriMotorFactory.name("FL").master.brake.openLoopControl.forward.create
     private val bl = NakiriMotorFactory.name("BL").master.brake.openLoopControl.forward.create
     private val fr = NakiriMotorFactory.name("FR").master.brake.openLoopControl.forward.create
@@ -52,7 +48,11 @@ class Ayame(
         get() = imuOffsetRead
 
     override fun getWheelPositions(): List<Double> {
-        return motors.map { it.position.d }
+        return motors.map { ticksToInches(it.position.d) }
+    }
+
+    override fun getWheelVelocities(): List<Double>? {
+        return motors.map { ticksToInches(it.velocity) }
     }
 
     override fun setMotorPowers(frontLeft: Double, rearLeft: Double, rearRight: Double, frontRight: Double) {
@@ -62,6 +62,9 @@ class Ayame(
     }
 
     override fun update() {
+        updatePoseEstimate()
+
+
         val absMax = wheelPowers.map { it.absoluteValue }.maxOrNull()!!
         if (absMax > 1.0) {
             motors.forEachIndexed { i, it -> it.power = wheelPowers[i] / absMax }

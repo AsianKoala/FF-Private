@@ -12,8 +12,22 @@ import robotuprising.lib.util.Extensions.d
 
 // todo change lift pid to inches so i can actually tune without wondering wtf the coeffs are
 class Lift : Subsystem {
-    private val liftLeft = NakiriMotorFactory.name("liftLeft").slave.resetEncoder.openLoopControl.float.reverse.create
-    private val liftRight = NakiriMotorFactory.name("liftRight").slave.resetEncoder.openLoopControl.float.create
+    private val liftLeft = NakiriMotorFactory
+            .name("liftLeft")
+            .slave
+            .resetEncoder
+            .openLoopControl
+            .float
+            .reverse
+            .create
+
+    private val liftRight = NakiriMotorFactory
+            .name("liftRight")
+            .slave
+            .resetEncoder
+            .openLoopControl
+            .float
+            .create
 
     private var liftState = LiftStages.LOW
     enum class LiftStages(val position: Int) {

@@ -32,4 +32,5 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean, priva
         }
 
     val position: Int get() = motor.currentPosition
+    val velocity: Double get() = motor.velocity
 }

@@ -26,7 +26,7 @@ class whatthefuck : NakiriOpMode() {
 
         when (state) {
             states.TURNING -> {
-                superstructure.requestDriveManagerPowers(
+                superstructure.requestAyamePowers(
                     Pose(
                         Point(
                             0.0,
@@ -39,7 +39,7 @@ class whatthefuck : NakiriOpMode() {
                 if (System.currentTimeMillis() - start > 250) {
                     start = System.currentTimeMillis()
                     state = states.SPINNING
-                    superstructure.requestDriveManagerPowers(Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW)))
+                    superstructure.requestAyamePowers(Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW)))
                 }
             }
 

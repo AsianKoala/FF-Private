@@ -1,5 +1,6 @@
 package robotuprising.lib.math
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import robotuprising.lib.control.auto.waypoints.Waypoint
 
 data class Pose(
@@ -12,6 +13,8 @@ data class Pose(
     val sin get() = h.sin
     val hypot get() = p.hypot
     val copy get() = Pose(p, h)
+
+    val pose2d get() = Pose2d(p.x, p.y, h.angle)
 
     fun distance(p2: Pose) = p.distance(p2.p)
     fun distance(p2: Waypoint) = p.distance(p2.p)
