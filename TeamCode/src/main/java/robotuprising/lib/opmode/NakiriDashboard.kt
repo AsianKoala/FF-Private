@@ -6,31 +6,58 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 
 /**
  * FTCDashboard but better
- * @property telemAdapter adapter to add data to FTCDashboard packet easier
+ * @property telemetryAdapter adapter to add data to FTCDashboard packet easier
  * @property internalTelemetry reference to telemetry implementation in opmode
  */
 object NakiriDashboard {
-    private var telemAdapter: TelemAdapter = TelemAdapter()
+    private var telemetryAdapter: TelemetryAdapter = TelemetryAdapter()
     private lateinit var internalTelemetry: Telemetry
+    private var isUpdatingDashboard: Boolean = false
 
-    var name = ""
-
-    fun init(telemImpl: Telemetry) {
+    /**
+     * Initializes NakiriDashboard, must be called prior to update()
+     * @param telemImpl running opmode's telemetry implementation
+     * @param shouldUpdate if FTCDashboard should be updated every loop, disable during competition
+     */
+    fun init(telemImpl: Telemetry, shouldUpdate: Boolean) {
         internalTelemetry = telemImpl
+        isUpdatingDashboard = shouldUpdate
     }
 
     fun fieldOverlay(): Canvas {
-        return telemAdapter.fieldOverlay()
+        return telemetryAdapter.fieldOverlay()
+    }
+
+    fun setHeader(v: String) {
+        addSpace()
+        addLine("------$v------")
+    }
+
+    fun addLine(v: String) {
+        telemetryAdapter.addLine(v)
+        internalTelemetry.addLine(v)
+    }
+
+    fun addData(k: String, v: Any) {
+        internalTelemetry.addData(k, v)
+        telemetryAdapter.put(k, v)
+    }
+
+    fun addSpace() {
+        telemetryAdapter.addSpace()
+        internalTelemetry.addLine()
     }
 
     fun update() {
+        if (isUpdatingDashboard) {
+            FtcDashboard.getInstance().sendTelemetryPacket(telemetryAdapter)
+        }
         internalTelemetry.update()
-        FtcDashboard.getInstance().sendTelemetryPacket(telemAdapter)
-        telemAdapter = TelemAdapter()
+        telemetryAdapter = TelemetryAdapter()
     }
 
     operator fun set(k: String, v: Any) {
-        internalTelemetry.addData("$name $k", v)
-        telemAdapter.addData("$name $k", v)
+        internalTelemetry.addData(k, v)
+        telemetryAdapter.addData(k, v)
     }
 }

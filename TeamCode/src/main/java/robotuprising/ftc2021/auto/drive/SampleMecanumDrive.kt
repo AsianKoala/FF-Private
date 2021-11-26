@@ -15,10 +15,12 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceRunner
-import robotuprising.ftc2021.auto.util.LynxModuleUtil
+import robotuprising.lib.hardware.AxesSigns
+import robotuprising.lib.hardware.BNO055IMUUtil
 import robotuprising.lib.util.Extensions.d
 import java.util.*
 
@@ -174,46 +176,12 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
     override val rawExternalHeading: Double
         get() = imu.angularOrientation.firstAngle.d
 
-    // TODO: This must be changed to match your configuration
-    //                           | Z axis
-    //                           |
-    //     (Motor Port Side)     |   / X axis
-    //                       ____|__/____
-    //          Y axis     / *   | /    /|   (IO Side)
-    //          _________ /______|/    //      I2C
-    //                   /___________ //     Digital
-    //                  |____________|/      Analog
-    //
-    //                 (Servo Port Side)
-    //
-    // The positive x axis points toward the USB port(s)
-    //
-    // Adjust the axis rotation rate as necessary
-    // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
-    // flat on a surface
     val externalHeadingVelocity: Double
-        get() = // TODO: This must be changed to match your configuration
-            //                           | Z axis
-            //                           |
-            //     (Motor Port Side)     |   / X axis
-            //                       ____|__/____
-            //          Y axis     / *   | /    /|   (IO Side)
-            //          _________ /______|/    //      I2C
-            //                   /___________ //     Digital
-            //                  |____________|/      Analog
-            //
-            //                 (Servo Port Side)
-            //
-            // The positive x axis points toward the USB port(s)
-            //
-            // Adjust the axis rotation rate as necessary
-            // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
-            // flat on a surface
-            imu.angularVelocity.zRotationRate.d
+        get() = imu.angularVelocity.zRotationRate.d
 
     companion object {
-        var TRANSLATIONAL_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
+        @JvmField var TRANSLATIONAL_PID = PIDCoefficients(6.0, 0.0, 0.5)
+        @JvmField var HEADING_PID = PIDCoefficients(5.0, 0.0, 0.5)
         var LATERAL_MULTIPLIER = 1.0
         var VX_WEIGHT = 1.0
         var VY_WEIGHT = 1.0
@@ -239,25 +207,23 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
             TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
             Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5
         )
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap)
+//        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap)
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next()
         for (module in hardwareMap.getAll<LynxModule>(LynxModule::class.java)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO)
         }
 
-        // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get<BNO055IMU>(BNO055IMU::class.java, "imu")
-        val parameters: BNO055IMU.Parameters = BNO055IMU.Parameters()
+        val parameters = BNO055IMU.Parameters()
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS
+        parameters.loggingEnabled = false
         imu.initialize(parameters)
+        BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN)
 
-        // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
-        // upward (normal to the floor) using a command like the following:
-        // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
-        leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
-        leftRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
-        rightRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
-        rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
+        leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "FL")
+        leftRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "BL")
+        rightRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "BR")
+        rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "FR")
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront)
         for (motor in motors) {
             val motorConfigurationType: MotorConfigurationType = motor.motorType.clone()
@@ -273,6 +239,8 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
+        leftFront.direction = DcMotorSimple.Direction.REVERSE
+        leftRear.direction = DcMotorSimple.Direction.REVERSE
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));

@@ -39,12 +39,12 @@ import java.util.*
  * user to reset the position of the bot in the event that it drifts off the path.
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
-@Config
-@Autonomous(group = "drive")
+//@Config
 @Disabled
+@Autonomous(group = "drive")
 class ManualFeedforwardTuner : LinearOpMode() {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
-    private var drive: SampleMecanumDrive? = null
+    private lateinit var drive: SampleMecanumDrive
 
     internal enum class Mode {
         DRIVER_MODE, TUNING_MODE
@@ -58,18 +58,27 @@ class ManualFeedforwardTuner : LinearOpMode() {
                     "when using the built-in drive motor velocity PID."
             )
         }
+
         telemetry = MultipleTelemetry(telemetry, dashboard.getTelemetry())
+
         drive = SampleMecanumDrive(hardwareMap)
-        mode = Mode.TUNING_MODE
+
+        mode = Mode.DRIVER_MODE
+
         val clock: NanoClock = NanoClock.system()
+
         telemetry.addLine("Ready!")
         telemetry.update()
         telemetry.clearAll()
+
         waitForStart()
+
         if (isStopRequested()) return
+
         var movingForwards = true
         var activeProfile: MotionProfile = generateProfile(true)
         var profileStart: Double = clock.seconds()
+
         while (!isStopRequested()) {
             telemetry.addData("mode", mode)
             when (mode) {
@@ -80,16 +89,20 @@ class ManualFeedforwardTuner : LinearOpMode() {
 
                     // calculate and set the motor power
                     val profileTime: Double = clock.seconds() - profileStart
+
                     if (profileTime > activeProfile.duration()) {
                         // generate a new profile
                         movingForwards = !movingForwards
                         activeProfile = generateProfile(movingForwards)
                         profileStart = clock.seconds()
                     }
+
                     val motionState: MotionState = activeProfile.get(profileTime)
                     val targetPower: Double = calculateMotorFeedforward(motionState.v, motionState.a, kV, kA, kStatic)
-                    drive!!.setDrivePower(Pose2d(targetPower, 0.0, 0.0))
-                    drive!!.updatePoseEstimate()
+
+                    drive.setDrivePower(Pose2d(targetPower, 0.0, 0.0))
+                    drive.updatePoseEstimate()
+
                     val poseVelo: Pose2d = Objects.requireNonNull(drive!!.poseVelocity, "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.")!!
                     val currentVelo: Double = poseVelo.x
 
@@ -98,6 +111,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
                     telemetry.addData("measuredVelocity", currentVelo)
                     telemetry.addData("error", motionState.v - currentVelo)
                 }
+
                 Mode.DRIVER_MODE -> {
                     if (gamepad1.b) {
                         mode = Mode.TUNING_MODE
@@ -105,7 +119,8 @@ class ManualFeedforwardTuner : LinearOpMode() {
                         activeProfile = generateProfile(movingForwards)
                         profileStart = clock.seconds()
                     }
-                    drive!!.setWeightedDrivePower(
+
+                    drive.setWeightedDrivePower(
                         Pose2d(
                             -gamepad1.left_stick_y.d,
                             -gamepad1.left_stick_x.d,
@@ -114,6 +129,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
                     )
                 }
             }
+
             telemetry.update()
         }
     }
@@ -122,16 +138,9 @@ class ManualFeedforwardTuner : LinearOpMode() {
         var DISTANCE = 72.0 // in
         private fun generateProfile(movingForward: Boolean): MotionProfile {
             // todo check if fuck
-            val start = if (movingForward) {
-                MotionState(DriveVelocityPIDTuner.DISTANCE, 0.0, 0.0, 0.0)
-            } else {
-                MotionState(0.0, 0.0, 0.0, 0.0)
-            }
-            val goal = if (movingForward) {
-                MotionState(DriveVelocityPIDTuner.DISTANCE, 0.0, 0.0, 0.0)
-            } else {
-                MotionState(0.0, 0.0, 0.0, 0.0)
-            }
+            val start = MotionState(if (movingForward) 0.0 else DISTANCE, 0.0, 0.0, 0.0)
+            val goal = MotionState(if (movingForward) DISTANCE else 0.0, 0.0, 0.0, 0.0)
+
             return generateSimpleMotionProfile(start, goal, MAX_VEL, MAX_ACCEL)
         }
     }

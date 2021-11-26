@@ -12,7 +12,6 @@ import kotlin.Throws
  * This is an example of a more complex path to really test the tuning.
  */
 @Autonomous(group = "drive")
-@Disabled
 class SplineTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {

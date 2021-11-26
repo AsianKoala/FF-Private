@@ -1,13 +1,14 @@
 package robotuprising.ftc2021.util
 
+import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.openftc.revextensions2.ExpansionHubEx
 import org.openftc.revextensions2.RevBulkData
 
 object BulkDataManager {
     lateinit var hwMap: HardwareMap
-    lateinit var masterHub: ExpansionHubEx
-    lateinit var slaveHub: ExpansionHubEx
+    private lateinit var masterHub: ExpansionHubEx
+    private lateinit var slaveHub: ExpansionHubEx
     lateinit var masterData: RevBulkData
     lateinit var slaveData: RevBulkData
 
@@ -15,7 +16,8 @@ object BulkDataManager {
         hwMap = hardwareMap
         masterHub = hwMap[ExpansionHubEx::class.java, "masterHub"]
         slaveHub = hwMap[ExpansionHubEx::class.java, "slaveHub"]
-        NakiriMotorFactory.linkHardwareMap(hwMap)
+
+        hardwareMap.getAll(LynxModule::class.java).forEach { it.bulkCachingMode = LynxModule.BulkCachingMode.AUTO }
         read()
     }
 

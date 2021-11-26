@@ -12,6 +12,7 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
     private var hasStarted = false
+    private var prevLoopTime = System.currentTimeMillis()
 
 //    private lateinit var opModeType: OpModeType
 //    private var debugging = false
@@ -35,6 +36,9 @@ abstract class BaseOpMode : TunableLinearOpMode() {
 
                 OpModeStatus.LOOP -> {
                     if (hasStarted) {
+                        val dt = System.currentTimeMillis() - prevLoopTime
+                        telemetry.addData("loop ms", dt)
+                        prevLoopTime = System.currentTimeMillis()
                         m_loop()
                     } else {
                         m_start()

@@ -7,8 +7,8 @@ object MathUtil {
     const val EPSILON = 1e-6
     const val TAU = 2 * PI
 
-    val Double.toRadians get() = Math.toRadians(this)
-    val Double.toDegrees get() = Math.toDegrees(this)
+    val Double.radians get() = Math.toRadians(this)
+    val Double.degrees get() = Math.toDegrees(this)
 
     fun Double.clip(a: Double) = Range.clip(this, -a, a)
 
@@ -21,12 +21,17 @@ object MathUtil {
         return (a - b).wrap().angle.absoluteValue < c.angle
     }
 
+    // opposite of range
     fun maxify(input: Double, min: Double): Double {
         return when (input) {
             in 0.0..min -> min
             in -min..0.0 -> -min
             else -> input
         }
+    }
+
+    fun cubicScaling(k: Double, x: Double): Double {
+        return (1 - k) * x + k * x * x * x
     }
 
     fun clipIntersection(start: Point, end: Point, robot: Point): Point {

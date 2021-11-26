@@ -4,7 +4,7 @@ import robotuprising.lib.control.auto.waypoints.LockedWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.MathUtil.toRadians
+import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import kotlin.math.PI
@@ -22,7 +22,7 @@ object PurePursuitController {
         val movementPowers = (relTarget / 12.0)
 
         val deltaH = getDeltaH(curr, target)
-        val turnPower = deltaH / 90.0.toRadians
+        val turnPower = deltaH / 90.0.radians
 
         return Pose(Point(movementPowers.x, movementPowers.y), Angle(turnPower, AngleUnit.RAW))
     }

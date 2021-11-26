@@ -36,8 +36,8 @@ class Outtake : Subsystem {
     override fun stop() {
     }
 
-    override fun sendDashboardPacket() {
-        NakiriDashboard.name = "outtake"
+    override fun sendDashboardPacket(debugging: Boolean) {
+        NakiriDashboard.setHeader("outtake")
         NakiriDashboard["state"] = outtakeState
         NakiriDashboard["left pos"] = outtakeState.leftPos
         NakiriDashboard["right pos"] = outtakeState.rightPos

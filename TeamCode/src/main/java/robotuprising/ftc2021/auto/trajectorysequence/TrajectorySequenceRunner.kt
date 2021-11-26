@@ -2,7 +2,6 @@ package robotuprising.ftc2021.auto.trajectorysequence
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.canvas.Canvas
-import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
@@ -22,7 +21,7 @@ import robotuprising.ftc2021.auto.util.DashboardUtil.drawRobot
 import robotuprising.ftc2021.auto.util.DashboardUtil.drawSampledPath
 import java.util.*
 
-@Config
+// @Config
 class TrajectorySequenceRunner(private val follower: TrajectoryFollower, headingPIDCoefficients: PIDCoefficients?) {
     private val turnController: PIDFController
     private val clock: NanoClock
@@ -84,7 +83,7 @@ class TrajectorySequenceRunner(private val follower: TrajectoryFollower, heading
                 }
                 targetPose = currentTrajectory[deltaTime]
             } else if (currentSegment is TurnSegment) {
-                val targetState: MotionState = (currentSegment as TurnSegment?)!!.motionProfile!!.get(deltaTime)
+                val targetState: MotionState = (currentSegment as TurnSegment?)!!.motionProfile[deltaTime]
                 turnController.targetPosition = targetState.x
                 val correction = turnController.update(poseEstimate.heading)
                 val targetOmega = targetState.v
@@ -141,7 +140,7 @@ class TrajectorySequenceRunner(private val follower: TrajectoryFollower, heading
                 if (segment is TrajectorySegment) {
                     fieldOverlay.setStrokeWidth(1)
                     fieldOverlay.setStroke(COLOR_INACTIVE_TRAJECTORY)
-                    drawSampledPath(fieldOverlay, (segment as TrajectorySegment).trajectory.path)
+                    drawSampledPath(fieldOverlay, segment.trajectory.path)
                 } else if (segment is TurnSegment) {
                     val (x, y) = segment.startPose
                     fieldOverlay.setFill(COLOR_INACTIVE_TURN)
@@ -156,7 +155,7 @@ class TrajectorySequenceRunner(private val follower: TrajectoryFollower, heading
         }
         if (currentSegment != null) {
             if (currentSegment is TrajectorySegment) {
-                val currentTrajectory: Trajectory = (currentSegment as TrajectorySegment).trajectory
+                val currentTrajectory: Trajectory = currentSegment.trajectory
                 fieldOverlay.setStrokeWidth(1)
                 fieldOverlay.setStroke(COLOR_ACTIVE_TRAJECTORY)
                 drawSampledPath(fieldOverlay, currentTrajectory.path)

@@ -9,7 +9,7 @@ import kotlin.math.absoluteValue
 object PathUtil {
 
     fun smooth(waypoints: ArrayList<Waypoint>, weightData: Double, weightSmooth: Double, tolerance: Double): ArrayList<Waypoint> {
-        val newPath = waypoints.deepCopy as ArrayList<Waypoint>
+        val newPath = waypoints.deepCopy() as ArrayList<Waypoint>
 
         var delta = tolerance
         while (delta >= tolerance) {

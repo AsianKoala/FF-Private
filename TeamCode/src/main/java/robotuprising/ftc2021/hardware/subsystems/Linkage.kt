@@ -13,7 +13,8 @@ class Linkage : Subsystem {
         IN(Globals.LINKAGE_RETRACT),
         MED(Globals.LINKAGE_MED),
         OUT(Globals.LINKAGE_EXTEND),
-        CUSTOM(Globals.LINKAGE_CUSTOM)
+        CUSTOM(Globals.LINKAGE_CUSTOM),
+        TRANSFER(Globals.LINKAGE_TRANSFER)
     }
 
     fun retract() {
@@ -32,17 +33,23 @@ class Linkage : Subsystem {
         linkageState = LinkageStates.CUSTOM
     }
 
+    fun extendTransfer() {
+        linkageState = LinkageStates.TRANSFER
+    }
+
     override fun update() {
         linkageServo.position = linkageState.pos
     }
 
     override fun stop() {
-
     }
 
-    override fun sendDashboardPacket() {
-        NakiriDashboard.name = "linkage"
+    override fun sendDashboardPacket(debugging: Boolean) {
+        NakiriDashboard.setHeader("linkage")
         NakiriDashboard["state"] = linkageState
         NakiriDashboard["state pos"] = linkageState.pos
+        NakiriDashboard["linkage transfer pos"] = Globals.LINKAGE_TRANSFER
+        NakiriDashboard["linkage med pos"] = Globals.LINKAGE_MED
+        NakiriDashboard["linkage custom pos"] = Globals.LINKAGE_CUSTOM
     }
 }

@@ -48,7 +48,7 @@ class Ultrasonics : Subsystem {
     override fun stop() {
     }
 
-    override fun sendDashboardPacket() {
+    override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard["last forward value"] = forwardReading
         NakiriDashboard["last horizontal value"] = horizontalReading
     }

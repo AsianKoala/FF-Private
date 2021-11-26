@@ -5,10 +5,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import robotuprising.ftc2021.util.*
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
-import kotlin.math.absoluteValue
 
 class Intake : Subsystem {
-    private val intakeMotor = NakiriMotorFactory.name("intake").slave.brake.openLoopControl.create
+    private val intakeMotor = NakiriMotor("intake", false).brake.openLoopControl
     private val intakePivotLeft = NakiriServo("intakeLeftPivot")
     private val intakePivotRight = NakiriServo("intakeRightPivot")
 
@@ -30,17 +29,11 @@ class Intake : Subsystem {
         MINERAL_IN
     }
 
+    private val sensorThreshold = 25.5
+
     private var intakeState = IntakeStates.OFF
     private var pivotState = PivotStates.IN
     private var sensorState = SensorStates.NONE
-
-    private val RevColorSensorV3.rgb get() = Triple(red(), green(), blue())
-
-    private fun compareTriple(first: Triple<Int, Int, Int>, second: Triple<Int, Int, Int>, threshold: Int): Boolean {
-        return (first.first - second.first).absoluteValue +
-            (first.second - second.second).absoluteValue +
-            (first.third - second.third).absoluteValue < threshold
-    }
 
     fun turnOn() {
         intakeState = IntakeStates.ON
@@ -74,20 +67,25 @@ class Intake : Subsystem {
         intakePivotRight.position = pivotState.rightPos
 
         sensorState = when {
-            intakeSensor.getDistance(DistanceUnit.MM) < 28.0 -> SensorStates.MINERAL_IN
+            intakeSensor.getDistance(DistanceUnit.MM) < sensorThreshold -> SensorStates.MINERAL_IN
             else -> SensorStates.NONE
         }
-
-        Globals.telemetry.addData("intake sensor state", sensorState)
-        Globals.telemetry.addData("intake sensor distance", intakeSensor.getDistance(DistanceUnit.MM))
     }
 
-    override fun sendDashboardPacket() {
-        NakiriDashboard.name = "intake"
+    override fun sendDashboardPacket(debugging: Boolean) {
+        NakiriDashboard.setHeader("intake")
         NakiriDashboard["state"] = intakeState
+        NakiriDashboard["power"] = intakeMotor.power
         NakiriDashboard["pivot state"] = pivotState
         NakiriDashboard["left pos"] = pivotState.leftPos
         NakiriDashboard["right pos"] = pivotState.rightPos
+        NakiriDashboard["sensor state"] = sensorState
+        NakiriDashboard["sensor distance"] = intakeSensor.getDistance(DistanceUnit.MM)
+        NakiriDashboard["sensor threshold"] = sensorThreshold
+
+        if (debugging) {
+            intakeMotor.sendDataToDashboard()
+        }
     }
 
     override fun stop() {

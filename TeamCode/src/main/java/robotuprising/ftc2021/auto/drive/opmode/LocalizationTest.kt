@@ -2,6 +2,7 @@
 package robotuprising.ftc2021.auto.drive.opmode
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.noahbres.meepmeep.core.toDegrees
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -36,7 +37,7 @@ class LocalizationTest : LinearOpMode() {
             val poseEstimate = drive.poseEstimate
             telemetry.addData("x", poseEstimate.x)
             telemetry.addData("y", poseEstimate.y)
-            telemetry.addData("heading", poseEstimate.heading)
+            telemetry.addData("heading", poseEstimate.heading.toDegrees())
             telemetry.update()
         }
     }

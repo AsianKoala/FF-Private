@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 import kotlin.Throws
 
- /*
- * This is a simple routine to test turning capabilities.
- */
+/*
+* This is a simple routine to test turning capabilities.
+*/
 @Config
 @Autonomous(group = "drive")
 @Disabled
@@ -24,6 +24,6 @@ class TurnTest : LinearOpMode() {
     }
 
     companion object {
-        var ANGLE = 90.0 // deg
+        var ANGLE = 180.0 // deg
     }
 }

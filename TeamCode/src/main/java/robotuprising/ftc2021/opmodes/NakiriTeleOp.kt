@@ -2,11 +2,7 @@ package robotuprising.ftc2021.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import robotuprising.ftc2021.hardware.NakiriOpMode
-import robotuprising.ftc2021.util.Globals
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
+import robotuprising.lib.math.*
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
@@ -37,13 +33,10 @@ class NakiriTeleOp : NakiriOpMode() {
         .onEnter { superstructure.requestOuttakeOut() }
         .transitionTimed(0.5)
         .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
-        .onEnter {
-            superstructure.requestOuttakeIn()
-            superstructure.requestLinkageRetract()
-        }
+        .onEnter { superstructure.requestOuttakeIn(); superstructure.requestLinkageRetract() }
         .transitionTimed(0.5)
         .state(OuttakeLongStates.LIFT_DOWN)
-        .onEnter { superstructure.requestLiftLow() }
+        .onEnter { superstructure.requestLiftBottom() }
         .transition { true }
         .build()
 
@@ -51,11 +44,11 @@ class NakiriTeleOp : NakiriOpMode() {
         superstructure.requestAyamePowers(
             Pose(
                 Point(
-                    gamepad1.left_stick_x.d * 0.75,
-                    -gamepad1.left_stick_y.d * 0.75
+                    MathUtil.cubicScaling(0.6, gamepad1.left_stick_x.d),
+                    MathUtil.cubicScaling(0.6, -gamepad1.left_stick_y.d)
                 ),
                 Angle(
-                    gamepad1.right_stick_x.d * 0.75,
+                    MathUtil.cubicScaling(0.8, gamepad1.right_stick_x.d),
                     AngleUnit.RAW
                 )
             )
@@ -71,14 +64,8 @@ class NakiriTeleOp : NakiriOpMode() {
             outtakeLongSequence.start()
         }
 
-        outtakeLongSequence.update()
-
-        if (gamepad1.y) {
-            Globals.LINKAGE_CUSTOM += 0.05
-        }
-
-        if (gamepad1.a) {
-            Globals.LINKAGE_CUSTOM -= 0.05
+        if (outtakeLongSequence.running) {
+            outtakeLongSequence.update()
         }
     }
 
@@ -86,10 +73,28 @@ class NakiriTeleOp : NakiriOpMode() {
         superstructure.runIntakeSequence(gamepad1.right_trigger_pressed)
     }
 
+    private fun debugControl() {
+        when {
+            gamepad2.left_bumper -> superstructure.requestIntakeOn()
+            gamepad2.right_bumper -> superstructure.requestIntakeOff()
+            gamepad1.dpad_right -> superstructure.requestIntakeReverse()
+            gamepad2.left_trigger_pressed -> superstructure.requestIntakeRotateIn()
+            gamepad2.right_trigger_pressed -> superstructure.requestIntakeRotateOut()
+            gamepad2.a -> superstructure.requestLinkageOut()
+            gamepad2.b -> superstructure.requestLinkageRetract()
+            gamepad2.y -> superstructure.requestLiftHigh()
+            gamepad2.x -> superstructure.requestLiftBottom()
+            gamepad2.dpad_up -> superstructure.requestOuttakeIn()
+            gamepad2.dpad_down -> superstructure.requestOuttakeOut()
+            gamepad2.dpad_left -> superstructure.requestOuttakeMedium()
+        }
+    }
+
     override fun m_loop() {
         super.m_loop()
         driveControl()
         intakeControl()
         outtakeControl()
+        debugControl()
     }
 }

@@ -1,13 +1,14 @@
 package robotuprising.ftc2021.hardware.subsystems
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.qualcomm.robotcore.hardware.VoltageSensor
+import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 class Nakiri : Subsystem {
 
-    private val ayame = Ayame(0.0, 0.0, 0.0, 15.0)
+    private val ayame = Ayame()
     private val intake = Intake()
     private val lift = Lift()
     private val linkage = Linkage()
@@ -21,6 +22,8 @@ class Nakiri : Subsystem {
         outtake,
         duckSpinner,
     )
+
+    private val batteryVoltageSensor: VoltageSensor = BulkDataManager.hwMap.voltageSensor.iterator().next()
 
     private enum class IntakeSequenceStates {
         INTAKE_OUTTAKE_RESET,
@@ -43,6 +46,7 @@ class Nakiri : Subsystem {
         OUTTAKE_IN
     }
 
+    val intaking get() = intakeSequence.running
     private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
         .state(IntakeSequenceStates.INTAKE_OUTTAKE_RESET)
         .onEnter {
@@ -57,11 +61,15 @@ class Nakiri : Subsystem {
         .onEnter {
             requestIntakeRotateIn()
             requestIntakeOff()
+            requestLiftTransfer()
+            requestLinkageTransfer()
         }
         .transitionTimed(1.5)
         .state(IntakeSequenceStates.TRANSFERRING)
-        .onEnter { requestIntakeReverse() }
-        .transitionTimed(0.8)
+        .onEnter {
+            requestIntakeReverse()
+        }
+        .transitionTimed(1.5)
         .state(IntakeSequenceStates.OUTTAKE_TO_MEDIUM)
         .onEnter {
             requestOuttakeMedium()
@@ -70,6 +78,7 @@ class Nakiri : Subsystem {
         .transition { true }
         .build()
 
+    val outtaking get() = sharedOuttakeSequence.running || closeOuttakeSequence.running
     private val sharedOuttakeSequence = StateMachineBuilder<SharedOuttakeState>()
         .state(SharedOuttakeState.OUTTAKE_OUT)
         .onEnter { requestOuttakeOut() }
@@ -90,22 +99,15 @@ class Nakiri : Subsystem {
         .onEnter { requestOuttakeOut() }
         .transitionTimed(0.75)
         .state(OuttakeSequenceStates.OUTTAKE_DOWN_LINKAGE_IN)
-        .onEnter {
-            requestOuttakeIn()
-            requestLinkageRetract()
-        }
+        .onEnter { requestOuttakeIn(); requestLinkageRetract() }
         .transitionTimed(0.5)
         .state(OuttakeSequenceStates.RESET)
-        .onEnter { requestLiftLow() }
+        .onEnter { requestLiftBottom() }
         .transition { true }
         .build()
 
     fun requestAyamePowers(powers: Pose) {
-        ayame.setDrivePower(powers.pose2d)
-    }
-
-    fun requestAyameStop() {
-        ayame.setDrivePower(Pose2d())
+        ayame.setVectorPower(powers)
     }
 
     fun requestIntakeOn() {
@@ -132,8 +134,12 @@ class Nakiri : Subsystem {
         return intake.isMineralIn()
     }
 
-    fun requestLiftLow() {
-        lift.setLevel(Lift.LiftStages.LOW)
+    fun requestLiftBottom() {
+        lift.setLevel(Lift.LiftStages.BOTTOM)
+    }
+
+    fun requestLiftTransfer() {
+        lift.setLevel(Lift.LiftStages.TRANSFER)
     }
 
     fun requestLiftHigh() {
@@ -154,6 +160,10 @@ class Nakiri : Subsystem {
 
     fun requestLinkageCustom() {
         linkage.extendCustom()
+    }
+
+    fun requestLinkageTransfer() {
+        linkage.extendTransfer()
     }
 
     fun requestOuttakeIn() {
@@ -185,19 +195,32 @@ class Nakiri : Subsystem {
     }
 
     fun runSharedOuttakeSequence(shouldStart: Boolean) {
-        sharedOuttakeSequence.smartRun(shouldStart)
+        if (!intakeSequence.running) {
+            sharedOuttakeSequence.smartRun(shouldStart)
+        }
     }
 
     fun runCloseOuttakeSequence(shouldStart: Boolean) {
-        closeOuttakeSequence.smartRun(shouldStart)
+        if (!intakeSequence.running) {
+            closeOuttakeSequence.smartRun(shouldStart)
+        }
+    }
+
+    fun resetRobot() {
+        requestIntakeOff()
+        requestIntakeRotateIn()
+        requestLinkageRetract()
+        requestOuttakeIn()
+        requestLiftBottom()
+        requestSpinnerOff()
     }
 
     override fun update() {
         subsystems.forEach { it.update() }
     }
 
-    override fun sendDashboardPacket() {
-        subsystems.forEach { it.sendDashboardPacket() }
+    override fun sendDashboardPacket(debugging: Boolean) {
+        subsystems.forEach { it.sendDashboardPacket(debugging) }
     }
 
     override fun stop() {

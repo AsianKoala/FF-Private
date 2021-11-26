@@ -4,7 +4,7 @@ import robotuprising.lib.control.auto.waypoints.PointTurnWaypoint
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.*
-import robotuprising.lib.math.MathUtil.toRadians
+import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.util.Extensions.d
 
@@ -56,7 +56,7 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
             val movementPowers = (relTarget / 12.0)
 
             val deltaH = PurePursuitController.getDeltaH(currPose, target)
-            val turnPower = deltaH / 90.0.toRadians
+            val turnPower = deltaH / 90.0.radians
 
             // get perpendicular intersetion for x component of the robot
             val dClip = currPose.p.distance(clip)

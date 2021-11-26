@@ -22,9 +22,8 @@ import java.util.*
  *
  * Further fine tuning of MAX_ANG_VEL may be desired.
  */
-@Config
-@Disabled
 @Autonomous(group = "drive")
+@Disabled
 class MaxAngularVeloTuner : LinearOpMode() {
     private lateinit var timer: ElapsedTime
     private var maxAngVelocity = 0.0

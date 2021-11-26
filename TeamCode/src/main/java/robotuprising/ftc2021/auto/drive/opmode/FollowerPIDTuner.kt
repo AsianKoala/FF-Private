@@ -24,7 +24,6 @@ import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
 class FollowerPIDTuner : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {

@@ -71,6 +71,8 @@ class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, pri
             start()
         }
 
-        update()
+        if (running) {
+            update()
+        }
     }
 }

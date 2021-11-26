@@ -141,7 +141,7 @@ class NakiriLocalizer(
         TODO("Not yet implemented")
     }
 
-    override fun sendDashboardPacket() {
+    override fun sendDashboardPacket(debugging: Boolean) {
         TODO("Not yet implemented")
     }
 }

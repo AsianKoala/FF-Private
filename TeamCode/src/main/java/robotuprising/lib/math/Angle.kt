@@ -1,6 +1,6 @@
 package robotuprising.lib.math
 
-import robotuprising.lib.math.MathUtil.toDegrees
+import robotuprising.lib.math.MathUtil.degrees
 import kotlin.math.* // ktlint-disable no-wildcard-imports
 
 data class Angle(
@@ -8,7 +8,7 @@ data class Angle(
     var unit: AngleUnit
 ) {
 
-    val deg: Double get() = angle.toDegrees
+    val deg: Double get() = angle.degrees
 
     val cos = cos(angle)
     val sin = sin(angle)

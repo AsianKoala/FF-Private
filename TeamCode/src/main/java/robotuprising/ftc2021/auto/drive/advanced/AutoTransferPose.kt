@@ -3,6 +3,7 @@ package robotuprising.ftc2021.auto.drive.advanced
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 import kotlin.Throws
@@ -32,6 +33,7 @@ import kotlin.Throws
  * to a file in the event of an app crash. This way, the pose can be retrieved and set even if
  * something disastrous occurs. Such a sample has not been included.
  */
+@Disabled
 @Autonomous(group = "advanced")
 class AutoTransferPose : LinearOpMode() {
     @Throws(InterruptedException::class)

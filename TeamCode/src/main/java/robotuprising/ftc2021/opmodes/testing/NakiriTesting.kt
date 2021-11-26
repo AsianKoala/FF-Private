@@ -6,8 +6,6 @@ import com.acmerobotics.roadrunner.util.epsilonEquals
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.Range
 import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals

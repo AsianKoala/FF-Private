@@ -1,6 +1,7 @@
 package robotuprising.ftc2021.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import robotuprising.ftc2021.hardware.NakiriOpMode
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
@@ -8,7 +9,8 @@ import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 
 @Autonomous(name = "Scrimmage Auto")
-class whatthefuck : NakiriOpMode() {
+@Disabled
+class ScrimmageAuto : NakiriOpMode() {
 
     var start: Long = 0
     override fun m_start() {

@@ -8,19 +8,21 @@ import kotlin.math.absoluteValue
 object Extensions {
     val Boolean.i get() = if (this) 1 else 0
     val Boolean.d get() = this.i.toDouble()
-    val Int.d get() = this.toDouble()
-    val Float.d get() = this.toDouble()
-    val Long.d get() = this.toDouble()
-    val Long.i get() = this.toInt()
-    val Int.l get() = this.toLong()
+    val Number.d get() = this.toDouble()
+    val Number.i get() = this.toInt()
+    val Number.l get() = this.toLong()
+    val Number.f get() = this.toFloat()
+
+    val Double.mmToIn get() = this / 25.4
+    val Double.cmToIn get() = this / 2.54
+    val Double.inToMM get() = this * 25.4
+    val Double.inToCM get() = this * 2.54
 
     val List<Double>.listAbs: List<Double> get() = this.map { it.absoluteValue }
-    val ArrayList<*>.deepCopy: ArrayList<Any> get() = this.map { it } as ArrayList<Any>
+    fun <E> ArrayList<E>.deepCopy(): ArrayList<E> {
+        val copy = ArrayList<E>()
+        this.forEach { copy.add(it) }
+        return copy
+    }
     val ArrayList<Double>.average: Double get() = this.sum() / this.size
-//    val ArrayList<Int>.average: Double
-//        get() {
-//            var sum = 0.0
-//            this.forEach { sum += it }
-//            return sum / size
-//        }
 }
