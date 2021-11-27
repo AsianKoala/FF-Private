@@ -1,7 +1,5 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
-import com.qualcomm.robotcore.hardware.VoltageSensor
-import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.system.statemachine.StateMachineBuilder
@@ -22,8 +20,6 @@ class Nakiri : Subsystem {
         outtake,
         duckSpinner,
     )
-
-    private val batteryVoltageSensor: VoltageSensor = BulkDataManager.hwMap.voltageSensor.iterator().next()
 
     private enum class IntakeSequenceStates {
         INTAKE_OUTTAKE_RESET,
@@ -206,15 +202,6 @@ class Nakiri : Subsystem {
         }
     }
 
-    fun resetRobot() {
-        requestIntakeOff()
-        requestIntakeRotateIn()
-        requestLinkageRetract()
-        requestOuttakeIn()
-        requestLiftBottom()
-        requestSpinnerOff()
-    }
-
     override fun update() {
         subsystems.forEach { it.update() }
     }
@@ -223,7 +210,11 @@ class Nakiri : Subsystem {
         subsystems.forEach { it.sendDashboardPacket(debugging) }
     }
 
-    override fun stop() {
-        subsystems.forEach { it.stop() }
+    override fun reset() {
+        subsystems.forEach { it.reset() }
+    }
+
+    init {
+        ayame.localizer
     }
 }

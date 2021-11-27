@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.auto.drive.advanced
 
 import com.acmerobotics.dashboard.FtcDashboard
-import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
@@ -51,7 +50,7 @@ import java.util.*
  * This is a modified SampleMecanumDrive class that implements the ability to cancel a trajectory
  * following. Essentially, it just forces the mode to IDLE.
  */
-//@Config
+// @Config
 class SampleMecanumDriveCancelable(hardwareMap: HardwareMap) : MecanumDrive(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER) {
     enum class Mode {
         IDLE, TURN, FOLLOW_TRAJECTORY

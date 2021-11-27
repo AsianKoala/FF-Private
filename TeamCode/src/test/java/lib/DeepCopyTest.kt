@@ -9,7 +9,7 @@ object DeepCopyTest {
         list.add(1)
         list.add(2)
         list.add(3)
-        val dc = list.deepCopy
+        val dc = list.deepCopy()
         dc[0] = 100
         println(list)
         println(dc)

@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
 import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriServo
@@ -33,13 +33,17 @@ class Outtake : Subsystem {
         rightServo.position = outtakeState.rightPos
     }
 
-    override fun stop() {
-    }
-
     override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard.setHeader("outtake")
         NakiriDashboard["state"] = outtakeState
-        NakiriDashboard["left pos"] = outtakeState.leftPos
-        NakiriDashboard["right pos"] = outtakeState.rightPos
+
+        if (debugging) {
+            NakiriDashboard["left pos"] = outtakeState.leftPos
+            NakiriDashboard["right pos"] = outtakeState.rightPos
+        }
+    }
+
+    override fun reset() {
+        rotateMedium()
     }
 }

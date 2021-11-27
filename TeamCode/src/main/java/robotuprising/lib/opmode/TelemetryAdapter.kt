@@ -6,8 +6,4 @@ class TelemetryAdapter : TelemetryPacket() {
     fun addData(k: String, v: Any) {
         addLine("$k: $v")
     }
-
-    fun addSpace() {
-        addLine(" ")
-    }
 }

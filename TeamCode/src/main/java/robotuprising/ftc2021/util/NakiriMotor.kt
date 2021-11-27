@@ -23,13 +23,6 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
             }
         }
 
-    var targetPosition: Int = 0
-        set(value) {
-            if (value != field) {
-                field = value
-            }
-        }
-
     val bulkPosition: Int
         get() {
             return if (onMaster) {
@@ -116,8 +109,8 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
             }
         }
 
-    val hub: String get() = if (onMaster) "master" else "slave"
-    val portNumber get() = motor.portNumber
+    val hub: String
+    val portNumber: Int
     val current get() = motor.getCurrent(CurrentUnit.MILLIAMPS)
     val currentDraw get() = motor.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.MILLIAMPS)
     val overTemp get() = motor.isBridgeOverTemp
@@ -133,5 +126,15 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
         NakiriDashboard["$name current"] = current
         NakiriDashboard["$name current draw"] = currentDraw
         NakiriDashboard["$name over temp"] = overTemp
+    }
+
+    init {
+        if (onMaster) {
+            hub = "master"
+            portNumber = Globals.MASTER_MAPPINGS.indexOf(name)
+        } else {
+            hub = "slave"
+            portNumber = Globals.SLAVE_MAPPINGS.indexOf(name)
+        }
     }
 }

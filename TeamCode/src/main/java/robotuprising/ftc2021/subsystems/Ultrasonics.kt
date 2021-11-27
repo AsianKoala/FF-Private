@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.util.BulkDataManager
@@ -13,9 +13,9 @@ class Ultrasonics : Subsystem {
     private val timer = ElapsedTime()
     private val readingInterval = 100
 
-    var isReading = false
+    private var isReading = false
+    var hasBeenRead = false
         private set
-    private var hasBeenRead = false
     var forwardReading = 0
         private set
     var horizontalReading = 0
@@ -25,12 +25,12 @@ class Ultrasonics : Subsystem {
         isReading = true
     }
 
-    fun stopReading() {
-        isReading = false
-    }
-
+    /**
+     * TODO: FIX THIS
+     */
     val finishedReadInterval: Boolean get() = timer.milliseconds() > readingInterval
 
+    // sensor will only read once to ensure i2c isn't called multiple times
     override fun update() {
         if (isReading) {
             if (finishedReadInterval && !hasBeenRead) {
@@ -38,14 +38,16 @@ class Ultrasonics : Subsystem {
                 horizontalReading = horizontal.readRangeValueCm()
                 timer.reset()
                 hasBeenRead = true
+                isReading = false
             } else {
                 forward.initiateRangeCommand()
                 horizontal.initiateRangeCommand()
+                hasBeenRead = false
             }
         }
     }
 
-    override fun stop() {
+    override fun reset() {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {

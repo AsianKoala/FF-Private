@@ -1,6 +1,6 @@
-package robotuprising.ftc2021.hardware
+package robotuprising.ftc2021.opmodes
 
-import robotuprising.ftc2021.hardware.subsystems.Nakiri
+import robotuprising.ftc2021.subsystems.Nakiri
 import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.opmode.NakiriDashboard
@@ -13,7 +13,7 @@ abstract class NakiriOpMode : BaseOpMode() {
         BulkDataManager.init(hardwareMap)
         NakiriDashboard.init(telemetry, true)
         superstructure = Nakiri()
-        superstructure.resetRobot()
+        superstructure.reset()
     }
 
     override fun m_init_loop() {
@@ -29,12 +29,12 @@ abstract class NakiriOpMode : BaseOpMode() {
     override fun m_loop() {
         BulkDataManager.read()
         superstructure.update()
-//        superstructure.sendDashboardPacket(false)
+        superstructure.sendDashboardPacket(false)
         NakiriDashboard.update()
     }
 
     override fun m_stop() {
-        superstructure.stop()
+        superstructure.reset()
     }
 
     override val is_comp: Boolean

@@ -6,13 +6,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 
 /**
  * FTCDashboard but better
- * @property telemetryAdapter adapter to add data to FTCDashboard packet easier
- * @property internalTelemetry reference to telemetry implementation in opmode
+ * @property dashboardAdapter adapter to add data to FTCDashboard packet easier
+ * @property telemetryImpl reference to telemetry implementation in opmode
+ *
+ * example usage: NakiriDashboard["lift height"] = lift.position
  */
 object NakiriDashboard {
-    private var telemetryAdapter: TelemetryAdapter = TelemetryAdapter()
-    private lateinit var internalTelemetry: Telemetry
-    private var isUpdatingDashboard: Boolean = false
+    private var dashboardAdapter: TelemetryAdapter = TelemetryAdapter()
+    private lateinit var telemetryImpl: Telemetry
+    private var isUpdatingDashboard: Boolean = true
 
     /**
      * Initializes NakiriDashboard, must be called prior to update()
@@ -20,12 +22,12 @@ object NakiriDashboard {
      * @param shouldUpdate if FTCDashboard should be updated every loop, disable during competition
      */
     fun init(telemImpl: Telemetry, shouldUpdate: Boolean) {
-        internalTelemetry = telemImpl
+        telemetryImpl = telemImpl
         isUpdatingDashboard = shouldUpdate
     }
 
     fun fieldOverlay(): Canvas {
-        return telemetryAdapter.fieldOverlay()
+        return dashboardAdapter.fieldOverlay()
     }
 
     fun setHeader(v: String) {
@@ -34,30 +36,24 @@ object NakiriDashboard {
     }
 
     fun addLine(v: String) {
-        telemetryAdapter.addLine(v)
-        internalTelemetry.addLine(v)
-    }
-
-    fun addData(k: String, v: Any) {
-        internalTelemetry.addData(k, v)
-        telemetryAdapter.put(k, v)
+        dashboardAdapter.addLine(v)
+        telemetryImpl.addLine(v)
     }
 
     fun addSpace() {
-        telemetryAdapter.addSpace()
-        internalTelemetry.addLine()
+        addLine(" ")
     }
 
     fun update() {
         if (isUpdatingDashboard) {
-            FtcDashboard.getInstance().sendTelemetryPacket(telemetryAdapter)
+            FtcDashboard.getInstance().sendTelemetryPacket(dashboardAdapter)
         }
-        internalTelemetry.update()
-        telemetryAdapter = TelemetryAdapter()
+        telemetryImpl.update()
+        dashboardAdapter = TelemetryAdapter()
     }
 
     operator fun set(k: String, v: Any) {
-        internalTelemetry.addData(k, v)
-        telemetryAdapter.addData(k, v)
+        telemetryImpl.addData(k, v)
+        dashboardAdapter.put(k, v)
     }
 }

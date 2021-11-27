@@ -2,7 +2,6 @@
 package robotuprising.ftc2021.auto.drive.opmode
 
 import com.acmerobotics.dashboard.FtcDashboard
-import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.kinematics.Kinematics.calculateMotorFeedforward
@@ -39,7 +38,7 @@ import java.util.*
  * user to reset the position of the bot in the event that it drifts off the path.
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
-//@Config
+// @Config
 @Disabled
 @Autonomous(group = "drive")
 class ManualFeedforwardTuner : LinearOpMode() {

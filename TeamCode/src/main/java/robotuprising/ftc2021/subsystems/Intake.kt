@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
@@ -30,6 +30,7 @@ class Intake : Subsystem {
     }
 
     private val sensorThreshold = 25.5
+    private var sensorRead = 0.0
 
     private var intakeState = IntakeStates.OFF
     private var pivotState = PivotStates.IN
@@ -66,8 +67,9 @@ class Intake : Subsystem {
         intakePivotLeft.position = pivotState.leftPos
         intakePivotRight.position = pivotState.rightPos
 
+        sensorRead = intakeSensor.getDistance(DistanceUnit.MM)
         sensorState = when {
-            intakeSensor.getDistance(DistanceUnit.MM) < sensorThreshold -> SensorStates.MINERAL_IN
+            sensorRead < sensorThreshold -> SensorStates.MINERAL_IN
             else -> SensorStates.NONE
         }
     }
@@ -75,20 +77,21 @@ class Intake : Subsystem {
     override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard.setHeader("intake")
         NakiriDashboard["state"] = intakeState
-        NakiriDashboard["power"] = intakeMotor.power
-        NakiriDashboard["pivot state"] = pivotState
-        NakiriDashboard["left pos"] = pivotState.leftPos
-        NakiriDashboard["right pos"] = pivotState.rightPos
         NakiriDashboard["sensor state"] = sensorState
-        NakiriDashboard["sensor distance"] = intakeSensor.getDistance(DistanceUnit.MM)
-        NakiriDashboard["sensor threshold"] = sensorThreshold
+        NakiriDashboard["sensor distance"] = sensorRead
 
         if (debugging) {
+            NakiriDashboard["power"] = intakeMotor.power
+            NakiriDashboard["pivot state"] = pivotState
+            NakiriDashboard["left pos"] = pivotState.leftPos
+            NakiriDashboard["right pos"] = pivotState.rightPos
+            NakiriDashboard["sensor threshold"] = sensorThreshold
             intakeMotor.sendDataToDashboard()
         }
     }
 
-    override fun stop() {
+    override fun reset() {
         turnOff()
+        rotateIn()
     }
 }

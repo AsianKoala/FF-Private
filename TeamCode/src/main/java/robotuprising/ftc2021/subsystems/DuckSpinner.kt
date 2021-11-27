@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.opmode.NakiriDashboard
@@ -31,16 +31,16 @@ class DuckSpinner : Subsystem {
         spinnerMotor.power = spinnerState.power
     }
 
-    override fun stop() {
+    override fun reset() {
         spinnerMotor.power = 0.0
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard.setHeader("duck spinner")
         NakiriDashboard["state"] = spinnerState
-        NakiriDashboard["motor power"] = spinnerMotor.power
 
         if (debugging) {
+            NakiriDashboard["motor power"] = spinnerMotor.power
             spinnerMotor.sendDataToDashboard()
         }
     }

@@ -1,7 +1,11 @@
 package robotuprising.lib.system
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
+import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.OpModeStatus
+import robotuprising.lib.opmode.OpModeType
 
 abstract class BaseOpMode : TunableLinearOpMode() {
     private val opModeStatus: OpModeStatus
@@ -14,18 +18,18 @@ abstract class BaseOpMode : TunableLinearOpMode() {
     private var hasStarted = false
     private var prevLoopTime = System.currentTimeMillis()
 
-//    private lateinit var opModeType: OpModeType
-//    private var debugging = false
+    private lateinit var opModeType: OpModeType
+    private var debugging = false
 
     override fun runOpMode() {
-//        val manager = (internalOpModeServices as OpModeManagerImpl)
-//
-//        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
-//        opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
-//            OpModeType.AUTO
-//        } else {
-//            OpModeType.TELEOP
-//        }
+        val manager = (internalOpModeServices as OpModeManagerImpl)
+
+        debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
+        opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
+            OpModeType.AUTO
+        } else {
+            OpModeType.TELEOP
+        }
 
         m_init()
         mainLoop@ while (true) {
@@ -55,10 +59,10 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
         m_stop()
-//        if (opModeType == OpModeType.AUTO && is_comp) {
-//            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
-//            manager.initActiveOpMode(opName + "Auto")
-//        }
+        if (opModeType == OpModeType.AUTO && is_comp) {
+            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
+            manager.initActiveOpMode(opName + "Auto")
+        }
     }
 //
 //    private fun debuggingTelem() {

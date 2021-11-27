@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.unused
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode

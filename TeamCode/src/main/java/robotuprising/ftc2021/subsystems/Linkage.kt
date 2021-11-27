@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.hardware.subsystems
+package robotuprising.ftc2021.subsystems
 
 import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriServo
@@ -41,15 +41,19 @@ class Linkage : Subsystem {
         linkageServo.position = linkageState.pos
     }
 
-    override fun stop() {
-    }
-
     override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard.setHeader("linkage")
         NakiriDashboard["state"] = linkageState
-        NakiriDashboard["state pos"] = linkageState.pos
-        NakiriDashboard["linkage transfer pos"] = Globals.LINKAGE_TRANSFER
-        NakiriDashboard["linkage med pos"] = Globals.LINKAGE_MED
-        NakiriDashboard["linkage custom pos"] = Globals.LINKAGE_CUSTOM
+
+        if (debugging) {
+            NakiriDashboard["state pos"] = linkageState.pos
+            NakiriDashboard["linkage transfer pos"] = Globals.LINKAGE_TRANSFER
+            NakiriDashboard["linkage med pos"] = Globals.LINKAGE_MED
+            NakiriDashboard["linkage custom pos"] = Globals.LINKAGE_CUSTOM
+        }
+    }
+
+    override fun reset() {
+        retract()
     }
 }

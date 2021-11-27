@@ -1,7 +1,6 @@
 package robotuprising.ftc2021.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import robotuprising.ftc2021.hardware.NakiriOpMode
 import robotuprising.lib.math.*
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.d
