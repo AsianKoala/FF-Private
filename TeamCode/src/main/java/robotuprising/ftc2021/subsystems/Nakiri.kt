@@ -38,6 +38,7 @@ class Nakiri : Subsystem {
     }
 
     private enum class SharedOuttakeState {
+        LINKAGE_OUT,
         OUTTAKE_OUT,
         OUTTAKE_IN
     }
@@ -76,11 +77,17 @@ class Nakiri : Subsystem {
 
     val outtaking get() = sharedOuttakeSequence.running || closeOuttakeSequence.running
     private val sharedOuttakeSequence = StateMachineBuilder<SharedOuttakeState>()
+        .state(SharedOuttakeState.LINKAGE_OUT)
+        .onEnter { requestLinkageMedium() }
+            .transitionTimed(0.5)
         .state(SharedOuttakeState.OUTTAKE_OUT)
         .onEnter { requestOuttakeOut() }
         .transitionTimed(0.75)
         .state(SharedOuttakeState.OUTTAKE_IN)
-        .onEnter { requestOuttakeIn() }
+        .onEnter {
+            requestOuttakeIn()
+            requestLinkageRetract()
+        }
         .transition { true }
         .build()
 

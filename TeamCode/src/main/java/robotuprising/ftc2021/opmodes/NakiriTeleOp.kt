@@ -27,7 +27,7 @@ class NakiriTeleOp : NakiriOpMode() {
         .onEnter { superstructure.requestLinkageOut() }
         .transitionTimed(0.5)
         .state(OuttakeLongStates.WAITING_FOR_INPUT)
-        .transition { gamepad1.right_bumper }
+        .transition { gamepad2.right_bumper }
         .state(OuttakeLongStates.DEPOSIT)
         .onEnter { superstructure.requestOuttakeOut() }
         .transitionTimed(0.5)
@@ -43,11 +43,11 @@ class NakiriTeleOp : NakiriOpMode() {
         superstructure.requestAyamePowers(
             Pose(
                 Point(
-                    MathUtil.cubicScaling(0.6, gamepad1.left_stick_x.d),
-                    MathUtil.cubicScaling(0.6, -gamepad1.left_stick_y.d)
+                    MathUtil.cubicScaling(0.6, gamepad1.left_stick_x.d * 0.9),
+                    MathUtil.cubicScaling(0.6, -gamepad1.left_stick_y.d * 0.9)
                 ),
                 Angle(
-                    MathUtil.cubicScaling(0.8, gamepad1.right_stick_x.d),
+                    MathUtil.cubicScaling(0.85, gamepad1.right_stick_x.d * 0.9),
                     AngleUnit.RAW
                 )
             )
@@ -55,10 +55,10 @@ class NakiriTeleOp : NakiriOpMode() {
     }
 
     private fun outtakeControl() {
-        superstructure.runCloseOuttakeSequence(gamepad1.left_trigger_pressed)
-        superstructure.runSharedOuttakeSequence(gamepad1.left_bumper)
+        superstructure.runCloseOuttakeSequence(gamepad2.right_trigger_pressed)
+        superstructure.runSharedOuttakeSequence(gamepad2.left_trigger_pressed)
 
-        if (!outtakeLongSequence.running && gamepad1.right_bumper) {
+        if (!outtakeLongSequence.running && gamepad2.right_bumper) {
             outtakeLongSequence.reset()
             outtakeLongSequence.start()
         }
@@ -94,6 +94,6 @@ class NakiriTeleOp : NakiriOpMode() {
         driveControl()
         intakeControl()
         outtakeControl()
-        debugControl()
+//        debugControl()
     }
 }
