@@ -3,7 +3,9 @@ package robotuprising.lib.system
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
+import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.debug.Debuggable
+import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.OpModeStatus
 import robotuprising.lib.opmode.OpModeType
 
@@ -18,8 +20,10 @@ abstract class BaseOpMode : TunableLinearOpMode() {
     private var hasStarted = false
     private var prevLoopTime = System.currentTimeMillis()
 
-    private lateinit var opModeType: OpModeType
+    private var opModeType: OpModeType = OpModeType.AUTO
     private var debugging = false
+
+    private var allianceSide = AllianceSide.BLUE
 
     override fun runOpMode() {
         val manager = (internalOpModeServices as OpModeManagerImpl)
@@ -32,6 +36,14 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
         m_init()
+
+        if(gamepad1.start) {
+            allianceSide = when(allianceSide) {
+                AllianceSide.BLUE -> AllianceSide.RED
+                AllianceSide.RED -> AllianceSide.BLUE
+            }
+        }
+
         mainLoop@ while (true) {
             when (opModeStatus) {
                 OpModeStatus.INIT_LOOP -> {
@@ -64,13 +76,6 @@ abstract class BaseOpMode : TunableLinearOpMode() {
             manager.initActiveOpMode(opName + "Auto")
         }
     }
-//
-//    private fun debuggingTelem() {
-//        telemetry.addData("debugging", debugging)
-//        telemetry.addData("opModeType", opModeType)
-//        telemetry.addData("has started", hasStarted)
-//        telemetry.addData("is comp", is_comp)
-//    }
 
     abstract val is_comp: Boolean
     abstract fun m_init()

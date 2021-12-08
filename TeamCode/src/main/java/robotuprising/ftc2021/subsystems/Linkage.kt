@@ -13,7 +13,6 @@ class Linkage : Subsystem {
         IN(Globals.LINKAGE_RETRACT),
         MED(Globals.LINKAGE_MED),
         OUT(Globals.LINKAGE_EXTEND),
-        CUSTOM(Globals.LINKAGE_CUSTOM),
         TRANSFER(Globals.LINKAGE_TRANSFER)
     }
 
@@ -27,10 +26,6 @@ class Linkage : Subsystem {
 
     fun extend() {
         linkageState = LinkageStates.OUT
-    }
-
-    fun extendCustom() {
-        linkageState = LinkageStates.CUSTOM
     }
 
     fun extendTransfer() {

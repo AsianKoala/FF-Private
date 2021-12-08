@@ -12,8 +12,7 @@ class NakiriTeleOp : NakiriOpMode() {
 
     private enum class OuttakeLongStates {
         LIFTING,
-        EXTENDING,
-        WAITING_FOR_INPUT,
+        EXTENDING_AND_WAIT,
         DEPOSIT,
         RETRACT_LINKAGE_AND_OUTTAKE,
         LIFT_DOWN
@@ -22,11 +21,9 @@ class NakiriTeleOp : NakiriOpMode() {
     private val outtakeLongSequence = StateMachineBuilder<OuttakeLongStates>()
         .state(OuttakeLongStates.LIFTING)
         .onEnter { superstructure.requestLiftHigh() }
-        .transitionTimed(0.5)
-        .state(OuttakeLongStates.EXTENDING)
+        .transitionTimed(0.4)
+        .state(OuttakeLongStates.EXTENDING_AND_WAIT)
         .onEnter { superstructure.requestLinkageOut() }
-        .transitionTimed(0.5)
-        .state(OuttakeLongStates.WAITING_FOR_INPUT)
         .transition { gamepad2.right_bumper }
         .state(OuttakeLongStates.DEPOSIT)
         .onEnter { superstructure.requestOuttakeOut() }
@@ -40,17 +37,16 @@ class NakiriTeleOp : NakiriOpMode() {
         .build()
 
     private fun driveControl() {
+        val scale = if(gamepad1.right_bumper) {
+            1.0
+        } else {
+            0.9
+        }
+
         superstructure.requestAyamePowers(
-            Pose(
-                Point(
-                    MathUtil.cubicScaling(0.6, gamepad1.left_stick_x.d * 0.9),
-                    MathUtil.cubicScaling(0.6, -gamepad1.left_stick_y.d * 0.9)
-                ),
-                Angle(
-                    MathUtil.cubicScaling(0.85, gamepad1.right_stick_x.d * 0.9),
-                    AngleUnit.RAW
-                )
-            )
+                MathUtil.cubicScaling(0.6, gamepad1.left_stick_x.d * scale),
+                MathUtil.cubicScaling(0.6, -gamepad1.left_stick_y.d * scale),
+                MathUtil.cubicScaling(0.85, gamepad1.right_stick_x.d * scale)
         )
     }
 
@@ -72,20 +68,27 @@ class NakiriTeleOp : NakiriOpMode() {
         superstructure.runIntakeSequence(gamepad1.right_trigger_pressed)
     }
 
+    private var debugging = false
     private fun debugControl() {
-        when {
-            gamepad2.left_bumper -> superstructure.requestIntakeOn()
-            gamepad2.right_bumper -> superstructure.requestIntakeOff()
-            gamepad1.dpad_right -> superstructure.requestIntakeReverse()
-            gamepad2.left_trigger_pressed -> superstructure.requestIntakeRotateIn()
-            gamepad2.right_trigger_pressed -> superstructure.requestIntakeRotateOut()
-            gamepad2.a -> superstructure.requestLinkageOut()
-            gamepad2.b -> superstructure.requestLinkageRetract()
-            gamepad2.y -> superstructure.requestLiftHigh()
-            gamepad2.x -> superstructure.requestLiftBottom()
-            gamepad2.dpad_up -> superstructure.requestOuttakeIn()
-            gamepad2.dpad_down -> superstructure.requestOuttakeOut()
-            gamepad2.dpad_left -> superstructure.requestOuttakeMedium()
+        if(gamepad2.right_stick_button){
+            debugging = !debugging
+        }
+
+        if(debugging) {
+            when {
+                gamepad2.left_bumper -> superstructure.requestIntakeOn()
+                gamepad2.right_bumper -> superstructure.requestIntakeOff()
+                gamepad1.dpad_right -> superstructure.requestIntakeReverse()
+                gamepad2.left_trigger_pressed -> superstructure.requestIntakeRotateIn()
+                gamepad2.right_trigger_pressed -> superstructure.requestIntakeRotateOut()
+                gamepad2.a -> superstructure.requestLinkageOut()
+                gamepad2.b -> superstructure.requestLinkageRetract()
+                gamepad2.y -> superstructure.requestLiftHigh()
+                gamepad2.x -> superstructure.requestLiftBottom()
+                gamepad2.dpad_up -> superstructure.requestOuttakeIn()
+                gamepad2.dpad_down -> superstructure.requestOuttakeOut()
+                gamepad2.dpad_left -> superstructure.requestOuttakeMedium()
+            }
         }
     }
 
@@ -94,6 +97,6 @@ class NakiriTeleOp : NakiriOpMode() {
         driveControl()
         intakeControl()
         outtakeControl()
-//        debugControl()
+        debugControl()
     }
 }

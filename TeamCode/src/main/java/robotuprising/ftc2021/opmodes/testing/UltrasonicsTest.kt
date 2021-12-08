@@ -9,7 +9,7 @@ class UltrasonicsTest : OpMode() {
     private lateinit var ultrasonic: Ultrasonics
 
     override fun init() {
-        ultrasonic = Ultrasonics(hardwareMap)
+        ultrasonic = Ultrasonics()
     }
 
     override fun start() {
@@ -17,7 +17,7 @@ class UltrasonicsTest : OpMode() {
     }
 
     override fun loop() {
-        ultrasonic.periodic()
+        ultrasonic.update()
 
         telemetry.addData("ultrasonic reading", ultrasonic.getForwardRange(DistanceUnit.MM))
         telemetry.addData("counter", ultrasonic.counter)

@@ -1,5 +1,8 @@
 package robotuprising.ftc2021.subsystems
 
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.system.statemachine.StateMachineBuilder
@@ -109,8 +112,8 @@ class Nakiri : Subsystem {
         .transition { true }
         .build()
 
-    fun requestAyamePowers(powers: Pose) {
-        ayame.setVectorPower(powers)
+    fun requestAyamePowers(x: Double, y: Double, h: Double) {
+        ayame.setVectorPower(Pose(Point(x, y), Angle(h, AngleUnit.RAW)))
     }
 
     fun requestIntakeOn() {
@@ -159,10 +162,6 @@ class Nakiri : Subsystem {
 
     fun requestLinkageMedium() {
         linkage.extendMed()
-    }
-
-    fun requestLinkageCustom() {
-        linkage.extendCustom()
     }
 
     fun requestLinkageTransfer() {
