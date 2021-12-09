@@ -1,5 +1,10 @@
 package robotuprising.lib.util
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Point
+import robotuprising.lib.math.Pose
 import kotlin.math.absoluteValue
 
 /**
@@ -25,4 +30,6 @@ object Extensions {
         return copy
     }
     val ArrayList<Double>.average: Double get() = this.sum() / this.size
+
+    val Pose2d.pose: Pose get() = Pose(Point(x, y), Angle(heading, AngleUnit.RAD))
 }

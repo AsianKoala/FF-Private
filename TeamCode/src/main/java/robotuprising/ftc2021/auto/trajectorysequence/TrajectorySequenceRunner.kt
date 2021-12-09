@@ -41,7 +41,6 @@ class TrajectorySequenceRunner(private val follower: TrajectoryFollower, heading
         lastSegmentIndex = -1
     }
 
-    // todo check
     fun update(poseEstimate: Pose2d, poseVelocity: Pose2d?): DriveSignal? {
         var targetPose: Pose2d? = null
         var driveSignal: DriveSignal? = null

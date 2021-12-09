@@ -136,7 +136,6 @@ class ManualFeedforwardTuner : LinearOpMode() {
     companion object {
         var DISTANCE = 72.0 // in
         private fun generateProfile(movingForward: Boolean): MotionProfile {
-            // todo check if fuck
             val start = MotionState(if (movingForward) 0.0 else DISTANCE, 0.0, 0.0, 0.0)
             val goal = MotionState(if (movingForward) DISTANCE else 0.0, 0.0, 0.0, 0.0)
 

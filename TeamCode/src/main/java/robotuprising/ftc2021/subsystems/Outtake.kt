@@ -6,8 +6,8 @@ import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Outtake : Subsystem {
-    private val leftServo = NakiriServo("outtakeLeft")
-    private val rightServo = NakiriServo("outtakeRight")
+    val leftServo = NakiriServo("outtakeLeft")
+    val rightServo = NakiriServo("outtakeRight")
 
     private var outtakeState = OuttakeStates.MEDIUM
     private enum class OuttakeStates(val leftPos: Double, val rightPos: Double) {

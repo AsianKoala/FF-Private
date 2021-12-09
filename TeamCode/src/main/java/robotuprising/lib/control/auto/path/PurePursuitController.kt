@@ -17,7 +17,7 @@ object PurePursuitController {
         return Point(-d * rh.sin, d * rh.cos)
     }
 
-    fun goToPosition(curr: Pose, target: Waypoint, moveScale: Double = 12.0, turnScale: Double = 90.0): Pose {
+    fun curve(curr: Pose, target: Waypoint, moveScale: Double = 12.0, turnScale: Double = 90.0): Pose {
         val relTarget = relVals(curr, target.p)
         val movementPowers = (relTarget / moveScale)
 

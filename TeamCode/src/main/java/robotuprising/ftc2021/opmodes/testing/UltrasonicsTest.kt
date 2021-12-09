@@ -19,7 +19,7 @@ class UltrasonicsTest : OpMode() {
     override fun loop() {
         ultrasonic.update()
 
-        telemetry.addData("ultrasonic reading", ultrasonic.getForwardRange(DistanceUnit.MM))
+//        telemetry.addData("ultrasonic reading", ultrasonic.getForwardRange(DistanceUnit.MM))
         telemetry.addData("counter", ultrasonic.counter)
         telemetry.update()
     }

@@ -8,8 +8,8 @@ import robotuprising.lib.system.Subsystem
 
 class Intake : Subsystem {
     private val intakeMotor = NakiriMotor("intake", false).brake.openLoopControl
-    private val intakePivotLeft = NakiriServo("intakeLeftPivot")
-    private val intakePivotRight = NakiriServo("intakeRightPivot")
+    val intakePivotLeft = NakiriServo("intakeLeftPivot")
+    val intakePivotRight = NakiriServo("intakeRightPivot")
 
     private val intakeSensor = BulkDataManager.hwMap[RevColorSensorV3::class.java, "intakeSensor"]
 

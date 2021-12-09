@@ -1,15 +1,14 @@
 package robotuprising.lib.system
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import net.frogbots.ftcopmodetunercommon.opmode.TunableLinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
-import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.OpModeStatus
 import robotuprising.lib.opmode.OpModeType
 
-abstract class BaseOpMode : TunableLinearOpMode() {
+abstract class BaseOpMode : LinearOpMode() {
     private val opModeStatus: OpModeStatus
         get() = when {
             isStopRequested -> OpModeStatus.STOP
@@ -36,13 +35,6 @@ abstract class BaseOpMode : TunableLinearOpMode() {
         }
 
         m_init()
-
-        if(gamepad1.start) {
-            allianceSide = when(allianceSide) {
-                AllianceSide.BLUE -> AllianceSide.RED
-                AllianceSide.RED -> AllianceSide.BLUE
-            }
-        }
 
         mainLoop@ while (true) {
             when (opModeStatus) {
@@ -72,8 +64,7 @@ abstract class BaseOpMode : TunableLinearOpMode() {
 
         m_stop()
         if (opModeType == OpModeType.AUTO && is_comp) {
-            val opName = manager.activeOpModeName.substring(0, manager.activeOpModeName.indexOf("Auto"))
-            manager.initActiveOpMode(opName + "Auto")
+            manager.initActiveOpMode("NakiriAuto")
         }
     }
 

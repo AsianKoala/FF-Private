@@ -10,7 +10,6 @@ import kotlin.math.PI
 object MeepMeepTesting {
     @JvmStatic
     fun main(args: Array<String>) {
-        // TODO: If you experience poor performance, enable this flag
         // System.setProperty("sun.java2d.opengl", "true");
 
         val firstDeposit = Pose2d(8.0, -43.0, PI - PI / 4)

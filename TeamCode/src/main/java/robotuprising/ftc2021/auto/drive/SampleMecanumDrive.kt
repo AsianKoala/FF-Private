@@ -27,7 +27,7 @@ import java.util.*
  /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
-@Config
+//@Config
 class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.TRACK_WIDTH, LATERAL_MULTIPLIER) {
     private val trajectorySequenceRunner: TrajectorySequenceRunner
     private val follower: TrajectoryFollower
@@ -238,11 +238,9 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, DriveConstants.MOTOR_VELO_PID)
         }
 
-        // TODO: reverse any motors using DcMotor.setDirection()
         leftFront.direction = DcMotorSimple.Direction.REVERSE
         leftRear.direction = DcMotorSimple.Direction.REVERSE
 
-        // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
         trajectorySequenceRunner = TrajectorySequenceRunner(follower, HEADING_PID)
     }

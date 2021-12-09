@@ -9,13 +9,14 @@ import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 class Nakiri : Subsystem {
 
-    private val ayame = Ayame()
-    private val intake = Intake()
-    private val lift = Lift()
-    private val linkage = Linkage()
-    private val outtake = Outtake()
-    private val duckSpinner = DuckSpinner()
-    private val subsystems = mutableListOf(
+    // 10 opacity
+    val ayame = Ayame()
+    val intake = Intake()
+    val lift = Lift()
+    val linkage = Linkage()
+    val outtake = Outtake()
+    val duckSpinner = DuckSpinner()
+    val subsystems = mutableListOf(
         ayame,
         intake,
         lift,
@@ -23,6 +24,15 @@ class Nakiri : Subsystem {
         outtake,
         duckSpinner,
     )
+
+    val currPose get() = ayame.pose
+
+    val intaking get() = intakeSequence.running
+
+    val outtaking get() = sharedOuttakeSequence.running || closeOuttakeSequence.running || longOuttakeSequence.running
+
+    val inCrater get() = ayame.locationState == Ayame.LocationStates.CRATER
+    val inField get() = ayame.locationState == Ayame.LocationStates.FIELD
 
     private enum class IntakeSequenceStates {
         INTAKE_OUTTAKE_RESET,
@@ -46,7 +56,6 @@ class Nakiri : Subsystem {
         OUTTAKE_IN
     }
 
-    val intaking get() = intakeSequence.running
     private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
         .state(IntakeSequenceStates.INTAKE_OUTTAKE_RESET)
         .onEnter {
@@ -78,11 +87,12 @@ class Nakiri : Subsystem {
         .transition { true }
         .build()
 
-    val outtaking get() = sharedOuttakeSequence.running || closeOuttakeSequence.running
     private val sharedOuttakeSequence = StateMachineBuilder<SharedOuttakeState>()
         .state(SharedOuttakeState.LINKAGE_OUT)
-        .onEnter { requestLinkageMedium() }
-            .transitionTimed(0.5)
+        .onEnter {
+            requestLinkageMedium()
+        }
+        .transitionTimed(0.5)
         .state(SharedOuttakeState.OUTTAKE_OUT)
         .onEnter { requestOuttakeOut() }
         .transitionTimed(0.75)
@@ -96,7 +106,9 @@ class Nakiri : Subsystem {
 
     private val closeOuttakeSequence = StateMachineBuilder<OuttakeSequenceStates>()
         .state(OuttakeSequenceStates.LIFT_UP)
-        .onEnter { requestLiftHigh() }
+        .onEnter {
+            requestLiftHigh()
+        }
         .transitionTimed(1.25)
         .state(OuttakeSequenceStates.LINKAGE_OUT)
         .onEnter { requestLinkageMedium() }
@@ -112,9 +124,55 @@ class Nakiri : Subsystem {
         .transition { true }
         .build()
 
-    fun requestAyamePowers(x: Double, y: Double, h: Double) {
-        ayame.setVectorPower(Pose(Point(x, y), Angle(h, AngleUnit.RAW)))
+    private enum class OuttakeLongStates {
+        LIFTING,
+        EXTENDING_AND_WAIT,
+        DEPOSIT,
+        RETRACT_LINKAGE_AND_OUTTAKE,
+        LIFT_DOWN
     }
+
+    private var outtakeLongSequenceTransition = false
+    private val longOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()
+            .state(OuttakeLongStates.LIFTING)
+            .onEnter {
+                requestLiftHigh()
+            }
+            .transitionTimed(0.4)
+            .state(OuttakeLongStates.EXTENDING_AND_WAIT)
+            .onEnter { requestLinkageOut() }
+            .transition { outtakeLongSequenceTransition }
+            .state(OuttakeLongStates.DEPOSIT)
+            .onEnter { requestOuttakeOut() }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
+            .onEnter {
+                requestOuttakeIn();
+                requestLinkageRetract()
+            }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.LIFT_DOWN)
+            .onEnter { requestLiftBottom() }
+            .transition { true }
+            .build()
+
+
+    fun requestAyamePowers(x: Double, y: Double, h: Double) {
+        requestAyamePowers(Pose(Point(x, y), Angle(h, AngleUnit.RAW)))
+    }
+
+    fun requestAyamePowers(powers: Pose) {
+        ayame.setVectorPower(powers)
+    }
+
+    fun requestAyameStop() {
+        requestAyamePowers(Pose.DEFAULT_RAW)
+    }
+
+    fun startGoingOverPipes() {
+        ayame.startGoingOverPipes()
+    }
+
 
     fun requestIntakeOn() {
         intake.turnOn()
@@ -199,12 +257,38 @@ class Nakiri : Subsystem {
     fun runSharedOuttakeSequence(shouldStart: Boolean) {
         if (!intakeSequence.running) {
             sharedOuttakeSequence.smartRun(shouldStart)
+        } else if(sharedOuttakeSequence.running) {
+            sharedOuttakeSequence.update()
         }
     }
 
     fun runCloseOuttakeSequence(shouldStart: Boolean) {
         if (!intakeSequence.running) {
             closeOuttakeSequence.smartRun(shouldStart)
+        } else if(closeOuttakeSequence.running) {
+            closeOuttakeSequence.update()
+        }
+    }
+
+    fun runAutoOuttake(shouldStart: Boolean) {
+        longOuttakeSequence.smartRun(shouldStart)
+    }
+
+    fun runTeleLongOuttakeSequence(shouldStart: Boolean) {
+        if(!intakeSequence.running) {
+            if(!longOuttakeSequence.running && shouldStart) {
+                longOuttakeSequence.reset()
+                outtakeLongSequenceTransition = false
+                longOuttakeSequence.start()
+            } else if(longOuttakeSequence.running && shouldStart) {
+                outtakeLongSequenceTransition = true
+            }
+
+            if(longOuttakeSequence.running) {
+                longOuttakeSequence.update()
+            }
+        } else if(longOuttakeSequence.running) {
+            longOuttakeSequence.update()
         }
     }
 
@@ -218,9 +302,5 @@ class Nakiri : Subsystem {
 
     override fun reset() {
         subsystems.forEach { it.reset() }
-    }
-
-    init {
-        ayame.localizer
     }
 }

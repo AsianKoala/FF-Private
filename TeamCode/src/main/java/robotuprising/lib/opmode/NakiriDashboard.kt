@@ -26,8 +26,12 @@ object NakiriDashboard {
         isUpdatingDashboard = shouldUpdate
     }
 
-    fun fieldOverlay(): Canvas {
-        return dashboardAdapter.fieldOverlay()
+    fun fieldOverlay(): Canvas? {
+        return if(isUpdatingDashboard) {
+            dashboardAdapter.fieldOverlay()
+        } else {
+            null
+        }
     }
 
     fun setHeader(v: String) {
@@ -36,7 +40,10 @@ object NakiriDashboard {
     }
 
     fun addLine(v: String) {
-        dashboardAdapter.addLine(v)
+        if(isUpdatingDashboard) {
+            dashboardAdapter.addLine(v)
+        }
+
         telemetryImpl.addLine(v)
     }
 
@@ -47,13 +54,16 @@ object NakiriDashboard {
     fun update() {
         if (isUpdatingDashboard) {
             FtcDashboard.getInstance().sendTelemetryPacket(dashboardAdapter)
+            dashboardAdapter = TelemetryAdapter()
         }
         telemetryImpl.update()
-        dashboardAdapter = TelemetryAdapter()
     }
 
     operator fun set(k: String, v: Any) {
         telemetryImpl.addData(k, v)
-        dashboardAdapter.put(k, v)
+
+        if(isUpdatingDashboard) {
+            dashboardAdapter.put(k, v)
+        }
     }
 }

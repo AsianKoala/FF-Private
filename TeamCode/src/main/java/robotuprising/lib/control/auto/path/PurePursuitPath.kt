@@ -39,15 +39,15 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
 
         NakiriDashboard["followpoint"] = target.p
         NakiriDashboard["target"] = end
-        NakiriDashboard.fieldOverlay()
+        NakiriDashboard.fieldOverlay()!!
             .setStroke("white")
             .strokeLine(currPose.p.dbNormalize.x, currPose.p.dbNormalize.y, target.p.dbNormalize.x, target.p.dbNormalize.y)
 
         if ((end is StopWaypoint && currPose.distance(end) < end.followDistance) || end is PointTurnWaypoint) {
-            return PurePursuitController.goToPosition(currPose, end)
+            return PurePursuitController.curve(currPose, end)
         } else {
             val (nx, ny) = target.p.dbNormalize
-            NakiriDashboard.fieldOverlay()
+            NakiriDashboard.fieldOverlay()!!
                 .setStroke("purple")
                 .strokeCircle(nx, ny, 1.0)
 

@@ -21,8 +21,8 @@ import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
  * If you are using SampleTankDrive, you should be tuning AXIAL_PID, CROSS_TRACK_PID, and HEADING_PID.
  * These coefficients can be tuned live in dashboard.
  */
-@Config
-@Autonomous(group = "drive")
+//@Config
+//@Autonomous(group = "drive")
 class FollowerPIDTuner : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
