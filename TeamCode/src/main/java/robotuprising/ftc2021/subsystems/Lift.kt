@@ -17,7 +17,8 @@ class Lift : Subsystem {
         @JvmField var kp = 0.028
         @JvmField var ki = 0.0008
         @JvmField var kd = 0.0005
-        @JvmField var kg = 0.23
+        @JvmField var kgHigh = 0.2
+        @JvmField var kgLow = 0.35
     }
     private val liftLeft = NakiriMotor("liftLeft", false).float.resetEncoder.openLoopControl
     private val liftRight = NakiriMotor("liftRight", false).float.resetEncoder.openLoopControl.reverse
@@ -27,7 +28,13 @@ class Lift : Subsystem {
     private var output = 0.0
 
     private var pidCoeffs = PIDCoefficients(kp, ki, kd)
-    private val controller = PIDFController(pidCoeffs, kF = { _, _ -> kg})
+    private val controller = PIDFController(pidCoeffs, kF = { _, _ ->
+        if(liftState == LiftStages.HIGH) {
+            kgHigh
+        } else {
+            kgLow
+        }
+    })
 
     private val disabled get() = pos < LiftStages.BOTTOM.position && liftState == LiftStages.BOTTOM
 
@@ -54,17 +61,6 @@ class Lift : Subsystem {
         pos = liftLeft.position.d
         target = liftState.position.d
         output = controller.update(pos)
-
-//        if (disabled) {
-//            setPower(0.0)
-//        } else if (liftState == LiftStages.TRANSFER || liftState == LiftStages.BOTTOM) {
-//            // limit downwards force
-//            liftLeft.power = Range.clip(output, 0.05, 1.0)
-//            liftRight.power = Range.clip(output, 0.05, 1.0)
-//        } else {
-//            liftLeft.power = Range.clip(output, -0.25, 1.0)
-//            liftRight.power = Range.clip(output, -0.25, 1.0)
-//        }
 
         if(disabled) {
             setPower(0.0)
@@ -104,18 +100,3 @@ class Lift : Subsystem {
         setLevel(LiftStages.BOTTOM)
     }
 }
-
-//        if (!(controllerOutput epsilonEquals 0.0)) {
-//            // stop motor from stalling at low position when not needed
-//            if (disabled) {
-//                liftLeft.power = 0.0
-//                liftRight.power = 0.0
-//            } else if (liftState == LiftStages.TRANSFER || liftState == LiftStages.BOTTOM) {
-//                // limit downwards force
-//                liftLeft.power = Range.clip(controllerOutput, 0.05, 1.0)
-//                liftRight.power = Range.clip(controllerOutput, 0.05, 1.0)
-//            } else {
-//                liftLeft.power = Range.clip(controllerOutput, -0.25, 1.0)
-//                liftRight.power = Range.clip(controllerOutput, -0.25, 1.0)
-//            }
-//        }

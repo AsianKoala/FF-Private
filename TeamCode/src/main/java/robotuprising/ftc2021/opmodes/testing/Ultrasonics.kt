@@ -20,7 +20,7 @@ class Ultrasonics : Subsystem {
     private var takingRangeReading = false
     var counter = 0
 
-    // cm
+    // mm
     var forwardRangeReading = 0.0
         private set
     var horizRangeReading = 0.0
@@ -45,8 +45,8 @@ class Ultrasonics : Subsystem {
         if (takingRangeReading) {
             //Check if its been longer than our delay to properly let the sensor perform
             if (hasDelayExpired() && !firstRun) {
-                forwardRangeReading = forwardSensor.getDistance(DistanceUnit.CM)
-                horizRangeReading = horizSensor.getDistance(DistanceUnit.CM)
+                forwardRangeReading = forwardSensor.getDistance(DistanceUnit.MM)
+                horizRangeReading = horizSensor.getDistance(DistanceUnit.MM)
                 forwardSensor.ping()
                 horizSensor.ping()
                 delayTimer.reset()

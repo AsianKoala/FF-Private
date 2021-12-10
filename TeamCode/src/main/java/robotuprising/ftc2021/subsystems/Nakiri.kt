@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.subsystems
 
+import robotuprising.ftc2021.subsystems.vision.Webcam
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
@@ -16,6 +17,7 @@ class Nakiri : Subsystem {
     val linkage = Linkage()
     val outtake = Outtake()
     val duckSpinner = DuckSpinner()
+    val webcam = Webcam()
     val subsystems = mutableListOf(
         ayame,
         intake,
@@ -248,6 +250,10 @@ class Nakiri : Subsystem {
 
     fun requestSpinnerOff() {
         duckSpinner.turnOff()
+    }
+
+    fun stopWebcam() {
+        webcam.reset()
     }
 
     fun runIntakeSequence(shouldStart: Boolean) {

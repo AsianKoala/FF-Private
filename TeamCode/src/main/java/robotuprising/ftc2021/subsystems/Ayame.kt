@@ -33,7 +33,7 @@ class Ayame: Subsystem {
     private val br = NakiriMotor("BR", true).brake.openLoopControl
     private val motors = listOf(fl, bl, fr, br)
 
-//    private val ultrasonics = Ultrasonics()
+    private val ultrasonics = Ultrasonics()
 
 
     // location
@@ -97,45 +97,58 @@ class Ayame: Subsystem {
     }
 
     private fun updatePose() {
+        ultrasonics.update()
+
+        if(ultrasonics.counter > 1) {
+            val fwd = ultrasonics.forwardRangeReading
+            val horiz = ultrasonics.horizRangeReading
+            if(fwd in 20.0..765.0) {
+                NakiriDashboard["forward"] = fwd
+            }
+
+            if(horiz in 20.0..765.0) {
+                NakiriDashboard["horiz"] = horiz
+            }
+        }
 //        if(locationState != LocationStates.PIPES) {
-//            val wheelPositions = getWheelPositions()
-//            val extHeading = pose.h.angle
-//            if (lastWheelPositions.isNotEmpty()) {
-//                val wheelDeltas = wheelPositions
-//                        .zip(lastWheelPositions)
-//                        .map { it.first - it.second }
-//                val robotPoseDelta = MecanumKinematics.wheelToRobotVelocities(
-//                        wheelDeltas,
-//                        15.6,
-//                        15.6,
-//                        1.0
-//                )
-//
-//                val finalHeadingDelta = Angle(extHeading - lastExtHeading, AngleUnit.RAD).wrap().abs
-//                _poseEstimate = Kinematics.relativeOdometryUpdate(
-//                        _poseEstimate,
-//                        Pose2d(robotPoseDelta.vec(), finalHeadingDelta)
-//                )
-//            }
-//
-//            val wheelVelocities = getWheelVelocities()
-//            val extHeadingVel = getExternalHeadingVelocity()
-//
-//            poseVelocity = MecanumKinematics.wheelToRobotVelocities(
-//                    wheelVelocities,
-//                    15.6,
-//                    15.6,
-//                    1.0
-//            )
-//
-//            poseVelocity = Pose2d(poseVelocity.vec(), extHeadingVel)
-//
-//            lastWheelPositions = wheelPositions
-//            lastExtHeading = extHeading
-//
-//
-//            pose = _poseEstimate.pose
-//            NakiriDashboard.addLine("default localization")
+            val wheelPositions = getWheelPositions()
+            val extHeading = pose.h.angle
+            if (lastWheelPositions.isNotEmpty()) {
+                val wheelDeltas = wheelPositions
+                        .zip(lastWheelPositions)
+                        .map { it.first - it.second }
+                val robotPoseDelta = MecanumKinematics.wheelToRobotVelocities(
+                        wheelDeltas,
+                        15.6,
+                        15.6,
+                        1.0
+                )
+
+                val finalHeadingDelta = Angle(extHeading - lastExtHeading, AngleUnit.RAD).wrap().abs
+                _poseEstimate = Kinematics.relativeOdometryUpdate(
+                        _poseEstimate,
+                        Pose2d(robotPoseDelta.vec(), finalHeadingDelta)
+                )
+            }
+
+            val wheelVelocities = getWheelVelocities()
+            val extHeadingVel = getExternalHeadingVelocity()
+
+            poseVelocity = MecanumKinematics.wheelToRobotVelocities(
+                    wheelVelocities,
+                    15.6,
+                    15.6,
+                    1.0
+            )
+
+            poseVelocity = Pose2d(poseVelocity.vec(), extHeadingVel)
+
+            lastWheelPositions = wheelPositions
+            lastExtHeading = extHeading
+
+
+            pose = _poseEstimate.pose
+            NakiriDashboard.addLine("default localization")
 //        } else {
 //            NakiriDashboard.addLine("localizing with ultrasonics")
 //
@@ -170,6 +183,7 @@ class Ayame: Subsystem {
 //                val crossed = (targetLocation == LocationStates.CRATER && xEstimate > pipeX) || (targetLocation == LocationStates.FIELD && xEstimate < pipeX)
 //                if(crossed) {
 //                    pose = ultrasonicPose
+//                    _poseEstimate = pose.pose2d
 //                    ultrasonics.stopReading()
 //
 //                    locationState = if(targetLocation == LocationStates.CRATER) {
@@ -239,5 +253,7 @@ class Ayame: Subsystem {
         headingOffset = orientation.firstAngle.d
         yawOffset = orientation.secondAngle.d
         pitchOffset = orientation.thirdAngle.d
+
+        ultrasonics.startReading()
     }
 }

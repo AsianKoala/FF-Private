@@ -13,17 +13,17 @@ object Globals {
     const val LINKAGE_RETRACT = 0.95
     const val LINKAGE_MED = 0.75
     const val LINKAGE_EXTEND = 0.5
-    const val LINKAGE_TRANSFER = 0.95
+    const val LINKAGE_TRANSFER = 0.90
     var LINKAGE_CUSTOM = 0.75
 
-    @JvmField var OUTTAKE_LEFT_IN = 0.08
-    @JvmField var OUTTAKE_RIGHT_IN = 0.42
+    const val OUTTAKE_LEFT_IN = 0.08
+    const val OUTTAKE_RIGHT_IN = 0.42
 
-    @JvmField var OUTTAKE_LEFT_OUT = 0.495
-    @JvmField var OUTTAKE_RIGHT_OUT = 0.02
+    const val OUTTAKE_LEFT_OUT = 0.495
+    const val OUTTAKE_RIGHT_OUT = 0.02
 
-    @JvmField var OUTTAKE_LEFT_MED = 0.20
-    @JvmField var OUTTAKE_RIGHT_MED = 0.32
+    const val OUTTAKE_LEFT_MED = 0.20
+    const val OUTTAKE_RIGHT_MED = 0.32
 
     const val INTAKE_PIVOT_LEFT_OUT = 0.83
     const val INTAKE_PIVOT_RIGHT_OUT = 0.02
@@ -35,8 +35,8 @@ object Globals {
     const val INTAKE_TRANSFER_POWER = -0.75
     const val INTAKE_NO_POWER = 0.0
 
-    const val LIFT_LOW = 400
-    const val LIFT_HIGH = 900
+    const val LIFT_LOW = 70
+    const val LIFT_HIGH = 1000
 
     val MASTER_MAPPINGS = listOf("FL", "FR", "BR", "BL")
     val SLAVE_MAPPINGS = listOf("intake", "liftLeft", "liftRight", "duck")

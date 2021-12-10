@@ -8,15 +8,14 @@ import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 
-@TeleOp
+@TeleOp()
 class NakiriTeleOp : NakiriOpMode() {
 
     private fun driveControl() {
         val scale = if(gamepad1.right_bumper) {
-            1.0
+            0.8
         } else {
-//            0.9
-            1.0//cringe
+            1.0
         }
 
         nakiri.requestAyamePowers(
@@ -27,9 +26,9 @@ class NakiriTeleOp : NakiriOpMode() {
     }
 
     private fun outtakeControl() {
-//        nakiri.runCloseOuttakeSequence(gamepad2.right_trigger_pressed)
-//        nakiri.runSharedOuttakeSequence(gamepad2.left_trigger_pressed)
-//        nakiri.runTeleLongOuttakeSequence(gamepad2.right_bumper)
+        nakiri.runTeleLongOuttakeSequence(gamepad1.left_trigger_pressed)
+        nakiri.runCloseOuttakeSequence(gamepad1.left_bumper)
+        nakiri.runSharedOuttakeSequence(gamepad1.right_bumper)
     }
 
     private fun intakeControl() {
@@ -40,6 +39,9 @@ class NakiriTeleOp : NakiriOpMode() {
         when {
             gamepad2.right_trigger_pressed -> nakiri.requestLiftHigh()
             gamepad2.left_trigger_pressed -> nakiri.requestLiftTransfer()
+            gamepad2.right_bumper -> nakiri.requestLiftBottom()
+            gamepad2.a -> nakiri.requestOuttakeIn()
+            gamepad2.b -> nakiri.requestOuttakeOut()
         }
     }
 

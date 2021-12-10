@@ -29,7 +29,7 @@ class Intake : Subsystem {
         MINERAL_IN
     }
 
-    private val sensorThreshold = 25.5
+    private val sensorThreshold = 40.0
     private var sensorRead = 0.0
 
     private var intakeState = IntakeStates.OFF

@@ -169,6 +169,9 @@ class NakiriAuto : NakiriOpMode() {
             .onExit { nakiri.reset() }
             .build()
 
+    override fun m_init_loop() {
+        super.m_init_loop()
+    }
     override fun m_start() {
         super.start()
         startTime = System.currentTimeMillis()
