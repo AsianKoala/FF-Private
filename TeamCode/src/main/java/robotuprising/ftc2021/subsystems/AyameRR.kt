@@ -18,6 +18,7 @@ import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceBuilder
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequenceRunner
 import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.hardware.AxesSigns
 import robotuprising.lib.hardware.BNO055IMUUtil.remapAxes
@@ -119,14 +120,15 @@ class AyameRR : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstant
     }
 
     override fun update() {
-//        updatePose()
-        updatePoseEstimate()
-        val signal: DriveSignal? = trajectorySequenceRunner.update(poseEstimate, poseVelocity)
-        if (signal != null) setDriveSignal(signal)
+        if(Globals.IS_AUTO) {
+            updatePoseEstimate()
+            NakiriDashboard["pose x"] = poseEstimate.x
+            NakiriDashboard["pose y"] = poseEstimate.y
+            NakiriDashboard["pose h"] = Angle(poseEstimate.heading, AngleUnit.RAD).wrap().deg
+            val signal: DriveSignal? = trajectorySequenceRunner.update(poseEstimate, poseVelocity)
+            if (signal != null) setDriveSignal(signal)
+        }
 
-        NakiriDashboard["pose x"] = poseEstimate.x
-        NakiriDashboard["pose y"] = poseEstimate.y
-        NakiriDashboard["pose h"] = Angle(poseEstimate.heading, AngleUnit.RAD).wrap().deg
 
 
 

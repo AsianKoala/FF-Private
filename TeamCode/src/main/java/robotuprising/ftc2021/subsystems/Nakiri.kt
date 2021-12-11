@@ -34,7 +34,7 @@ class Nakiri : Subsystem {
 
     val currPose get() = ayame.poseEstimate.pose
 
-    val intaking get() = intakeSequence.running
+//    val intaking get() = intakeSequence.running
 
     val outtaking get() =
         sharedOuttakeSequence.running || closeOuttakeSequence.running
@@ -44,13 +44,7 @@ class Nakiri : Subsystem {
 
 //    val cupPosition get() = webcam.cupState
 
-    private enum class IntakeSequenceStates {
-        INTAKE_OUTTAKE_RESET,
-        INTAKE,
-        ROTATING,
-        TRANSFERRING,
-        OUTTAKE_TO_MEDIUM
-    }
+
 
     private enum class OuttakeSequenceStates {
         LIFT_UP,
@@ -63,44 +57,16 @@ class Nakiri : Subsystem {
     private enum class SharedOuttakeState {
         LINKAGE_OUT,
         OUTTAKE_OUT,
-        OUTTAKE_IN
+        OUTTAKE_IN,
+        LIFT_IN
     }
 
-    private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
-        .state(IntakeSequenceStates.INTAKE_OUTTAKE_RESET)
-        .onEnter {
-            requestIntakeRotateOut()
-            requestOuttakeIn()
-        }
-        .transitionTimed(0.5)
-        .state(IntakeSequenceStates.INTAKE)
-        .onEnter { requestIntakeOn() }
-        .transition { isMineralIn() }
-        .state(IntakeSequenceStates.ROTATING)
-        .onEnter {
-            requestIntakeRotateIn()
-            requestIntakeOff()
-            requestLiftTransfer()
-            requestLinkageTransfer()
-        }
-        .transitionTimed(1.5)
-        .state(IntakeSequenceStates.TRANSFERRING)
-        .onEnter {
-            requestIntakeReverse()
-        }
-        .transitionTimed(1.5)
-        .state(IntakeSequenceStates.OUTTAKE_TO_MEDIUM)
-        .onEnter {
-            requestOuttakeMedium()
-            requestIntakeOff()
-        }
-        .transition { true }
-        .build()
 
     private val sharedOuttakeSequence = StateMachineBuilder<SharedOuttakeState>()
         .state(SharedOuttakeState.LINKAGE_OUT)
         .onEnter {
             requestLinkageMedium()
+            requestLiftTransfer()
         }
         .transitionTimed(0.5)
         .state(SharedOuttakeState.OUTTAKE_OUT)
@@ -111,7 +77,10 @@ class Nakiri : Subsystem {
             requestOuttakeIn()
             requestLinkageRetract()
         }
-        .transition { true }
+        .transitionTimed(0.75)
+            .state(SharedOuttakeState.LIFT_IN)
+            .onEnter { requestLiftBottom() }
+            .transition  { true }
         .build()
 
     private val closeOuttakeSequence = StateMachineBuilder<OuttakeSequenceStates>()
@@ -282,24 +251,12 @@ class Nakiri : Subsystem {
         webcam.reset()
     }
 
-    fun runIntakeSequence(shouldStart: Boolean) {
-        intakeSequence.smartRun(shouldStart)
-    }
-
     fun runSharedOuttakeSequence(shouldStart: Boolean) {
-        if (!intakeSequence.running) {
-            sharedOuttakeSequence.smartRun(shouldStart)
-        } else if(sharedOuttakeSequence.running) {
-            sharedOuttakeSequence.update()
-        }
+        sharedOuttakeSequence.smartRun(shouldStart)
     }
 
     fun runCloseOuttakeSequence(shouldStart: Boolean) {
-        if (!intakeSequence.running) {
-            closeOuttakeSequence.smartRun(shouldStart)
-        } else if(closeOuttakeSequence.running) {
-            closeOuttakeSequence.update()
-        }
+        closeOuttakeSequence.smartRun(shouldStart)
     }
 
     private val highAutoOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()

@@ -16,9 +16,9 @@ class Lift : Subsystem {
     companion object {
         @JvmField var kp = 0.028
         @JvmField var ki = 0.0000
-        @JvmField var kd = 0.00065
+        @JvmField var kd = 0.0004
         @JvmField var kgHigh = 0.2
-        @JvmField var kgLow = 0.35
+        @JvmField var kgLow = 0.32
     }
     private val liftLeft = NakiriMotor("liftLeft", false).float.resetEncoder.openLoopControl
     private val liftRight = NakiriMotor("liftRight", false).float.resetEncoder.openLoopControl.reverse
@@ -36,7 +36,7 @@ class Lift : Subsystem {
         }
     })
 
-    private val disabled get() = pos < LiftStages.BOTTOM.position && liftState == LiftStages.BOTTOM
+    private val disabled get() = pos < LiftStages.BOTTOM.position+50 && liftState == LiftStages.BOTTOM
 
     private var liftState = LiftStages.BOTTOM
     enum class LiftStages(val position: Int) {

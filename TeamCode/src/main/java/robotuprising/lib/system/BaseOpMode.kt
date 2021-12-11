@@ -3,6 +3,7 @@ package robotuprising.lib.system
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
+import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.NakiriDashboard
@@ -32,6 +33,9 @@ abstract class BaseOpMode : LinearOpMode() {
         } else {
             OpModeType.TELEOP
         }
+
+        val name = (internalOpModeServices as OpModeManagerImpl).activeOpModeName
+        Globals.IS_AUTO = name == "NakiriAuto"
 
         m_init()
 

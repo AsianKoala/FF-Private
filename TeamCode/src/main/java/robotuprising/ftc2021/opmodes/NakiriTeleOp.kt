@@ -28,6 +28,46 @@ class NakiriTeleOp : NakiriOpMode() {
         )
     }
 
+    private enum class IntakeSequenceStates {
+        INTAKE_OUTTAKE_RESET,
+        INTAKE,
+        ROTATING,
+        TRANSFERRING,
+        OUTTAKE_TO_MEDIUM
+    }
+
+    private val intakeSequence = StateMachineBuilder<IntakeSequenceStates>()
+            .state(IntakeSequenceStates.INTAKE_OUTTAKE_RESET)
+            .onEnter {
+                nakiri.requestIntakeRotateOut()
+                nakiri.requestOuttakeIn()
+            }
+            .transitionTimed(0.5)
+            .state(IntakeSequenceStates.INTAKE)
+            .onEnter { nakiri.requestIntakeOn() }
+            .transition { nakiri.isMineralIn() || gamepad1.b}
+            .state(IntakeSequenceStates.ROTATING)
+            .onEnter {
+                nakiri.requestIntakeRotateIn()
+                nakiri.requestIntakeOff()
+                nakiri.requestLiftTransfer()
+                nakiri.requestLinkageTransfer()
+            }
+            .transitionTimed(1.5)
+            .state(IntakeSequenceStates.TRANSFERRING)
+            .onEnter {
+                nakiri.requestIntakeReverse()
+            }
+            .transitionTimed(1.5)
+            .state(IntakeSequenceStates.OUTTAKE_TO_MEDIUM)
+            .onEnter {
+                nakiri.requestOuttakeMedium()
+                nakiri.requestIntakeOff()
+            }
+            .transition { true }
+            .build()
+
+
     private enum class OuttakeLongStates {
         LIFTING,
         EXTENDING_AND_WAIT,
@@ -43,7 +83,7 @@ class NakiriTeleOp : NakiriOpMode() {
             .transitionTimed(0.4)
             .state(OuttakeLongStates.EXTENDING_AND_WAIT)
             .onEnter { nakiri.requestLinkageOut() }
-            .transition { gamepad1.left_trigger_pressed }
+            .transition { gamepad2.left_trigger_pressed }
             .state(OuttakeLongStates.DEPOSIT)
             .onEnter { nakiri.requestOuttakeOut() }
             .transitionTimed(0.5)
@@ -59,10 +99,10 @@ class NakiriTeleOp : NakiriOpMode() {
             .build()
 
     private fun outtakeControl() {
-        nakiri.runCloseOuttakeSequence(gamepad1.left_bumper)
-//        nakiri.runSharedOuttakeSequence(gamepad1.right_bumper)
+        nakiri.runCloseOuttakeSequence(gamepad2.left_bumper)
+        nakiri.runSharedOuttakeSequence(gamepad2.right_bumper)
 
-        if (!outtakeLongSequence.running && gamepad1.left_trigger_pressed) {
+        if (!outtakeLongSequence.running && gamepad2.left_trigger_pressed) {
             outtakeLongSequence.reset()
             outtakeLongSequence.start()
         }
@@ -73,7 +113,8 @@ class NakiriTeleOp : NakiriOpMode() {
     }
 
     private fun intakeControl() {
-        nakiri.runIntakeSequence(gamepad1.right_trigger_pressed)
+//        nakiri.runIntakeSequence(gamepad1.right_trigger_pressed)
+        intakeSequence.smartRun(gamepad1.right_trigger_pressed)
     }
 
     private fun duckControl() {

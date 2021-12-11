@@ -8,10 +8,11 @@ import robotuprising.lib.opmode.OpModeType
 @Config
 object Globals {
     var ALLIANCE_SIDE = AllianceSide.RED
+    var IS_AUTO = false
     var CUP_LOCATION = Webcam.CupStates.LEFT
 
     const val LINKAGE_RETRACT = 1.0
-    const val LINKAGE_MED = 0.75
+    const val LINKAGE_MED = 0.80
     const val LINKAGE_EXTEND = 0.5
     const val LINKAGE_TRANSFER = 0.82
     const val LINKAGE_EXTEND_MIDDLE = 0.65
