@@ -70,8 +70,8 @@ abstract class BaseOpMode : LinearOpMode() {
 
     abstract val is_comp: Boolean
     abstract fun m_init()
-    abstract fun m_init_loop()
-    abstract fun m_start()
+    open fun m_init_loop() {}
+    open fun m_start() {}
     abstract fun m_loop()
-    abstract fun m_stop()
+    open fun m_stop() {}
 }

@@ -45,8 +45,8 @@ class Ultrasonics : Subsystem {
         if (takingRangeReading) {
             //Check if its been longer than our delay to properly let the sensor perform
             if (hasDelayExpired() && !firstRun) {
-                forwardRangeReading = forwardSensor.getDistance(DistanceUnit.MM)
-                horizRangeReading = horizSensor.getDistance(DistanceUnit.MM)
+                forwardRangeReading = forwardSensor.getDistance(DistanceUnit.CM)
+                horizRangeReading = horizSensor.getDistance(DistanceUnit.CM)
                 forwardSensor.ping()
                 horizSensor.ping()
                 delayTimer.reset()

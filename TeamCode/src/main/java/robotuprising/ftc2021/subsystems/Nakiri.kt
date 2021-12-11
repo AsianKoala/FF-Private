@@ -11,14 +11,14 @@ import robotuprising.lib.system.statemachine.StateMachineBuilder
 class Nakiri : Subsystem {
 
     // 10 opacity
-    val ayame = Ayame()
-    val intake = Intake()
-    val lift = Lift()
-    val linkage = Linkage()
-    val outtake = Outtake()
-    val duckSpinner = DuckSpinner()
-    val webcam = Webcam()
-    val subsystems = mutableListOf(
+    private val ayame = Ayame()
+    private val intake = Intake()
+    private val lift = Lift()
+    private val linkage = Linkage()
+    private val outtake = Outtake()
+    private val duckSpinner = DuckSpinner()
+    private val webcam = Webcam()
+    private val subsystems = mutableListOf(
         ayame,
         intake,
         lift,
@@ -35,6 +35,8 @@ class Nakiri : Subsystem {
 
     val inCrater get() = ayame.locationState == Ayame.LocationStates.CRATER
     val inField get() = ayame.locationState == Ayame.LocationStates.FIELD
+
+    val cupPosition get() = webcam.cupState
 
     private enum class IntakeSequenceStates {
         INTAKE_OUTTAKE_RESET,
@@ -175,7 +177,6 @@ class Nakiri : Subsystem {
         ayame.startGoingOverPipes()
     }
 
-
     fun requestIntakeOn() {
         intake.turnOn()
     }
@@ -252,6 +253,13 @@ class Nakiri : Subsystem {
         duckSpinner.turnOff()
     }
 
+    fun startWebcam() {
+        webcam.init()
+    }
+    fun readWebcam() {
+        webcam.update()
+    }
+
     fun stopWebcam() {
         webcam.reset()
     }
@@ -278,24 +286,6 @@ class Nakiri : Subsystem {
 
     fun runAutoOuttake(shouldStart: Boolean) {
         longOuttakeSequence.smartRun(shouldStart)
-    }
-
-    fun runTeleLongOuttakeSequence(shouldStart: Boolean) {
-        if(!intakeSequence.running) {
-            if(!longOuttakeSequence.running && shouldStart) {
-                longOuttakeSequence.reset()
-                outtakeLongSequenceTransition = false
-                longOuttakeSequence.start()
-            } else if(longOuttakeSequence.running && shouldStart) {
-                outtakeLongSequenceTransition = true
-            }
-
-            if(longOuttakeSequence.running) {
-                longOuttakeSequence.update()
-            }
-        } else if(longOuttakeSequence.running) {
-            longOuttakeSequence.update()
-        }
     }
 
     override fun update() {

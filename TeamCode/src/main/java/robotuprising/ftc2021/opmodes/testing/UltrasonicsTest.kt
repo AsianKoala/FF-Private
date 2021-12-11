@@ -1,30 +1,33 @@
 package robotuprising.ftc2021.opmodes.testing
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import robotuprising.ftc2021.opmodes.NakiriOpMode
+import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.lib.opmode.NakiriDashboard
+import robotuprising.lib.system.BaseOpMode
 
 @TeleOp
-class UltrasonicsTest : OpMode() {
-    private lateinit var ultrasonic: Ultrasonics
+class UltrasonicsTest : BaseOpMode() {
+    private lateinit var ultrasonics: Ultrasonics
 
-    override fun init() {
-        ultrasonic = Ultrasonics()
+    override val is_comp: Boolean
+        get() = false
+
+    override fun m_init() {
+        BulkDataManager.init(hardwareMap)
+        NakiriDashboard.init(telemetry, true)
+        ultrasonics = Ultrasonics()
     }
 
-    override fun start() {
-        ultrasonic.startReading()
+    override fun m_start() {
+        ultrasonics.startReading()
     }
 
-    override fun loop() {
-        ultrasonic.update()
-
-//        telemetry.addData("ultrasonic reading", ultrasonic.getForwardRange(DistanceUnit.MM))
-        telemetry.addData("counter", ultrasonic.counter)
-        telemetry.update()
+    override fun m_loop() {
+        BulkDataManager.read()
+        ultrasonics.update()
+        ultrasonics.sendDashboardPacket(false)
+        NakiriDashboard.update()
     }
 
-    override fun stop() {
-        ultrasonic.stopReading()
-    }
 }

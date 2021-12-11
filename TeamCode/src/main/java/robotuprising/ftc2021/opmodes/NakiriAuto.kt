@@ -169,11 +169,18 @@ class NakiriAuto : NakiriOpMode() {
             .onExit { nakiri.reset() }
             .build()
 
+    override fun m_init() {
+        super.m_init()
+        nakiri.startWebcam()
+    }
     override fun m_init_loop() {
         super.m_init_loop()
+        nakiri.readWebcam()
     }
+
     override fun m_start() {
         super.start()
+        nakiri.stopWebcam()
         startTime = System.currentTimeMillis()
         autoStateMachine.reset()
         autoStateMachine.start()
