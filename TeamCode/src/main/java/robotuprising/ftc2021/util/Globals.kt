@@ -1,18 +1,20 @@
 package robotuprising.ftc2021.util
 
 import com.acmerobotics.dashboard.config.Config
+import robotuprising.ftc2021.subsystems.vision.Webcam
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.OpModeType
 
 @Config
 object Globals {
-    var ALLIANCE_SIDE = AllianceSide.BLUE
+    var ALLIANCE_SIDE = AllianceSide.RED
+    var CUP_LOCATION = Webcam.CupStates.LEFT
 
     const val LINKAGE_RETRACT = 1.0
     const val LINKAGE_MED = 0.75
     const val LINKAGE_EXTEND = 0.5
     const val LINKAGE_TRANSFER = 0.82
-    var LINKAGE_CUSTOM = 0.75
+    const val LINKAGE_EXTEND_MIDDLE = 0.65
 
     const val OUTTAKE_LEFT_IN = 0.07
     const val OUTTAKE_RIGHT_IN = 0.45

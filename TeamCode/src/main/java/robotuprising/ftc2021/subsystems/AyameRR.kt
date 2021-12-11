@@ -1,6 +1,7 @@
 package robotuprising.ftc2021.subsystems
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients
+import com.acmerobotics.roadrunner.drive.DriveSignal
 import com.acmerobotics.roadrunner.drive.MecanumDrive
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower
@@ -20,6 +21,9 @@ import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.hardware.AxesSigns
 import robotuprising.lib.hardware.BNO055IMUUtil.remapAxes
+import robotuprising.lib.math.Angle
+import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
@@ -61,6 +65,10 @@ class AyameRR : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstant
                 powers.y - powers.x - powers.h.angle,
                 powers.y + powers.x - powers.h.angle
         )
+    }
+
+    fun setVectorPowers(x: Double, y: Double, h: Double) {
+        setVectorPowers(Pose(Point(x, y), Angle(h, AngleUnit.RAW)))
     }
 
     // private methods
@@ -110,13 +118,17 @@ class AyameRR : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstant
         )
     }
 
-    fun setStartPose(startPose: Pose) {
-        poseEstimate = startPose.pose2d
-    }
-
     override fun update() {
 //        updatePose()
         updatePoseEstimate()
+        val signal: DriveSignal? = trajectorySequenceRunner.update(poseEstimate, poseVelocity)
+        if (signal != null) setDriveSignal(signal)
+
+        NakiriDashboard["pose x"] = poseEstimate.x
+        NakiriDashboard["pose y"] = poseEstimate.y
+        NakiriDashboard["pose h"] = Angle(poseEstimate.heading, AngleUnit.RAD).wrap().deg
+
+
 
         val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
         if (absMax > 1.0) {

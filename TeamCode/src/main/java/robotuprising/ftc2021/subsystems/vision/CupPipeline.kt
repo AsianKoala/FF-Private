@@ -159,6 +159,6 @@ class CupPipeline : OpenCvPipeline() {
         var RIGHT = Point(270.d, 120.d)
 
         var VARIANCE = 50
-        var MIN_AREA = 5000.0
+        var MIN_AREA = 2000.0
     }
 }

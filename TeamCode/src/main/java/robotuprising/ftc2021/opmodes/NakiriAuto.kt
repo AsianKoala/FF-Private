@@ -1,78 +1,99 @@
 package robotuprising.ftc2021.opmodes
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.noahbres.meepmeep.core.toRadians
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
 import robotuprising.ftc2021.subsystems.vision.Webcam
 import robotuprising.ftc2021.util.Globals
-import robotuprising.lib.control.auto.path.PurePursuitController
-import robotuprising.lib.control.auto.waypoints.LockedWaypoint
-import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.radians
+import robotuprising.lib.math.Point
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
-import kotlin.math.absoluteValue
 
 @Autonomous(preselectTeleOp = "NakiriTeleOp")
 class NakiriAuto : NakiriOpMode() {
+    private val startX = 10.0
+    private val startY = 60.0
+    private val depositAngle = 42.0.radians
+    private val depositX = 5.0
+    private val depositY = 41.5
 
-    private val startX = 8.0
-    private val startY = 63.0
-    private val depositAngle = 45.0.radians
-    private val depositY = 42.0
-    private val initialDepositWaypoint = if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
-        LockedWaypoint(startX, depositY, 0.0, Angle(depositAngle, AngleUnit.RAD))
+
+    private val initialDepositPose2d = if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
+        Pose2d(depositX, depositY, depositAngle)
     } else {
-        LockedWaypoint(startX, -depositY, 0.0, Angle(-depositAngle, AngleUnit.RAD))
+        Pose2d(depositX, -depositY, -depositAngle)
     }
+
+    private val startPose = if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
+        Pose2d(startX, startY, 90.0.radians)
+    } else {
+        Pose2d(startX, -startY, (-90.0).radians)
+    }
+
+    private lateinit var moveToDepositTrajectorySequence: TrajectorySequence
+
+    private lateinit var goToCraterTrajSequence: TrajectorySequence
 
     private enum class InitialDepositStates {
         MOVE_TO_DEPOSIT,
         DEPOSIT,
         TURN,
-        CROSS_PIPES_INTO_CRATER
+        CROSS
     }
 
     private val initialDepositStateMachine = StateMachineBuilder<InitialDepositStates>()
             .state(InitialDepositStates.MOVE_TO_DEPOSIT)
-            .loop { nakiri.requestAyamePowers(PurePursuitController.curve(nakiri.currPose, initialDepositWaypoint))}
-            .transition { MathUtil.waypointThresh(nakiri.currPose, initialDepositWaypoint, 1.0) }
-
+            .onEnter { nakiri.ayame.followTrajectorySequenceAsync(moveToDepositTrajectorySequence) }
+            .transition { !nakiri.ayame.isBusy }
             .state(InitialDepositStates.DEPOSIT)
             .loop {
-                when(nakiri.cupPosition) {
+                when(Globals.CUP_LOCATION) {
                     Webcam.CupStates.RIGHT -> nakiri.runAutoHighOuttake()
                     Webcam.CupStates.MIDDLE -> nakiri.runAutoMiddleOuttake()
                     Webcam.CupStates.LEFT -> nakiri.runAutoLowOuttake()
                 }
             }
             .transition { !nakiri.outtaking }
-
             .state(InitialDepositStates.TURN)
-            .loop { nakiri.requestAyamePowers(PurePursuitController.turn(nakiri.currPose, Angle(0.0, AngleUnit.RAD))) }
-            .transition { nakiri.currPose.h.deg.absoluteValue < 1.0 }
+            .onEnter { nakiri.ayame.followTrajectorySequenceAsync(goToCraterTrajSequence) }
+            .transition { !nakiri.ayame.isBusy }
 
-            .state(InitialDepositStates.CROSS_PIPES_INTO_CRATER)
-            .loop { nakiri.requestAyamePowers(0.0, 1.0, 0.0) }
-            .transitionTimed(1.5)
+            .state(InitialDepositStates.CROSS)
+            .loop { nakiri.ayame.setVectorPowers(0.0, 0.85, 0.0) }
+            .onExit { nakiri.ayame.setVectorPowers(0.0, 0.0, 0.0) }
+            .transitionTimed(1.3)
             .build()
-
 
     override fun m_init() {
         super.m_init()
-        nakiri.startWebcam()
 
-        nakiri.setStartingPose(
-                if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
-                    Pose(Point(startX, startY), Angle(90.0.radians, AngleUnit.RAD))
-                } else {
-                    Pose(Point(startX, -startY), Angle((-90.0).radians, AngleUnit.RAD))
-                }
-        )
+        moveToDepositTrajectorySequence = nakiri.ayame.trajectorySequenceBuilder(startPose)
+                .lineToSplineHeading(initialDepositPose2d)
+                .build()
+
+
+        goToCraterTrajSequence = if(Globals.ALLIANCE_SIDE == AllianceSide.BLUE) {
+            nakiri.ayame.trajectorySequenceBuilder(moveToDepositTrajectorySequence.end())
+                    .turn(-depositAngle)
+                    .strafeLeft(6.0)
+                    .build()
+        } else {
+            nakiri.ayame.trajectorySequenceBuilder(moveToDepositTrajectorySequence.end())
+                    .turn(depositAngle)
+                    .strafeRight(6.0)
+                    .build()
+        }
+
+        nakiri.ayame.poseEstimate = startPose
+        nakiri.startWebcam()
     }
 
     override fun m_init_loop() {
         super.m_init_loop()
-        nakiri.readWebcam()
+        nakiri.updateWebcam()
     }
 
     override fun m_start() {
@@ -85,13 +106,6 @@ class NakiriAuto : NakiriOpMode() {
     override fun m_loop() {
         super.m_loop()
         initialDepositStateMachine.update()
-
-        if(!initialDepositStateMachine.running) {
-            requestOpModeStop()
-        }
-
-        NakiriDashboard["alliance side"] = Globals.ALLIANCE_SIDE
-        NakiriDashboard["cup state"] = nakiri.cupPosition
-        NakiriDashboard["start point"] = Point(startX, startY)
     }
+
 }

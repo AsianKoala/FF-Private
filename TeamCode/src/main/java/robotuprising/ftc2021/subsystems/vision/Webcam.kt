@@ -7,6 +7,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation
 import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.opmode.AllianceSide
+import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Webcam : Subsystem {
@@ -39,8 +40,6 @@ class Webcam : Subsystem {
         })
     }
 
-    // todo
-    // i trust myself on making sure that webcam isn't used after start()
     override fun update() {
         val area = pipeline.getRectArea()
         val midpoint = pipeline.getRectMidpointX()
@@ -58,6 +57,9 @@ class Webcam : Subsystem {
                 else -> CupStates.LEFT
             }
         }
+
+        NakiriDashboard["cup state"] = cupState
+        NakiriDashboard["midpoint"] = midpoint
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
@@ -65,6 +67,7 @@ class Webcam : Subsystem {
     }
 
     override fun reset() {
+        Globals.CUP_LOCATION = cupState
         webcam.stopStreaming()
     }
 }

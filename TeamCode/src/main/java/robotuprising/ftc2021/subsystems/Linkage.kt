@@ -13,7 +13,9 @@ class Linkage : Subsystem {
         IN(Globals.LINKAGE_RETRACT),
         MED(Globals.LINKAGE_MED),
         OUT(Globals.LINKAGE_EXTEND),
-        TRANSFER(Globals.LINKAGE_TRANSFER)
+        TRANSFER(Globals.LINKAGE_TRANSFER),
+        MIDDLE(Globals.LINKAGE_EXTEND_MIDDLE)
+
     }
 
     fun retract() {
@@ -32,6 +34,10 @@ class Linkage : Subsystem {
         linkageState = LinkageStates.TRANSFER
     }
 
+    fun extendMiddle() {
+        linkageState = LinkageStates.MIDDLE
+    }
+
     override fun update() {
         linkageServo.position = linkageState.pos
     }
@@ -44,7 +50,6 @@ class Linkage : Subsystem {
             NakiriDashboard["state pos"] = linkageState.pos
             NakiriDashboard["linkage transfer pos"] = Globals.LINKAGE_TRANSFER
             NakiriDashboard["linkage med pos"] = Globals.LINKAGE_MED
-            NakiriDashboard["linkage custom pos"] = Globals.LINKAGE_CUSTOM
         }
     }
 

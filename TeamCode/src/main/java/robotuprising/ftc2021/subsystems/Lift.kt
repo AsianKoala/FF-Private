@@ -15,8 +15,8 @@ import robotuprising.lib.util.Extensions.d
 class Lift : Subsystem {
     companion object {
         @JvmField var kp = 0.028
-        @JvmField var ki = 0.0008
-        @JvmField var kd = 0.0005
+        @JvmField var ki = 0.0000
+        @JvmField var kd = 0.00065
         @JvmField var kgHigh = 0.2
         @JvmField var kgLow = 0.35
     }

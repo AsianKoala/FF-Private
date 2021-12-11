@@ -21,14 +21,12 @@ abstract class NakiriOpMode : BaseOpMode() {
     override fun m_init_loop() {
         BulkDataManager.read()
         nakiri.sendDashboardPacket(false)
-        NakiriDashboard.update()
     }
 
     override fun m_loop() {
         BulkDataManager.read()
         nakiri.update()
         nakiri.sendDashboardPacket(false)
-        NakiriDashboard.update()
     }
 
     override fun m_stop() {

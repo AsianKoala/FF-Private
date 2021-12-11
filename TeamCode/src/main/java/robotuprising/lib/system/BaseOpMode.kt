@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
 import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.AllianceSide
+import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.opmode.OpModeStatus
 import robotuprising.lib.opmode.OpModeType
 
@@ -57,7 +58,8 @@ abstract class BaseOpMode : LinearOpMode() {
                 }
             }
 
-            telemetry.update()
+            NakiriDashboard.update()
+//            telemetry.update()
         }
 
         m_stop()

@@ -42,7 +42,7 @@ class Nakiri : Subsystem {
             || middleAutoOuttakeSequence.running || highAutoOuttakeSequence.running
 
 
-    val cupPosition get() = webcam.cupState
+//    val cupPosition get() = webcam.cupState
 
     private enum class IntakeSequenceStates {
         INTAKE_OUTTAKE_RESET,
@@ -180,7 +180,7 @@ class Nakiri : Subsystem {
     }
 
     fun setStartingPose(startPose: Pose) {
-        ayame.setStartPose(startPose)
+//        ayame.setStartPose(startPose)
     }
 
 //    fun WHOSGONNASENDIT() {
@@ -239,6 +239,10 @@ class Nakiri : Subsystem {
         linkage.extendMed()
     }
 
+    fun requestLinkageExtendMiddle() {
+        linkage.extendMiddle()
+    }
+
     fun requestLinkageTransfer() {
         linkage.extendTransfer()
     }
@@ -270,7 +274,7 @@ class Nakiri : Subsystem {
     fun startWebcam() {
         webcam.init()
     }
-    fun readWebcam() {
+    fun updateWebcam() {
         webcam.update()
     }
 
@@ -315,7 +319,7 @@ class Nakiri : Subsystem {
                 requestOuttakeIn();
                 requestLinkageRetract()
             }
-            .transitionTimed(0.5)
+            .transitionTimed(0.75)
             .state(OuttakeLongStates.LIFT_DOWN)
             .onEnter { requestLiftBottom() }
             .transition { true }
@@ -328,11 +332,11 @@ class Nakiri : Subsystem {
             }
             .transitionTimed(0.4)
             .state(OuttakeLongStates.EXTENDING_AND_WAIT)
-            .onEnter { requestLinkageOut() }
+            .onEnter { requestLinkageExtendMiddle() }
             .transitionTimed(1.5)
             .state(OuttakeLongStates.DEPOSIT)
             .onEnter { requestOuttakeOut() }
-            .transitionTimed(0.5)
+            .transitionTimed(0.75)
             .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
             .onEnter {
                 requestOuttakeIn();
@@ -345,17 +349,12 @@ class Nakiri : Subsystem {
             .build()
 
     private val lowAutoOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()
-            .state(OuttakeLongStates.LIFTING)
-            .onEnter {
-//                requestLiftHigh()
-            }
-            .transitionTimed(0.4)
             .state(OuttakeLongStates.EXTENDING_AND_WAIT)
-            .onEnter { requestLinkageOut() }
+            .onEnter { requestLinkageExtendMiddle() }
             .transitionTimed(1.5)
             .state(OuttakeLongStates.DEPOSIT)
             .onEnter { requestOuttakeOut() }
-            .transitionTimed(0.5)
+            .transitionTimed(0.75)
             .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
             .onEnter {
                 requestOuttakeIn();

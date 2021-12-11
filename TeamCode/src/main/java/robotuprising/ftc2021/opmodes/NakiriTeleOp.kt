@@ -1,9 +1,11 @@
 package robotuprising.ftc2021.opmodes
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import robotuprising.ftc2021.subsystems.Nakiri
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.math.*
+import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.d
@@ -94,6 +96,7 @@ class NakiriTeleOp : NakiriOpMode() {
 
     override fun m_init() {
         super.m_init()
+        nakiri.ayame.poseEstimate = Pose2d(8.0, 63.0, 90.0.radians)
     }
 
     override fun m_start() {
