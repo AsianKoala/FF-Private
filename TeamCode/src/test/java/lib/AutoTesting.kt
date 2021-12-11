@@ -18,11 +18,33 @@ object AutoTesting {
 
         val deltaH = (target.h - start.h).wrap().angle
         println(deltaH.degrees)
+
+        val scale = 16.0
+        val turnScale = 90.0.radians
+
+        println(relVal / scale)
+        println(deltaH)
+        println(turnScale)
+        val powers = Pose(relVal / scale, Angle(deltaH / turnScale, AngleUnit.RAD))
+        val powersHeading = powers.h.angle
+        println(powersHeading)
+        val wheelPowers = setVectorPowers(powers)
+        println(powers)
+        println(wheelPowers)
     }
 
     fun relVals(curr: Pose, target: Point): Point {
         val d = (curr.p - target).hypot
         val rh = (target - curr.p).atan2 - curr.h
         return Point(-d * rh.sin, d * rh.cos)
+    }
+
+    fun setVectorPowers(powers: Pose): List<Double> {
+        return mutableListOf(
+                powers.y + powers.x + powers.h.angle,
+                powers.y - powers.x + powers.h.angle,
+                powers.y - powers.x - powers.h.angle,
+                powers.y + powers.x - powers.h.angle
+        )
     }
 }

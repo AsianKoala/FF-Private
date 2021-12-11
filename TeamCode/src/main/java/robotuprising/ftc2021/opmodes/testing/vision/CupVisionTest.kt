@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.opmodes.testing.vision
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
@@ -20,6 +21,7 @@ import robotuprising.lib.util.Extensions.d
 import org.opencv.core.MatOfPoint2f
 
 @TeleOp
+@Disabled
 class CupVisionTest : OpMode() {
     private lateinit var webcam: OpenCvCamera
     private lateinit var pipeline: CupPipeline

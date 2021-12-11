@@ -7,11 +7,13 @@ import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.lib.util.Extensions.pose
 
 class Nakiri : Subsystem {
 
     // 10 opacity
-    private val ayame = Ayame()
+//    private val ayame = Ayame()
+    val ayame = AyameRR()
     private val intake = Intake()
     private val lift = Lift()
     private val linkage = Linkage()
@@ -19,7 +21,8 @@ class Nakiri : Subsystem {
     private val duckSpinner = DuckSpinner()
     private val webcam = Webcam()
     private val subsystems = mutableListOf(
-        ayame,
+//        ayame,
+            ayame,
         intake,
         lift,
         linkage,
@@ -27,7 +30,9 @@ class Nakiri : Subsystem {
         duckSpinner,
     )
 
-    val currPose get() = ayame.pose
+//    val currPose get() = ayame.pose
+
+    val currPose get() = ayame.poseEstimate.pose
 
     val intaking get() = intakeSequence.running
 
@@ -36,8 +41,6 @@ class Nakiri : Subsystem {
             || longOuttakeSequence.running || lowAutoOuttakeSequence.running
             || middleAutoOuttakeSequence.running || highAutoOuttakeSequence.running
 
-    val inCrater get() = ayame.locationState == Ayame.LocationStates.CRATER
-    val inField get() = ayame.locationState == Ayame.LocationStates.FIELD
 
     val cupPosition get() = webcam.cupState
 
@@ -169,7 +172,7 @@ class Nakiri : Subsystem {
     }
 
     fun requestAyamePowers(powers: Pose) {
-        ayame.setVectorPower(powers)
+        ayame.setVectorPowers(powers)
     }
 
     fun requestAyameStop() {
@@ -180,9 +183,9 @@ class Nakiri : Subsystem {
         ayame.setStartPose(startPose)
     }
 
-    fun WHOSGONNASENDIT() {
-        ayame.WHOSGONNASENDIT()
-    }
+//    fun WHOSGONNASENDIT() {
+//        ayame.WHOSGONNASENDIT()
+//    }
 
     fun requestIntakeOn() {
         intake.turnOn()

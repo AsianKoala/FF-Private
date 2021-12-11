@@ -3,6 +3,7 @@ package robotuprising.ftc2021.auto.drive.opmode
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import robotuprising.ftc2021.auto.drive.SampleMecanumDrive
 import kotlin.Throws
@@ -11,6 +12,7 @@ import kotlin.Throws
  * This is an example of a more complex path to really test the tuning.
  */
 @Autonomous(group = "drive")
+@Disabled
 class SplineTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {

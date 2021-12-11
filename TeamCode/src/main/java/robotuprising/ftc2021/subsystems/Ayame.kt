@@ -7,7 +7,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.hardware.bosch.BNO055IMUImpl
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import robotuprising.ftc2021.auto.drive.DriveConstants
-import robotuprising.ftc2021.opmodes.testing.Ultrasonics
 import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.ftc2021.util.Globals
 import robotuprising.ftc2021.util.NakiriMotor
@@ -68,7 +67,7 @@ class Ayame: Subsystem {
         NONE,
     }
 
-    fun setVectorPower(powers: Pose) {
+    fun setVectorPowers(powers: Pose) {
         wheels = mutableListOf(
             powers.y + powers.x + powers.h.angle,
             powers.y - powers.x + powers.h.angle,
@@ -275,7 +274,7 @@ class Ayame: Subsystem {
     }
 
     override fun reset() {
-        setVectorPower(Pose.DEFAULT_RAW)
+        setVectorPowers(Pose.DEFAULT_RAW)
     }
 
     init {

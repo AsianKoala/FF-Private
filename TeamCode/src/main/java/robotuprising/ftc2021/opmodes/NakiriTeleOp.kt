@@ -74,6 +74,14 @@ class NakiriTeleOp : NakiriOpMode() {
         nakiri.runIntakeSequence(gamepad1.right_trigger_pressed)
     }
 
+    private fun duckControl() {
+        when {
+            gamepad1.dpad_left -> nakiri.requestSpinnerOn()
+            gamepad1.dpad_right -> nakiri.requestSpinnerReverse()
+            else -> nakiri.requestSpinnerOff()
+        }
+    }
+
     private fun debugControl() {
         when {
             gamepad2.right_trigger_pressed -> nakiri.requestLiftHigh()
@@ -98,6 +106,7 @@ class NakiriTeleOp : NakiriOpMode() {
         driveControl()
         intakeControl()
         outtakeControl()
+        duckControl()
 //        debugControl()
     }
 }

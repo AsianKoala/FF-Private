@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.lib.util.Extensions.d
 import com.acmerobotics.roadrunner.control.PIDFController
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.util.Range
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 
 @TeleOp
+@Disabled
 class MuleTeleOp : OpMode() {
     private lateinit var fl: ExpansionHubMotor
     private lateinit var fr: ExpansionHubMotor

@@ -95,19 +95,19 @@ class CupPipeline : OpenCvPipeline() {
         return output
     }
 
-    fun getRectHeight(): Int {
+    private fun getRectHeight(): Int {
         return maxRect.height
     }
 
-    fun getRectWidth(): Int {
+    private fun getRectWidth(): Int {
         return maxRect.width
     }
 
-    fun getRectX(): Int {
+    private fun getRectX(): Int {
         return maxRect.x
     }
 
-    fun getRectY(): Int {
+    private fun getRectY(): Int {
         return maxRect.y
     }
 
@@ -115,11 +115,11 @@ class CupPipeline : OpenCvPipeline() {
         return getRectX() + getRectWidth() / 2.0
     }
 
-    fun getRectMidpointY(): Double {
+    private fun getRectMidpointY(): Double {
         return getRectY() + getRectHeight() / 2.0
     }
 
-    fun getRectMidpointXY(): Point {
+    private fun getRectMidpointXY(): Point {
         return Point(getRectMidpointX(), getRectMidpointY())
     }
 

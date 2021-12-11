@@ -1,12 +1,14 @@
 package robotuprising.ftc2021.opmodes.testing
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import robotuprising.ftc2021.opmodes.NakiriOpMode
+import robotuprising.ftc2021.subsystems.Ultrasonics
 import robotuprising.ftc2021.util.BulkDataManager
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.BaseOpMode
 
 @TeleOp
+@Disabled
 class UltrasonicsTest : BaseOpMode() {
     private lateinit var ultrasonics: Ultrasonics
 

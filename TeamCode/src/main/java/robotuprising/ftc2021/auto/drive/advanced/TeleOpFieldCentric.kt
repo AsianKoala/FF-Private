@@ -18,7 +18,6 @@ import kotlin.Throws
  *
  * See lines 42-57.
  */
-// todo
 @TeleOp(group = "advanced")
 @Disabled
 class TeleOpFieldCentric : LinearOpMode() {
