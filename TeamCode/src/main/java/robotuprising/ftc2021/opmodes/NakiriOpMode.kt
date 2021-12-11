@@ -19,13 +19,6 @@ abstract class NakiriOpMode : BaseOpMode() {
     }
 
     override fun m_init_loop() {
-        if(gamepad1.a) {
-            Globals.ALLIANCE_SIDE = when(Globals.ALLIANCE_SIDE) {
-                AllianceSide.BLUE -> AllianceSide.RED
-                AllianceSide.RED -> AllianceSide.BLUE
-            }
-        }
-
         BulkDataManager.read()
         nakiri.sendDashboardPacket(false)
         NakiriDashboard.update()

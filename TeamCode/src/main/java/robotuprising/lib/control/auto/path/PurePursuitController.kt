@@ -4,9 +4,11 @@ import robotuprising.lib.control.auto.waypoints.LockedWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
+import robotuprising.lib.math.MathUtil.degrees
 import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
+import robotuprising.lib.opmode.NakiriDashboard
 import kotlin.math.PI
 
 object PurePursuitController {
@@ -17,12 +19,18 @@ object PurePursuitController {
         return Point(-d * rh.sin, d * rh.cos)
     }
 
-    fun curve(curr: Pose, target: Waypoint, moveScale: Double = 12.0, turnScale: Double = 90.0): Pose {
+    fun curve(curr: Pose, target: Waypoint, moveScale: Double = 16.0, turnScale: Double = 90.0): Pose {
         val relTarget = relVals(curr, target.p)
         val movementPowers = (relTarget / moveScale)
 
         val deltaH = getDeltaH(curr, target)
         val turnPower = deltaH / turnScale.radians
+
+        NakiriDashboard["PP current: "] = curr
+        NakiriDashboard["target waypoint"] = target
+        NakiriDashboard["rel target"] = relTarget
+        NakiriDashboard["delta h degrees"] = deltaH.degrees
+        NakiriDashboard["movement powers"] = movementPowers
 
         return Pose(Point(movementPowers.x, movementPowers.y), Angle(turnPower, AngleUnit.RAW))
     }

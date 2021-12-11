@@ -6,8 +6,8 @@ import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
 class Outtake : Subsystem {
-    val leftServo = NakiriServo("outtakeLeft")
-    val rightServo = NakiriServo("outtakeRight")
+    private val leftServo = NakiriServo("outtakeLeft")
+    private val rightServo = NakiriServo("outtakeRight")
 
     private var outtakeState = OuttakeStates.MEDIUM
     private enum class OuttakeStates(val leftPos: Double, val rightPos: Double) {
@@ -34,8 +34,8 @@ class Outtake : Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-        NakiriDashboard.setHeader("outtake")
-        NakiriDashboard["state"] = outtakeState
+//        NakiriDashboard.setHeader("outtake")
+//        NakiriDashboard["state"] = outtakeState
 
         if (debugging) {
             NakiriDashboard["left pos"] = outtakeState.leftPos

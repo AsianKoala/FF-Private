@@ -176,8 +176,12 @@ class Nakiri : Subsystem {
         requestAyamePowers(Pose.DEFAULT_RAW)
     }
 
-    fun startGoingOverPipes() {
-        ayame.startGoingOverPipes()
+    fun setStartingPose(startPose: Pose) {
+        ayame.setStartPose(startPose)
+    }
+
+    fun WHOSGONNASENDIT() {
+        ayame.WHOSGONNASENDIT()
     }
 
     fun requestIntakeOn() {

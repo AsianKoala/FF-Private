@@ -6,9 +6,7 @@ import robotuprising.lib.opmode.OpModeType
 
 @Config
 object Globals {
-//    const val IS_COMP = false
     var ALLIANCE_SIDE = AllianceSide.BLUE
-//    var OPMODE_TYPE = OpModeType.AUTO
 
     const val LINKAGE_RETRACT = 1.0
     const val LINKAGE_MED = 0.75

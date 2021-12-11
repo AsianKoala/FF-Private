@@ -40,13 +40,15 @@ class Ayame: Subsystem {
     var pose: Pose = Pose.DEFAULT_ANGLE
         private set
 
+    private lateinit var startHeading: Angle
+
     private val imu = BulkDataManager.hwMap[BNO055IMUImpl::class.java, "imu"]
     private val headingOffset: Double
     private val rollOffset: Double
     private val pitchOffset: Double
 
     private val angularOrientation get() = imu.angularOrientation
-    private val yaw: Angle get() = Angle(angularOrientation.firstAngle - headingOffset, AngleUnit.RAD).wrap()
+    private val yaw: Angle get() = (Angle(angularOrientation.firstAngle - headingOffset, AngleUnit.RAD) + startHeading).wrap()
 
     // powers
     private var wheels: List<Double> = mutableListOf(0.0, 0.0, 0.0, 0.0)
@@ -89,6 +91,47 @@ class Ayame: Subsystem {
 
     var startCounter = 0
     var crossCounter = 0
+    private fun stupidPoseEstimate() {
+        val wheelPositions = getWheelPositions()
+        val extHeading = yaw.angle
+        if (lastWheelPositions.isNotEmpty()) {
+            val wheelDeltas = wheelPositions
+                    .zip(lastWheelPositions)
+                    .map { it.first - it.second }
+            val robotPoseDelta = MecanumKinematics.wheelToRobotVelocities(
+                    wheelDeltas,
+                    15.6,
+                    15.6,
+                    1.0
+            )
+
+            val finalHeadingDelta = Angle(extHeading - lastExtHeading, AngleUnit.RAD).wrap().abs
+            _poseEstimate = Kinematics.relativeOdometryUpdate(
+                    _poseEstimate,
+                    Pose2d(robotPoseDelta.vec(), finalHeadingDelta)
+            )
+        }
+
+        val wheelVelocities = getWheelVelocities()
+        val extHeadingVel = getExternalHeadingVelocity()
+
+        poseVelocity = MecanumKinematics.wheelToRobotVelocities(
+                wheelVelocities,
+                15.6,
+                15.6,
+                1.0
+        )
+
+        poseVelocity = Pose2d(poseVelocity.vec(), extHeadingVel)
+
+        lastWheelPositions = wheelPositions
+        lastExtHeading = extHeading
+
+
+        pose = _poseEstimate.pose
+        NakiriDashboard.addLine("default localization")
+    }
+
     private fun updatePose() {
         if(locationState != LocationStates.PIPES) {
             val wheelPositions = getWheelPositions()
@@ -189,7 +232,7 @@ class Ayame: Subsystem {
         NakiriDashboard["cross counter"] = crossCounter
     }
 
-    fun startGoingOverPipes() {
+    fun WHOSGONNASENDIT() {
         targetLocation = if(locationState == LocationStates.FIELD) {
             LocationStates.CRATER
         } else {
@@ -202,9 +245,18 @@ class Ayame: Subsystem {
 
         startCounter = ultrasonics.counter
     }
+
+    fun setStartPose(startPose: Pose) {
+        pose = startPose
+        _poseEstimate = startPose.pose2d
+        startHeading = pose.h
+    }
+
     override fun update() {
 
 //        updatePose()
+
+        stupidPoseEstimate()
 
         val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
         if (absMax > 1.0) {

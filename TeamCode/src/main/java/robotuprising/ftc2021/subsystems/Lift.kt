@@ -71,13 +71,13 @@ class Lift : Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-//        NakiriDashboard.setHeader("lift")
-//        NakiriDashboard["state"] = liftState
+        NakiriDashboard.setHeader("lift")
+        NakiriDashboard["state"] = liftState
 //        NakiriDashboard["pos"] = pos
-//        NakiriDashboard["target"] = target
+//        NakiriDashboard["targe t"] = target
 //        NakiriDashboard["controller output"] = output
-//        NakiriDashboard["disabled"] = disabled
-//        NakiriDashboard["overheating"] = liftLeft.overTemp
+        NakiriDashboard["disabled"] = disabled
+        NakiriDashboard["overheating"] = liftLeft.overTemp
 
         if (debugging) {
             NakiriDashboard["state position"] = liftState.position
