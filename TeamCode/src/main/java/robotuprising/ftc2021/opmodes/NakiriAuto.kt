@@ -83,7 +83,7 @@ class NakiriAuto : NakiriOpMode() {
         } else {
             nakiri.ayame.trajectorySequenceBuilder(moveToDepositTrajectorySequence.end())
                     .turn(depositAngle)
-                    .strafeRight(6.0)
+                    .strafeRight(6.3)
                     .build()
         }
 

@@ -44,18 +44,10 @@ class Webcam : Subsystem {
         val area = pipeline.getRectArea()
         val midpoint = pipeline.getRectMidpointX()
 
-        cupState = when(Globals.ALLIANCE_SIDE) {
-            AllianceSide.BLUE -> when {
-                area < CupPipeline.MIN_AREA -> CupStates.LEFT
-                midpoint > 200 -> CupStates.RIGHT
-                else -> CupStates.MIDDLE
-            }
-
-            AllianceSide.RED -> when {
-                area < CupPipeline.MIN_AREA -> CupStates.RIGHT
-                midpoint > 200 -> CupStates.MIDDLE
-                else -> CupStates.LEFT
-            }
+        cupState = when {
+            area < CupPipeline.MIN_AREA -> CupStates.LEFT
+            midpoint > 200 -> CupStates.RIGHT
+            else -> CupStates.MIDDLE
         }
 
         NakiriDashboard["cup state"] = cupState
