@@ -39,4 +39,10 @@ object PurePursuitController {
             (autoAngle - curr.h).wrap().angle
         }
     }
+
+    fun turn(curr: Pose, targetHeading: Angle, turnScale: Double = 90.0): Pose {
+        val dh = (targetHeading - curr.h).wrap().angle
+        val turnPower = dh / turnScale.radians
+        return Pose(Point.ORIGIN, Angle(turnPower, AngleUnit.RAW))
+    }
 }

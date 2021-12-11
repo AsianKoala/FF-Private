@@ -25,8 +25,6 @@ abstract class BaseOpMode : LinearOpMode() {
     private var allianceSide = AllianceSide.BLUE
 
     override fun runOpMode() {
-        val manager = (internalOpModeServices as OpModeManagerImpl)
-
         debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
         opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
             OpModeType.AUTO
@@ -63,12 +61,8 @@ abstract class BaseOpMode : LinearOpMode() {
         }
 
         m_stop()
-        if (opModeType == OpModeType.AUTO && is_comp) {
-            manager.initActiveOpMode("NakiriAuto")
-        }
     }
 
-    abstract val is_comp: Boolean
     abstract fun m_init()
     open fun m_init_loop() {}
     open fun m_start() {}

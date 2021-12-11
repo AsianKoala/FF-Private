@@ -10,9 +10,6 @@ import robotuprising.lib.system.BaseOpMode
 class UltrasonicsTest : BaseOpMode() {
     private lateinit var ultrasonics: Ultrasonics
 
-    override val is_comp: Boolean
-        get() = false
-
     override fun m_init() {
         BulkDataManager.init(hardwareMap)
         NakiriDashboard.init(telemetry, true)

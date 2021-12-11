@@ -37,8 +37,8 @@ class Linkage : Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-        NakiriDashboard.setHeader("linkage")
-        NakiriDashboard["state"] = linkageState
+//        NakiriDashboard.setHeader("linkage")
+//        NakiriDashboard["state"] = linkageState
 
         if (debugging) {
             NakiriDashboard["state pos"] = linkageState.pos

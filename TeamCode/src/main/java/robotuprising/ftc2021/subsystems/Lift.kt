@@ -42,6 +42,7 @@ class Lift : Subsystem {
     enum class LiftStages(val position: Int) {
         BOTTOM(Globals.LIFT_LOW),
         TRANSFER(Globals.LIFT_LOW),
+        MEDIUM(Globals.LIFT_MEDIUM),
         HIGH(Globals.LIFT_HIGH)
     }
 
@@ -70,12 +71,12 @@ class Lift : Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-        NakiriDashboard.setHeader("lift")
-        NakiriDashboard["state"] = liftState
-        NakiriDashboard["pos"] = pos
-        NakiriDashboard["target"] = target
-        NakiriDashboard["controller output"] = output
-        NakiriDashboard["disabled"] = disabled
+//        NakiriDashboard.setHeader("lift")
+//        NakiriDashboard["state"] = liftState
+//        NakiriDashboard["pos"] = pos
+//        NakiriDashboard["target"] = target
+//        NakiriDashboard["controller output"] = output
+//        NakiriDashboard["disabled"] = disabled
 //        NakiriDashboard["overheating"] = liftLeft.overTemp
 
         if (debugging) {

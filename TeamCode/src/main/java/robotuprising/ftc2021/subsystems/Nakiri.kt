@@ -31,7 +31,10 @@ class Nakiri : Subsystem {
 
     val intaking get() = intakeSequence.running
 
-    val outtaking get() = sharedOuttakeSequence.running || closeOuttakeSequence.running || longOuttakeSequence.running
+    val outtaking get() =
+        sharedOuttakeSequence.running || closeOuttakeSequence.running
+            || longOuttakeSequence.running || lowAutoOuttakeSequence.running
+            || middleAutoOuttakeSequence.running || highAutoOuttakeSequence.running
 
     val inCrater get() = ayame.locationState == Ayame.LocationStates.CRATER
     val inField get() = ayame.locationState == Ayame.LocationStates.FIELD
@@ -213,6 +216,10 @@ class Nakiri : Subsystem {
         lift.setLevel(Lift.LiftStages.HIGH)
     }
 
+    fun requestLiftMedium() {
+        lift.setLevel(Lift.LiftStages.MEDIUM)
+    }
+
     fun requestLinkageRetract() {
         linkage.retract()
     }
@@ -284,8 +291,107 @@ class Nakiri : Subsystem {
         }
     }
 
-    fun runAutoOuttake(shouldStart: Boolean) {
-        longOuttakeSequence.smartRun(shouldStart)
+    private val highAutoOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()
+            .state(OuttakeLongStates.LIFTING)
+            .onEnter {
+                requestLiftHigh()
+            }
+            .transitionTimed(0.4)
+            .state(OuttakeLongStates.EXTENDING_AND_WAIT)
+            .onEnter { requestLinkageOut() }
+            .transitionTimed(1.5)
+            .state(OuttakeLongStates.DEPOSIT)
+            .onEnter { requestOuttakeOut() }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
+            .onEnter {
+                requestOuttakeIn();
+                requestLinkageRetract()
+            }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.LIFT_DOWN)
+            .onEnter { requestLiftBottom() }
+            .transition { true }
+            .build()
+
+    private val middleAutoOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()
+            .state(OuttakeLongStates.LIFTING)
+            .onEnter {
+                requestLiftMedium()
+            }
+            .transitionTimed(0.4)
+            .state(OuttakeLongStates.EXTENDING_AND_WAIT)
+            .onEnter { requestLinkageOut() }
+            .transitionTimed(1.5)
+            .state(OuttakeLongStates.DEPOSIT)
+            .onEnter { requestOuttakeOut() }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
+            .onEnter {
+                requestOuttakeIn();
+                requestLinkageRetract()
+            }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.LIFT_DOWN)
+            .onEnter { requestLiftBottom() }
+            .transition { true }
+            .build()
+
+    private val lowAutoOuttakeSequence = StateMachineBuilder<OuttakeLongStates>()
+            .state(OuttakeLongStates.LIFTING)
+            .onEnter {
+//                requestLiftHigh()
+            }
+            .transitionTimed(0.4)
+            .state(OuttakeLongStates.EXTENDING_AND_WAIT)
+            .onEnter { requestLinkageOut() }
+            .transitionTimed(1.5)
+            .state(OuttakeLongStates.DEPOSIT)
+            .onEnter { requestOuttakeOut() }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.RETRACT_LINKAGE_AND_OUTTAKE)
+            .onEnter {
+                requestOuttakeIn();
+                requestLinkageRetract()
+            }
+            .transitionTimed(0.5)
+            .state(OuttakeLongStates.LIFT_DOWN)
+            .onEnter { requestLiftBottom() }
+            .transition { true }
+            .build()
+
+
+    fun runAutoHighOuttake() {
+        if(!highAutoOuttakeSequence.running) {
+            highAutoOuttakeSequence.reset()
+            highAutoOuttakeSequence.start()
+        }
+
+        if(highAutoOuttakeSequence.running) {
+            highAutoOuttakeSequence.update()
+        }
+    }
+
+    fun runAutoMiddleOuttake() {
+        if(!middleAutoOuttakeSequence.running) {
+            middleAutoOuttakeSequence.reset()
+            middleAutoOuttakeSequence.start()
+        }
+
+        if(middleAutoOuttakeSequence.running) {
+            middleAutoOuttakeSequence.update()
+        }
+    }
+
+    fun runAutoLowOuttake() {
+        if(!lowAutoOuttakeSequence.running) {
+            lowAutoOuttakeSequence.reset()
+            lowAutoOuttakeSequence.start()
+        }
+
+        if(lowAutoOuttakeSequence.running) {
+            lowAutoOuttakeSequence.update()
+        }
     }
 
     override fun update() {

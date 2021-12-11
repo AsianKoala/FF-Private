@@ -47,8 +47,6 @@ class Ayame: Subsystem {
 
     private val angularOrientation get() = imu.angularOrientation
     private val yaw: Angle get() = Angle(angularOrientation.firstAngle - headingOffset, AngleUnit.RAD).wrap()
-//    private val roll: Angle get() = Angle(angularOrientation.secondAngle - rollOffset, AngleUnit.RAD).wrap()
-//    private val pitch: Angle get() = Angle(angularOrientation.thirdAngle - pitchOffset, AngleUnit.RAD).wrap()
 
     // powers
     private var wheels: List<Double> = mutableListOf(0.0, 0.0, 0.0, 0.0)
@@ -77,10 +75,6 @@ class Ayame: Subsystem {
         )
     }
 
-    private fun setMotorPowers(frontLeft: Double, rearLeft: Double, rearRight: Double, frontRight: Double) {
-        wheels = listOf(frontLeft, rearLeft, frontRight, rearRight)
-    }
-
     private fun getWheelPositions(): List<Double> {
         return motors.map { DriveConstants.encoderTicksToInches(it.position.d) }
     }
@@ -88,15 +82,15 @@ class Ayame: Subsystem {
     private fun getWheelVelocities(): List<Double> {
         return motors.map { DriveConstants.encoderTicksToInches(it.velocity.d) }
     }
+
     private fun getExternalHeadingVelocity(): Double {
         return imu.angularVelocity.xRotationRate.d
     }
 
-
     var startCounter = 0
     var crossCounter = 0
     private fun updatePose() {
-        if(false /*locationState != LocationStates.PIPES*/) {
+        if(locationState != LocationStates.PIPES) {
             val wheelPositions = getWheelPositions()
             val extHeading = yaw.angle
             if (lastWheelPositions.isNotEmpty()) {
@@ -141,57 +135,50 @@ class Ayame: Subsystem {
             if(ultrasonics.counter > 1) {
                 val fwd = ultrasonics.forwardRangeReading
                 val horiz = ultrasonics.horizRangeReading
-                if(fwd in 20.0..765.0) {
-                    NakiriDashboard["forward"] = fwd
-                }
+                if(fwd in 20.0..765.0 && horiz in 20.0..765.0) {
+                    val forwardNormalized = fwd * yaw.cos
 
-                if(horiz in 20.0..765.0) {
-                    NakiriDashboard["horiz"] = horiz
-                }
+                    val forwardWall = 182.88
+                    val downWall = -182.88
+                    val upWall = 182.88
 
-                val forwardNormalized = fwd * yaw.cos
+                    val deltaX = forwardWall - fwd
+                    val deltaY: Double
 
-                val forwardWall = 182.88
-                val downWall = -182.88
-                val upWall = 182.88
-
-                val deltaX = forwardWall - fwd
-                val deltaY: Double
-
-                val xEstimate = deltaX * yaw.cos // re
-                val yEstimate = if(Globals.ALLIANCE_SIDE == AllianceSide.RED) {
-                    deltaY = downWall + horiz
-                    deltaY * yaw.sin
-                } else {
-                    deltaY = upWall - horiz
-                    deltaY * yaw.cos
-                }
-
-                val ultrasonicPose = Pose(Point(xEstimate, yEstimate), yaw)
-
-                NakiriDashboard["xEstimate"] = xEstimate
-                NakiriDashboard["yEstimate"] = yEstimate
-                NakiriDashboard["delta x"] = deltaX
-                NakiriDashboard["delta y"] = deltaY
-                val crossed = (targetLocation == LocationStates.CRATER && forwardNormalized < 50) ||
-                        (targetLocation == LocationStates.FIELD && forwardNormalized > 80)
-                if(crossed) {
-                    crossCounter++
-                    pose = ultrasonicPose
-                    pose.p = pose.p / 2.54
-                    _poseEstimate = pose.pose2d
-                    ultrasonics.stopReading()
-
-                    locationState = if(targetLocation == LocationStates.CRATER) {
-                        LocationStates.CRATER
+                    val xEstimate = deltaX * yaw.cos // re
+                    val yEstimate = if(Globals.ALLIANCE_SIDE == AllianceSide.RED) {
+                        deltaY = downWall + horiz
+                        deltaY * yaw.sin
                     } else {
-                        LocationStates.FIELD
+                        deltaY = upWall - horiz
+                        deltaY * yaw.cos
                     }
 
-                    targetLocation = LocationStates.NONE
+                    val ultrasonicPose = Pose(Point(xEstimate, yEstimate), yaw)
+
+                    NakiriDashboard["xEstimate"] = xEstimate
+                    NakiriDashboard["yEstimate"] = yEstimate
+                    NakiriDashboard["delta x"] = deltaX
+                    NakiriDashboard["delta y"] = deltaY
+                    val crossed = (targetLocation == LocationStates.CRATER && forwardNormalized < 50) ||
+                            (targetLocation == LocationStates.FIELD && forwardNormalized > 80)
+                    if(crossed) {
+                        crossCounter++
+                        pose = ultrasonicPose
+                        pose.p = pose.p / 2.54
+                        _poseEstimate = pose.pose2d
+                        ultrasonics.stopReading()
+
+                        locationState = if(targetLocation == LocationStates.CRATER) {
+                            LocationStates.CRATER
+                        } else {
+                            LocationStates.FIELD
+                        }
+
+                        targetLocation = LocationStates.NONE
+                    }
                 }
             }
-
             NakiriDashboard.addLine("localizing with ultrasonics")
         }
         NakiriDashboard["pose x"] = pose.x
@@ -215,15 +202,7 @@ class Ayame: Subsystem {
 
         startCounter = ultrasonics.counter
     }
-
-    // override methods
-    // subsystem methods
     override fun update() {
-//        if(Globals.OPMODE_TYPE == OpModeType.AUTO) {
-//            updatePose()
-//        }
-
-//        ultrasonics.update()
 
 //        updatePose()
 
@@ -236,7 +215,6 @@ class Ayame: Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-//        ultrasonics.sendDashboardPacket(debugging)
         if (debugging) {
             NakiriDashboard.setHeader("ayame")
             NakiriDashboard["wheel powers"] = wheels

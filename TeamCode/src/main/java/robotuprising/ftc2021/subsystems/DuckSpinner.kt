@@ -55,10 +55,10 @@ class DuckSpinner : Subsystem {
     }
 
     override fun sendDashboardPacket(debugging: Boolean) {
-        NakiriDashboard.setHeader("duck spinner")
-        NakiriDashboard["state"] = spinnerState
-        NakiriDashboard["last read velocity"] = velocity
-        NakiriDashboard["target velocity"] = targetVelocity
+//        NakiriDashboard.setHeader("duck spinner")
+//        NakiriDashboard["state"] = spinnerState
+//        NakiriDashboard["last read velocity"] = velocity
+//        NakiriDashboard["target velocity"] = targetVelocity
 
         if (debugging) {
             NakiriDashboard["motor power"] = spinnerMotor.power

@@ -76,7 +76,7 @@ class Intake : Subsystem {
 
     override fun sendDashboardPacket(debugging: Boolean) {
         NakiriDashboard.setHeader("intake")
-        NakiriDashboard["state"] = intakeState
+//        NakiriDashboard["state"] = intakeState
         NakiriDashboard["sensor state"] = sensorState
         NakiriDashboard["sensor distance"] = sensorRead
 

@@ -1,6 +1,7 @@
 package robotuprising.lib.math
 
 import com.qualcomm.robotcore.util.Range
+import robotuprising.lib.control.auto.waypoints.Waypoint
 import kotlin.math.* // ktlint-disable no-wildcard-imports
 
 object MathUtil {
@@ -19,6 +20,10 @@ object MathUtil {
 
     fun angleThresh(a: Angle, b: Angle, c: Angle): Boolean {
         return (a - b).wrap().angle.absoluteValue < c.angle
+    }
+
+    fun waypointThresh(currPose: Pose, target: Waypoint, thresh: Double): Boolean {
+        return (currPose.p - target.p).hypot < thresh
     }
 
     // opposite of range

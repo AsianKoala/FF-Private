@@ -42,6 +42,6 @@ abstract class NakiriOpMode : BaseOpMode() {
         nakiri.reset()
     }
 
-    override val is_comp: Boolean
-        get() = Globals.IS_COMP
+//    override val is_comp: Boolean
+//        get() = Globals.IS_COMP
 }
