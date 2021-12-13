@@ -335,7 +335,11 @@ class Nakiri : Subsystem {
         }
     }
 
+    fun runnMiddleTeleOp(shouldStart: Boolean) {
+        middleAutoOuttakeSequence.smartRun(shouldStart)
+    }
     fun runAutoMiddleOuttake() {
+
         if(!middleAutoOuttakeSequence.running) {
             middleAutoOuttakeSequence.reset()
             middleAutoOuttakeSequence.start()

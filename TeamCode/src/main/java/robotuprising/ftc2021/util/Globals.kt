@@ -7,7 +7,7 @@ import robotuprising.lib.opmode.OpModeType
 
 @Config
 object Globals {
-    var ALLIANCE_SIDE = AllianceSide.RED
+    var ALLIANCE_SIDE = AllianceSide.BLUE
     var IS_AUTO = false
     var CUP_LOCATION = Webcam.CupStates.LEFT
 

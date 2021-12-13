@@ -2,7 +2,6 @@ package robotuprising.lib.debug
 
 object Marker {
     // [freq,sum]
-    // todo fix
     var telemetryMap = LinkedHashMap<String, Any>()
     var freqMap = LinkedHashMap<String, LongArray>()
     private var startTime: Long = 0
