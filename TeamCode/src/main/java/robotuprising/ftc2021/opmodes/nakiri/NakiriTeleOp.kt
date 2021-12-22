@@ -1,12 +1,9 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.nakiri
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import robotuprising.ftc2021.subsystems.Nakiri
-import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.math.*
 import robotuprising.lib.math.MathUtil.radians
-import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed

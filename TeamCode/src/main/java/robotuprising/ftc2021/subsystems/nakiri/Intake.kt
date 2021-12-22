@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.subsystems
+package robotuprising.ftc2021.subsystems.nakiri
 
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit

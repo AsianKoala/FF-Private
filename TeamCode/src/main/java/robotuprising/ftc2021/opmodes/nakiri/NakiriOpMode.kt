@@ -1,9 +1,7 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.nakiri
 
-import robotuprising.ftc2021.subsystems.Nakiri
+import robotuprising.ftc2021.subsystems.nakiri.Nakiri
 import robotuprising.ftc2021.util.BulkDataManager
-import robotuprising.ftc2021.util.Globals
-import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.BaseOpMode
 

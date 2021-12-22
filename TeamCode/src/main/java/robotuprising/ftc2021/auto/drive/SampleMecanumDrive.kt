@@ -131,7 +131,6 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) : MecanumDrive(DriveConstants
         }
     }
 
-    // todo look at
     fun setWeightedDrivePower(drivePower: Pose2d) {
         var vel: Pose2d = drivePower
         if ((

@@ -1,7 +1,5 @@
-package robotuprising.ftc2021.subsystems
+package robotuprising.ftc2021.subsystems.nakiri
 
-import com.acmerobotics.roadrunner.control.PIDCoefficients
-import com.acmerobotics.roadrunner.control.PIDFController
 import robotuprising.ftc2021.util.NakiriMotor
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem

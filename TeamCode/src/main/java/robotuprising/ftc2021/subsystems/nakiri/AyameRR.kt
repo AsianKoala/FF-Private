@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.subsystems
+package robotuprising.ftc2021.subsystems.nakiri
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.drive.DriveSignal
@@ -157,7 +157,7 @@ class AyameRR : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstant
         get() = imuOffsetRead
 
     override fun getWheelPositions(): List<Double> {
-        return motors.map { DriveConstants.encoderTicksToInches(it.position.d) } // todo fix to bulk
+        return motors.map { DriveConstants.encoderTicksToInches(it.position.d) }
     }
 
     override fun getWheelVelocities(): List<Double> {

@@ -1,15 +1,12 @@
-package robotuprising.ftc2021.opmodes
+package robotuprising.ftc2021.opmodes.nakiri
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.noahbres.meepmeep.core.toRadians
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import robotuprising.ftc2021.auto.trajectorysequence.TrajectorySequence
 import robotuprising.ftc2021.subsystems.vision.Webcam
 import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.math.MathUtil.radians
-import robotuprising.lib.math.Point
 import robotuprising.lib.opmode.AllianceSide
-import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 @Autonomous(preselectTeleOp = "NakiriTeleOp")

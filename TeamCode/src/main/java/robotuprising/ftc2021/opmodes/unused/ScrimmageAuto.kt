@@ -2,11 +2,7 @@ package robotuprising.ftc2021.opmodes.unused
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import robotuprising.ftc2021.opmodes.NakiriOpMode
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
+import robotuprising.ftc2021.opmodes.nakiri.NakiriOpMode
 
 @Autonomous(name = "Scrimmage Auto")
 @Disabled

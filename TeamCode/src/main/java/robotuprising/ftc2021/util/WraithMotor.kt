@@ -6,10 +6,12 @@ import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.openftc.revextensions2.ExpansionHubEx
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.lib.opmode.NakiriDashboard
+import robotuprising.lib.opmode.WraithDashboard
 import kotlin.math.absoluteValue
 
-class NakiriMotor(private val name: String, private val onMaster: Boolean) {
+// todo fix bulk position
+// todo make everything else read from bulk reads
+class WraithMotor(private val name: String, private val onMaster: Boolean) {
     private val motor = BulkDataManager.hwMap[ExpansionHubMotor::class.java, name]
 
     var power: Double = 0.0
@@ -34,49 +36,49 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
 
     val velocity: Double get() = motor.velocity
 
-    val reverse: NakiriMotor
+    val reverse: WraithMotor
         get() {
             direction = DcMotorSimple.Direction.REVERSE
             return this
         }
 
-    val forward: NakiriMotor
+    val forward: WraithMotor
         get() {
             direction = DcMotorSimple.Direction.FORWARD
             return this
         }
 
-    val float: NakiriMotor
+    val float: WraithMotor
         get() {
             zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
             return this
         }
 
-    val brake: NakiriMotor
+    val brake: WraithMotor
         get() {
             zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
             return this
         }
 
-    val openLoopControl: NakiriMotor
+    val openLoopControl: WraithMotor
         get() {
             mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             return this
         }
 
-    val velocityControl: NakiriMotor
+    val velocityControl: WraithMotor
         get() {
             mode = DcMotor.RunMode.RUN_USING_ENCODER
             return this
         }
 
-    val positionControl: NakiriMotor
+    val positionControl: WraithMotor
         get() {
             mode = DcMotor.RunMode.RUN_TO_POSITION
             return this
         }
 
-    val resetEncoder: NakiriMotor
+    val resetEncoder: WraithMotor
         get() {
             mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             return this
@@ -114,16 +116,16 @@ class NakiriMotor(private val name: String, private val onMaster: Boolean) {
     val overTemp get() = motor.isBridgeOverTemp
 
     fun sendDataToDashboard() {
-        NakiriDashboard.addLine("$name motor data")
-        NakiriDashboard["name"] = name
-        NakiriDashboard["$name hub"] = hub
-        NakiriDashboard["$name port number"] = portNumber
-        NakiriDashboard["$name mode"] = mode
-        NakiriDashboard["$name direction"] = direction
-        NakiriDashboard["$name zero behavior"] = zeroPowerBehavior
-        NakiriDashboard["$name current"] = current
-        NakiriDashboard["$name current draw"] = currentDraw
-        NakiriDashboard["$name over temp"] = overTemp
+        WraithDashboard.addLine("$name motor data")
+        WraithDashboard["name"] = name
+        WraithDashboard["$name hub"] = hub
+        WraithDashboard["$name port number"] = portNumber
+        WraithDashboard["$name mode"] = mode
+        WraithDashboard["$name direction"] = direction
+        WraithDashboard["$name zero behavior"] = zeroPowerBehavior
+        WraithDashboard["$name current"] = current
+        WraithDashboard["$name current draw"] = currentDraw
+        WraithDashboard["$name over temp"] = overTemp
     }
 
     init {
