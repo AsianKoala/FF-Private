@@ -26,7 +26,7 @@ class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
                 currWaypoint++
             }
         } while (skip && currWaypoint < waypoints.size - 1)
-        if (isFinished) return Pose(Point.ORIGIN, Angle(0.d, AngleUnit.RAW))
+        if (isFinished) return Pose(Point(), Angle(0.d, AngleUnit.RAW))
 
         val start = waypoints[currWaypoint]
         val end = waypoints[currWaypoint + 1]

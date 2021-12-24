@@ -44,7 +44,6 @@ class Lift : Subsystem {
         HIGH(Globals.LIFT_HIGH)
     }
 
-
     fun setLevel(stage: LiftStages) {
         liftState = stage
         controller.reset()

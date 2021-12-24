@@ -1,23 +1,28 @@
 package robotuprising.ftc2021.subsystems.wraith
 
-import robotuprising.ftc2021.util.WraithMotor
+object Turret : MotorSubsystem(
+        ControlledMotorConfig(
+                "turret",
+                false,
 
-class Turret : WraithSubsystem {
-    private val turretMotor = WraithMotor("turret", false)
+                MotorControlType.POSITION_PID,
 
-    override fun update() {
-        TODO("Not yet implemented")
-    }
+                90.0,
+                1.0,
+                5.0,
 
-    override fun read() {
-        TODO("Not yet implemented")
-    }
+                deadzone = 0.5,
+                positionLowerLimit = -91.0,
+                positionUpperLimit = 91.0
+        )
+) {
 
-    override fun sendDashboardData() {
-        TODO("Not yet implemented")
-    }
+    val turretAngle: Double get() = position
 
-    override fun reset() {
-        TODO("Not yet implemented")
+    val homing: Boolean get() = isAtTarget
+
+    fun setTurretAngle(angle: Double) {
+        controller.reset()
+        controller.targetPosition = angle
     }
 }

@@ -13,7 +13,7 @@ class Speedometer {
     fun update(position: Pose): Pose {
         return if (pastPositions.size == 0) {
             pastPositions.add(TimePose(position))
-            Pose(Point.ORIGIN, Angle.EAST)
+            Pose(Point(), Angle.EAST)
         } else {
             bestIndex = max(pastPositions.size - 4, 0)
             val ref = pastPositions[bestIndex]

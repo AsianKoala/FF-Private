@@ -8,6 +8,8 @@ object MathUtil {
     const val EPSILON = 1e-6
     const val TAU = 2 * PI
 
+    infix fun Double.epsilonNotEqual(other: Double) = abs(this - other) > EPSILON
+
     val Double.radians get() = Math.toRadians(this)
     val Double.degrees get() = Math.toDegrees(this)
 

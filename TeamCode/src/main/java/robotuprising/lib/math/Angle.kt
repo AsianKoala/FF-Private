@@ -41,5 +41,6 @@ data class Angle(
 
     companion object {
         val EAST get() = Angle(0.0, AngleUnit.RAD)
+        val EAST_RAW get() = Angle(0.0, AngleUnit.RAW)
     }
 }

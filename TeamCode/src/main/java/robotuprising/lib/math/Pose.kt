@@ -23,7 +23,7 @@ data class Pose(
     override fun toString() = String.format("%.2f, %.2f, %.2f", x, y, h.wrap().deg)
 
     companion object {
-        val DEFAULT_ANGLE = Pose(Point.ORIGIN, Angle.EAST)
-        val DEFAULT_RAW = Pose(Point.ORIGIN, Angle(0.0, AngleUnit.RAW))
+        val DEFAULT_ANGLE = Pose(Point(), Angle.EAST)
+        val DEFAULT_RAW = Pose(Point(), Angle.EAST_RAW)
     }
 }

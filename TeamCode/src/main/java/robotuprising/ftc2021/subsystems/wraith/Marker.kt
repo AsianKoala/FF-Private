@@ -2,7 +2,7 @@ package robotuprising.ftc2021.subsystems.wraith
 
 import robotuprising.ftc2021.util.WraithServo
 
-class Marker : WraithSubsystem {
+class Marker : Subsystem {
     private val pitchServo = WraithServo("pitch")
     private val yawServo = WraithServo("yaw")
     private val extendServo = WraithServo("extend")

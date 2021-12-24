@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.openftc.revextensions2.ExpansionHubEx
 import org.openftc.revextensions2.ExpansionHubMotor
+import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import robotuprising.lib.opmode.WraithDashboard
 import kotlin.math.absoluteValue
 
@@ -17,7 +18,7 @@ class WraithMotor(private val name: String, private val onMaster: Boolean) {
     var power: Double = 0.0
         set(value) {
             val clipped = Range.clip(value, -1.0, 1.0)
-            if (clipped != field && (clipped == 0.0 || clipped.absoluteValue == 1.0 || (clipped - field).absoluteValue > 0.005)) {
+            if (clipped epsilonNotEqual field && (clipped == 0.0 || clipped.absoluteValue == 1.0 || (clipped - field).absoluteValue > 0.005)) {
                 field = value
                 motor.power = value
             }

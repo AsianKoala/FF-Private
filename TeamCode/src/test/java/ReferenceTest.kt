@@ -5,7 +5,7 @@ object ReferenceTest {
     fun main(args: Array<String>) {
         val a = ArrayList<Point>()
         for (i in 0..4) {
-            a.add(Point.ORIGIN)
+            a.add(Point())
         }
         def(a)
         a.forEach { println(it) }

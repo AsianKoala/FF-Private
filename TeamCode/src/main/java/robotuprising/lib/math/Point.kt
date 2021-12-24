@@ -7,8 +7,8 @@ import kotlin.math.hypot
 import kotlin.math.sin
 
 data class Point(
-    var x: Double,
-    var y: Double
+    var x: Double = 0.0,
+    var y: Double = 0.0
 ) {
     val hypot get() = hypot(x, y)
     val atan2 get() = Angle(atan2(y, x), AngleUnit.RAD)
