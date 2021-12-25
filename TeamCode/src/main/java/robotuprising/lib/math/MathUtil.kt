@@ -20,6 +20,16 @@ object MathUtil {
         h.sin * p.y - h.cos * p.x
     )
 
+    fun clamp(x: Double, a: Double, b: Double): Double {
+        if(x < a) {
+            return a
+        } else if(x > b) {
+            return b
+        }
+
+        return x
+    }
+
     fun angleThresh(a: Angle, b: Angle, c: Angle): Boolean {
         return (a - b).wrap().angle.absoluteValue < c.angle
     }

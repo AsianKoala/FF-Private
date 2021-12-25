@@ -1,31 +1,41 @@
 package robotuprising.ftc2021.subsystems.wraith
 
+import robotuprising.ftc2021.util.Constants
+import robotuprising.lib.math.MathUtil.radians
 import kotlin.math.absoluteValue
+import kotlin.math.cos
+import kotlin.math.sin
 
-// degrees, inches, degrees relative to slides
-data class WraithState(var turret: Double, var slide: Double, var arm: Double) {
+// degrees, inches, degrees
+data class WraithState(
+        var turret: Double = Turret.config.homePosition,
+        var slide: Double = Slide.config.homePosition,
+        var arm: Double = Constants.armMountAngle
+) {
 
-    val asList get() = listOf(turret, slide,  arm)
+    val asList get() = listOf(turret, slide, arm)
 
-    // find all data relative to the robot TODO
-    // @see Constants.kt
-    val slideX: Double get() = TODO()
+    // find all data relative to the robot
+    // TODO test if actually works
+    val slideX: Double get() = -1 * cos(turret.radians) * Constants.slideTopXOffset + Constants.turretCenterXOffset
 
-    val slideY: Double get() = TODO()
+    val slideY: Double get() = -1 * sin(turret.radians) * Constants.slideTopYOffset + Constants.turretCenterYOffset
 
-    val slideZ: Double get() = TODO()
+    val slideZ: Double get() = Constants.slideStages * slide * sin(Constants.slideMountAngle.radians) + Constants.turretCenterZOffset
 
-    val armX: Double get() = TODO()
+    private val topDownArmLength = Constants.armLength * cos(arm.radians)
 
-    val armY: Double get() = TODO()
+    val armX: Double get() = slideX + topDownArmLength * cos(turret.radians)
 
-    val armZ: Double get() = TODO()
+    val armY: Double get() = slideY + topDownArmLength * sin(turret.radians)
+
+    val armZ: Double get() = slideZ + Constants.armLength * sin(arm.radians)
 
     fun isAtDesiredState(targetState: WraithState): Boolean {
         val targetStateList = targetState.asList
 
         asList.forEachIndexed { i, it ->
-            if((targetStateList[i] - it).absoluteValue < thresholds[i]) {
+            if ((targetStateList[i] - it).absoluteValue < thresholds[i]) {
                 return false
             }
         }
@@ -34,10 +44,10 @@ data class WraithState(var turret: Double, var slide: Double, var arm: Double) {
     }
 
     companion object {
-        const val turretDegreesThreshold = 0.5
-        const val slideInchesThreshold = 0.25
-        const val armDegreesThreshold = 1.0
+        val turretEpsilon = Turret.config.positionEpsilon
+        val slideEpsilon = Slide.config.positionEpsilon
+        val armEpsilon = 1.0
 
-        val thresholds = listOf(turretDegreesThreshold,  slideInchesThreshold, armDegreesThreshold)
+        val thresholds = listOf(turretEpsilon, slideEpsilon, armEpsilon)
     }
 }

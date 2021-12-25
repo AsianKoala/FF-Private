@@ -22,6 +22,7 @@ data class Pose(
     val toRawString = String.format("%.2f, %.2f, %.2f", x, y, h.angle)
     override fun toString() = String.format("%.2f, %.2f, %.2f", x, y, h.wrap().deg)
 
+    // TODO check if referencing this will do bad stuff if changing
     companion object {
         val DEFAULT_ANGLE = Pose(Point(), Angle.EAST)
         val DEFAULT_RAW = Pose(Point(), Angle.EAST_RAW)

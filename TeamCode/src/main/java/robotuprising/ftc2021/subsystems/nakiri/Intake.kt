@@ -2,6 +2,9 @@ package robotuprising.ftc2021.subsystems.nakiri
 
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import robotuprising.ftc2021.hardware.nakiri.NakiriMotor
+import robotuprising.ftc2021.hardware.nakiri.NakiriServo
+import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.util.*
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem

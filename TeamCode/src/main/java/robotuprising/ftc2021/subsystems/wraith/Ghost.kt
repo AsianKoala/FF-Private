@@ -1,13 +1,14 @@
 package robotuprising.ftc2021.subsystems.wraith
 
-import robotuprising.ftc2021.util.WraithMotor
+import robotuprising.ftc2021.hardware.wraith.interfaces.Loopable
+import robotuprising.ftc2021.hardware.wraith.WraithMotor
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import kotlin.math.absoluteValue
 
-class Ghost : Subsystem {
+object Ghost : Subsystem(), Loopable {
     private val fl = WraithMotor("fl", true).brake.openLoopControl.reverse
     private val bl = WraithMotor("bl", true).brake.openLoopControl.reverse
     private val fr = WraithMotor("fr", true).brake.openLoopControl
@@ -16,7 +17,15 @@ class Ghost : Subsystem {
 
     var powers = Pose(Point(), Angle(0.0, AngleUnit.RAD))
 
-    override fun update() {
+    override fun reset() {
+        powers = Pose.DEFAULT_RAW
+    }
+
+    override fun updateDashboard(debugging: Boolean) {
+
+    }
+
+    override fun loop() {
         val fl = powers.y + powers.x + powers.h.angle
         val bl = powers.y - powers.x + powers.h.angle
         val fr = powers.y - powers.x - powers.h.angle
@@ -29,18 +38,6 @@ class Ghost : Subsystem {
         } else {
             motors.forEachIndexed { i, it -> it.power = wheels[i] }
         }
-    }
-
-    override fun read() {
-
-    }
-
-    override fun sendDashboardData() {
-
-    }
-
-    override fun reset() {
-        powers = Pose.DEFAULT_RAW
     }
 
 }

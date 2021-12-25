@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.subsystems.nakiri
 
 import robotuprising.ftc2021.util.Globals
-import robotuprising.ftc2021.util.NakiriServo
+import robotuprising.ftc2021.hardware.nakiri.NakiriServo
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 

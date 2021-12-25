@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
 import robotuprising.ftc2021.util.Globals
-import robotuprising.ftc2021.util.NakiriMotor
+import robotuprising.ftc2021.hardware.nakiri.NakiriMotor
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d

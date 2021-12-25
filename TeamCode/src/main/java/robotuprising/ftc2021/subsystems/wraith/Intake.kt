@@ -1,17 +1,16 @@
 package robotuprising.ftc2021.subsystems.wraith
 
-import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
-import robotuprising.ftc2021.util.BulkDataManager
-import robotuprising.ftc2021.util.Constants
-import robotuprising.ftc2021.util.WraithMotor
-import robotuprising.lib.opmode.WraithDashboard
+import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorControlType
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystem
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystemConfig
+import robotuprising.ftc2021.util.*
 
 object Intake : MotorSubsystem(
-        ControlledMotorConfig(
+        MotorSubsystemConfig(
                 "intake",
-                false,
 
                 MotorControlType.OPEN_LOOP
         )
@@ -36,7 +35,6 @@ object Intake : MotorSubsystem(
 
     override fun read() {
         super.read()
-
         lastLoadingSensorRead = loadingSensor.getDistance(DistanceUnit.MM)
     }
 }

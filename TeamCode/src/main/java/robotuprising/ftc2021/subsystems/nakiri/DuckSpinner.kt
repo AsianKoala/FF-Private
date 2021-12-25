@@ -1,6 +1,6 @@
 package robotuprising.ftc2021.subsystems.nakiri
 
-import robotuprising.ftc2021.util.NakiriMotor
+import robotuprising.ftc2021.hardware.nakiri.NakiriMotor
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 

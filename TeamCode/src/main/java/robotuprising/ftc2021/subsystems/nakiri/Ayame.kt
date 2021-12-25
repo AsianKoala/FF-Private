@@ -6,10 +6,10 @@ import com.acmerobotics.roadrunner.kinematics.MecanumKinematics
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.hardware.bosch.BNO055IMUImpl
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
-import robotuprising.ftc2021.auto.drive.DriveConstants
-import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.ftc2021.auto.roadrunner.drive.DriveConstants
+import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.util.Globals
-import robotuprising.ftc2021.util.NakiriMotor
+import robotuprising.ftc2021.hardware.nakiri.NakiriMotor
 import robotuprising.lib.hardware.AxesSigns
 import robotuprising.lib.hardware.BNO055IMUUtil.remapAxes
 import robotuprising.lib.math.Angle

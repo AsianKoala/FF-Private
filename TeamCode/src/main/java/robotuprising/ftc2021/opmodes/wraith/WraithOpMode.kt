@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.opmodes.wraith
 
 import robotuprising.ftc2021.subsystems.wraith.Wraith
-import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.lib.opmode.WraithDashboard
 import robotuprising.lib.system.BaseOpMode
 

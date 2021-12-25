@@ -1,16 +1,44 @@
 package robotuprising.ftc2021.subsystems.wraith
 
-import com.qualcomm.robotcore.hardware.DigitalChannel
-import robotuprising.ftc2021.util.BulkDataManager
-import robotuprising.ftc2021.util.WraithMotor
+import robotuprising.ftc2021.hardware.wraith.MotorConfig
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorControlType
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystem
+import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystemConfig
+import robotuprising.ftc2021.util.*
+import robotuprising.lib.math.MathUtil
 
-class Slide : Subsystem {
-    private val slideMotor = WraithMotor("slide", false).float.openLoopControl
-    private val limitSwitch = BulkDataManager.hwMap[DigitalChannel::class.java, "limitSwitch"]
+object Slide : MotorSubsystem(
+        MotorSubsystemConfig(
+                "slide",
 
-    private var pos = 0.0
-    private var target = 0.0
-    private var output = 0.0
+                MotorControlType.MOTION_PROFILE,
 
+                0.0,
+                (1 / MotorConfig.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
+                1.0,
 
+                0.0,
+                0.0,
+                0.0,
+                0.001,
+                1 / 10.0,
+                0.003,
+                { _, _ -> 0.0 },
+
+                10.0,
+                5.0,
+                0.0,
+
+                0.1,
+
+                0.25,
+                0.0,
+                180.0 / 25.4
+        )
+) {
+    val slideInches get() = position
+
+    fun moveSlide(target: Double) {
+        startFollowingMotionProfile(slideInches, target)
+    }
 }

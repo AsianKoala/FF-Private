@@ -1,6 +1,6 @@
 package robotuprising.ftc2021.subsystems.nakiri
 
-import robotuprising.ftc2021.subsystems.vision.Webcam
+import robotuprising.ftc2021.subsystems.nakiri.vision.Webcam
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point

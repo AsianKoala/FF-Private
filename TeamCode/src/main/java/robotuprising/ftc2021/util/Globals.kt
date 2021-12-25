@@ -1,9 +1,8 @@
 package robotuprising.ftc2021.util
 
 import com.acmerobotics.dashboard.config.Config
-import robotuprising.ftc2021.subsystems.vision.Webcam
+import robotuprising.ftc2021.subsystems.nakiri.vision.Webcam
 import robotuprising.lib.opmode.AllianceSide
-import robotuprising.lib.opmode.OpModeType
 
 @Config
 object Globals {

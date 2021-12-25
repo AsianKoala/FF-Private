@@ -3,7 +3,7 @@ package robotuprising.ftc2021.subsystems.nakiri
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.util.MB1242
-import robotuprising.ftc2021.util.BulkDataManager
+import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 
