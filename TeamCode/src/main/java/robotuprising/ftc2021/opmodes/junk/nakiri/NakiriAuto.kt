@@ -64,8 +64,8 @@ class NakiriAuto : NakiriOpMode() {
             .transitionTimed(1.3)
             .build()
 
-    override fun m_init() {
-        super.m_init()
+    override fun mInit() {
+        super.mInit()
 
         moveToDepositTrajectorySequence = nakiri.ayame.trajectorySequenceBuilder(startPose)
                 .lineToSplineHeading(initialDepositPose2d)
@@ -88,20 +88,20 @@ class NakiriAuto : NakiriOpMode() {
         nakiri.startWebcam()
     }
 
-    override fun m_init_loop() {
-        super.m_init_loop()
+    override fun mInitLoop() {
+        super.mInitLoop()
         nakiri.updateWebcam()
     }
 
-    override fun m_start() {
+    override fun mStart() {
         super.start()
         nakiri.stopWebcam()
         initialDepositStateMachine.reset()
         initialDepositStateMachine.start()
     }
 
-    override fun m_loop() {
-        super.m_loop()
+    override fun mLoop() {
+        super.mLoop()
         initialDepositStateMachine.update()
     }
 

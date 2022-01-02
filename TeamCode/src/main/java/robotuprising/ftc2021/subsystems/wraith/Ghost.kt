@@ -2,6 +2,7 @@ package robotuprising.ftc2021.subsystems.wraith
 
 import robotuprising.ftc2021.hardware.wraith.interfaces.Loopable
 import robotuprising.ftc2021.hardware.wraith.WraithMotor
+import robotuprising.lib.control.auto.path.PurePursuitPath
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
@@ -16,6 +17,8 @@ object Ghost : Subsystem(), Loopable {
     private val motors = listOf(fl, bl, fr, br)
 
     var powers = Pose(Point(), Angle(0.0, AngleUnit.RAD))
+
+    var currentPath: PurePursuitPath? = null
 
     override fun reset() {
         powers = Pose.DEFAULT_RAW

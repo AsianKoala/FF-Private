@@ -1,4 +1,5 @@
 package robotuprising.ftc2021.manager
 
-object WraithDataManager {
+// todo
+object LoggerManager {
 }

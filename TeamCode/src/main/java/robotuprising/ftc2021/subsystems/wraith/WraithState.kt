@@ -2,6 +2,7 @@ package robotuprising.ftc2021.subsystems.wraith
 
 import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.math.MathUtil.radians
+import robotuprising.lib.math.Vector3d
 import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
@@ -10,7 +11,8 @@ import kotlin.math.sin
 data class WraithState(
         var turret: Double = Turret.config.homePosition,
         var slide: Double = Slide.config.homePosition,
-        var arm: Double = Constants.armMountAngle
+        var arm: Double = Constants.armMountAngle,
+        var outtake: Double = Constants.outtakeMountAngle,
 ) {
 
     val asList get() = listOf(turret, slide, arm)
@@ -23,6 +25,7 @@ data class WraithState(
 
     val slideZ: Double get() = Constants.slideStages * slide * sin(Constants.slideMountAngle.radians) + Constants.turretCenterZOffset
 
+
     private val topDownArmLength = Constants.armLength * cos(arm.radians)
 
     val armX: Double get() = slideX + topDownArmLength * cos(turret.radians)
@@ -30,6 +33,10 @@ data class WraithState(
     val armY: Double get() = slideY + topDownArmLength * sin(turret.radians)
 
     val armZ: Double get() = slideZ + Constants.armLength * sin(arm.radians)
+
+
+    val slide3dPosition get() = Vector3d(slideX, slideY, slideZ)
+    val arm3dPosition get() = Vector3d(armX, armY, armZ)
 
     fun isAtDesiredState(targetState: WraithState): Boolean {
         val targetStateList = targetState.asList
@@ -44,10 +51,11 @@ data class WraithState(
     }
 
     companion object {
-        val turretEpsilon = Turret.config.positionEpsilon
-        val slideEpsilon = Slide.config.positionEpsilon
-        val armEpsilon = 1.0
+        private val turretEpsilon = Turret.config.positionEpsilon
+        private val slideEpsilon = Slide.config.positionEpsilon
+        private val armEpsilon = 1.0
+        private val outtakeEpsilon = 1.0
 
-        val thresholds = listOf(turretEpsilon, slideEpsilon, armEpsilon)
+        private val thresholds = listOf(turretEpsilon, slideEpsilon, armEpsilon, outtakeEpsilon)
     }
 }

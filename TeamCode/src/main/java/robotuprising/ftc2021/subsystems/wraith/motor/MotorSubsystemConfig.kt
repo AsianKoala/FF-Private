@@ -25,5 +25,7 @@ data class MotorSubsystemConfig(
 
         val positionEpsilon: Double = 0.0,
         val positionUpperLimit: Double = Double.POSITIVE_INFINITY,
-        val positionLowerLimit: Double = Double.NEGATIVE_INFINITY
+        val positionLowerLimit: Double = Double.NEGATIVE_INFINITY,
+
+        var offset: Double = 0.0
 )

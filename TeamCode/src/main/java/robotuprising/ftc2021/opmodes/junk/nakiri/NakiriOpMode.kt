@@ -8,7 +8,7 @@ import robotuprising.lib.system.BaseOpMode
 abstract class NakiriOpMode : BaseOpMode() {
     lateinit var nakiri: Nakiri
 
-    override fun m_init() {
+    override fun mInit() {
         BulkDataManager.init(hardwareMap)
         NakiriDashboard.init(telemetry, false)
 
@@ -16,18 +16,18 @@ abstract class NakiriOpMode : BaseOpMode() {
         nakiri.reset()
     }
 
-    override fun m_init_loop() {
+    override fun mInitLoop() {
         BulkDataManager.read()
         nakiri.sendDashboardPacket(false)
     }
 
-    override fun m_loop() {
+    override fun mLoop() {
         BulkDataManager.read()
         nakiri.update()
         nakiri.sendDashboardPacket(false)
     }
 
-    override fun m_stop() {
+    override fun mStop() {
         nakiri.reset()
     }
 }

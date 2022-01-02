@@ -1,14 +1,11 @@
 package robotuprising.lib.system
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
-import robotuprising.ftc2021.util.Globals
 import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.AllianceSide
+import robotuprising.lib.opmode.BlueAlliance
 import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.opmode.OpModeStatus
-import robotuprising.lib.opmode.OpModeType
 
 abstract class BaseOpMode : LinearOpMode() {
     private val opModeStatus: OpModeStatus
@@ -21,28 +18,27 @@ abstract class BaseOpMode : LinearOpMode() {
     private var hasStarted = false
     private var prevLoopTime = System.currentTimeMillis()
 
-    private var opModeType: OpModeType = OpModeType.AUTO
     private var debugging = false
 
-    private var allianceSide = AllianceSide.BLUE
+    protected var allianceSide = AllianceSide.BLUE
 
     override fun runOpMode() {
         debugging = javaClass.isAnnotationPresent(Debuggable::class.java)
-        opModeType = if (javaClass.isAnnotationPresent(Autonomous::class.java)) {
-            OpModeType.AUTO
+
+        allianceSide = if(javaClass.isAnnotationPresent(BlueAlliance::class.java)) {
+            AllianceSide.BLUE
         } else {
-            OpModeType.TELEOP
+            AllianceSide.RED
         }
 
-        val name = (internalOpModeServices as OpModeManagerImpl).activeOpModeName
-        Globals.IS_AUTO = name == "NakiriAuto"
 
-        m_init()
+
+        mInit()
 
         mainLoop@ while (true) {
             when (opModeStatus) {
                 OpModeStatus.INIT_LOOP -> {
-                    m_init_loop()
+                    mInitLoop()
                 }
 
                 OpModeStatus.LOOP -> {
@@ -50,9 +46,9 @@ abstract class BaseOpMode : LinearOpMode() {
                         val dt = System.currentTimeMillis() - prevLoopTime
                         telemetry.addData("loop ms", dt)
                         prevLoopTime = System.currentTimeMillis()
-                        m_loop()
+                        mLoop()
                     } else {
-                        m_start()
+                        mStart()
                         hasStarted = true
                     }
                 }
@@ -63,15 +59,15 @@ abstract class BaseOpMode : LinearOpMode() {
             }
 
             NakiriDashboard.update()
-//            telemetry.update()
         }
 
-        m_stop()
+        mStop()
     }
 
-    abstract fun m_init()
-    open fun m_init_loop() {}
-    open fun m_start() {}
-    abstract fun m_loop()
-    open fun m_stop() {}
+    abstract fun mInit()
+    open fun mInitLoop() {}
+    open fun mStart() {}
+    abstract fun mLoop()
+    open fun mStop() {}
+    open fun mTest() {}
 }

@@ -12,17 +12,17 @@ import robotuprising.lib.system.BaseOpMode
 class UltrasonicsTest : BaseOpMode() {
     private lateinit var ultrasonics: Ultrasonics
 
-    override fun m_init() {
+    override fun mInit() {
         BulkDataManager.init(hardwareMap)
         NakiriDashboard.init(telemetry, true)
         ultrasonics = Ultrasonics()
     }
 
-    override fun m_start() {
+    override fun mStart() {
         ultrasonics.startReading()
     }
 
-    override fun m_loop() {
+    override fun mLoop() {
         BulkDataManager.read()
         ultrasonics.update()
         ultrasonics.sendDashboardPacket(false)

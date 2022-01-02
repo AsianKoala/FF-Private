@@ -133,18 +133,18 @@ class NakiriTeleOp : NakiriOpMode() {
         }
     }
 
-    override fun m_init() {
-        super.m_init()
+    override fun mInit() {
+        super.mInit()
         nakiri.ayame.poseEstimate = Pose2d(8.0, 63.0, 90.0.radians)
     }
 
-    override fun m_start() {
-        super.m_start()
+    override fun mStart() {
+        super.mStart()
 //        nakiri.startGoingOverPipes() // testing
     }
 
-    override fun m_loop() {
-        super.m_loop()
+    override fun mLoop() {
+        super.mLoop()
         driveControl()
         intakeControl()
         outtakeControl()

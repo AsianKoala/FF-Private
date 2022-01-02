@@ -4,31 +4,27 @@ import robotuprising.lib.util.Extensions.mmToIn
 
 object Constants {
 
-    // used in determining the three dimensional pose of the superstructure
+    // used in determining the three dimensional vector of the superstructure
     const val turretCenterXOffset = 0.0 // relative to robot center, inches
     const val turretCenterYOffset = 0.0 // relative to robot center, inches
     const val turretCenterZOffset = 0.0 // relative to the ground, inches
 
-    const val slideMountAngle = 180.0 - 10.0 // degrees, relative to the robot
+    const val slideMountAngle = 0.0 // degrees, relative to the robot
     const val slideTopXOffset = 0.0 // relative to turret center, inches
     const val slideTopYOffset = 0.0 // relative to turret center, inches
-    const val slideTopZOffset = 0.0 // relative to the ground, inches
 
-    const val armMountDistanceAlongSlide = 0.0 // inches
     const val armLength = 0.0 // inches
-    const val armMountAngle = slideMountAngle
+    const val armMountAngle = 0.0
 
     const val slideStages = 5
 
 
-    const val armAngleThresholdForCollision = 0.0 // relative to slides, degrees
-    const val slideExtendThresholdForCollision = 0.0 // relative to the slide, inches
-
-    const val turretAngleForCollision = 0.0
+    const val outtakeMountAngle = 0.0
 
 
+    const val loadingSensorThreshold = 0.0
 
-    const val loadingSensorThreshold = 25.0
+    const val intakeSensorThreshold = 0.0
 
 
     val slideSpoolRadius = 35.0.mmToIn
@@ -43,4 +39,23 @@ object Constants {
     const val auxOdoExtend = 0.0
 
 
+    const val outtakeReadyPosition = 0.0
+    const val outtakeDepositPosition = 0.0
+
+    const val indexerOpenPosition = 0.0
+    const val indexerLockedPosition = 0.0
+    const val indexerIndexingPosition = 0.0
+
+    const val armHomePosition = 0.0
+    const val armIntermediatePosition = 0.0
+    const val armAllianceDepositPosition = 0.0
+    const val armSharedDepositPosition = 0.0
+
+
+    const val duckWheelDiameter = 0.0
+    const val carouselDiameter = 1.0
+
+    const val turretZeroValue = 0.0
+
+    const val slideZeroValue = 0.0
 }

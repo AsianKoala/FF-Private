@@ -13,6 +13,8 @@ object SubsystemManager {
     private val readableSubsystems: ArrayList<Readable> = ArrayList()
     private val testableSubsystems: ArrayList<Testable> = ArrayList()
 
+    private var zeroedYet = false
+
     fun resetAll() {
         subsystems.forEach(Subsystem::reset)
     }
@@ -27,6 +29,8 @@ object SubsystemManager {
 
     fun zeroAll() {
         zeroableSubsystems.forEach(Zeroable::zero)
+
+        zeroedYet = true
     }
 
     fun readAll() {
@@ -37,7 +41,15 @@ object SubsystemManager {
         testableSubsystems.forEach(Testable::test)
     }
 
-    fun setSubsystems(vararg allSubsystems: Subsystem) {
+    fun prepareForInit() {
+
+    }
+
+    fun init() {
+        resetAll()
+    }
+
+    fun registerSubsystems(vararg allSubsystems: Subsystem) {
         allSubsystems.forEach { register(it) }
     }
 

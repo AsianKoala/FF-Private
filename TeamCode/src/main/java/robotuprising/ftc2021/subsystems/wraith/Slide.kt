@@ -1,6 +1,8 @@
 package robotuprising.ftc2021.subsystems.wraith
 
+import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.wraith.MotorConfig
+import robotuprising.ftc2021.hardware.wraith.interfaces.Zeroable
 import robotuprising.ftc2021.subsystems.wraith.motor.MotorControlType
 import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystem
 import robotuprising.ftc2021.subsystems.wraith.motor.MotorSubsystemConfig
@@ -14,7 +16,7 @@ object Slide : MotorSubsystem(
                 MotorControlType.MOTION_PROFILE,
 
                 0.0,
-                (1 / MotorConfig.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
+                (1.0 / MotorConfig.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
                 1.0,
 
                 0.0,
@@ -35,10 +37,24 @@ object Slide : MotorSubsystem(
                 0.0,
                 180.0 / 25.4
         )
-) {
-    val slideInches get() = position
+), Zeroable {
+    val slideInches get() = position * Constants.slideStages
 
-    fun moveSlide(target: Double) {
-        startFollowingMotionProfile(slideInches, target)
+    // target is in continuous form
+    fun setSlideInches(target: Double) {
+        generateAndFollowMotionProfile(position, target / Constants.slideStages)
     }
+
+    override val zeroInitTime: Long = 0
+    override val postOffsetValue: Double = Constants.turretZeroValue
+    override var offset: Double = 0.0
+
+    override fun zero() {
+
+    }
+
+    override fun readyForInit(): Boolean {
+        TODO("Not yet implemented")
+    }
+
 }

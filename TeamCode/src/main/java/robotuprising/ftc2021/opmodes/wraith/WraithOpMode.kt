@@ -8,7 +8,7 @@ import robotuprising.lib.system.BaseOpMode
 class WraithOpMode : BaseOpMode() {
     lateinit var wraith: Wraith
 
-    override fun m_init() {
+    override fun mInit() {
         BulkDataManager.init(hardwareMap)
         WraithDashboard.init(telemetry, true)
 
@@ -16,17 +16,17 @@ class WraithOpMode : BaseOpMode() {
         wraith.reset()
     }
 
-    override fun m_init_loop() {
+    override fun mInitLoop() {
         BulkDataManager.read()
         wraith.periodic()
     }
 
-    override fun m_loop() {
+    override fun mLoop() {
         BulkDataManager.read()
         wraith.periodic()
     }
 
-    override fun m_stop() {
+    override fun mStop() {
         wraith.reset()
     }
 
