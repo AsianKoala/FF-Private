@@ -1,11 +1,32 @@
 package robotuprising.ftc2021.manager
 
+import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.lib.util.Extensions.d
 
 object GameStateManager {
+    private val gameTimer = ElapsedTime()
+
+    private val autoTime = 30.0
+    private val transitionTime = 8.0 + autoTime
+    private val teleopTime = 120.0 + transitionTime
+    private val endgameTime = 30.0 + teleopTime
+
+    fun startTimer() {
+        gameTimer.reset()
+    }
+
     private var lastCycleTime = -1
 
-    var systemState = SystemStates.INIT
+    val systemState: SystemStates get() = when {
+        gameTimer.seconds() > endgameTime -> SystemStates.FINISHED
+        gameTimer.seconds() > teleopTime -> SystemStates.ENDGAME
+        gameTimer.seconds() > transitionTime -> SystemStates.TELEOP
+        gameTimer.seconds() > autoTime -> SystemStates.TRANSITION
+        gameTimer.seconds() > 0.0 -> SystemStates.AUTO
+        else -> SystemStates.INIT
+
+    }
+
 
     var gameState = GameStates.IDLE
         set(value) {

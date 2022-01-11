@@ -2,6 +2,7 @@ package robotuprising.ftc2021.util
 
 import robotuprising.lib.util.Extensions.mmToIn
 
+// todo get this from cad
 object Constants {
 
     // used in determining the three dimensional vector of the superstructure
@@ -55,7 +56,7 @@ object Constants {
     const val duckWheelDiameter = 0.0
     const val carouselDiameter = 1.0
 
-    const val turretZeroValue = 0.0
+    const val turretPostZeroValue = 0.0
 
-    const val slideZeroValue = 0.0
+    const val slidePostZeroValue = 0.0
 }

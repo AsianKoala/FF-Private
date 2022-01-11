@@ -1,10 +1,10 @@
 package robotuprising.ftc2021.manager
 
-import robotuprising.ftc2021.subsystems.wraith.Subsystem
-import robotuprising.ftc2021.hardware.wraith.interfaces.Loopable
-import robotuprising.ftc2021.hardware.wraith.interfaces.Readable
-import robotuprising.ftc2021.hardware.wraith.interfaces.Testable
-import robotuprising.ftc2021.hardware.wraith.interfaces.Zeroable
+import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
+import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
+import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
+import robotuprising.ftc2021.hardware.osiris.interfaces.Zeroable
 
 object SubsystemManager {
     private val subsystems: ArrayList<Subsystem> = ArrayList()

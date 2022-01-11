@@ -1,6 +1,6 @@
 package robotuprising.ftc2021.statemachines
 
-import robotuprising.ftc2021.subsystems.wraith.Wraith
+import robotuprising.ftc2021.subsystems.osiris.Osiris
 
 /**
  * assumptions:
@@ -11,5 +11,5 @@ import robotuprising.ftc2021.subsystems.wraith.Wraith
  * outtake is unknown (shouldn't matter if indexer is closed)
  */
 class AllianceDepositStateMachine {
-    private val wraith = Wraith
+    private val wraith = Osiris
 }

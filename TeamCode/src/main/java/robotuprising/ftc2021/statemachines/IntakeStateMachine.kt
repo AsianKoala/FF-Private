@@ -1,8 +1,8 @@
 package robotuprising.ftc2021.statemachines
 
-import robotuprising.ftc2021.subsystems.wraith.Indexer
-import robotuprising.ftc2021.subsystems.wraith.Intake
-import robotuprising.ftc2021.subsystems.wraith.LoadingSensor
+import robotuprising.ftc2021.subsystems.osiris.Indexer
+import robotuprising.ftc2021.subsystems.osiris.Intake
+import robotuprising.ftc2021.subsystems.osiris.LoadingSensor
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 /**

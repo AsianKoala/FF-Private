@@ -1,12 +1,11 @@
 package robotuprising.lib.system
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.lib.debug.Debuggable
-import robotuprising.lib.opmode.AllianceSide
-import robotuprising.lib.opmode.BlueAlliance
-import robotuprising.lib.opmode.NakiriDashboard
-import robotuprising.lib.opmode.OpModeStatus
+import robotuprising.lib.opmode.*
 
+// todo fix alliance side maybe idk
 abstract class BaseOpMode : LinearOpMode() {
     private val opModeStatus: OpModeStatus
         get() = when {
@@ -31,11 +30,15 @@ abstract class BaseOpMode : LinearOpMode() {
             AllianceSide.RED
         }
 
+        BulkDataManager.init(hardwareMap)
+        OsirisDashboard.init(telemetry, false)
 
 
         mInit()
 
         mainLoop@ while (true) {
+            BulkDataManager.read()
+
             when (opModeStatus) {
                 OpModeStatus.INIT_LOOP -> {
                     mInitLoop()
@@ -58,16 +61,15 @@ abstract class BaseOpMode : LinearOpMode() {
                 }
             }
 
-            NakiriDashboard.update()
+            OsirisDashboard.update()
         }
 
         mStop()
     }
 
     abstract fun mInit()
-    open fun mInitLoop() {}
-    open fun mStart() {}
+    abstract fun mInitLoop()
+    abstract fun mStart()
     abstract fun mLoop()
-    open fun mStop() {}
-    open fun mTest() {}
+    abstract fun mStop()
 }
