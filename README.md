@@ -1,7 +1,7 @@
 # FTC 14607 [![twitter](./res/fixeddarktwitterlogo.png)](https://twitter.com/asiank0ala)
 
 <div align=center>
-  code for our 2021-22 robot Osiris, written by Neil
+  code for our 2021-22 robot Osiris
 </div>
 
 <div align=center>
