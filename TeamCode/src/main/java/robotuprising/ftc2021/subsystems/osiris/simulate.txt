@@ -1,0 +1,10 @@
+goal: set osiris target
+
+init base op mode
+initalizes BulkDataManager and OsirisDashboard
+
+calls mInit()
+
+mInit():
+subsystemManager calls registerSubsystems
+registserSubsystems registers all arguments

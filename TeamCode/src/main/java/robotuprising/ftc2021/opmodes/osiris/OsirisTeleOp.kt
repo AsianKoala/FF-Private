@@ -5,7 +5,10 @@ import robotuprising.lib.opmode.BlueAlliance
 import robotuprising.lib.opmode.RedAlliance
 
 // todo start coding a rough draft
-open class OsirisTeleOp : OsirisOpMode()
+open class OsirisTeleOp : OsirisOpMode() {
+
+
+}
 
 @BlueAlliance
 @TeleOp

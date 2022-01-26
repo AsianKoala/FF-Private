@@ -24,7 +24,6 @@ object GameStateManager {
         gameTimer.seconds() > autoTime -> SystemStates.TRANSITION
         gameTimer.seconds() > 0.0 -> SystemStates.AUTO
         else -> SystemStates.INIT
-
     }
 
 

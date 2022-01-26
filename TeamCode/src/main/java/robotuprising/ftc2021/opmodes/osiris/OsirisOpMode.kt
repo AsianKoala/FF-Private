@@ -7,42 +7,38 @@ import robotuprising.lib.system.BaseOpMode
 
 open class OsirisOpMode : BaseOpMode() {
 
-    private val subsystemManager = SubsystemManager
-    private val dataManager = OsirisDataManager
-    private val gameStateManager = GameStateManager
+    protected val subsystemManager = SubsystemManager
+    protected val dataManager = OsirisDataManager
+    protected val gameStateManager = GameStateManager
 
-    private val ghost = Ghost
-    private val odometry = Odometry
+    protected val ghost = Ghost
+    protected val odometry = Odometry
 
-    private val intake = Intake
-    private val intakeSensor = IntakeSensor
-    private val loadingSensor = LoadingSensor
+    protected val intake = Intake
+    protected val loadingSensor = LoadingSensor
 
-    private val turretLimitSwitch = TurretLimitSwitch
-    private val slideLimitSwitch = SlideLimitSwitch
+    protected val turretLimitSwitch = TurretLimitSwitch
+    protected val slideLimitSwitch = SlideLimitSwitch
 
-    private val osiris = Osiris
-    private val turret = Turret
-    private val slide = Slide
-    private val arm = Arm
-    private val outtake = Outtake
-    private val indexer = Indexer
+    protected val osiris = Osiris
+    protected val turret = Turret
+    protected val slide = Slide
+    protected val arm = Arm
+    protected val outtake = Outtake
+    protected val indexer = Indexer
 
-    private val spinner = Spinner
-    private val capstone = Capstone
+    protected val spinner = Spinner
 
-    private val redWebcam = RedWebcam
-    private val blueWebcam = BlueWebcam
+    protected val redWebcam = RedWebcam
+    protected val blueWebcam = BlueWebcam
 
 
-    // todo make a logger
-    override fun mInit() {
+    open fun register() {
         subsystemManager.registerSubsystems(
                 ghost,
                 odometry,
 
                 intake,
-                intakeSensor,
                 loadingSensor,
 
                 turretLimitSwitch,
@@ -56,7 +52,7 @@ open class OsirisOpMode : BaseOpMode() {
                 indexer,
 
                 spinner,
-                capstone,
+
                 redWebcam,
                 blueWebcam
         )
@@ -68,30 +64,29 @@ open class OsirisOpMode : BaseOpMode() {
         if(allianceSide == AllianceSide.RED) {
             subsystemManager.deregister(blueWebcam)
         }
+    }
 
-        turretLimitSwitch.link(turret)
-        slideLimitSwitch.link(slide)
-
-
-        subsystemManager.resetAll()
-
+    // todo make a logger
+    override fun mInit() {
+        register()
+        subsystemManager.prepareZero()
         gameStateManager.gameState = GameStates.IDLE
     }
 
     override fun mInitLoop() {
-        subsystemManager.readAll()
-
-        subsystemManager.loopAll()
+        subsystemManager.periodic()
     }
 
     override fun mStart() {
+        subsystemManager.deregister(redWebcam)
+        subsystemManager.deregister(blueWebcam)
+        subsystemManager.deregister(turretLimitSwitch)
+
         gameStateManager.startTimer()
     }
 
     override fun mLoop() {
-        subsystemManager.readAll()
-
-        subsystemManager.loopAll()
+        subsystemManager.periodic()
     }
 
     override fun mStop() {

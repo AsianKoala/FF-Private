@@ -48,12 +48,12 @@ abstract class BaseOpMode : LinearOpMode() {
                     if (hasStarted) {
                         val dt = System.currentTimeMillis() - prevLoopTime
                         telemetry.addData("loop ms", dt)
-                        prevLoopTime = System.currentTimeMillis()
                         mLoop()
                     } else {
                         mStart()
                         hasStarted = true
                     }
+                    prevLoopTime = System.currentTimeMillis()
                 }
 
                 OpModeStatus.STOP -> {

@@ -48,9 +48,7 @@ object Constants {
     const val indexerIndexingPosition = 0.0
 
     const val armHomePosition = 0.0
-    const val armIntermediatePosition = 0.0
     const val armAllianceDepositPosition = 0.0
-    const val armSharedDepositPosition = 0.0
 
 
     const val duckWheelDiameter = 0.0
@@ -59,4 +57,13 @@ object Constants {
     const val turretPostZeroValue = 0.0
 
     const val slidePostZeroValue = 0.0
+
+
+
+    const val turretRedDepositAngle = 0.0
+    const val turretBlueDepositAngle = 0.0
+    const val slideDepositInches = 0.0
+
+
+    const val TILE = 24.0
 }

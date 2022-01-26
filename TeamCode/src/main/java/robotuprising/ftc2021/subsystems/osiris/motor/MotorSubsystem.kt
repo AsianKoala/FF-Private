@@ -11,6 +11,7 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
+import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.lib.math.MathUtil
 import robotuprising.lib.opmode.OsirisDashboard
@@ -18,32 +19,26 @@ import robotuprising.lib.util.Extensions.d
 import java.lang.Exception
 import kotlin.math.absoluteValue
 
-open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopable, Readable, Testable {
+open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopable, Readable, Testable, Initializable {
     protected val motor: OsirisMotor = OsirisMotor(config.motorConfig)
 
-    private val controller by lazy { PIDFController(
+    private val controller: PIDFController by lazy {
+        val ret = PIDFController(
             PIDCoefficients(config.kP, config.kI, config.kD),
             config.kV,
             config.kA,
             config.kStatic,
             config.kF
-    ) }
+        )
+
+        ret
+    }
 
     private var targetPosition = 0.0
 
     protected var rawPosition = 0.0
-        private set
-    private var rawVelocity = 0.0
+    protected var rawVelocity = 0.0
 
-    protected var isZeroed = false
-    protected var offset = 0.0
-        set(value) {
-            if(!isZeroed) {
-                isZeroed = true
-            }
-
-            field = value
-        }
 
     protected var position = 0.0
     protected var velocity = 0.0
@@ -63,8 +58,13 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     private var hasFinishedProfile = true
 
 
-    private fun ticksToUnits(ticks: Double): Double {
+    protected fun ticksToUnits(ticks: Double): Double {
         return (ticks / config.unitsPerTick) * config.gearRatio
+    }
+
+    protected fun setControllerTarget(target: Double) {
+        controller.reset()
+        controller.targetPosition = target
     }
 
     private fun PIDFController.targetMotionState(state: MotionState) {
@@ -135,16 +135,19 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
                     }
                 }
 
-                val rawOutput = controller.update(position, velocity)
-
-                val clampedOutput = when {
-                    position - config.positionEpsilon < config.positionLowerLimit -> MathUtil.clamp(output, 0.0, 1.0)
-                    position + config.positionUpperLimit > config.positionUpperLimit -> MathUtil.clamp(output, -1.0, 0.0)
-                    else -> rawOutput
+                var rawOutput = if(dead) {
+                    0.0
+                } else {
+                    controller.update(position, velocity)
                 }
 
+//                val clampedOutput = when {
+//                    position - config.positionEpsilon < config.positionLowerLimit -> MathUtil.clamp(output, 0.0, 1.0)
+//                    position + config.positionUpperLimit > config.positionUpperLimit -> MathUtil.clamp(output, -1.0, 0.0)
+//                    else -> rawOutput
+//                }
 
-                clampedOutput
+                rawOutput
             }
         }
 
@@ -157,13 +160,17 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
             rawPosition = motor.position.d - offset
             rawVelocity = motor.velocity
 
-            position = ticksToUnits(rawPosition) + if(isZeroed) config.postZeroedValue else 0.0
+            position = ticksToUnits(rawPosition)
             velocity = ticksToUnits(rawVelocity)
         }
     }
 
     override fun test() {
         motor.power = 0.1
+    }
+
+    override fun init() {
+        TODO("Not yet implemented")
     }
 }
 

@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.subsystems.osiris
 
+import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.subsystems.osiris.motor.MotorData
 import robotuprising.ftc2021.subsystems.osiris.motor.*
 import robotuprising.ftc2021.util.Constants
@@ -13,15 +14,15 @@ object Turret : ZeroableMotorSubsystem(
                 MotorControlType.MOTION_PROFILE,
 
                 90.0,
-                (1 / MotorData.GB_13_7.ticksPerRev) * 360.0, // deg
+                (1 / MotorData.GB_5_2.ticksPerRev) * 360.0, // deg
                 1.0 / 5.0,
 
                 0.0,
                 0.0,
                 0.0,
-                0.001,
-                1 / 90.0,
-                0.003,
+                0.0,
+                0.0,
+                0.0,
                 { _, _ -> 0.0 },
 
                 90.0, // deg/s
@@ -39,9 +40,14 @@ object Turret : ZeroableMotorSubsystem(
 ) {
     val turretAngle: Double get() = position
 
-    fun setTurretAngle(angle: Double) {
+    fun setTurretProfileTarget(angle: Double) {
         generateAndFollowMotionProfile(turretAngle, angle)
     }
+
+    fun setTurretLockAngle(angle: Double) {
+        setControllerTarget(angle)
+    }
+
 }
 
 

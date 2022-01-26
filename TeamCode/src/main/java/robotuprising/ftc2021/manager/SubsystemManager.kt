@@ -27,12 +27,6 @@ object SubsystemManager {
         loopableSubsystems.forEach(Loopable::loop)
     }
 
-    fun zeroAll() {
-        zeroableSubsystems.forEach(Zeroable::zero)
-
-        zeroedYet = true
-    }
-
     fun readAll() {
         readableSubsystems.forEach(Readable::read)
     }
@@ -41,12 +35,13 @@ object SubsystemManager {
         testableSubsystems.forEach(Testable::test)
     }
 
-    fun prepareForInit() {
-
+    fun prepareZero() {
+        zeroableSubsystems.forEach(Zeroable::switchToFloatForZero)
     }
 
-    fun init() {
-        resetAll()
+    fun periodic() {
+        readAll()
+        loopAll()
     }
 
     fun registerSubsystems(vararg allSubsystems: Subsystem) {
@@ -102,7 +97,7 @@ object SubsystemManager {
     override fun toString(): String {
         var ret = ""
 
-        subsystems.forEach { ret += it::class.java }
+        subsystems.forEach { ret += "${it::class.java} \n"}
 
         return ret
     }

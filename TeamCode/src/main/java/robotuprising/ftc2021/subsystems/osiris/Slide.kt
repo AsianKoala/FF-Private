@@ -13,7 +13,7 @@ object Slide : ZeroableMotorSubsystem(
                         zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
                 ),
 
-                MotorControlType.MOTION_PROFILE,
+                MotorControlType.POSITION_PID,
 
                 0.0,
                 (1.0 / MotorData.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
@@ -22,9 +22,9 @@ object Slide : ZeroableMotorSubsystem(
                 0.0,
                 0.0,
                 0.0,
-                0.001,
-                1 / 10.0,
-                0.003,
+                0.0,
+                0.0,
+                0.0,
                 { _, _ -> 0.0 },
 
                 10.0,
@@ -45,5 +45,9 @@ object Slide : ZeroableMotorSubsystem(
     // target is in continuous form
     fun setSlideInches(target: Double) {
         generateAndFollowMotionProfile(position, target / Constants.slideStages)
+    }
+
+    fun setSlideLockTarget(target: Double) {
+        setControllerTarget(target)
     }
 }

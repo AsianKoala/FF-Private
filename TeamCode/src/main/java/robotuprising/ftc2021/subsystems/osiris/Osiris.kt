@@ -3,6 +3,8 @@ package robotuprising.ftc2021.subsystems.osiris
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.manager.GameStateManager
+import robotuprising.ftc2021.statemachines.IntakeStateMachine
+import robotuprising.ftc2021.util.Constants
 
 object Osiris : Subsystem(), Loopable {
     private val turret = Turret
@@ -10,11 +12,9 @@ object Osiris : Subsystem(), Loopable {
     private val arm = Arm
     private val outtake = Outtake
 
-    private val gameStateManager = GameStateManager
+    private val systemState = OsirisState()
 
-    val systemState = OsirisState()
-
-    val systemGoal = OsirisState()
+    private val systemGoal = OsirisState()
 
     private var followingGoal = false
 
@@ -36,20 +36,9 @@ object Osiris : Subsystem(), Loopable {
         outtakeEnabled = false
     }
 
-    private fun setGoal(newGoal: OsirisState) {
-        systemGoal.apply {
-            turret = newGoal.turret
-            slide = newGoal.slide
-            arm = newGoal.arm
-            outtake = newGoal.outtake
-        }
-
-        followingGoal = true
-    }
-
     private fun followSetpoint() {
-        if(!turretEnabled && systemGoal.turret != systemGoal.turret) {
-            turret.setTurretAngle(systemGoal.turret)
+        if(!turretEnabled && systemState.turret != systemGoal.turret) {
+            turret.setTurretLockAngle(systemGoal.turret)
             turretEnabled = true
         } else if(turret.isAtTarget) {
             turretEnabled = false
@@ -57,7 +46,7 @@ object Osiris : Subsystem(), Loopable {
         }
 
         if(!slideEnabled && systemState.slide != systemGoal.slide) {
-            slide.setSlideInches(systemGoal.slide)
+            slide.setSlideLockTarget(systemGoal.slide)
             slideEnabled = true
         } else if(slide.isAtTarget) {
             slideEnabled = false
@@ -74,9 +63,13 @@ object Osiris : Subsystem(), Loopable {
         }
 
         if(!outtakeEnabled && systemState.outtake != systemGoal.outtake) {
-            outtake.moveServoToPosition(systemGoal.outtake)
-            outtakeEnabled = true
-            outtakeTimer.reset()
+            if(systemState.outtake == Constants.outtakeReadyPosition && systemState.arm != systemGoal.arm) {
+                // if outtake is home, wait for arm to move
+            } else {
+                outtake.moveServoToPosition(systemGoal.outtake)
+                outtakeEnabled = true
+                outtakeTimer.reset()
+            }
         } else if(outtakeTimer.seconds() > maxOuttakeTime && outtakeEnabled) {
             outtakeEnabled = false
             systemState.outtake = systemGoal.outtake
@@ -88,6 +81,21 @@ object Osiris : Subsystem(), Loopable {
         }
     }
 
+    fun setGoal(newGoal: OsirisState) {
+        systemGoal.apply {
+            turret = newGoal.turret
+            slide = newGoal.slide
+            arm = newGoal.arm
+            outtake = newGoal.outtake
+        }
+
+        followingGoal = true
+    }
+
+    val currGoal get() = systemGoal
+    val currState get() = systemState
+    val done get() = !followingGoal
+
     override fun reset() {
         setSubsystemsDisabled()
     }
@@ -97,4 +105,9 @@ object Osiris : Subsystem(), Loopable {
     override fun loop() {
         followSetpoint()
     }
+
+
+    val depositGoalRed = OsirisState(Constants.turretRedDepositAngle, Constants.slideDepositInches, Constants.armAllianceDepositPosition, Constants.outtakeDepositPosition)
+    val resetGoal = OsirisState()
+    val depositGoalBlue = depositGoalRed.copy(turret = Constants.turretBlueDepositAngle)
 }

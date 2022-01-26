@@ -11,36 +11,25 @@ import robotuprising.lib.system.statemachine.StateMachineBuilder
  * indexer is open,
  * intake is down
  */
-class IntakeStateMachine {
+object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
+    enum class States {
+        INTAKING,
+        MINERAL_IN_REVERSE_INTAKING
+    }
+
     private val intake = Intake
     private val sensor = LoadingSensor
     private val indexer = Indexer
 
-    private enum class State {
-        INTAKING,
-        MINERAL_IN
-    }
-
-    private val stateMachine = StateMachineBuilder<State>()
-            .state(State.INTAKING)
+    override val stateMachine = StateMachineBuilder<States>()
+            .state(States.INTAKING)
             .onEnter(intake::turnOn)
-            .onExit(intake::turnOff)
+            .onExit(intake::turnReverse)
             .onExit(indexer::lock)
             .transition(sensor::isMineralIn)
+
+            .state(States.MINERAL_IN_REVERSE_INTAKING)
+            .onExit(intake::turnOff)
+            .transitionTimed(1.0)
             .build()
-
-    fun start() {
-        stateMachine.reset()
-        stateMachine.start()
-    }
-
-    fun update() {
-        stateMachine.update()
-    }
-
-    fun stop() {
-        stateMachine.stop()
-    }
-
-    val done = stateMachine.state == State.MINERAL_IN
 }
