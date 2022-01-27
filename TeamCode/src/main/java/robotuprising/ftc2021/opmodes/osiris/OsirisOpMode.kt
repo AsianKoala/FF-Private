@@ -11,8 +11,6 @@ import robotuprising.lib.system.BaseOpMode
 open class OsirisOpMode : BaseOpMode() {
 
     private val subsystemManager = SubsystemManager
-    private val dataManager = OsirisDataManager
-    private val gameStateManager = GameStateManager
 
     private val ghost = Ghost
     private val odometry = Odometry
@@ -70,7 +68,7 @@ open class OsirisOpMode : BaseOpMode() {
 
     override fun mInit() {
         register()
-        gameStateManager.gameState = GameStates.IDLE
+        subsystemManager.initAll()
 
         ghost.driveState = Ghost.DriveStates.DISABLED
     }
@@ -82,8 +80,6 @@ open class OsirisOpMode : BaseOpMode() {
     override fun mStart() {
         subsystemManager.deregister(redWebcam)
         subsystemManager.deregister(blueWebcam)
-
-        gameStateManager.startTimer()
     }
 
     override fun mLoop() {

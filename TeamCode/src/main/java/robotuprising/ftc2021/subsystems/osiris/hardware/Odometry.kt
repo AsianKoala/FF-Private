@@ -26,7 +26,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
     @JvmField var turnScalar: Double = 14.9691931
     @JvmField var auxTracker: Double = 3.85
 
-    private var startPose = Pose.DEFAULT_RAW.copy
+    var startPose = Pose.DEFAULT_RAW.copy
 
     private var startL: Double = 0.0
     private var startR: Double = 0.0

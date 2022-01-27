@@ -1,10 +1,7 @@
 package robotuprising.ftc2021.manager
 
+import robotuprising.ftc2021.hardware.osiris.interfaces.*
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
-import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
-import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
-import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
-import robotuprising.ftc2021.hardware.osiris.interfaces.Zeroable
 
 object SubsystemManager {
     private val subsystems: ArrayList<Subsystem> = ArrayList()
@@ -12,6 +9,7 @@ object SubsystemManager {
     private val zeroableSubsystems: ArrayList<Zeroable> = ArrayList()
     private val readableSubsystems: ArrayList<Readable> = ArrayList()
     private val testableSubsystems: ArrayList<Testable> = ArrayList()
+    private val initializableSubsystems: ArrayList<Initializable> = ArrayList()
 
     private var zeroedYet = false
 
@@ -33,6 +31,10 @@ object SubsystemManager {
 
     fun testAll() {
         testableSubsystems.forEach(Testable::test)
+    }
+
+    fun initAll() {
+        initializableSubsystems.forEach(Initializable::init)
     }
 
     fun periodic() {
@@ -66,6 +68,10 @@ object SubsystemManager {
         if(subsystem is Testable) {
             testableSubsystems.add(subsystem)
         }
+
+        if(subsystem is Initializable) {
+            initializableSubsystems.add(subsystem)
+        }
     }
 
     fun deregister(subsystem: Subsystem) {
@@ -87,6 +93,10 @@ object SubsystemManager {
 
         if(subsystem is Testable && subsystem in testableSubsystems) {
             testableSubsystems.remove(subsystem)
+        }
+
+        if(subsystem is Initializable && subsystem in initializableSubsystems) {
+            initializableSubsystems.remove(subsystem)
         }
     }
 
