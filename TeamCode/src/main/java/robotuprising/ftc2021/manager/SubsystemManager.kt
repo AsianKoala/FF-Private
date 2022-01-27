@@ -15,8 +15,8 @@ object SubsystemManager {
 
     private var zeroedYet = false
 
-    fun resetAll() {
-        subsystems.forEach(Subsystem::reset)
+    fun stopAll() {
+        subsystems.forEach(Subsystem::stop)
     }
 
     fun updateDashboardAll(debugging: Boolean) {
@@ -33,10 +33,6 @@ object SubsystemManager {
 
     fun testAll() {
         testableSubsystems.forEach(Testable::test)
-    }
-
-    fun prepareZero() {
-        zeroableSubsystems.forEach(Zeroable::switchToFloatForZero)
     }
 
     fun periodic() {

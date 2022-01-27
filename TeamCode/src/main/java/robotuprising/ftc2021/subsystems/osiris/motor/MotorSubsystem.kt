@@ -98,7 +98,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
         motionTimer.reset()
     }
 
-    override fun reset() {
+    override fun stop() {
         targetPosition = 0.0
         output = 0.0
         controller.reset()
@@ -157,7 +157,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
     override fun read() {
         if(config.controlType != MotorControlType.OPEN_LOOP) {
-            rawPosition = motor.position.d - offset
+            rawPosition = motor.position.d
             rawVelocity = motor.velocity
 
             position = ticksToUnits(rawPosition)

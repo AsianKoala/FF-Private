@@ -3,7 +3,6 @@ package robotuprising.ftc2021.hardware.osiris.interfaces
 interface Zeroable {
     val zeroed: Boolean
 
-    fun switchToFloatForZero()
     fun zero()
 }
 

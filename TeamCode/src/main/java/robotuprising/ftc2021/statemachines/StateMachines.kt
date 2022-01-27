@@ -1,0 +1,13 @@
+package robotuprising.ftc2021.statemachines
+
+import robotuprising.ftc2021.subsystems.osiris.Osiris
+
+object DepositRedHighStateMachine: DepositStateMachine(Osiris.depositHighRedGoal)
+object DepositRedMediumStateMachine: DepositStateMachine(Osiris.depositMediumRedGoal)
+object DepositRedLowStateMachine: DepositStateMachine(Osiris.depositLowRedGoal)
+object DepositRedSharedStateMachine: DepositStateMachine(Osiris.depositSharedRedGoal)
+
+object DepositBlueHighStateMachine: DepositStateMachine(Osiris.depositHighBlueGoal)
+object DepositBlueMediumStateMachine: DepositStateMachine(Osiris.depositMediumBlueGoal)
+object DepositBlueLowStateMachine: DepositStateMachine(Osiris.depositLowBlueGoal)
+object DepositBlueSharedStateMachine: DepositStateMachine(Osiris.depositSharedBlueGoal)

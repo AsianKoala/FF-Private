@@ -2,36 +2,38 @@ package robotuprising.ftc2021.opmodes.osiris
 
 import robotuprising.ftc2021.manager.*
 import robotuprising.ftc2021.subsystems.osiris.*
+import robotuprising.ftc2021.subsystems.osiris.hardware.*
+import robotuprising.ftc2021.subsystems.osiris.hardware.vision.BlueWebcam
+import robotuprising.ftc2021.subsystems.osiris.hardware.vision.RedWebcam
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.BaseOpMode
 
 open class OsirisOpMode : BaseOpMode() {
 
-    protected val subsystemManager = SubsystemManager
-    protected val dataManager = OsirisDataManager
-    protected val gameStateManager = GameStateManager
+    private val subsystemManager = SubsystemManager
+    private val dataManager = OsirisDataManager
+    private val gameStateManager = GameStateManager
 
-    protected val ghost = Ghost
-    protected val odometry = Odometry
+    private val ghost = Ghost
+    private val odometry = Odometry
 
-    protected val intake = Intake
-    protected val loadingSensor = LoadingSensor
+    private val intake = Intake
+    private val loadingSensor = LoadingSensor
 
-    protected val turretLimitSwitch = TurretLimitSwitch
-    protected val slideLimitSwitch = SlideLimitSwitch
+    private val turretLimitSwitch = TurretLimitSwitch
+    private val slideLimitSwitch = SlideLimitSwitch
 
-    protected val osiris = Osiris
-    protected val turret = Turret
-    protected val slide = Slide
-    protected val arm = Arm
-    protected val outtake = Outtake
-    protected val indexer = Indexer
+    private val osiris = Osiris
+    private val turret = Turret
+    private val slide = Slide
+    private val arm = Arm
+    private val outtake = Outtake
+    private val indexer = Indexer
 
-    protected val spinner = Spinner
+    private val spinner = Spinner
 
-    protected val redWebcam = RedWebcam
-    protected val blueWebcam = BlueWebcam
-
+    private val redWebcam = RedWebcam
+    private val blueWebcam = BlueWebcam
 
     open fun register() {
         subsystemManager.registerSubsystems(
@@ -66,11 +68,11 @@ open class OsirisOpMode : BaseOpMode() {
         }
     }
 
-    // todo make a logger
     override fun mInit() {
         register()
-        subsystemManager.prepareZero()
         gameStateManager.gameState = GameStates.IDLE
+
+        ghost.driveState = Ghost.DriveStates.DISABLED
     }
 
     override fun mInitLoop() {
@@ -80,7 +82,6 @@ open class OsirisOpMode : BaseOpMode() {
     override fun mStart() {
         subsystemManager.deregister(redWebcam)
         subsystemManager.deregister(blueWebcam)
-        subsystemManager.deregister(turretLimitSwitch)
 
         gameStateManager.startTimer()
     }
@@ -90,6 +91,6 @@ open class OsirisOpMode : BaseOpMode() {
     }
 
     override fun mStop() {
-        subsystemManager.resetAll()
+        subsystemManager.stopAll()
     }
 }

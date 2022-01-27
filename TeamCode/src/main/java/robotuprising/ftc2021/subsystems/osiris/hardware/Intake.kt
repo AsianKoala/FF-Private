@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
 import robotuprising.ftc2021.hardware.osiris.OsirisServo
 import robotuprising.ftc2021.subsystems.osiris.motor.MotorConfig

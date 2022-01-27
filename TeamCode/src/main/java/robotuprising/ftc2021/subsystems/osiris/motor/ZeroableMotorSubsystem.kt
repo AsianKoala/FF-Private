@@ -9,25 +9,14 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
 
     private var zeroedYet = false
     private var offset = 0.0
-        set(value) {
-            if(!zeroedYet) {
-                zeroedYet = true
-            }
-
-            field = value
-        }
-
-    override fun switchToFloatForZero() {
-        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-    }
 
     override fun zero() {
         offset = rawPosition
+        zeroedYet = true
 
         if(config.motorConfig.zeroPowerBehavior == DcMotor.ZeroPowerBehavior.BRAKE) {
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         }
-        zeroedYet = true
     }
 
     override fun read() {
@@ -35,7 +24,7 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
             rawPosition = motor.position.d - offset
             rawVelocity = motor.velocity
 
-            position = ticksToUnits(rawPosition) + if(zeroedYet) config.postZeroedValue else 0.0
+            position = ticksToUnits(rawPosition) + config.postZeroedValue
             velocity = ticksToUnits(rawVelocity)
 
         }

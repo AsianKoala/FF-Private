@@ -1,4 +1,4 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import robotuprising.ftc2021.subsystems.osiris.motor.MotorData

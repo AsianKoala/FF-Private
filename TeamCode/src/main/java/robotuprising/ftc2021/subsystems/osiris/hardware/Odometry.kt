@@ -1,18 +1,23 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
 import robotuprising.ftc2021.util.Constants
 import robotuprising.ftc2021.hardware.osiris.OsirisServo
+import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
+import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
+import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Pose
 import robotuprising.lib.math.TimePose
 import robotuprising.lib.opmode.OsirisDashboard
+import robotuprising.lib.util.Extensions.d
 import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
 
 // todo figure out how to zero
-object Odometry : Subsystem() {
+object Odometry : Subsystem(), Loopable, Initializable {
     private val leftServo = OsirisServo("leftRetract")
     private val rightServo = OsirisServo("rightRetract")
     private val auxServo = OsirisServo("auxRetract")
@@ -38,7 +43,7 @@ object Odometry : Subsystem() {
 
     private var accumHeading = 0.0
 
-    fun updatePose(currLeftEncoder: Double, currRightEncoder: Double, currAuxEncoder: Double) {
+    private fun updatePose(currLeftEncoder: Double, currRightEncoder: Double, currAuxEncoder: Double) {
         val actualCurrLeft = -(currLeftEncoder - startL)
         val actualCurrRight = (currRightEncoder - startR)
         val actualCurrAux = (currAuxEncoder - startA)
@@ -90,19 +95,25 @@ object Odometry : Subsystem() {
         auxServo.position = Constants.auxOdoRetract
     }
 
-    fun initOdo(startPosition: Pose, startLeft: Double, startRight: Double, startAux: Double) {
-        startPose = startPosition
-        currentPosition = startPose.copy
-        startL = startLeft
-        startR = startRight
-        startA = startAux
-    }
-
-    override fun reset() {
+    override fun stop() {
         extend()
     }
 
     override fun updateDashboard(debugging: Boolean) {
         OsirisDashboard["current position"] = currentPosition
+    }
+
+    override fun loop() {
+        updatePose(
+                BulkDataManager.masterData.getMotorCurrentPosition(0).d,
+                BulkDataManager.masterData.getMotorCurrentPosition(1).d,
+                BulkDataManager.masterData.getMotorCurrentPosition(2).d
+        )
+    }
+
+    override fun init() {
+        startL = BulkDataManager.masterData.getMotorCurrentPosition(0).d
+        startR = BulkDataManager.masterData.getMotorCurrentPosition(1).d
+        startA = BulkDataManager.masterData.getMotorCurrentPosition(2).d
     }
 }

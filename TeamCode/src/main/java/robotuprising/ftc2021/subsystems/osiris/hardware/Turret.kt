@@ -1,6 +1,6 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
-import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
+import com.qualcomm.robotcore.hardware.DcMotor
 import robotuprising.ftc2021.subsystems.osiris.motor.MotorData
 import robotuprising.ftc2021.subsystems.osiris.motor.*
 import robotuprising.ftc2021.util.Constants
@@ -9,11 +9,12 @@ object Turret : ZeroableMotorSubsystem(
         MotorSubsystemConfig(
                 MotorConfig(
                         "turret",
+                        zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
                 ),
 
                 MotorControlType.MOTION_PROFILE,
 
-                90.0,
+                Constants.turretPostZeroValue,
                 (1 / MotorData.GB_5_2.ticksPerRev) * 360.0, // deg
                 1.0 / 5.0,
 

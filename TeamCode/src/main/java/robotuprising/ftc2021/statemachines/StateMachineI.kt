@@ -6,16 +6,15 @@ abstract class StateMachineI<E> {
     protected abstract val stateMachine: StateMachine<E>
 
     fun start() {
+        stateMachine.stop()
         stateMachine.reset()
         stateMachine.start()
     }
 
     fun update() {
-        stateMachine.update()
-    }
-
-    fun stop() {
-        stateMachine.stop()
+        if(stateMachine.running) {
+            stateMachine.update()
+        }
     }
 
     val done get() = !stateMachine.running

@@ -21,7 +21,7 @@ open class LimitSwitch(name: String, private val zeroableSubsystem: Zeroable) : 
         }
     }
 
-    override fun reset() {
+    override fun stop() {
 
     }
 

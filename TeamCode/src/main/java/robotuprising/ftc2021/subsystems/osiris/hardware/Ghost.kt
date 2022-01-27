@@ -1,7 +1,8 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
+import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.lib.control.auto.path.PurePursuitController
 import robotuprising.lib.control.auto.path.PurePursuitPath
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
@@ -30,6 +31,8 @@ object Ghost : Subsystem(), Loopable {
         set(value) {
             if(driveState == DriveStates.MANUAL) {
                 _powers = value
+            } else {
+                throw Exception("ghost not in manual mode")
             }
             field = value
         }
@@ -38,6 +41,8 @@ object Ghost : Subsystem(), Loopable {
         set(value) {
             if(driveState == DriveStates.PATH) {
                 _powers = value
+            } else {
+                throw Exception("ghost not in path mode")
             }
             field = value
         }
@@ -46,6 +51,8 @@ object Ghost : Subsystem(), Loopable {
         set(value) {
             if(driveState == DriveStates.TARGET_POINT) {
                 _powers = value
+            } else {
+                throw Exception("ghost not in target point")
             }
             field = value
         }
@@ -56,7 +63,7 @@ object Ghost : Subsystem(), Loopable {
     var acceptableTargetError = 2.0
     var acceptableStopError = 0.5
 
-    override fun reset() {
+    override fun stop() {
         _powers = Pose.DEFAULT_RAW
     }
 

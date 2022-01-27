@@ -1,9 +1,10 @@
-package robotuprising.ftc2021.subsystems.osiris
+package robotuprising.ftc2021.subsystems.osiris.hardware
 
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
 import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.ftc2021.util.Constants
 
 object LoadingSensor : Subsystem(), Readable {
@@ -17,7 +18,7 @@ object LoadingSensor : Subsystem(), Readable {
         lastRead = loadingSensor.getDistance(DistanceUnit.MM)
     }
 
-    override fun reset() {
+    override fun stop() {
 
     }
 

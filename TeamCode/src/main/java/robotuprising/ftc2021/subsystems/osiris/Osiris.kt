@@ -2,8 +2,10 @@ package robotuprising.ftc2021.subsystems.osiris
 
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
-import robotuprising.ftc2021.manager.GameStateManager
-import robotuprising.ftc2021.statemachines.IntakeStateMachine
+import robotuprising.ftc2021.subsystems.osiris.hardware.Arm
+import robotuprising.ftc2021.subsystems.osiris.hardware.Outtake
+import robotuprising.ftc2021.subsystems.osiris.hardware.Slide
+import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.util.Constants
 
 object Osiris : Subsystem(), Loopable {
@@ -63,7 +65,7 @@ object Osiris : Subsystem(), Loopable {
         }
 
         if(!outtakeEnabled && systemState.outtake != systemGoal.outtake) {
-            if(systemState.outtake == Constants.outtakeReadyPosition && systemState.arm != systemGoal.arm) {
+            if(systemState.outtake == Constants.outtakeHomePosition && systemState.arm != systemGoal.arm) {
                 // if outtake is home, wait for arm to move
             } else {
                 outtake.moveServoToPosition(systemGoal.outtake)
@@ -96,7 +98,7 @@ object Osiris : Subsystem(), Loopable {
     val currState get() = systemState
     val done get() = !followingGoal
 
-    override fun reset() {
+    override fun stop() {
         setSubsystemsDisabled()
     }
 
@@ -106,8 +108,22 @@ object Osiris : Subsystem(), Loopable {
         followSetpoint()
     }
 
-
-    val depositGoalRed = OsirisState(Constants.turretRedDepositAngle, Constants.slideDepositInches, Constants.armAllianceDepositPosition, Constants.outtakeDepositPosition)
     val resetGoal = OsirisState()
-    val depositGoalBlue = depositGoalRed.copy(turret = Constants.turretBlueDepositAngle)
+
+    val depositHighRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideHighInches,
+            Constants.armHighPosition, Constants.outtakeHighPosition)
+
+    val depositMediumRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideMediumInches, 
+            Constants.armMediumPosition, Constants.outtakeMediumPosition)
+
+    val depositLowRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideLowInches,
+            Constants.armLowPosition, Constants.outtakeLowPosition)
+
+    val depositSharedRedGoal = OsirisState(Constants.turretSharedRedAngle, Constants.slideSharedInches,
+            Constants.armSharedPosition, Constants.outtakeSharedPosition)
+
+    val depositHighBlueGoal = depositHighRedGoal.copy(turret = Constants.turretBlueAngle)
+    val depositMediumBlueGoal = depositMediumRedGoal.copy(turret = Constants.turretBlueAngle)
+    val depositLowBlueGoal = depositLowRedGoal.copy(turret = Constants.turretBlueAngle)
+    val depositSharedBlueGoal = depositSharedRedGoal.copy(turret = Constants.turretSharedBlueAngle)
 }
