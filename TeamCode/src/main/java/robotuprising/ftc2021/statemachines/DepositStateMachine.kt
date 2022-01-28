@@ -30,7 +30,7 @@ open class DepositStateMachine(private val depositGoal: OsirisState) : StateMach
             .onExit { deposited = true }
             .transitionTimed(0.5)
             .state(States.RESET)
-            .onEnter { osiris.setGoal(osiris.resetGoal) }
+            .onEnter(osiris::setResetGoal)
             .transition(osiris::done)
             .build()
 }

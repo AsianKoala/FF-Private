@@ -94,6 +94,10 @@ object Osiris : Subsystem(), Loopable {
         followingGoal = true
     }
 
+    fun setResetGoal() {
+        setGoal(resetGoal)
+    }
+
     val currGoal get() = systemGoal
     val currState get() = systemState
     val done get() = !followingGoal

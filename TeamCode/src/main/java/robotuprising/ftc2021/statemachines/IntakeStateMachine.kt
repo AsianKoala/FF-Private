@@ -5,12 +5,6 @@ import robotuprising.ftc2021.subsystems.osiris.hardware.Intake
 import robotuprising.ftc2021.subsystems.osiris.hardware.LoadingSensor
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
-/**
- * assumptions:
- * outtake is in place,
- * indexer is open,
- * intake is down
- */
 object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
     enum class States {
         INTAKING,

@@ -40,11 +40,11 @@ object Slide : ZeroableMotorSubsystem(
                 Constants.slidePostZeroValue
         )
 ) {
-    val slideInches get() = position * Constants.slideStages
+    val slideInches get() = position
 
     // target is in continuous form
     fun setSlideInches(target: Double) {
-        generateAndFollowMotionProfile(position, target / Constants.slideStages)
+        generateAndFollowMotionProfile(position, target / slideInches)
     }
 
     fun setSlideLockTarget(target: Double) {

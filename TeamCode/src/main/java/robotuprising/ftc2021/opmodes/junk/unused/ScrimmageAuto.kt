@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import robotuprising.ftc2021.opmodes.junk.nakiri.NakiriOpMode
 
-@Autonomous(name = "Scrimmage Auto")
-@Disabled
-class ScrimmageAuto : NakiriOpMode() {
+//@Autonomous(name = "Scrimmage Auto")
+//@Disabled
+//class ScrimmageAuto : NakiriOpMode() {
 //
 //    var start: Long = 0
 //    override fun m_start() {
@@ -51,4 +51,4 @@ class ScrimmageAuto : NakiriOpMode() {
 //            }
 //        }
 //    }
-}
+//}

@@ -4,15 +4,15 @@ package robotuprising.ftc2021.util
 object Constants {
 
     // used in determining the three dimensional vector of the superstructure
-//    const val turretCenterXOffset = 0.0 // relative to robot center, inches
-//    const val turretCenterYOffset = 0.0 // relative to robot center, inches
-//    const val turretCenterZOffset = 0.0 // relative to the ground, inches
-//
-//    const val slideMountAngle = 0.0 // degrees, relative to the robot
-//    const val slideTopXOffset = 0.0 // relative to turret center, inches
-//    const val slideTopYOffset = 0.0 // relative to turret center, inches
-//
-//    const val armLength = 0.0 // inches
+    const val turretCenterXOffset = 0.0 // relative to robot center, inches
+    const val turretCenterYOffset = 0.0 // relative to robot center, inches
+    const val turretCenterZOffset = 0.0 // relative to the ground, inches
+
+    const val slideMountAngle = 0.0 // degrees, relative to the robot
+    const val slideTopXOffset = 0.0 // relative to turret center, inches
+    const val slideTopYOffset = 0.0 // relative to turret center, inches
+
+    const val armLength = 0.0 // inches
 
     const val loadingSensorThreshold = 0.0
     
