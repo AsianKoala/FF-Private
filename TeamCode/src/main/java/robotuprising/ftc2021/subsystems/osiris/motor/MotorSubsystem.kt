@@ -19,8 +19,8 @@ import robotuprising.lib.util.Extensions.d
 import java.lang.Exception
 import kotlin.math.absoluteValue
 
-open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopable, Readable, Testable, Initializable {
-    protected val motor: OsirisMotor = OsirisMotor(config.motorConfig)
+open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopable, Readable, Testable {
+    protected val motor: OsirisMotor by lazy { OsirisMotor(config.motorConfig) }
 
     private val controller: PIDFController by lazy {
         val ret = PIDFController(
@@ -99,16 +99,19 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     }
 
     override fun stop() {
+        hasFinishedProfile = true
         targetPosition = 0.0
         output = 0.0
         controller.reset()
-        currentMotionState = MotionState(0.0, 0.0)
+        motionTimer.reset()
+        currentMotionProfile = null
+        currentMotionState = null
     }
 
     override fun updateDashboard(debugging: Boolean) {
-        if(debugging) {
-            OsirisDashboard["motor config"] = config
-        }
+//        if(debugging) {
+//            OsirisDashboard["motor config"] = config
+//        }
     }
 
     override fun loop() {
@@ -167,10 +170,6 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
     override fun test() {
         motor.power = 0.1
-    }
-
-    override fun init() {
-        TODO("Not yet implemented")
     }
 }
 

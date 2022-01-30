@@ -16,26 +16,26 @@ import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
 
-// todo figure out how to zero
 object Odometry : Subsystem(), Loopable, Initializable {
-    private val leftServo = OsirisServo("leftRetract")
-    private val rightServo = OsirisServo("rightRetract")
-    private val auxServo = OsirisServo("auxRetract")
+//    private val leftServo = OsirisServo("leftRetract")
+//    private val rightServo = OsirisServo("rightRetract")
+//    private val auxServo = OsirisServo("auxRetract")
 
     const val TICKS_PER_INCH = 1103.8839
     @JvmField var turnScalar: Double = 14.9691931
     @JvmField var auxTracker: Double = 3.85
 
     var startPose = Pose.DEFAULT_RAW.copy
+        set(value) {
+            currentPosition = value.copy
+            field = value
+        }
 
     private var startL: Double = 0.0
     private var startR: Double = 0.0
     private var startA: Double = 0.0
 
     var currentPosition: Pose = Pose.DEFAULT_RAW
-    var currentVelocity: Pose = Pose.DEFAULT_ANGLE
-
-    private var allRawDeltas: ArrayList<TimePose> = ArrayList()
 
     private var lastLeftEncoder = 0.0
     private var lastRightEncoder = 0.0
@@ -45,7 +45,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
 
     private fun updatePose(currLeftEncoder: Double, currRightEncoder: Double, currAuxEncoder: Double) {
         val actualCurrLeft = -(currLeftEncoder - startL)
-        val actualCurrRight = (currRightEncoder - startR)
+        val actualCurrRight = -(currRightEncoder - startR)
         val actualCurrAux = (currAuxEncoder - startA)
 
         val lWheelDelta = (actualCurrLeft - lastLeftEncoder) / TICKS_PER_INCH
@@ -83,37 +83,43 @@ object Odometry : Subsystem(), Loopable, Initializable {
         lastAuxEncoder = actualCurrAux
     }
 
-    fun extend() {
-        leftServo.position = Constants.leftOdoExtend
-        rightServo.position = Constants.rightOdoExtend
-        auxServo.position = Constants.auxOdoExtend
-    }
-
-    fun retract() {
-        leftServo.position = Constants.leftOdoRetract
-        rightServo.position = Constants.rightOdoRetract
-        auxServo.position = Constants.auxOdoRetract
-    }
+//    fun extend() {
+//        leftServo.position = Constants.leftOdoExtend
+//        rightServo.position = Constants.rightOdoExtend
+//        auxServo.position = Constants.auxOdoExtend
+//    }
+//
+//    fun retract() {
+//        leftServo.position = Constants.leftOdoRetract
+//        rightServo.position = Constants.rightOdoRetract
+//        auxServo.position = Constants.auxOdoRetract
+//    }
 
     override fun stop() {
-        extend()
+
     }
 
     override fun updateDashboard(debugging: Boolean) {
+        OsirisDashboard.addSpace()
         OsirisDashboard["current position"] = currentPosition
+        OsirisDashboard["l"] = lastLeftEncoder
+        OsirisDashboard["r"] = lastRightEncoder
+        OsirisDashboard["a"] = lastAuxEncoder
+
     }
 
     override fun loop() {
         updatePose(
-                BulkDataManager.masterData.getMotorCurrentPosition(0).d,
                 BulkDataManager.masterData.getMotorCurrentPosition(1).d,
+                BulkDataManager.masterData.getMotorCurrentPosition(0).d,
                 BulkDataManager.masterData.getMotorCurrentPosition(2).d
         )
     }
 
     override fun init() {
-        startL = BulkDataManager.masterData.getMotorCurrentPosition(0).d
-        startR = BulkDataManager.masterData.getMotorCurrentPosition(1).d
+        startL = BulkDataManager.masterData.getMotorCurrentPosition(1).d
+        startR = BulkDataManager.masterData.getMotorCurrentPosition(0).d
         startA = BulkDataManager.masterData.getMotorCurrentPosition(2).d
+        startPose = Pose.DEFAULT_RAW
     }
 }

@@ -5,7 +5,7 @@ import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 
 class OsirisServo(name: String) {
-    private val servo = BulkDataManager.hwMap[ExpansionHubServo::class.java, name]
+    private val servo by lazy { BulkDataManager.hwMap[ExpansionHubServo::class.java, name] }
 
     var position: Double = 0.0
         set(value) {

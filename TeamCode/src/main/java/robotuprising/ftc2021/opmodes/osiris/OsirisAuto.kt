@@ -8,9 +8,9 @@ import robotuprising.lib.opmode.RedAlliance
 open class OsirisAuto : OsirisOpMode()
 
 @BlueAlliance
-@Autonomous
+//@Autonomous
 class BlueAuto : OsirisAuto()
 
 @RedAlliance
-@Autonomous
+//@Autonomous
 class RedAuto : OsirisAuto()

@@ -9,7 +9,7 @@ import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
-@Autonomous(preselectTeleOp = "NakiriTeleOp")
+//@Autonomous(preselectTeleOp = "NakiriTeleOp")
 class NakiriAuto : NakiriOpMode() {
     private val startX = 10.0
     private val startY = 60.0

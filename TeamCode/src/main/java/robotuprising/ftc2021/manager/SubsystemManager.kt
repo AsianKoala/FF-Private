@@ -2,6 +2,7 @@ package robotuprising.ftc2021.manager
 
 import robotuprising.ftc2021.hardware.osiris.interfaces.*
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.lib.opmode.OsirisDashboard
 
 object SubsystemManager {
     private val subsystems: ArrayList<Subsystem> = ArrayList()
@@ -11,6 +12,9 @@ object SubsystemManager {
     private val testableSubsystems: ArrayList<Testable> = ArrayList()
     private val initializableSubsystems: ArrayList<Initializable> = ArrayList()
 
+    private val managerLists = listOf(subsystems, loopableSubsystems, zeroableSubsystems,
+            readableSubsystems, testableSubsystems, initializableSubsystems)
+
     private var zeroedYet = false
 
     fun stopAll() {
@@ -18,6 +22,8 @@ object SubsystemManager {
     }
 
     fun updateDashboardAll(debugging: Boolean) {
+        OsirisDashboard["subsystems length"] = subsystems.size
+        OsirisDashboard.addSpace()
         subsystems.forEach { it.updateDashboard(debugging) }
     }
 
@@ -40,6 +46,7 @@ object SubsystemManager {
     fun periodic() {
         readAll()
         loopAll()
+        updateDashboardAll(false)
     }
 
     fun registerSubsystems(vararg allSubsystems: Subsystem) {
@@ -53,23 +60,23 @@ object SubsystemManager {
     fun register(subsystem: Subsystem) {
         subsystems.add(subsystem)
 
-        if(subsystem is Loopable) {
+        if (subsystem is Loopable) {
             loopableSubsystems.add(subsystem)
         }
 
-        if(subsystem is Zeroable) {
+        if (subsystem is Zeroable) {
             zeroableSubsystems.add(subsystem)
         }
 
-        if(subsystem is Readable) {
+        if (subsystem is Readable) {
             readableSubsystems.add(subsystem)
         }
 
-        if(subsystem is Testable) {
+        if (subsystem is Testable) {
             testableSubsystems.add(subsystem)
         }
 
-        if(subsystem is Initializable) {
+        if (subsystem is Initializable) {
             initializableSubsystems.add(subsystem)
         }
     }
@@ -98,6 +105,10 @@ object SubsystemManager {
         if(subsystem is Initializable && subsystem in initializableSubsystems) {
             initializableSubsystems.remove(subsystem)
         }
+    }
+
+    fun clearAll() {
+        managerLists.forEach { it.clear() }
     }
 
     override fun toString(): String {

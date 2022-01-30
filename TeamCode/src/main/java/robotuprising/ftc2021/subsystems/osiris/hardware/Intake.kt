@@ -13,21 +13,15 @@ object Intake : MotorSubsystem(
                 MotorControlType.OPEN_LOOP
         )
 ) {
-    private val rotateServo = OsirisServo("intakeRotate")
-
     fun turnOn() {
-        motor.power = 1.0
+        output = 1.0
     }
 
     fun turnReverse() {
-        motor.power = -1.0
+        output = -1.0
     }
 
     fun turnOff() {
-        motor.power = 0.0
-    }
-
-    fun rotate(position: Double) {
-        rotateServo.position = position
+        output = 0.0
     }
 }

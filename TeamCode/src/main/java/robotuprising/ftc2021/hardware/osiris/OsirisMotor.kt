@@ -9,12 +9,11 @@ import org.openftc.revextensions2.ExpansionHubMotor
 import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.subsystems.osiris.motor.MotorConfig
 import robotuprising.ftc2021.util.Globals
+import robotuprising.lib.hardware.FakeMotor
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import robotuprising.lib.opmode.OsirisDashboard
 import kotlin.math.absoluteValue
 
-// todo fix bulk position
-// todo make everything else read from bulk reads
 class OsirisMotor(private val name: String, private val onMaster: Boolean) {
     // optional constructor used for MotorSubsystems
     constructor(motorConfig: MotorConfig) : this(motorConfig.name, false) {
@@ -23,29 +22,76 @@ class OsirisMotor(private val name: String, private val onMaster: Boolean) {
         mode = motorConfig.mode
     }
 
-    private val motor = BulkDataManager.hwMap[ExpansionHubMotor::class.java, name]
+    private val motor by lazy { BulkDataManager.hwMap[ExpansionHubMotor::class.java, name] }
+
+    private var zeroPowerChanged = false
+    private var directionChanged = false
+    private var modeChanged = false
+
+    private fun hardwareUpdate() {
+        if(zeroPowerChanged) {
+            motor.zeroPowerBehavior = zeroPowerBehavior
+        }
+
+        if(directionChanged) {
+            motor.direction = direction
+        }
+
+        if(modeChanged) {
+            motor.mode = mode
+        }
+    }
 
     var power: Double = 0.0
         set(value) {
             val clipped = Range.clip(value, -1.0, 1.0)
             if (clipped epsilonNotEqual field && (clipped == 0.0 || clipped.absoluteValue == 1.0 || (clipped - field).absoluteValue > 0.005)) {
+                hardwareUpdate()
                 field = value
                 motor.power = value
             }
         }
 
-    val bulkPosition: Int
+    val position: Int get() {
+        hardwareUpdate()
+        return if(onMaster) {
+            BulkDataManager.masterData.getMotorCurrentPosition(motor)
+        } else {
+            BulkDataManager.slaveData.getMotorCurrentPosition(motor)
+        }
+//        return motor.position
+    }
+
+    val velocity: Double
         get() {
-            return if (onMaster) {
-                BulkDataManager.masterData.getMotorCurrentPosition(Globals.MASTER_MAPPINGS.indexOf(name))
-            } else {
-                BulkDataManager.slaveData.getMotorCurrentPosition(Globals.SLAVE_MAPPINGS.indexOf(name))
+            hardwareUpdate()
+            return motor.velocity
+         }
+
+    var mode: DcMotor.RunMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        set(value) {
+            if (field != value) {
+                modeChanged = true
+                field = value
             }
         }
 
-    val position: Int get() = motor.currentPosition
+    var zeroPowerBehavior = DcMotor.ZeroPowerBehavior.UNKNOWN
+        set(value) {
+            if (value != field) {
+                if (value != DcMotor.ZeroPowerBehavior.UNKNOWN)
+                    zeroPowerChanged = true
+                field = value
+            }
+        }
 
-    val velocity: Double get() = motor.velocity
+    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
+        set(value) {
+            if (value != field) {
+                directionChanged = true
+                field = value
+            }
+        }
 
     val reverse: OsirisMotor
         get() {
@@ -95,57 +141,35 @@ class OsirisMotor(private val name: String, private val onMaster: Boolean) {
             return this
         }
 
-    var mode: DcMotor.RunMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        set(value) {
-            if (field != value) {
-                motor.mode = value
-                field = value
-            }
-        }
 
-    var zeroPowerBehavior = DcMotor.ZeroPowerBehavior.UNKNOWN
-        set(value) {
-            if (value != field) {
-                if (value != DcMotor.ZeroPowerBehavior.UNKNOWN)
-                    motor.zeroPowerBehavior = value
-                field = value
-            }
-        }
 
-    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
-        set(value) {
-            if (value != field) {
-                motor.direction = value
-                field = value
-            }
-        }
+//    val hub: String
+//    val portNumber: Int
+//    val current get() = motor.getCurrent(CurrentUnit.MILLIAMPS)
+//    val currentDraw get() = motor.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.MILLIAMPS)
+//    val overTemp get() = motor.isBridgeOverTemp
 
-    val hub: String
-    val portNumber: Int
-    val current get() = motor.getCurrent(CurrentUnit.MILLIAMPS)
-    val currentDraw get() = motor.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.MILLIAMPS)
-    val overTemp get() = motor.isBridgeOverTemp
+//        fun sendDataToDashboard() {
+//        OsirisDashboard.addLine("$name motor data")
+//        OsirisDashboard["name"] = name
+//        OsirisDashboard["$name hub"] = hub
+//        OsirisDashboard["$name port number"] = portNumber
+//        OsirisDashboard["$name mode"] = mode
+//        OsirisDashboard["$name direction"] = direction
+//        OsirisDashboard["$name zero behavior"] = zeroPowerBehavior
+//        OsirisDashboard["$name current"] = current
+//        OsirisDashboard["$name current draw"] = currentDraw
+//        OsirisDashboard["$name over temp"] = overTemp
+//        }
 
-    fun sendDataToDashboard() {
-        OsirisDashboard.addLine("$name motor data")
-        OsirisDashboard["name"] = name
-        OsirisDashboard["$name hub"] = hub
-        OsirisDashboard["$name port number"] = portNumber
-        OsirisDashboard["$name mode"] = mode
-        OsirisDashboard["$name direction"] = direction
-        OsirisDashboard["$name zero behavior"] = zeroPowerBehavior
-        OsirisDashboard["$name current"] = current
-        OsirisDashboard["$name current draw"] = currentDraw
-        OsirisDashboard["$name over temp"] = overTemp
-    }
-
-    init {
-        if (onMaster) {
-            hub = "master"
-            portNumber = Globals.MASTER_MAPPINGS.indexOf(name)
-        } else {
-            hub = "slave"
-            portNumber = Globals.SLAVE_MAPPINGS.indexOf(name)
-        }
-    }
+//        init {
+//        if (onMaster) {
+//            hub = "master"
+//            portNumber = Globals.MASTER_MAPPINGS.indexOf(name)
+//        } else {
+//            hub = "slave"
+//            portNumber = Globals.SLAVE_MAPPINGS.indexOf(name)
+//        }
+//        }
+//    }
 }

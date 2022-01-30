@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 object OsirisDashboard {
     private var dashboardAdapter: TelemetryAdapter = TelemetryAdapter()
     private lateinit var telemetryImpl: Telemetry
-    private var isUpdatingDashboard: Boolean = true
+    private var isUpdatingDashboard: Boolean = false
 
     /**
      * Initializes WraithDashboard, must be called prior to update()
@@ -57,6 +57,7 @@ object OsirisDashboard {
             dashboardAdapter = TelemetryAdapter()
         }
         telemetryImpl.update()
+        telemetryImpl.clearAll()
     }
 
     operator fun set(k: String, v: Any) {

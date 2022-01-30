@@ -16,7 +16,7 @@ import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 
 @RedAlliance
-@TeleOp
+//@TeleOp
 open class OsirisRedTeleOp : OsirisOpMode() {
     open val fieldHeadingOffset = -90.0 // we are looking at -90.0 from driver pov
 
@@ -38,7 +38,7 @@ open class OsirisRedTeleOp : OsirisOpMode() {
             Point(xPower, yPower)
         }
 
-        ghost.manualPowers = Pose(finalPower, Angle(turnPower, AngleUnit.RAW))
+        ghost.powers = Pose(finalPower, Angle(turnPower, AngleUnit.RAW))
     }
 
     private fun intakeControl() {
@@ -101,7 +101,7 @@ open class OsirisRedTeleOp : OsirisOpMode() {
 }
 
 @BlueAlliance
-@TeleOp
+//@TeleOp
 class BlueTeleOp : OsirisRedTeleOp() {
     override val fieldHeadingOffset = 90.0
 

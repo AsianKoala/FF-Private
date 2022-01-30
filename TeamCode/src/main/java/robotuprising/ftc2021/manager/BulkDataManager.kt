@@ -22,12 +22,17 @@ object BulkDataManager {
 
         batteryVoltageSensor = hwMap.voltageSensor.iterator().next()
 
-        hardwareMap.getAll(LynxModule::class.java).forEach { it.bulkCachingMode = LynxModule.BulkCachingMode.AUTO }
+//        hardwareMap.getAll(LynxModule::class.java).forEach { it.bulkCachingMode = LynxModule.BulkCachingMode.AUTO }
         read()
     }
 
     fun read() {
-        masterData = masterHub.bulkInputData
-        slaveData = slaveHub.bulkInputData
+        if(masterHub.bulkInputData != null) {
+            masterData = masterHub.bulkInputData
+        }
+
+        if(slaveHub.bulkInputData != null) {
+            slaveData = slaveHub.bulkInputData
+        }
     }
 }

@@ -8,6 +8,8 @@ import robotuprising.lib.control.auto.path.PurePursuitPath
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.*
+import robotuprising.lib.opmode.NakiriDashboard
+import robotuprising.lib.opmode.OsirisDashboard
 import kotlin.math.absoluteValue
 
 object Ghost : Subsystem(), Loopable {
@@ -17,7 +19,7 @@ object Ghost : Subsystem(), Loopable {
     private val br = OsirisMotor("br", true).brake.openLoopControl
     private val motors = listOf(fl, bl, fr, br)
 
-    private var _powers = Pose(Point(), Angle(0.0, AngleUnit.RAD))
+    var powers = Pose(Point(), Angle(0.0, AngleUnit.RAW))
 
     var driveState = DriveStates.DISABLED
     enum class DriveStates {
@@ -27,36 +29,6 @@ object Ghost : Subsystem(), Loopable {
         TARGET_POINT
     }
 
-    var manualPowers = Pose(Point(), Angle.EAST)
-        set(value) {
-            if(driveState == DriveStates.MANUAL) {
-                _powers = value
-            } else {
-                throw Exception("ghost not in manual mode")
-            }
-            field = value
-        }
-
-    var pathPowers = Pose(Point(), Angle.EAST)
-        set(value) {
-            if(driveState == DriveStates.PATH) {
-                _powers = value
-            } else {
-                throw Exception("ghost not in path mode")
-            }
-            field = value
-        }
-
-    var targetPointPowers = Pose(Point(), Angle.EAST)
-        set(value) {
-            if(driveState == DriveStates.TARGET_POINT) {
-                _powers = value
-            } else {
-                throw Exception("ghost not in target point")
-            }
-            field = value
-        }
-
     var currentPath: PurePursuitPath? = null
     var targetWaypoint: Waypoint? = null
 
@@ -64,19 +36,25 @@ object Ghost : Subsystem(), Loopable {
     var acceptableStopError = 0.5
 
     override fun stop() {
-        _powers = Pose.DEFAULT_RAW
+        driveState = DriveStates.DISABLED
+        powers = Pose.DEFAULT_RAW
+        motors.forEach { it.power = 0.0 }
+        currentPath = null
+        targetWaypoint = null
     }
 
     override fun updateDashboard(debugging: Boolean) {
-
+        OsirisDashboard.addSpace()
+        OsirisDashboard["drive state"] = driveState
+        OsirisDashboard["powers"] = powers.toRawString
     }
 
     override fun loop() {
         when(driveState) {
             DriveStates.DISABLED -> {
-                _powers.p.x = 0.0
-                _powers.p.y = 0.0
-                _powers.h = Angle.EAST
+                powers.p.x = 0.0
+                powers.p.y = 0.0
+                powers.h = Angle.EAST_RAW
             }
 
             DriveStates.MANUAL -> {
@@ -88,7 +66,7 @@ object Ghost : Subsystem(), Loopable {
                     if(currentPath!!.isFinished) {
                         driveState = DriveStates.DISABLED
                     } else {
-                        pathPowers = currentPath!!.update(Odometry.currentPosition)
+                        powers = currentPath!!.update(Odometry.currentPosition)
                     }
                 } else {
                     throw Exception("Must have cached path to follow!!!!")
@@ -116,7 +94,7 @@ object Ghost : Subsystem(), Loopable {
                     }
 
                     if(driveState != DriveStates.DISABLED) {
-                        targetPointPowers = PurePursuitController.curve(currPose, targetWaypoint!!)
+                        powers = PurePursuitController.curve(currPose, targetWaypoint!!)
                     }
                 } else {
                     throw Exception("must have cached point to target!!!!")
@@ -124,10 +102,10 @@ object Ghost : Subsystem(), Loopable {
             }
         }
 
-        val fl = _powers.y + _powers.x + _powers.h.angle
-        val bl = _powers.y - _powers.x + _powers.h.angle
-        val fr = _powers.y - _powers.x - _powers.h.angle
-        val br = _powers.y + _powers.x - _powers.h.angle
+        val fl = powers.y + powers.x + powers.h.angle
+        val bl = powers.y - powers.x + powers.h.angle
+        val fr = powers.y - powers.x - powers.h.angle
+        val br = powers.y + powers.x - powers.h.angle
 
         val wheels = listOf(fl, bl, fr, br)
         val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
@@ -136,6 +114,8 @@ object Ghost : Subsystem(), Loopable {
         } else {
             motors.forEachIndexed { i, it -> it.power = wheels[i] }
         }
+
+        OsirisDashboard["wheels"] = wheels
     }
 
 }
