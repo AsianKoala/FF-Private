@@ -7,13 +7,13 @@ import kotlin.math.hypot
 import kotlin.math.sin
 
 data class Point(
-    var x: Double = 0.0,
-    var y: Double = 0.0
+    val x: Double = 0.0,
+    val y: Double = 0.0
 ) {
-    val hypot get() = hypot(x, y)
-    val atan2 get() = Angle(atan2(y, x), AngleUnit.RAD)
-    val dbNormalize get() = Point(y, -x)
-    val copy get() = Point(x, y)
+    val hypot = hypot(x, y)
+    val atan2 = Angle(atan2(y, x), AngleUnit.RAD)
+    val dbNormalize = Point(y, -x)
+    val copy= Point(x, y)
 
     operator fun plus(p: Point) = Point(x + p.x, y + p.y)
     operator fun minus(p: Point) = Point(x - p.x, y - p.y)
@@ -29,8 +29,4 @@ data class Point(
     )
 
     override fun toString() = String.format("%.2f, %.2f", x, y)
-
-    companion object {
-        val ORIGIN get() = Point(0.0, 0.0)
-    }
 }

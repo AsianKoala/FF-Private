@@ -108,7 +108,7 @@ object SubsystemManager {
     }
 
     fun clearAll() {
-        managerLists.forEach { it.clear() }
+        managerLists.forEach(ArrayList<*>::clear)
     }
 
     override fun toString(): String {

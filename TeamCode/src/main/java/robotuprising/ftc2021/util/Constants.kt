@@ -34,6 +34,7 @@ object Constants {
     const val outtakeMediumPosition = 0.0
     const val outtakeLowPosition = 0.0
     const val outtakeSharedPosition = 0.0
+    const val outtakeCockPosition = 0.0
 
     const val indexerOpenPosition = 0.0
     const val indexerLockedPosition = 0.0

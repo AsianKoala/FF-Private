@@ -4,16 +4,16 @@ import robotuprising.lib.math.MathUtil.degrees
 import kotlin.math.* // ktlint-disable no-wildcard-imports
 
 data class Angle(
-    var angle: Double,
-    var unit: AngleUnit
+    val angle: Double,
+    val unit: AngleUnit
 ) {
 
-    val deg: Double get() = angle.degrees
+    val deg: Double = angle.degrees
 
     val cos = cos(angle)
     val sin = sin(angle)
     val abs = angle.absoluteValue
-    val copy get() = Angle(angle, unit)
+    val copy = Angle(angle, unit)
 
     fun wrap(): Angle {
         var heading = angle
@@ -38,9 +38,4 @@ data class Angle(
 
     operator fun times(scalar: Double) = Angle(angle * scalar, unit)
     operator fun div(scalar: Double) = Angle(angle / scalar, unit)
-
-    companion object {
-        val EAST get() = Angle(0.0, AngleUnit.RAD)
-        val EAST_RAW get() = Angle(0.0, AngleUnit.RAW)
-    }
 }

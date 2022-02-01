@@ -36,7 +36,7 @@ class Ayame: Subsystem {
 
 
     // location
-    var pose: Pose = Pose.DEFAULT_ANGLE
+    var pose: Pose = Pose(AngleUnit.RAD)
         private set
 
     private lateinit var startHeading: Angle
@@ -207,7 +207,7 @@ class Ayame: Subsystem {
                     if(crossed) {
                         crossCounter++
                         pose = ultrasonicPose
-                        pose.p = pose.p / 2.54
+//                        pose = Pose(pose.p / 2.54, Angle(unit = AngleUnit.RAD))
                         _poseEstimate = pose.pose2d
                         ultrasonics.stopReading()
 
@@ -274,7 +274,7 @@ class Ayame: Subsystem {
     }
 
     override fun reset() {
-        setVectorPowers(Pose.DEFAULT_RAW)
+        setVectorPowers(Pose(Point(), Angle(0.0, AngleUnit.RAW)))
     }
 
     init {

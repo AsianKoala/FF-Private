@@ -6,12 +6,11 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Pose
-import robotuprising.lib.math.TimePose
+import robotuprising.lib.math.*
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
+import robotuprising.lib.util.Extensions.mmToIn
+import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
@@ -21,11 +20,11 @@ object Odometry : Subsystem(), Loopable, Initializable {
 //    private val rightServo = OsirisServo("rightRetract")
 //    private val auxServo = OsirisServo("auxRetract")
 
-    const val TICKS_PER_INCH = 1103.8839
+    val TICKS_PER_INCH = 1892.3724 // (ticks per rev) / (2 * pi * r)
     @JvmField var turnScalar: Double = 14.9691931
     @JvmField var auxTracker: Double = 3.85
 
-    var startPose = Pose.DEFAULT_RAW.copy
+    var startPose = Pose(AngleUnit.RAD)
         set(value) {
             currentPosition = value.copy
             field = value
@@ -35,7 +34,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
     private var startR: Double = 0.0
     private var startA: Double = 0.0
 
-    var currentPosition: Pose = Pose.DEFAULT_RAW
+    var currentPosition: Pose = Pose(AngleUnit.RAD)
 
     private var lastLeftEncoder = 0.0
     private var lastRightEncoder = 0.0
@@ -56,7 +55,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
         val rightTotal = actualCurrRight / TICKS_PER_INCH
 
         val lastAngle = currentPosition.h.copy
-        currentPosition.h = -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h
+        val newAngle =  -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h
 
         val angleIncrement = (lWheelDelta - rWheelDelta) / turnScalar
         val auxPrediction = angleIncrement * auxTracker
@@ -75,28 +74,22 @@ object Odometry : Subsystem(), Loopable, Initializable {
             deltaY = (radiusOfMovement * sin(angleIncrement)) + (radiusOfStrafe * (1 - cos(angleIncrement)))
         }
 
-        currentPosition.p.x += lastAngle.cos * deltaY - lastAngle.sin * deltaX
-        currentPosition.p.y += lastAngle.sin * deltaY + lastAngle.cos * deltaX
+        val incrementX = lastAngle.cos * deltaY - lastAngle.sin * deltaX
+        val incrementY = lastAngle.sin * deltaY + lastAngle.cos * deltaX
+        val pointIncrement = Point(incrementX, incrementY)
+
+        currentPosition = Pose(currentPosition.p + pointIncrement, newAngle)
 
         lastLeftEncoder = actualCurrLeft
         lastRightEncoder = actualCurrRight
         lastAuxEncoder = actualCurrAux
     }
 
-//    fun extend() {
-//        leftServo.position = Constants.leftOdoExtend
-//        rightServo.position = Constants.rightOdoExtend
-//        auxServo.position = Constants.auxOdoExtend
-//    }
-//
-//    fun retract() {
-//        leftServo.position = Constants.leftOdoRetract
-//        rightServo.position = Constants.rightOdoRetract
-//        auxServo.position = Constants.auxOdoRetract
-//    }
-
     override fun stop() {
-
+        accumHeading = 0.0
+        lastLeftEncoder = 0.0
+        lastRightEncoder = 0.0
+        lastAuxEncoder = 0.0
     }
 
     override fun updateDashboard(debugging: Boolean) {
@@ -105,7 +98,6 @@ object Odometry : Subsystem(), Loopable, Initializable {
         OsirisDashboard["l"] = lastLeftEncoder
         OsirisDashboard["r"] = lastRightEncoder
         OsirisDashboard["a"] = lastAuxEncoder
-
     }
 
     override fun loop() {
@@ -120,6 +112,6 @@ object Odometry : Subsystem(), Loopable, Initializable {
         startL = BulkDataManager.masterData.getMotorCurrentPosition(1).d
         startR = BulkDataManager.masterData.getMotorCurrentPosition(0).d
         startA = BulkDataManager.masterData.getMotorCurrentPosition(2).d
-        startPose = Pose.DEFAULT_RAW
+        startPose = Pose(AngleUnit.RAD)
     }
 }

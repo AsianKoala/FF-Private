@@ -37,7 +37,7 @@ object Ghost : Subsystem(), Loopable {
 
     override fun stop() {
         driveState = DriveStates.DISABLED
-        powers = Pose.DEFAULT_RAW
+        powers = Pose(AngleUnit.RAW)
         motors.forEach { it.power = 0.0 }
         currentPath = null
         targetWaypoint = null
@@ -52,9 +52,7 @@ object Ghost : Subsystem(), Loopable {
     override fun loop() {
         when(driveState) {
             DriveStates.DISABLED -> {
-                powers.p.x = 0.0
-                powers.p.y = 0.0
-                powers.h = Angle.EAST_RAW
+                powers = Pose(AngleUnit.RAW)
             }
 
             DriveStates.MANUAL -> {
@@ -62,6 +60,7 @@ object Ghost : Subsystem(), Loopable {
             }
 
             DriveStates.PATH -> {
+                throw Exception("what the fuck")
                 if(currentPath != null) {
                     if(currentPath!!.isFinished) {
                         driveState = DriveStates.DISABLED
@@ -74,6 +73,7 @@ object Ghost : Subsystem(), Loopable {
             }
 
             DriveStates.TARGET_POINT -> {
+                throw Exception("what the fuck")
                 if(targetWaypoint != null) {
                     val currPose = Odometry.currentPosition
                     when(targetWaypoint) {
@@ -116,6 +116,9 @@ object Ghost : Subsystem(), Loopable {
         }
 
         OsirisDashboard["wheels"] = wheels
+        OsirisDashboard["y"] = powers.y
+        OsirisDashboard["x"] = powers.x
+        OsirisDashboard["h"] = powers.h.angle
     }
 
 }

@@ -52,15 +52,22 @@ object MathUtil {
     }
 
     fun clipIntersection(start: Point, end: Point, robot: Point): Point {
-        if (start.y == end.y)
-            start.y += 0.01
-        if (start.x == end.x)
-            start.x += 0.01
+        var startX = start.y
+        var startY = start.x
 
-        val m1 = (end.y - start.y) / (end.x - start.x)
+        if (start.x == end.x)
+            startX += 0.01
+
+        if (start.y == end.y)
+            startY += 0.01
+
+        val mStart = Point(startX, startY)
+
+
+        val m1 = (end.y - mStart.y) / (end.x - mStart.x)
         val m2 = -1.0 / m1
-        val xClip = (-m2 * robot.x + robot.y + m1 * start.x - start.y) / (m1 - m2)
-        val yClip = m1 * (xClip - start.x) + start.y
+        val xClip = (-m2 * robot.x + robot.y + m1 * mStart.x - mStart.y) / (m1 - m2)
+        val yClip = m1 * (xClip - mStart.x) + mStart.y
         return Point(xClip, yClip)
     }
 
@@ -68,10 +75,10 @@ object MathUtil {
         val lineAngle = (secondPoint - firstPoint).atan2
         val length = secondPoint.distance(firstPoint)
         val extendedLineLength = length + distance
-        val extended = secondPoint.copy
-        extended.x = lineAngle.cos * extendedLineLength + firstPoint.x
-        extended.y = lineAngle.sin * extendedLineLength + firstPoint.y
-        return extended
+
+        val extendedX = lineAngle.cos * extendedLineLength + firstPoint.x
+        val extendedY = lineAngle.sin * extendedLineLength + firstPoint.y
+        return Point(extendedX, extendedY)
     }
 
     /**
@@ -108,11 +115,12 @@ object MathUtil {
             intersections.add(Point((xLeft + xRight) / div, (yLeft + yRight) / div))
             intersections.add(Point((xLeft - xRight) / div, (yLeft - yRight) / div))
         }
-        var closest = Point(69420.0, -10000.0)
+        var closest = Point(69420.0, -69420.0)
         for (p in intersections) { // add circle center offsets
-            p.x += center.x
-            p.y += center.y
-            if (p.distance(endPoint) < closest.distance(endPoint)) closest = p
+            val offsetPoint = Point(p.x + center.x, p.y + center.y)
+            if (offsetPoint.distance(endPoint) < closest.distance(endPoint)) {
+                closest = offsetPoint
+            }
         }
         return closest
     }

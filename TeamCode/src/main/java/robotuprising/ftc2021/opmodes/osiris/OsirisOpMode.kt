@@ -11,12 +11,13 @@ import robotuprising.lib.system.BaseOpMode
 open class OsirisOpMode : BaseOpMode() {
 //
     private val subsystemManager = SubsystemManager
+    private val stateMachineManager = StateMachineManager
 //
     private val ghost = Ghost
-//    private val odometry = Odometry
-//
-//    private val intake = Intake
-//    private val loadingSensor = LoadingSensor
+    private val odometry = Odometry
+
+    private val intake = Intake
+    private val loadingSensor = LoadingSensor
 //
 //    private val turretLimitSwitch = TurretLimitSwitch
 //    private val slideLimitSwitch = SlideLimitSwitch
@@ -28,7 +29,7 @@ open class OsirisOpMode : BaseOpMode() {
 //    private val outtake = Outtake
 //    private val indexer = Indexer
 //
-//    private val spinner = Spinner
+    private val spinner = Spinner
 //
 //    private val redWebcam = RedWebcam
 //    private val blueWebcam = BlueWebcam
@@ -65,7 +66,15 @@ open class OsirisOpMode : BaseOpMode() {
 //            subsystemManager.deregister(blueWebcam)
 //        }
 
+        subsystemManager.registerSubsystems(
+                ghost,
+                odometry,
 
+                intake,
+                loadingSensor,
+
+                spinner
+        )
     }
 
     override fun mInit() {
@@ -77,6 +86,7 @@ open class OsirisOpMode : BaseOpMode() {
 
     override fun mInitLoop() {
         subsystemManager.periodic()
+        stateMachineManager.periodic()
     }
 
     override fun mStart() {
@@ -86,6 +96,7 @@ open class OsirisOpMode : BaseOpMode() {
 
     override fun mLoop() {
         subsystemManager.periodic()
+        stateMachineManager.periodic()
     }
 
     override fun mStop() {

@@ -145,7 +145,7 @@ class Nakiri : Subsystem {
     }
 
     fun requestAyameStop() {
-        requestAyamePowers(Pose.DEFAULT_RAW)
+        requestAyamePowers(Pose(AngleUnit.RAW))
     }
 
     fun setStartingPose(startPose: Pose) {

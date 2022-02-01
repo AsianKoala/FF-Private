@@ -7,6 +7,6 @@ object Spinner : MotorSubsystem(
         MotorSubsystemConfig(MotorConfig("duckSpinner"), MotorControlType.OPEN_LOOP)
 ) {
         fun setPower(power: Double) {
-                motor.power = power
+                output = power
         }
 }

@@ -23,15 +23,13 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     protected val motor: OsirisMotor by lazy { OsirisMotor(config.motorConfig) }
 
     private val controller: PIDFController by lazy {
-        val ret = PIDFController(
+         PIDFController(
             PIDCoefficients(config.kP, config.kI, config.kD),
             config.kV,
             config.kA,
             config.kStatic,
             config.kF
         )
-
-        ret
     }
 
     private var targetPosition = 0.0
@@ -48,7 +46,17 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     // when we are at rest, don't want any motor movement
     private val dead get() = position.absoluteValue < config.deadzone && targetPosition epsilonEquals config.homePosition
 
+
+
     val isAtTarget get() = ((position - targetPosition).absoluteValue < config.positionEpsilon) || dead
+
+
+    // pid
+    protected fun setControllerTarget(target: Double) {
+        controller.reset()
+        controller.targetPosition = target
+    }
+
 
     // motion profiling
     private var motionTimer = ElapsedTime()
@@ -62,10 +70,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
         return (ticks / config.unitsPerTick) * config.gearRatio
     }
 
-    protected fun setControllerTarget(target: Double) {
-        controller.reset()
-        controller.targetPosition = target
-    }
+
 
     private fun PIDFController.targetMotionState(state: MotionState) {
         targetPosition = state.x
@@ -138,7 +143,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
                     }
                 }
 
-                var rawOutput = if(dead) {
+                val rawOutput = if(dead) {
                     0.0
                 } else {
                     controller.update(position, velocity)

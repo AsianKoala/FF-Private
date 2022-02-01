@@ -31,15 +31,22 @@ class OsirisMotor(private val name: String, private val onMaster: Boolean) {
     private fun hardwareUpdate() {
         if(zeroPowerChanged) {
             motor.zeroPowerBehavior = zeroPowerBehavior
+//            OsirisDashboard.addLine("changed config of $name")
         }
 
         if(directionChanged) {
             motor.direction = direction
+//            OsirisDashboard.addLine("changed config of $name")
         }
 
         if(modeChanged) {
             motor.mode = mode
+//            OsirisDashboard.addLine("changed config of $name")
         }
+
+        zeroPowerChanged = false
+        directionChanged = false
+        modeChanged = false
     }
 
     var power: Double = 0.0
@@ -50,6 +57,7 @@ class OsirisMotor(private val name: String, private val onMaster: Boolean) {
                 field = value
                 motor.power = value
             }
+//            OsirisDashboard.addLine("requested power $field on motor $name")
         }
 
     val position: Int get() {
@@ -59,7 +67,8 @@ class OsirisMotor(private val name: String, private val onMaster: Boolean) {
         } else {
             BulkDataManager.slaveData.getMotorCurrentPosition(motor)
         }
-//        return motor.position
+//        OsirisDashboard.addLine("requested position from motor $name")
+//        return motor.currentPosition
     }
 
     val velocity: Double

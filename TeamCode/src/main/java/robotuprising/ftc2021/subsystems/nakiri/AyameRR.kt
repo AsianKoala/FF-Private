@@ -149,7 +149,7 @@ class AyameRR : MecanumDrive(DriveConstants.kV, DriveConstants.kA, DriveConstant
     }
 
     override fun reset() {
-        setVectorPowers(Pose.DEFAULT_RAW)
+        setVectorPowers(Pose(AngleUnit.RAW))
     }
 
     // roadrunner implementation methods
