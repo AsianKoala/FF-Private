@@ -9,7 +9,8 @@ import robotuprising.lib.system.statemachine.StateMachineBuilder
 object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
     enum class States {
         INTAKING,
-        MINERAL_IN_REVERSE_INTAKING
+        MINERAL_IN_REVERSE_INTAKING,
+        COCK
     }
 
     private val intake = Intake
@@ -22,11 +23,14 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
             .onEnter(intake::turnOn)
             .onExit(intake::turnReverse)
             .onExit(indexer::lock)
-            .onExit(outtake::cock)
             .transition(sensor::isMineralIn)
 
             .state(States.MINERAL_IN_REVERSE_INTAKING)
             .onExit(intake::turnOff)
+            .transitionTimed(1.0)
+
+            .state(States.COCK)
+            .onEnter(outtake::cock)
             .transitionTimed(1.0)
             .build()
 }

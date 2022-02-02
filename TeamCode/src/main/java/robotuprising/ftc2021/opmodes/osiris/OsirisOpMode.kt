@@ -26,8 +26,8 @@ open class OsirisOpMode : BaseOpMode() {
 //    private val turret = Turret
 //    private val slide = Slide
 //    private val arm = Arm
-//    private val outtake = Outtake
-//    private val indexer = Indexer
+    private val outtake = Outtake
+    private val indexer = Indexer
 //
     private val spinner = Spinner
 //
@@ -101,5 +101,6 @@ open class OsirisOpMode : BaseOpMode() {
 
     override fun mStop() {
         subsystemManager.stopAll()
+        stateMachineManager.stop()
     }
 }

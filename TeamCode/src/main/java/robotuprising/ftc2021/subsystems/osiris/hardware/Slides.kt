@@ -6,38 +6,20 @@ import robotuprising.ftc2021.subsystems.osiris.motor.*
 import robotuprising.ftc2021.util.*
 import robotuprising.lib.math.MathUtil
 
-object Slide : ZeroableMotorSubsystem(
+object Slides : ZeroableMotorSubsystem(
         MotorSubsystemConfig(
                 MotorConfig(
                         "turret",
                         zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
                 ),
 
-                MotorControlType.POSITION_PID,
+                controlType = MotorControlType.POSITION_PID,
 
-                0.0,
-                (1.0 / MotorData.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
-                1.0,
+                unitsPerTick = (1.0 / MotorData.GB_13_7.ticksPerRev) * MathUtil.TAU * Constants.slideSpoolRadius,
+                gearRatio = 1.0,
 
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                { _, _ -> 0.0 },
 
-                10.0,
-                5.0,
-                0.0,
-
-                0.1,
-
-                0.25,
-                0.0,
-                180.0 / 25.4,
-
-                Constants.slidePostZeroValue
+                postZeroedValue = Constants.slideHomeValue
         )
 ) {
     val slideInches get() = position

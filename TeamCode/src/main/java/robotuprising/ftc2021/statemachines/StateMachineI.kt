@@ -9,14 +9,18 @@ abstract class StateMachineI<E> {
     private val stateMachineManager = StateMachineManager
     private var addedToManager = false
 
+    fun stop() {
+        stateMachine.stop()
+        stateMachine.reset()
+    }
+
     fun start() {
         if(!addedToManager) {
             stateMachineManager.addMachine(this)
             addedToManager = true
         }
 
-        stateMachine.stop()
-        stateMachine.reset()
+        stop()
         stateMachine.start()
     }
 

@@ -17,7 +17,7 @@ object Constants {
     const val loadingSensorThreshold = 0.0
     
     const val slideSpoolRadius = 35.0 / 25.4
-    const val slidePostZeroValue = 0.0
+    const val slideHomeValue = 0.0
     const val slideHighInches = 0.0
     const val slideMediumInches = 0.0
     const val slideLowInches = 0.0

@@ -11,11 +11,11 @@ import robotuprising.lib.math.Pose
 import kotlin.collections.ArrayList
 
 class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
-    val DEAD_MAN_SWITCH = 2000
+    private val DEAD_MAN_SWITCH = 2000
 
-    var currPoint = 0
-    var interrupting = false
-    val timeUntilDeadMan = ElapsedTime()
+    private var currPoint = 0
+    private var interrupting = false
+    private val timeUntilDeadMan = ElapsedTime()
 
     fun update(): Pose {
         val position = Odometry.currentPosition
@@ -79,14 +79,14 @@ class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
 
         val target = waypoints[currPoint + 1]
 
-        if(target is StopWaypoint && position.distance(target) < target.followDistance) {
-            return MecanumPurePursuitController.goToPosition(
+        return if(target is StopWaypoint && position.distance(target) < target.followDistance) {
+            MecanumPurePursuitController.goToPosition(
                     position,
                     velocity,
                     target
             )
         } else {
-            return trackToLine(
+            trackToLine(
                     position,
                     velocity,
                     waypoints[currPoint],

@@ -46,9 +46,9 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
 
     // when we are at rest, don't want any motor movement
-    private val dead get() = (position.absoluteValue < config.deadzone && targetPosition epsilonEquals config.homePosition) || disabled
+//    private val dead get() = targetPosition epsilonEquals config.homePosition || disabled
 
-    val isAtTarget get() = ((position - targetPosition).absoluteValue < config.positionEpsilon) || dead
+    val isAtTarget get() = ((position - targetPosition).absoluteValue < config.positionEpsilon)
 
 
     // pid
@@ -120,11 +120,13 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
         OsirisDashboard["target position"] = 0
         OsirisDashboard["position"] = position
         OsirisDashboard["output"] = output
+        OsirisDashboard["is at target"] = isAtTarget
+        OsirisDashboard["disabled"] = disabled
     }
 
     override fun loop() {
         if(config.controlType != MotorControlType.OPEN_LOOP) {
-            output = if(dead) {
+            output = if(disabled) {
                 0.0
             } else {
                 if(config.controlType == MotorControlType.MOTION_PROFILE && !hasFinishedProfile) {
@@ -146,7 +148,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
                     }
                 }
 
-                val rawOutput = if(dead) {
+                val rawOutput = if(disabled) {
                     0.0
                 } else {
                     controller.update(position, velocity)

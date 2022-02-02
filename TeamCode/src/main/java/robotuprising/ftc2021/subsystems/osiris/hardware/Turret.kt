@@ -18,12 +18,6 @@ object Turret : ZeroableMotorSubsystem(
                 unitsPerTick = (1 / MotorData.GB_13_7.ticksPerRev) * 360.0, // deg
                 gearRatio = 1.0 / 5.0,
 
-                deadzone = 0.2,
-
-                positionEpsilon = 0.5,
-                positionUpperLimit = 90.0,
-                positionLowerLimit = -90.0,
-
                 postZeroedValue = Constants.turretPostZeroValue
         )
 ) {

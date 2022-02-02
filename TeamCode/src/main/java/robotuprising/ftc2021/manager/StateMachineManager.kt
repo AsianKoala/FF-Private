@@ -12,4 +12,9 @@ object StateMachineManager {
     fun periodic() {
         stateMachines.forEach(StateMachineI<*>::update)
     }
+
+    fun stop() {
+        stateMachines.forEach(StateMachineI<*>::stop)
+        stateMachines.clear()
+    }
 }

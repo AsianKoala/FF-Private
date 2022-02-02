@@ -1,14 +1,14 @@
 package robotuprising.ftc2021.subsystems.osiris
 
 import com.acmerobotics.roadrunner.util.epsilonEquals
-import robotuprising.ftc2021.subsystems.osiris.hardware.Slide
+import robotuprising.ftc2021.subsystems.osiris.hardware.Slides
 import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.util.Constants
 
 // degrees, inches, degrees
 data class OsirisState(
         var turret: Double = Turret.config.homePosition,
-        var slide: Double = Slide.config.homePosition,
+        var slide: Double = Slides.config.homePosition,
         var arm: Double = Constants.armHomePosition,
         var outtake: Double = Constants.outtakeHomePosition,
 ) {

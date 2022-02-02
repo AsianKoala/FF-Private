@@ -8,4 +8,8 @@ object Outtake: ServoSubsystem(ServoSubsystemConfig("outtake")) {
     fun cock() {
         moveServoToPosition(Constants.outtakeCockPosition)
     }
+
+    fun depositHigh() {
+        moveServoToPosition(Constants.outtakeHighPosition)
+    }
 }

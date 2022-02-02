@@ -4,14 +4,14 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.subsystems.osiris.hardware.Arm
 import robotuprising.ftc2021.subsystems.osiris.hardware.Outtake
-import robotuprising.ftc2021.subsystems.osiris.hardware.Slide
+import robotuprising.ftc2021.subsystems.osiris.hardware.Slides
 import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.opmode.OsirisDashboard
 
 object Osiris : Subsystem(), Loopable {
     private val turret = Turret
-    private val slide = Slide
+    private val slide = Slides
     private val arm = Arm
     private val outtake = Outtake
 

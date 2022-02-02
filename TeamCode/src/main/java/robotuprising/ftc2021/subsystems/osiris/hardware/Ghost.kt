@@ -33,7 +33,6 @@ object Ghost : Subsystem(), Loopable {
     var targetWaypoint: Waypoint? = null
 
     var acceptableTargetError = 2.0
-    var acceptableStopError = 0.5
 
     override fun stop() {
         driveState = DriveStates.DISABLED

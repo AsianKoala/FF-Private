@@ -1,36 +1,41 @@
 package robotuprising.ftc2021.statemachines
 
-import robotuprising.ftc2021.subsystems.osiris.hardware.Indexer
 import robotuprising.ftc2021.subsystems.osiris.Osiris
 import robotuprising.ftc2021.subsystems.osiris.OsirisState
+import robotuprising.ftc2021.subsystems.osiris.hardware.*
+import robotuprising.ftc2021.util.Constants
+import robotuprising.lib.system.statemachine.StateMachine
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
-open class DepositStateMachine(private val depositGoal: OsirisState) : StateMachineI<DepositStateMachine.States>() {
+// STATIC TURRET MOVEMENT
+class DepositStateMachine(private val turretTarget: Double) : StateMachineI<DepositStateMachine.States>() {
     enum class States {
-        SET_OSIRIS_GOAL,
-        DEPOSIT,
-        RESET
+        MOVE_TURRET_TO_TARGET,
+        MOVE_SLIDES,
+        MOVE_ARM_OUTTAKE,
+        CHECK_MOVEMENT
     }
 
-    private val osiris = Osiris
-    private val indexer = Indexer
+    private val turret = Turret
+    private val slides = Slides
+    private val arm = Arm
+    private val outtake = Outtake
 
-    var deposited = false
+    override val stateMachine: StateMachine<States> = StateMachineBuilder<States>()
+            .state(States.MOVE_TURRET_TO_TARGET)
+            .onEnter { turret.setTurretLockAngle(turretTarget) }
+            .transitionTimed(1.0)
 
-    override val stateMachine = StateMachineBuilder<States>()
-            .state(States.SET_OSIRIS_GOAL)
-            .onEnter {
-                osiris.setGoal(depositGoal)
-                deposited = false
-            }
-            .transition(osiris::done)
-            .state(States.DEPOSIT)
-            .onEnter(indexer::index)
-            .onExit(indexer::open)
-            .onExit { deposited = true }
-            .transitionTimed(0.5)
-            .state(States.RESET)
-            .onEnter(osiris::setResetGoal)
-            .transition(osiris::done)
+            .state(States.MOVE_SLIDES)
+            .onEnter { slides.setSlideLockTarget(Constants.slideHighInches) }
+            .transitionTimed(1.0)
+
+            .state(States.MOVE_ARM_OUTTAKE)
+            .onEnter(arm::depositHigh)
+            .onEnter(outtake::depositHigh)
+            .transitionTimed(1.0)
+
+            .state(States.CHECK_MOVEMENT)
+            .transition { turret.isAtTarget && slides.isAtTarget }
             .build()
 }
