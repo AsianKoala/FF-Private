@@ -7,6 +7,7 @@ import robotuprising.ftc2021.subsystems.osiris.hardware.Outtake
 import robotuprising.ftc2021.subsystems.osiris.hardware.Slide
 import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.util.Constants
+import robotuprising.lib.opmode.OsirisDashboard
 
 object Osiris : Subsystem(), Loopable {
     private val turret = Turret
@@ -23,8 +24,8 @@ object Osiris : Subsystem(), Loopable {
     private var armTimer = ElapsedTime()
     private var outtakeTimer = ElapsedTime()
 
-    private val maxArmTime = 0
-    private val maxOuttakeTime = 0
+    private val maxArmTime = 1.0
+    private val maxOuttakeTime = 1.0
 
     private var turretEnabled = false
     private var slideEnabled = false
@@ -38,18 +39,45 @@ object Osiris : Subsystem(), Loopable {
         outtakeEnabled = false
     }
 
+    // constraints:
+    /*
+    before moving turret OR slides, outtake must be cocked
+    before retracting slides, turret must be cocked and arm must be down
+
+    if(outtake is not cocked, and turret/slides have new goals)
+    move outtake first
+
+
+     */
+
     private fun followSetpoint() {
         if(!turretEnabled && systemState.turret != systemGoal.turret) {
-            turret.setTurretLockAngle(systemGoal.turret)
-            turretEnabled = true
+            // if we have a new turret goal
+            // and outtake isnt cocked
+            if(systemState.outtake != Constants.outtakeCockPosition &&
+                    systemGoal.outtake == Constants.outtakeCockPosition &&
+                    systemState.turret == Constants.turretHomeValue) {
+                OsirisDashboard.addLine("waiting for outtake to cock (turret)")
+            } else {
+                turret.setTurretLockAngle(systemGoal.turret)
+                turretEnabled = true
+            }
         } else if(turret.isAtTarget) {
             turretEnabled = false
             systemState.turret = systemGoal.turret
         }
 
         if(!slideEnabled && systemState.slide != systemGoal.slide) {
-            slide.setSlideLockTarget(systemGoal.slide)
-            slideEnabled = true
+            // if we have a new slide goal
+            // and outtake isnt cocked
+            if(systemState.outtake != Constants.outtakeCockPosition && systemGoal.outtake == Constants.outtakeCockPosition) {
+                OsirisDashboard.addLine("waiting for outtake to cock (slide)")
+            } else if(systemState.arm != Constants.armHomePosition && systemGoal.outtake == Constants.armHomePosition) {
+                OsirisDashboard.addLine("waiting for arm to home (slide)")
+            } else {
+                slide.setSlideLockTarget(systemGoal.slide)
+                slideEnabled = true
+            }
         } else if(slide.isAtTarget) {
             slideEnabled = false
             systemState.slide = systemGoal.slide
@@ -65,13 +93,9 @@ object Osiris : Subsystem(), Loopable {
         }
 
         if(!outtakeEnabled && systemState.outtake != systemGoal.outtake) {
-            if(systemState.outtake == Constants.outtakeHomePosition && systemState.arm != systemGoal.arm) {
-                // if outtake is home, wait for arm to move
-            } else {
-                outtake.moveServoToPosition(systemGoal.outtake)
-                outtakeEnabled = true
-                outtakeTimer.reset()
-            }
+            outtake.moveServoToPosition(systemGoal.outtake)
+            outtakeEnabled = true
+            outtakeTimer.reset()
         } else if(outtakeTimer.seconds() > maxOuttakeTime && outtakeEnabled) {
             outtakeEnabled = false
             systemState.outtake = systemGoal.outtake

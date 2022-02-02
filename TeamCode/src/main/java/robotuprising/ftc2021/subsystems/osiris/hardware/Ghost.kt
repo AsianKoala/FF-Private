@@ -1,10 +1,10 @@
 package robotuprising.ftc2021.subsystems.osiris.hardware
 
+import robotuprising.ftc2021.auto.pp.MecanumPurePursuitController
+import robotuprising.ftc2021.auto.pp.PurePursuitPath
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
-import robotuprising.lib.control.auto.path.PurePursuitController
-import robotuprising.lib.control.auto.path.PurePursuitPath
 import robotuprising.lib.control.auto.waypoints.StopWaypoint
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.*
@@ -50,6 +50,9 @@ object Ghost : Subsystem(), Loopable {
     }
 
     override fun loop() {
+        val position = Odometry.currentPosition
+        val velocity = Odometry.relVelocity
+
         when(driveState) {
             DriveStates.DISABLED -> {
                 powers = Pose(AngleUnit.RAW)
@@ -60,12 +63,11 @@ object Ghost : Subsystem(), Loopable {
             }
 
             DriveStates.PATH -> {
-                throw Exception("what the fuck")
                 if(currentPath != null) {
-                    if(currentPath!!.isFinished) {
+                    if(currentPath!!.finished) {
                         driveState = DriveStates.DISABLED
                     } else {
-                        powers = currentPath!!.update(Odometry.currentPosition)
+                        powers = currentPath!!.update()
                     }
                 } else {
                     throw Exception("Must have cached path to follow!!!!")
@@ -73,28 +75,29 @@ object Ghost : Subsystem(), Loopable {
             }
 
             DriveStates.TARGET_POINT -> {
-                throw Exception("what the fuck")
                 if(targetWaypoint != null) {
-                    val currPose = Odometry.currentPosition
                     when(targetWaypoint) {
                         is StopWaypoint -> {
                             val stopWaypoint = targetWaypoint as StopWaypoint
 
-                            if(currPose.p.distance(stopWaypoint.p) < acceptableStopError
-                                    && MathUtil.angleThresh(currPose.h, stopWaypoint.h, stopWaypoint.dh)) {
+                            if(position.p.distance(stopWaypoint.p) < stopWaypoint.allowedPositionError) {
                                 driveState = DriveStates.DISABLED
                             }
                         }
 
                         else -> {
-                            if(currPose.p.distance(targetWaypoint!!.p) < acceptableTargetError) {
+                            if(position.p.distance(targetWaypoint!!.p) < acceptableTargetError) {
                                 driveState = DriveStates.DISABLED
                             }
                         }
                     }
 
                     if(driveState != DriveStates.DISABLED) {
-                        powers = PurePursuitController.curve(currPose, targetWaypoint!!)
+                        powers = MecanumPurePursuitController.goToPosition(
+                                position,
+                                velocity,
+                                targetWaypoint!!
+                        )
                     }
                 } else {
                     throw Exception("must have cached point to target!!!!")

@@ -42,11 +42,11 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     protected var velocity = 0.0
     protected var output = 0.0
 
+    var disabled = true
+
 
     // when we are at rest, don't want any motor movement
-    private val dead get() = position.absoluteValue < config.deadzone && targetPosition epsilonEquals config.homePosition
-
-
+    private val dead get() = (position.absoluteValue < config.deadzone && targetPosition epsilonEquals config.homePosition) || disabled
 
     val isAtTarget get() = ((position - targetPosition).absoluteValue < config.positionEpsilon) || dead
 
@@ -57,6 +57,8 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
         controller.targetPosition = target
     }
 
+    private var followingPositionPID = false
+
 
     // motion profiling
     private var motionTimer = ElapsedTime()
@@ -65,12 +67,9 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
     private var hasFinishedProfile = true
 
-
     protected fun ticksToUnits(ticks: Double): Double {
         return (ticks / config.unitsPerTick) * config.gearRatio
     }
-
-
 
     private fun PIDFController.targetMotionState(state: MotionState) {
         targetPosition = state.x
@@ -104,6 +103,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     }
 
     override fun stop() {
+        disabled = true
         hasFinishedProfile = true
         targetPosition = 0.0
         output = 0.0
@@ -114,9 +114,12 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     }
 
     override fun updateDashboard(debugging: Boolean) {
-//        if(debugging) {
-//            OsirisDashboard["motor config"] = config
-//        }
+        OsirisDashboard.addLine(config.motorConfig.name)
+        OsirisDashboard["raw position"] = rawPosition
+        OsirisDashboard["raw velocity"] = rawVelocity
+        OsirisDashboard["target position"] = 0
+        OsirisDashboard["position"] = position
+        OsirisDashboard["output"] = output
     }
 
     override fun loop() {

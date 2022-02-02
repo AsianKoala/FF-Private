@@ -24,6 +24,7 @@ object Constants {
     const val slideSharedInches = 0.0
 
     const val turretPostZeroValue = 0.0
+    const val turretHomeValue = 0.0
     const val turretRedAngle = 0.0
     const val turretBlueAngle = 0.0
     const val turretSharedRedAngle = 0.0

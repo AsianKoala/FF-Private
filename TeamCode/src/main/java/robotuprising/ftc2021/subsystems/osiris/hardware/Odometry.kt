@@ -1,7 +1,5 @@
 package robotuprising.ftc2021.subsystems.osiris.hardware
 
-import robotuprising.ftc2021.util.Constants
-import robotuprising.ftc2021.hardware.osiris.OsirisServo
 import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.manager.BulkDataManager
@@ -9,10 +7,9 @@ import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.lib.math.*
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
-import robotuprising.lib.util.Extensions.mmToIn
-import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.sin
 
 object Odometry : Subsystem(), Loopable, Initializable {
@@ -42,6 +39,10 @@ object Odometry : Subsystem(), Loopable, Initializable {
 
     private var accumHeading = 0.0
 
+    // velocity
+    private val prevRobotRelativePositions = ArrayList<TimePose>()
+    private var robotRelativeMovement = Pose(AngleUnit.RAD)
+
     private fun updatePose(currLeftEncoder: Double, currRightEncoder: Double, currAuxEncoder: Double) {
         val actualCurrLeft = -(currLeftEncoder - startL)
         val actualCurrRight = -(currRightEncoder - startR)
@@ -55,7 +56,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
         val rightTotal = actualCurrRight / TICKS_PER_INCH
 
         val lastAngle = currentPosition.h.copy
-        val newAngle =  -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h
+        val newAngle =  -Angle(((leftTotal - rightTotal) / turnScalar), AngleUnit.RAD) + startPose.h // wraps with add
 
         val angleIncrement = (lWheelDelta - rWheelDelta) / turnScalar
         val auxPrediction = angleIncrement * auxTracker
@@ -74,6 +75,11 @@ object Odometry : Subsystem(), Loopable, Initializable {
             deltaY = (radiusOfMovement * sin(angleIncrement)) + (radiusOfStrafe * (1 - cos(angleIncrement)))
         }
 
+        val robotDeltaRelativeMovement = Pose(Point(deltaX, deltaY), Angle(angleIncrement, AngleUnit.RAD))
+        robotRelativeMovement += robotDeltaRelativeMovement
+
+        prevRobotRelativePositions.add(TimePose(robotRelativeMovement))
+
         val incrementX = lastAngle.cos * deltaY - lastAngle.sin * deltaX
         val incrementY = lastAngle.sin * deltaY + lastAngle.cos * deltaX
         val pointIncrement = Point(incrementX, incrementY)
@@ -83,6 +89,24 @@ object Odometry : Subsystem(), Loopable, Initializable {
         lastLeftEncoder = actualCurrLeft
         lastRightEncoder = actualCurrRight
         lastAuxEncoder = actualCurrAux
+    }
+
+    val VELOCITY_READ_TICKS = 5
+    val relVelocity: Pose get() {
+        if(prevRobotRelativePositions.size < 2) {
+            return Pose(AngleUnit.RAD)
+        }
+
+        val oldIndex = max(0, prevRobotRelativePositions.size - VELOCITY_READ_TICKS - 1)
+        val old = prevRobotRelativePositions[oldIndex]
+        val curr = prevRobotRelativePositions[prevRobotRelativePositions.size - 1]
+
+        val scalar = (curr.timestamp - old.timestamp).toDouble() / 1000.0
+
+        val dirVel = (curr.pose.p - old.pose.p) * (1 / scalar)
+        val angularVel = (curr.pose.h.angle - old.pose.h.angle) * (1 / scalar)
+
+        return Pose(dirVel, Angle(angularVel, AngleUnit.RAD))
     }
 
     override fun stop() {
