@@ -47,6 +47,10 @@ object OsirisDashboard {
         telemetryImpl.addLine(v)
     }
 
+    fun addLine() {
+        addLine("")
+    }
+
     fun addSpace() {
         addLine(" ")
     }

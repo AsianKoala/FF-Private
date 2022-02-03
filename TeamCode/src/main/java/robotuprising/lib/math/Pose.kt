@@ -9,14 +9,14 @@ data class Pose(
 ) {
     constructor(unit: AngleUnit): this(Point(), Angle(0.0, unit))
 
-    val x = p.x
-    val y = p.y
-    val cos = h.cos
-    val sin = h.sin
-    val hypot = p.hypot
-    val copy = Pose(p, h)
+    val x get() = p.x
+    val y get() = p.y
+    val cos get() = h.cos
+    val sin get() = h.sin
+    val hypot get() = p.hypot
+    val copy get() = Pose(p, h)
 
-    val pose2d = Pose2d(p.x, p.y, h.angle)
+    val pose2d get() = Pose2d(p.x, p.y, h.angle)
 
     fun distance(p2: Pose) = p.distance(p2.p)
     fun distance(p2: Waypoint) = p.distance(p2.p)

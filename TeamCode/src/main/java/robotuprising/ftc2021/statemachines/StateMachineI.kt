@@ -12,6 +12,8 @@ abstract class StateMachineI<E> {
     fun stop() {
         stateMachine.stop()
         stateMachine.reset()
+
+        addedToManager = false
     }
 
     fun start() {
@@ -20,7 +22,8 @@ abstract class StateMachineI<E> {
             addedToManager = true
         }
 
-        stop()
+        stateMachine.stop()
+        stateMachine.reset()
         stateMachine.start()
     }
 

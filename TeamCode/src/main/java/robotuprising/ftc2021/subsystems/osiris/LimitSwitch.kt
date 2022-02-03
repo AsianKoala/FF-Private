@@ -5,9 +5,10 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Zeroable
 import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.lib.opmode.OsirisDashboard
 
-open class LimitSwitch(name: String, private val zeroableSubsystem: Zeroable) : Subsystem(), Readable, Loopable {
-    private val limitSwitch = BulkDataManager.hwMap[DigitalChannel::class.java, name]
+open class LimitSwitch(private val name: String, private val zeroableSubsystem: Zeroable) : Subsystem(), Readable, Loopable {
+    private val limitSwitch by lazy { BulkDataManager.hwMap[DigitalChannel::class.java, name] }
 
     private var pressed = false
 
@@ -16,9 +17,9 @@ open class LimitSwitch(name: String, private val zeroableSubsystem: Zeroable) : 
     }
 
     override fun loop() {
-        if(pressed) {
-            zeroableSubsystem.zero()
-        }
+//        if(pressed) {
+//            zeroableSubsystem.zero()
+//        }
     }
 
     override fun stop() {
@@ -26,6 +27,6 @@ open class LimitSwitch(name: String, private val zeroableSubsystem: Zeroable) : 
     }
 
     override fun updateDashboard(debugging: Boolean) {
-
+        OsirisDashboard["$name pressed"] = pressed
     }
 }

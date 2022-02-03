@@ -1,15 +1,17 @@
 package robotuprising.ftc2021.opmodes.osiris
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import robotuprising.ftc2021.hardware.osiris.OsirisServo
 import robotuprising.ftc2021.manager.SubsystemManager
 import robotuprising.ftc2021.statemachines.IntakeStateMachine
-import robotuprising.ftc2021.subsystems.osiris.hardware.Ghost
-import robotuprising.ftc2021.subsystems.osiris.hardware.Intake
-import robotuprising.ftc2021.subsystems.osiris.hardware.Odometry
+import robotuprising.ftc2021.statemachines.JustDepositStateMachine
+import robotuprising.ftc2021.subsystems.osiris.OsirisStateMachines
+import robotuprising.ftc2021.subsystems.osiris.hardware.*
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
+import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
 import robotuprising.lib.util.GamepadUtil.left_trigger_pressed
 import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
@@ -18,19 +20,11 @@ import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 class OsirisTeleOpScuffed : OsirisOpMode() {
 
     private val ghost = Ghost
-    private val intake = Intake
-    private val odometry = Odometry
-
-    override fun mStart() {
-        super.mStart()
-
-        ghost.driveState = Ghost.DriveStates.MANUAL
-    }
 
     override fun mLoop() {
         super.mLoop()
 
-        dtControl()
+//        dtControl()
         intakeControl()
     }
 
@@ -48,8 +42,25 @@ class OsirisTeleOpScuffed : OsirisOpMode() {
     }
 
     private fun intakeControl() {
-        if(gamepad1.right_trigger_pressed) {
-            IntakeStateMachine.start()
+
+//        if(gamepad1.right_trigger_pressed) {
+//            IntakeStateMachine.start()
+//        }
+//
+//        if(gamepad1.left_trigger_pressed) {
+//            JustDepositStateMachine.start()
+//        }
+//
+//        if(gamepad1.left_bumper) {
+//            Outtake.depositHigh()
+//        }
+//
+//        if(gamepad1.right_bumper) {
+//            Arm.depositHigh()
+//        }
+
+        if(gamepad1.a) {
+            Turret.disabled = false
         }
     }
 }

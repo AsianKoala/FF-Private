@@ -13,12 +13,12 @@ class PurePursuitBuilder(val path: ArrayList<Waypoint> = ArrayList()) : PathBuil
     }
 
     fun reverse(): PurePursuitBuilder {
-        for (w in path) {
-            w.x = -w.x
-            if (w is LockedWaypoint) {
-                w.h += Angle(PI, AngleUnit.RAD)
-            }
-        }
+//        for (w in path) {
+//            w.x = -w.x
+//            if (w is LockedWaypoint) {
+//                w.h += Angle(PI, AngleUnit.RAD)
+//            }
+//        }
         return this
     }
 

@@ -10,14 +10,14 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
     enum class States {
         INDEX,
         COCK_OUTTAKE_ARM,
-        RESET_TURRET_SLIDES
+//        RESET_TURRET_SLIDES
     }
 
     private val indexer = Indexer
     private val outtake = Outtake
     private val arm = Arm
-    private val turret = Turret
-    private val slides = Slides
+//    private val turret = Turret
+//    private val slides = Slides
 
     override val stateMachine: StateMachine<States> = StateMachineBuilder<States>()
             .state(States.INDEX)
@@ -30,12 +30,12 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
             .onEnter(arm::home)
             .transitionTimed(3.0)
 
-            .state(States.RESET_TURRET_SLIDES)
-            .onEnter {
-                turret.setTurretLockAngle(Constants.turretHomeValue)
-                slides.setSlideLockTarget(Constants.slideHomeValue)
-            }
-            .transition { turret.isAtTarget && slides.isAtTarget }
+//            .state(States.RESET_TURRET_SLIDES)
+//            .onEnter {
+//                turret.setTurretLockAngle(Constants.turretHomeValue)
+//                slides.setSlideLockTarget(Constants.slideHomeValue)
+//            }
+//            .transition { turret.isAtTarget && slides.isAtTarget }
             .build()
 
 }

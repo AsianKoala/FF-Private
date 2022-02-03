@@ -10,10 +10,10 @@ data class Point(
     val x: Double = 0.0,
     val y: Double = 0.0
 ) {
-    val hypot = hypot(x, y)
-    val atan2 = Angle(atan2(y, x), AngleUnit.RAD)
-    val dbNormalize = Point(y, -x)
-    val copy= Point(x, y)
+    val hypot get() = hypot(x, y)
+    val atan2 get() = Angle(atan2(y, x), AngleUnit.RAD)
+    val dbNormalize get() = Point(y, -x)
+    val copy get() = Point(x, y)
 
     operator fun plus(p: Point) = Point(x + p.x, y + p.y)
     operator fun minus(p: Point) = Point(x - p.x, y - p.y)

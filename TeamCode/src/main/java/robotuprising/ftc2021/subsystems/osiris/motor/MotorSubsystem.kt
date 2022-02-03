@@ -1,11 +1,12 @@
 package robotuprising.ftc2021.subsystems.osiris.motor
 
+import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.profile.MotionProfile
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator
 import com.acmerobotics.roadrunner.profile.MotionState
-import com.acmerobotics.roadrunner.util.epsilonEquals
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
@@ -13,13 +14,13 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
-import robotuprising.lib.math.MathUtil
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
 import java.lang.Exception
 import kotlin.math.absoluteValue
 
-open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopable, Readable, Testable {
+@Config
+open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initializable, Loopable, Readable, Testable {
     protected val motor: OsirisMotor by lazy { OsirisMotor(config.motorConfig) }
 
     private val controller: PIDFController by lazy {
@@ -53,8 +54,12 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
     // pid
     protected fun setControllerTarget(target: Double) {
+        if(motor.mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
+            motor.mode = config.motorConfig.mode
+        }
         controller.reset()
         controller.targetPosition = target
+        targetPosition = target
     }
 
     private var followingPositionPID = false
@@ -68,7 +73,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
     private var hasFinishedProfile = true
 
     protected fun ticksToUnits(ticks: Double): Double {
-        return (ticks / config.unitsPerTick) * config.gearRatio
+        return (ticks / config.ticksPerUnit) * config.gearRatio
     }
 
     private fun PIDFController.targetMotionState(state: MotionState) {
@@ -102,31 +107,32 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
         motionTimer.reset()
     }
 
+    var stopped = 0
     override fun stop() {
-        disabled = true
-        hasFinishedProfile = true
-        targetPosition = 0.0
-        output = 0.0
-        controller.reset()
-        motionTimer.reset()
-        currentMotionProfile = null
-        currentMotionState = null
+        stopped++
     }
 
     override fun updateDashboard(debugging: Boolean) {
-        OsirisDashboard.addLine(config.motorConfig.name)
-        OsirisDashboard["raw position"] = rawPosition
-        OsirisDashboard["raw velocity"] = rawVelocity
-        OsirisDashboard["target position"] = 0
-        OsirisDashboard["position"] = position
-        OsirisDashboard["output"] = output
-        OsirisDashboard["is at target"] = isAtTarget
-        OsirisDashboard["disabled"] = disabled
+        if(config.controlType != MotorControlType.OPEN_LOOP) {
+            OsirisDashboard.addLine()
+            OsirisDashboard.addLine(config.motorConfig.name)
+            OsirisDashboard["raw position"] = rawPosition
+            OsirisDashboard["raw velocity"] = rawVelocity
+            OsirisDashboard["target position"] = targetPosition
+            OsirisDashboard["position"] = position
+            OsirisDashboard["output"] = output
+            OsirisDashboard["is at target"] = isAtTarget
+            OsirisDashboard["disabled"] = disabled
+            OsirisDashboard["sim output"] = simOutput
+        }
     }
 
+    var simOutput = 0.0
     override fun loop() {
+        OsirisDashboard["stopped"] = stopped
         if(config.controlType != MotorControlType.OPEN_LOOP) {
             output = if(disabled) {
+                simOutput = controller.update(position)
                 0.0
             } else {
                 if(config.controlType == MotorControlType.MOTION_PROFILE && !hasFinishedProfile) {
@@ -151,16 +157,18 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
                 val rawOutput = if(disabled) {
                     0.0
                 } else {
-                    controller.update(position, velocity)
+                    controller.update(position)
                 }
 
-//                val clampedOutput = when {
-//                    position - config.positionEpsilon < config.positionLowerLimit -> MathUtil.clamp(output, 0.0, 1.0)
-//                    position + config.positionUpperLimit > config.positionUpperLimit -> MathUtil.clamp(output, -1.0, 0.0)
-//                    else -> rawOutput
+
+//                val rawOutput = if(disabled) {
+//                    0.0
+//                } else {
+//                    controller.update(position, velocity)
 //                }
 
                 rawOutput
+//                0.0
             }
         }
 
@@ -180,6 +188,22 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Loopa
 
     override fun test() {
         motor.power = 0.1
+    }
+
+    override fun init() {
+        disabled = true
+        hasFinishedProfile = true
+        targetPosition = 0.0
+        output = 0.0
+        controller.reset()
+        motionTimer.reset()
+        currentMotionProfile = null
+        currentMotionState = null
+        rawPosition = 0.0
+        rawVelocity = 0.0
+        position = 0.0
+        velocity = 0.0
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
     }
 }
 

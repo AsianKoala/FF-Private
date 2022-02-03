@@ -2,6 +2,7 @@ package robotuprising.ftc2021.statemachines
 
 import robotuprising.ftc2021.subsystems.osiris.hardware.Odometry
 import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
+import robotuprising.lib.math.Point
 import robotuprising.lib.system.statemachine.StateMachine
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
@@ -16,11 +17,13 @@ object AutoAimBlueStateMachine : StateMachineI<AutoAimBlueStateMachine.States>()
 
     var enabled = false
 
+    private val hubPoint = Point()
+
     private fun loop() {
         if(enabled) {
             val currentPosition = odometry.currentPosition
 
-            val absoluteAngle
+            val absoluteAngle = (currentPosition.p - hubPoint).atan2
         }
     }
 

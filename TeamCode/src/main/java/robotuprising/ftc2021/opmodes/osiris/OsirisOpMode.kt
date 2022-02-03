@@ -13,67 +13,43 @@ open class OsirisOpMode : BaseOpMode() {
     private val subsystemManager = SubsystemManager
     private val stateMachineManager = StateMachineManager
 //
-    private val ghost = Ghost
-    private val odometry = Odometry
-
-    private val intake = Intake
-    private val loadingSensor = LoadingSensor
+//    private val ghost = Ghost
+//    private val odometry = Odometry
+//
+//    private val intake = Intake
+//    private val loadingSensor = LoadingSensor
 //
 //    private val turretLimitSwitch = TurretLimitSwitch
 //    private val slideLimitSwitch = SlideLimitSwitch
 //
 //    private val osiris = Osiris
-//    private val turret = Turret
-//    private val slide = Slide
+    private val turret = Turret
+//    private val slides = Slides
 //    private val arm = Arm
-    private val outtake = Outtake
-    private val indexer = Indexer
+//    private val outtake = Outtake
+//    private val indexer = Indexer
 //
-    private val spinner = Spinner
+//    private val spinner = Spinner
 //
 //    private val redWebcam = RedWebcam
 //    private val blueWebcam = BlueWebcam
 
     open fun register() {
-//        subsystemManager.registerSubsystems(
+        subsystemManager.registerSubsystems(
 //                ghost,
 //                odometry,
-//
+
 //                intake,
 //                loadingSensor,
-//
-//                turretLimitSwitch,
-//                slideLimitSwitch,
-//
-//                osiris,
-//                turret,
-//                slide,
-//                arm,
+
 //                outtake,
 //                indexer,
-//
-//                spinner,
-//
-//                redWebcam,
-//                blueWebcam
-//        )
-//
-//        if(allianceSide == AllianceSide.BLUE) {
-//            subsystemManager.deregister(redWebcam)
-//        }
-//
-//        if(allianceSide == AllianceSide.RED) {
-//            subsystemManager.deregister(blueWebcam)
-//        }
+//                arm,
 
-        subsystemManager.registerSubsystems(
-                ghost,
-                odometry,
+//                slides
 
-                intake,
-                loadingSensor,
+        turret
 
-                spinner
         )
     }
 
@@ -90,8 +66,10 @@ open class OsirisOpMode : BaseOpMode() {
     }
 
     override fun mStart() {
-//        subsystemManager.deregister(redWebcam)
-//        subsystemManager.deregister(blueWebcam)
+//        ghost.driveState = Ghost.DriveStates.DISABLED
+//        intake.disabled = false
+//        slides.setSlideLockTarget(400.0)
+        turret.setTurretLockAngle(45.0)
     }
 
     override fun mLoop() {

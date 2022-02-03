@@ -9,7 +9,6 @@ import robotuprising.lib.opmode.NakiriDashboard
 import robotuprising.lib.system.Subsystem
 import robotuprising.lib.util.Extensions.d
 
-@Config
 class Lift : Subsystem {
     companion object {
         @JvmField var kp = 0.028

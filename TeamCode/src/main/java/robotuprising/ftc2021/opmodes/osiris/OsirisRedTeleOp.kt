@@ -58,24 +58,24 @@ open class OsirisRedTeleOp : OsirisOpMode() {
         }
     }
 
-    open fun depositControl() {
-        if(gamepad2.left_trigger_pressed) {
-            when(depositLevel) {
-                3 -> DepositRedHighStateMachine.start()
-                2 -> DepositRedMediumStateMachine.start()
-                1 -> DepositRedLowStateMachine.start()
-            }
-        }
-
-        if(gamepad2.right_trigger_pressed) {
-            DepositRedSharedStateMachine.start()
-        }
-
-        DepositRedHighStateMachine.update()
-        DepositRedMediumStateMachine.update()
-        DepositRedLowStateMachine.update()
-        DepositRedSharedStateMachine.update()
-    }
+//    open fun depositControl() {
+//        if(gamepad2.left_trigger_pressed) {
+//            when(depositLevel) {
+//                3 -> DepositRedHighStateMachine.start()
+//                2 -> DepositRedMediumStateMachine.start()
+//                1 -> DepositRedLowStateMachine.start()
+//            }
+//        }
+//
+//        if(gamepad2.right_trigger_pressed) {
+//            DepositRedSharedStateMachine.start()
+//        }
+//
+//        DepositRedHighStateMachine.update()
+//        DepositRedMediumStateMachine.update()
+//        DepositRedLowStateMachine.update()
+//        DepositRedSharedStateMachine.update()
+//    }
 
     open fun duckControl() {
         if(gamepad1.dpad_left) {
@@ -95,7 +95,7 @@ open class OsirisRedTeleOp : OsirisOpMode() {
         driveControl()
         intakeControl()
         depositLevelControl()
-        depositControl()
+//        depositControl()
         duckControl()
     }
 }
@@ -105,24 +105,24 @@ open class OsirisRedTeleOp : OsirisOpMode() {
 class BlueTeleOp : OsirisRedTeleOp() {
     override val fieldHeadingOffset = 90.0
 
-    override fun depositControl() {
-        if(gamepad1.left_trigger_pressed) {
-            when(depositLevel) {
-                3 -> DepositBlueHighStateMachine.start()
-                2 -> DepositBlueMediumStateMachine.start()
-                1 -> DepositBlueLowStateMachine.start()
-            }
-        }
-
-        if(gamepad1.left_bumper) {
-            DepositBlueSharedStateMachine.start()
-        }
-
-        DepositBlueHighStateMachine.update()
-        DepositBlueMediumStateMachine.update()
-        DepositBlueLowStateMachine.update()
-        DepositBlueSharedStateMachine.update()
-    }
+//    override fun depositControl() {
+//        if(gamepad1.left_trigger_pressed) {
+//            when(depositLevel) {
+//                3 -> DepositBlueHighStateMachine.start()
+//                2 -> DepositBlueMediumStateMachine.start()
+//                1 -> DepositBlueLowStateMachine.start()
+//            }
+//        }
+//
+//        if(gamepad1.left_bumper) {
+//            DepositBlueSharedStateMachine.start()
+//        }
+//
+//        DepositBlueHighStateMachine.update()
+//        DepositBlueMediumStateMachine.update()
+//        DepositBlueLowStateMachine.update()
+//        DepositBlueSharedStateMachine.update()
+//    }
 
     override fun duckControl() {
         if(gamepad1.dpad_left) {

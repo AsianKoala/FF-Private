@@ -6,7 +6,7 @@ data class MotorSubsystemConfig(
         val controlType: MotorControlType,
 
 //        val homePosition: Double = 0.0,
-        val unitsPerTick: Double = 1.0,
+        val ticksPerUnit: Double = 1.0,
         val gearRatio: Double = 1.0,
 
         val kP: Double = 0.0,

@@ -138,16 +138,16 @@ object Osiris : Subsystem(), Loopable {
 
     val resetGoal = OsirisState()
 
-    val depositHighRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideHighInches,
+    val depositHighRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideHighTicks,
             Constants.armHighPosition, Constants.outtakeHighPosition)
 
-    val depositMediumRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideMediumInches, 
+    val depositMediumRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideMediumTicks,
             Constants.armMediumPosition, Constants.outtakeMediumPosition)
 
-    val depositLowRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideLowInches,
+    val depositLowRedGoal = OsirisState(Constants.turretRedAngle, Constants.slideLowTicks,
             Constants.armLowPosition, Constants.outtakeLowPosition)
 
-    val depositSharedRedGoal = OsirisState(Constants.turretSharedRedAngle, Constants.slideSharedInches,
+    val depositSharedRedGoal = OsirisState(Constants.turretSharedRedAngle, Constants.slideSharedTicks,
             Constants.armSharedPosition, Constants.outtakeSharedPosition)
 
     val depositHighBlueGoal = depositHighRedGoal.copy(turret = Constants.turretBlueAngle)

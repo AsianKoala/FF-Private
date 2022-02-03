@@ -8,12 +8,12 @@ data class Angle(
     val unit: AngleUnit
 ) {
 
-    val deg: Double = angle.degrees
+    val deg: Double get() = angle.degrees
 
-    val cos = cos(angle)
-    val sin = sin(angle)
-    val abs = angle.absoluteValue
-    val copy = Angle(angle, unit)
+    val cos get() = cos(angle)
+    val sin get() = sin(angle)
+    val abs get() = angle.absoluteValue
+    val copy get() = Angle(angle, unit)
 
     fun wrap(): Angle {
         var heading = angle

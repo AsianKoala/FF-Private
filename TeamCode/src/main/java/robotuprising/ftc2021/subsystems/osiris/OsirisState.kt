@@ -7,8 +7,8 @@ import robotuprising.ftc2021.util.Constants
 
 // degrees, inches, degrees
 data class OsirisState(
-        var turret: Double = Turret.config.homePosition,
-        var slide: Double = Slides.config.homePosition,
+        var turret: Double = Constants.turretHomeValue,
+        var slide: Double = Constants.slideHomeValue,
         var arm: Double = Constants.armHomePosition,
         var outtake: Double = Constants.outtakeHomePosition,
 ) {

@@ -1,7 +1,5 @@
 package robotuprising.ftc2021.statemachines
 
-import robotuprising.ftc2021.subsystems.osiris.Osiris
-import robotuprising.ftc2021.subsystems.osiris.OsirisState
 import robotuprising.ftc2021.subsystems.osiris.hardware.*
 import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.system.statemachine.StateMachine
@@ -27,7 +25,7 @@ class DepositStateMachine(private val turretTarget: Double) : StateMachineI<Depo
             .transitionTimed(1.0)
 
             .state(States.MOVE_SLIDES)
-            .onEnter { slides.setSlideLockTarget(Constants.slideHighInches) }
+            .onEnter { slides.setSlideLockTarget(Constants.slideHighTicks) }
             .transitionTimed(1.0)
 
             .state(States.MOVE_ARM_OUTTAKE)

@@ -1,9 +1,6 @@
 package robotuprising.lib.control.odometry
 
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
-import robotuprising.lib.math.TimePose
+import robotuprising.lib.math.*
 import kotlin.math.max
 
 class Speedometer {
@@ -13,7 +10,7 @@ class Speedometer {
     fun update(position: Pose): Pose {
         return if (pastPositions.size == 0) {
             pastPositions.add(TimePose(position))
-            Pose(Point(), Angle.EAST)
+            Pose(AngleUnit.RAD)
         } else {
             bestIndex = max(pastPositions.size - 4, 0)
             val ref = pastPositions[bestIndex]

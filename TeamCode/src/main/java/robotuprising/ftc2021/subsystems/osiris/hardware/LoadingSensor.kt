@@ -6,9 +6,10 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
 import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.ftc2021.util.Constants
+import robotuprising.lib.opmode.OsirisDashboard
 
 object LoadingSensor : Subsystem(), Readable {
-    private val loadingSensor = BulkDataManager.hwMap[RevColorSensorV3::class.java, "loadingSensor"]
+    private val loadingSensor by lazy { BulkDataManager.hwMap[RevColorSensorV3::class.java, "loadingSensor"] }
 
     private var lastRead = Double.POSITIVE_INFINITY
 
@@ -19,10 +20,11 @@ object LoadingSensor : Subsystem(), Readable {
     }
 
     override fun stop() {
-
+        lastRead = Double.POSITIVE_INFINITY
     }
 
     override fun updateDashboard(debugging: Boolean) {
-
+//        OsirisDashboard.addLine()
+//        OsirisDashboard["loading sensor"] = lastRead
     }
 }
