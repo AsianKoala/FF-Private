@@ -16,7 +16,7 @@ abstract class StateMachineI<E> {
         addedToManager = false
     }
 
-    fun start() {
+    open fun start() {
         if(!addedToManager) {
             stateMachineManager.addMachine(this)
             addedToManager = true

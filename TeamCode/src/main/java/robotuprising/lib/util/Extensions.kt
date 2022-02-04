@@ -32,4 +32,8 @@ object Extensions {
     val ArrayList<Double>.average: Double get() = this.sum() / this.size
 
     val Pose2d.pose: Pose get() = Pose(Point(x, y), Angle(heading, AngleUnit.RAD))
+
+    fun <E> ArrayList<E>.varargAdd(vararg e: E) {
+        this.addAll(e)
+    }
 }

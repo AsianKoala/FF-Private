@@ -45,7 +45,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
     protected var velocity = 0.0
     protected var output = 0.0
 
-    var disabled = true
+    var disabled = false
 
 
     // when we are at rest, don't want any motor movement
@@ -188,7 +188,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
     }
 
     override fun init() {
-        disabled = true
+        disabled = false
         hasFinishedProfile = true
         targetPosition = 0.0
         output = 0.0

@@ -37,7 +37,7 @@ object Turret : ZeroableMotorSubsystem(
 
     override fun init() {
         super.init()
-        zero()
+        zero() // TODO ONLY ZERO IN TELEOP
     }
 
 }

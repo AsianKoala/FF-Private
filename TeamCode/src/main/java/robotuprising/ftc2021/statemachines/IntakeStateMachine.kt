@@ -19,6 +19,12 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
     private val outtake = Outtake
     private val turret = Turret
 
+    var hasIntaked = false
+
+    override fun start() {
+        super.start()
+        hasIntaked = false
+    }
 
     override val stateMachine = StateMachineBuilder<States>()
             .state(States.OUTTAKE_RESET)
@@ -28,9 +34,8 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
             .state(States.INTAKING)
             .onEnter(intake::turnOn)
             .onExit(indexer::lock)
-            .loop {
-                OsirisDashboard.addLine("INTAKING")
-            }
+            .onExit { hasIntaked = true }
+            .loop { OsirisDashboard.addLine("INTAKING") }
             .transition(sensor::isMineralIn)
 
             .state(States.MINERAL_IN_REVERSE_INTAKING)
@@ -41,7 +46,7 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
 
             .state(States.COCK)
             .onEnter(outtake::cock)
-            .transitionTimed(1.0)
+            .transitionTimed(0.5)
 
             .state(States.TURN_TURRET)
             .onEnter { turret.setTurretLockAngle(245.0) }

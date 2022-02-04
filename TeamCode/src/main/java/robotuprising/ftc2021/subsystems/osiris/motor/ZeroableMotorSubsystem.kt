@@ -16,9 +16,9 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
 
 //        disabled = false
 
-        if(config.motorConfig.zeroPowerBehavior == DcMotor.ZeroPowerBehavior.BRAKE) {
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
+//        if(config.motorConfig.zeroPowerBehavior == DcMotor.ZeroPowerBehavior.BRAKE) {
+//            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//        }
     }
 
     override fun read() {

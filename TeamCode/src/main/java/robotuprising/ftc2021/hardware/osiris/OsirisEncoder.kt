@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.util.NanoClock
 
 import com.qualcomm.robotcore.hardware.DcMotorEx
 
-// todo fix
 class OsirisEncoder constructor(private val motor: DcMotorEx, private val clock: NanoClock = NanoClock.system()) {
     enum class Direction(val multiplier: Int) {
         FORWARD(1), REVERSE(-1);
@@ -22,7 +21,7 @@ class OsirisEncoder constructor(private val motor: DcMotorEx, private val clock:
     private var velocityEstimate: Double
     private var lastUpdateTime: Double
     private val multiplier: Int
-        private get() = direction.multiplier * if (motor.direction == DcMotorSimple.Direction.FORWARD) 1 else -1
+        get() = direction.multiplier * if (motor.direction == DcMotorSimple.Direction.FORWARD) 1 else -1
     val currentPosition: Int
         get() {
             val multiplier = multiplier

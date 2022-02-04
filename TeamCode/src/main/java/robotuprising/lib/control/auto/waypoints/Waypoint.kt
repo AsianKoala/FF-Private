@@ -3,6 +3,7 @@ package robotuprising.lib.control.auto.waypoints
 import robotuprising.ftc2021.auto.pp.Subroutines
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
+import robotuprising.lib.util.Extensions.d
 
 // id love for this to be a dataclass but yeah sucks to suck
 open class Waypoint(
@@ -11,6 +12,7 @@ open class Waypoint(
     val followDistance: Double = 0.0,
     val action: Subroutines.Subroutine? = null
 ) {
+    constructor(x: Int, y: Int, followDistance: Int, action: Subroutines.Subroutine? = null) : this(x.d, y.d, followDistance.d, action)
     val p = Point(x, y)
 
     open val copy: Waypoint get() = Waypoint(x, y, followDistance, action)

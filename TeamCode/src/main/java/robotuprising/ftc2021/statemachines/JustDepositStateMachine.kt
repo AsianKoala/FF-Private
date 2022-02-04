@@ -33,7 +33,7 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
 
             .state(States.RESET_SLIDES)
             .onEnter { slides.setSlideInches(0.1) }
-            .transitionTimed(3.0)
+            .transitionTimed(2.0)
 
             .state(States.RESET_TURRET)
             .onEnter { turret.setTurretLockAngle(180.0) }
@@ -41,7 +41,7 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
 
             .state(States.HOME_OUTTAKE)
             .onEnter(outtake::home)
-            .transitionTimed(1.0)
+            .transitionTimed(0.5)
             .build()
 
 }

@@ -8,23 +8,7 @@ import robotuprising.ftc2021.subsystems.osiris.hardware.vision.RedWebcam
 import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.BaseOpMode
 
-open class OsirisOpMode : BaseOpMode() {
-
-    private val subsystemManager = SubsystemManager
-    private val stateMachineManager = StateMachineManager
-
-    private val ghost = Ghost
-    private val odometry = Odometry
-
-    private val intake = Intake
-    private val loadingSensor = LoadingSensor
-
-    private val turret = Turret
-    private val slides = Slides
-    private val arm = Arm
-    private val outtake = Outtake
-    private val indexer = Indexer
-
+abstract class OsirisOpMode : BaseOpMode() {
 //    private val turretLimitSwitch = TurretLimitSwitch
 //    private val slideLimitSwitch = SlideLimitSwitch
 
@@ -34,54 +18,49 @@ open class OsirisOpMode : BaseOpMode() {
 //    private val blueWebcam = BlueWebcam
 
     open fun register() {
-        subsystemManager.registerSubsystems(
-                ghost,
-//                odometry,
+        SubsystemManager.registerSubsystems(
+                Ghost,
 
-                intake,
-                loadingSensor,
-//                turretLimitSwitch,
+                Intake,
+                LoadingSensor,
 
-                outtake,
-                indexer,
-                arm,
+                Outtake,
+                Indexer,
+                Arm,
 
-                slides,
-//
-                turret
+                Turret,
+
+                Slides
 
         )
     }
 
     override fun mInit() {
-        subsystemManager.clearAll()
+        SubsystemManager.clearAll()
         register()
-        subsystemManager.initAll()
+        SubsystemManager.initAll()
 
-        intake.disabled = false
-        turret.disabled = false
-        slides.disabled = false
-        turret.setTurretLockAngle(180.0)
-        slides.setSlideInches(0.0)
+        Turret.setTurretLockAngle(180.0)
+        Slides.setSlideInches(0.0)
     }
 
     override fun mInitLoop() {
-        subsystemManager.periodic()
-        subsystemManager.initServos()
-        stateMachineManager.periodic()
+        SubsystemManager.periodic()
+        SubsystemManager.initServos()
+        StateMachineManager.periodic()
     }
 
     override fun mStart() {
-        ghost.driveState = Ghost.DriveStates.MANUAL
+
     }
 
     override fun mLoop() {
-        subsystemManager.periodic()
-        stateMachineManager.periodic()
+        SubsystemManager.periodic()
+        StateMachineManager.periodic()
     }
 
     override fun mStop() {
-        subsystemManager.stopAll()
-        stateMachineManager.stop()
+        SubsystemManager.stopAll()
+        StateMachineManager.stop()
     }
 }
