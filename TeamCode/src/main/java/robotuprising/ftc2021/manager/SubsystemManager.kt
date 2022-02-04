@@ -2,6 +2,7 @@ package robotuprising.ftc2021.manager
 
 import robotuprising.ftc2021.hardware.osiris.interfaces.*
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.ftc2021.subsystems.osiris.motor.ServoSubsystem
 import robotuprising.lib.opmode.OsirisDashboard
 
 object SubsystemManager {
@@ -41,6 +42,14 @@ object SubsystemManager {
 
     fun initAll() {
         initializableSubsystems.forEach(Initializable::init)
+    }
+
+    fun initServos() {
+        subsystems.forEach {
+            if(it is ServoSubsystem) {
+                it.moveServoToPosition(it.config.homePosition)
+            }
+        }
     }
 
     fun periodic() {

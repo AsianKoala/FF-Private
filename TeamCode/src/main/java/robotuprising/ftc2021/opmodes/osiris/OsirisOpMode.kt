@@ -9,26 +9,25 @@ import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.BaseOpMode
 
 open class OsirisOpMode : BaseOpMode() {
-//
+
     private val subsystemManager = SubsystemManager
     private val stateMachineManager = StateMachineManager
-//
-//    private val ghost = Ghost
-//    private val odometry = Odometry
-//
-//    private val intake = Intake
-//    private val loadingSensor = LoadingSensor
-//
+
+    private val ghost = Ghost
+    private val odometry = Odometry
+
+    private val intake = Intake
+    private val loadingSensor = LoadingSensor
+
+    private val turret = Turret
+    private val slides = Slides
+    private val arm = Arm
+    private val outtake = Outtake
+    private val indexer = Indexer
+
 //    private val turretLimitSwitch = TurretLimitSwitch
 //    private val slideLimitSwitch = SlideLimitSwitch
-//
-//    private val osiris = Osiris
-    private val turret = Turret
-//    private val slides = Slides
-//    private val arm = Arm
-//    private val outtake = Outtake
-//    private val indexer = Indexer
-//
+
 //    private val spinner = Spinner
 //
 //    private val redWebcam = RedWebcam
@@ -36,40 +35,44 @@ open class OsirisOpMode : BaseOpMode() {
 
     open fun register() {
         subsystemManager.registerSubsystems(
-//                ghost,
+                ghost,
 //                odometry,
 
-//                intake,
-//                loadingSensor,
+                intake,
+                loadingSensor,
+//                turretLimitSwitch,
 
-//                outtake,
-//                indexer,
-//                arm,
+                outtake,
+                indexer,
+                arm,
 
-//                slides
-
-        turret
+                slides,
+//
+                turret
 
         )
     }
 
     override fun mInit() {
         subsystemManager.clearAll()
-
         register()
         subsystemManager.initAll()
+
+        intake.disabled = false
+        turret.disabled = false
+        slides.disabled = false
+        turret.setTurretLockAngle(180.0)
+        slides.setSlideInches(0.0)
     }
 
     override fun mInitLoop() {
         subsystemManager.periodic()
+        subsystemManager.initServos()
         stateMachineManager.periodic()
     }
 
     override fun mStart() {
-//        ghost.driveState = Ghost.DriveStates.DISABLED
-//        intake.disabled = false
-//        slides.setSlideLockTarget(400.0)
-        turret.setTurretLockAngle(45.0)
+        ghost.driveState = Ghost.DriveStates.MANUAL
     }
 
     override fun mLoop() {

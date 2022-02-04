@@ -20,6 +20,6 @@ abstract class ServoSubsystem(val config: ServoSubsystemConfig) : Subsystem(), I
     }
 
     override fun init() {
-        servo.position = config.homePosition
+        servo.position = -1.0
     }
 }

@@ -12,6 +12,6 @@ object ReferenceTest {
     }
 
     fun def(arr: ArrayList<Point>) {
-        arr.forEach { it.x = 5.0 }
+//        arr.forEach { it.x = 5.0 }
     }
 }

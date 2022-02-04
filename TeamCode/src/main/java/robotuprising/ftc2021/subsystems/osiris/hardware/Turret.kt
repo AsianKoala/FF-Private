@@ -8,18 +8,23 @@ object Turret : ZeroableMotorSubsystem(
         MotorSubsystemConfig(
                 MotorConfig(
                         "turret",
-                        zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+                        zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
                 ),
 
                 controlType = MotorControlType.POSITION_PID,
 
-                kP = 0.0005,
+                kP = 0.03, // probably need a kstatic
+                kD = 0.00001,
+                kStatic = 0.01,
 
                 ticksPerUnit = 5.33333,
+
+                positionEpsilon = 2.0,
 
                 postZeroedValue = Constants.turretPostZeroValue
         )
 ) {
+
     val turretAngle: Double get() = position
 
     fun setTurretProfileTarget(angle: Double) {
@@ -28,6 +33,11 @@ object Turret : ZeroableMotorSubsystem(
 
     fun setTurretLockAngle(angle: Double) {
         setControllerTarget(angle)
+    }
+
+    override fun init() {
+        super.init()
+        zero()
     }
 
 }

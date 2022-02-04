@@ -9,7 +9,7 @@ abstract class StateMachineI<E> {
     private val stateMachineManager = StateMachineManager
     private var addedToManager = false
 
-    fun stop() {
+    open fun stop() {
         stateMachine.stop()
         stateMachine.reset()
 

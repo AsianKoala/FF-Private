@@ -4,7 +4,7 @@ import robotuprising.ftc2021.subsystems.osiris.motor.ServoSubsystem
 import robotuprising.ftc2021.subsystems.osiris.motor.ServoSubsystemConfig
 import robotuprising.ftc2021.util.Constants
 
-object Outtake: ServoSubsystem(ServoSubsystemConfig("outtake", Constants.outtakeHomePosition)) {
+object Outtake: ServoSubsystem(ServoSubsystemConfig("outtake", Constants.outtakeCockPosition)) {
     fun home() {
         moveServoToPosition(Constants.outtakeHomePosition)
     }

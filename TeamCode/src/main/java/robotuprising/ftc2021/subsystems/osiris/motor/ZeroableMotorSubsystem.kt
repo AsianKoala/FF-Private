@@ -14,7 +14,7 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
         offset = rawPosition
         zeroedYet = true
 
-        disabled = false
+//        disabled = false
 
         if(config.motorConfig.zeroPowerBehavior == DcMotor.ZeroPowerBehavior.BRAKE) {
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE

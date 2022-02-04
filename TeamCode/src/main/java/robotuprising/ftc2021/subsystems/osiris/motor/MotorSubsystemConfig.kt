@@ -22,10 +22,8 @@ data class MotorSubsystemConfig(
         val maxVelocity: Double = 0.0,
         val maxAcceleration: Double = 0.0,
         val maxJerk: Double = 0.0,
-//
-//        val positionEpsilon: Double = 0.0,
-//        val positionUpperLimit: Double = Double.POSITIVE_INFINITY,
-//        val positionLowerLimit: Double = Double.NEGATIVE_INFINITY,
+
+        val homePositionToDisable: Double = Double.NaN,
 
         val postZeroedValue: Double = 0.0
 )

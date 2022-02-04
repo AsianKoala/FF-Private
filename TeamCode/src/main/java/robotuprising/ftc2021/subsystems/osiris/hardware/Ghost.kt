@@ -116,11 +116,6 @@ object Ghost : Subsystem(), Loopable {
         } else {
             motors.forEachIndexed { i, it -> it.power = wheels[i] }
         }
-
-        OsirisDashboard["wheels"] = wheels
-        OsirisDashboard["y"] = powers.y
-        OsirisDashboard["x"] = powers.x
-        OsirisDashboard["h"] = powers.h.angle
     }
 
 }

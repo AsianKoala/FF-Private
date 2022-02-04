@@ -1,5 +1,6 @@
 package robotuprising.ftc2021.subsystems.osiris.hardware
 
+import com.acmerobotics.dashboard.config.Config
 import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.manager.BulkDataManager
@@ -12,14 +13,15 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
+@Config
 object Odometry : Subsystem(), Loopable, Initializable {
 //    private val leftServo = OsirisServo("leftRetract")
 //    private val rightServo = OsirisServo("rightRetract")
 //    private val auxServo = OsirisServo("auxRetract")
 
     val TICKS_PER_INCH = 1892.3724 // (ticks per rev) / (2 * pi * r)
-    @JvmField var turnScalar: Double = 14.9691931
-    @JvmField var auxTracker: Double = 3.85
+    @JvmField var turnScalar: Double = 8.690685
+    @JvmField var auxTracker: Double = 7.641969 //5.0
 
     var startPose = Pose(AngleUnit.RAD)
         set(value) {
@@ -118,10 +120,7 @@ object Odometry : Subsystem(), Loopable, Initializable {
 
     override fun updateDashboard(debugging: Boolean) {
         OsirisDashboard.addSpace()
-        OsirisDashboard["current position"] = currentPosition
-        OsirisDashboard["l"] = lastLeftEncoder
-        OsirisDashboard["r"] = lastRightEncoder
-        OsirisDashboard["a"] = lastAuxEncoder
+        OsirisDashboard["position"] = currentPosition
     }
 
     override fun loop() {

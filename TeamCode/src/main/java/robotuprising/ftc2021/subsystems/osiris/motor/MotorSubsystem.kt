@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.profile.MotionProfile
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator
 import com.acmerobotics.roadrunner.profile.MotionState
+import com.acmerobotics.roadrunner.util.epsilonEquals
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
@@ -14,6 +15,7 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
 import java.lang.Exception
@@ -49,14 +51,11 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
     // when we are at rest, don't want any motor movement
 //    private val dead get() = targetPosition epsilonEquals config.homePosition || disabled
 
-    val isAtTarget get() = ((position - targetPosition).absoluteValue < config.positionEpsilon)
+    val isAtTarget get() = (position - targetPosition).absoluteValue < config.positionEpsilon
 
 
     // pid
     protected fun setControllerTarget(target: Double) {
-        if(motor.mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
-            motor.mode = config.motorConfig.mode
-        }
         controller.reset()
         controller.targetPosition = target
         targetPosition = target
@@ -70,7 +69,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
     private var currentMotionProfile: MotionProfile? = null
     private var currentMotionState: MotionState? = null
 
-    private var hasFinishedProfile = true
+    private var hasFinishedProfile = false
 
     protected fun ticksToUnits(ticks: Double): Double {
         return (ticks / config.ticksPerUnit) * config.gearRatio
@@ -107,21 +106,20 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
         motionTimer.reset()
     }
 
-    var stopped = 0
     override fun stop() {
-        stopped++
+
     }
 
     override fun updateDashboard(debugging: Boolean) {
         if(config.controlType != MotorControlType.OPEN_LOOP) {
             OsirisDashboard.addLine()
             OsirisDashboard.addLine(config.motorConfig.name)
-            OsirisDashboard["raw position"] = rawPosition
-            OsirisDashboard["raw velocity"] = rawVelocity
+//            OsirisDashboard["raw position"] = rawPosition
+//            OsirisDashboard["raw velocity"] = rawVelocity
             OsirisDashboard["target position"] = targetPosition
             OsirisDashboard["position"] = position
             OsirisDashboard["output"] = output
-            OsirisDashboard["is at target"] = isAtTarget
+//            OsirisDashboard["is at target"] = isAtTarget
             OsirisDashboard["disabled"] = disabled
             OsirisDashboard["sim output"] = simOutput
         }
@@ -129,7 +127,10 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
 
     var simOutput = 0.0
     override fun loop() {
-        OsirisDashboard["stopped"] = stopped
+        if(motor.mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
+            motor.mode = config.motorConfig.mode
+        }
+
         if(config.controlType != MotorControlType.OPEN_LOOP) {
             output = if(disabled) {
                 simOutput = controller.update(position)
@@ -156,22 +157,18 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
 
                 val rawOutput = if(disabled) {
                     0.0
+                } else if(!config.homePositionToDisable.isNaN() &&
+                        targetPosition epsilonEquals config.homePositionToDisable &&
+                        (config.homePositionToDisable - position).absoluteValue < config.positionEpsilon) {
+                    0.0
                 } else {
                     controller.update(position)
                 }
 
 
-//                val rawOutput = if(disabled) {
-//                    0.0
-//                } else {
-//                    controller.update(position, velocity)
-//                }
-
                 rawOutput
-//                0.0
             }
         }
-
 
         motor.power = output
     }

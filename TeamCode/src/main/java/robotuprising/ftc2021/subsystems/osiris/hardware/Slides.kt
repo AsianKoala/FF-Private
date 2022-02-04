@@ -13,23 +13,30 @@ object Slides : ZeroableMotorSubsystem(
                         direction = DcMotorSimple.Direction.REVERSE
                 ),
 
-                controlType = MotorControlType.POSITION_PID,
+                controlType = MotorControlType.MOTION_PROFILE,
 
-                ticksPerUnit = 1.0,
+                ticksPerUnit = 20.8333,
                 gearRatio = 1.0,
 
-                kP = 0.03,
-                kD = 0.0001,
+                kP = 0.2,
+                kD = 0.007,
+
+                maxVelocity = 84.0,
+                maxAcceleration = 64.0,
+
+                positionEpsilon = 1.0,
+                homePositionToDisable = 0.0,
+
+                kStatic = 0.03,
+//                kD = 0.00005,
 
 
                 postZeroedValue = Constants.slideHomeValue
         )
 ) {
-    val slideInches get() = position
-
     // target is in continuous form
     fun setSlideInches(target: Double) {
-        generateAndFollowMotionProfile(position, target / slideInches)
+        generateAndFollowMotionProfile(position, target)
     }
 
     fun setSlideLockTarget(target: Double) {
