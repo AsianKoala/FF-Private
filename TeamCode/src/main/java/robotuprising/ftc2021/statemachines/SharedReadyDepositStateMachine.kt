@@ -21,8 +21,9 @@ object SharedReadyDepositStateMachine : StateMachineI<SharedReadyDepositStateMac
 
     override val stateMachine: StateMachine<States> = StateMachineBuilder<States>()
             .state(States.READY_ARM_OUTTAKE)
-            .onEnter { Arm.moveServoToPosition(Constants.armSharedPosition) }
-            .onEnter { Outtake.moveServoToPosition(Constants.outtakeSharedPosition) }
+            .onEnter(Arm::depositShared)
+            .onEnter(Outtake::depositShared)
+            .onEnter { Slides.setSlideInches(3.0) }
             .onExit { counter++ }
             .transitionTimed(1.0)
 

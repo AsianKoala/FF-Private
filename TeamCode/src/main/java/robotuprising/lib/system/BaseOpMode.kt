@@ -31,7 +31,7 @@ abstract class BaseOpMode : LinearOpMode() {
         }
 
         BulkDataManager.init(hardwareMap)
-        OsirisDashboard.init(telemetry, true)
+        OsirisDashboard.init(telemetry, false)
 
 
         mInit()

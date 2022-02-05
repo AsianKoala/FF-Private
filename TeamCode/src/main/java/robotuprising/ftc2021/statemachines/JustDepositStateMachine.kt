@@ -1,6 +1,7 @@
 package robotuprising.ftc2021.statemachines
 
 import robotuprising.ftc2021.subsystems.osiris.hardware.*
+import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.system.statemachine.StateMachine
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
@@ -11,7 +12,9 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
         COCK_OUTTAKE_ARM,
         RESET_SLIDES,
         RESET_TURRET,
+        JIGGLE_ARM,
         HOME_OUTTAKE,
+        HOME_ARM
     }
 
     override val stateMachine: StateMachine<States> = StateMachineBuilder<States>()
@@ -33,8 +36,16 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
             .onEnter(Turret::home)
             .transitionTimed(0.3)
 
+            .state(States.JIGGLE_ARM)
+            .onEnter { Arm.moveServoToPosition(Constants.armHomePosition + 0.17) }
+            .transitionTimed(0.3)
+
             .state(States.HOME_OUTTAKE)
             .onEnter(Outtake::home)
+            .transitionTimed(0.2)
+
+            .state(States.HOME_ARM)
+            .onEnter(Arm::home)
             .transition { true }
             .build()
 

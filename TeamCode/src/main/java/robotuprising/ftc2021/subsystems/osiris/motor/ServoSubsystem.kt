@@ -3,6 +3,7 @@ package robotuprising.ftc2021.subsystems.osiris.motor
 import robotuprising.ftc2021.hardware.osiris.OsirisServo
 import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.lib.opmode.OsirisDashboard
 
 abstract class ServoSubsystem(val config: ServoSubsystemConfig) : Subsystem(), Initializable {
     private val servo by lazy { OsirisServo(config.name) }
@@ -16,7 +17,7 @@ abstract class ServoSubsystem(val config: ServoSubsystemConfig) : Subsystem(), I
     }
 
     override fun updateDashboard(debugging: Boolean) {
-//        NakiriDashboard["${config.name} position"] = servo.position
+        OsirisDashboard["${config.name} position"] = servo.position
     }
 
     override fun init() {

@@ -12,23 +12,21 @@ abstract class OsirisOpMode : BaseOpMode() {
 
     open fun register() {
         SubsystemManager.registerSubsystems(
-                Ghost,
-
-                Odometry,
-
-//                Intake,
-//                LoadingSensor,
+//                Ghost,
 //
-//                Outtake,
-//                Indexer,
-//                Arm,
+                Intake,
+                LoadingSensor,
 //
-//                Turret,
-//                Slides,
+                Outtake,
+                Indexer,
+                Arm,
 //
-//                Spinner,
+                Turret,
+                Slides,
 //
-//                IntakeStopper
+                Spinner,
+//
+                IntakeStopper
         )
     }
 
@@ -36,8 +34,9 @@ abstract class OsirisOpMode : BaseOpMode() {
         SubsystemManager.clearAll()
         register()
         SubsystemManager.initAll()
+//        Turret.disabled = true
 
-        Turret.setTurretLockAngle(180.0)
+        Turret.zero()
         Slides.setSlideInches(0.0)
     }
 
@@ -48,7 +47,7 @@ abstract class OsirisOpMode : BaseOpMode() {
     }
 
     override fun mStart() {
-
+        IntakeStopper.unlock()
     }
 
     override fun mLoop() {

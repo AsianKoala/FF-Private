@@ -23,19 +23,22 @@ object IntakeStateMachineRed : StateMachineI<IntakeStateMachineRed.States>() {
     var hasIntaked = false
 
     var shared = false
+    var shouldCock = false
 
     override fun start() {
-        if(!addedToManager) {
+        if(!IntakeStateMachineRed.addedToManager) {
             shared = false
         }
 
         super.start()
         hasIntaked = false
+        shouldCock = false
     }
 
     override val stateMachine = StateMachineBuilder<States>()
             .state(States.OUTTAKE_RESET)
             .onEnter(outtake::home)
+            .onEnter(Indexer::open)
             .transitionTimed(0.2)
 
             .state(States.INTAKING)
@@ -43,7 +46,8 @@ object IntakeStateMachineRed : StateMachineI<IntakeStateMachineRed.States>() {
             .onExit(indexer::lock)
             .onExit { hasIntaked = true }
             .loop { OsirisDashboard.addLine("INTAKING") }
-            .transition(sensor::isMineralIn)
+//            .transition(sensor::isMineralIn)
+            .transition { shouldCock }
 
             .state(States.MINERAL_IN_REVERSE_INTAKING)
             .onEnter(intake::turnReverse)
@@ -57,13 +61,9 @@ object IntakeStateMachineRed : StateMachineI<IntakeStateMachineRed.States>() {
 
             .state(States.TURN_TURRET)
             .onEnter {
-                if(!shared) {
-                    turret.depositRedHigh()
-                } else {
-                    turret.depositRedShared()
-                }
+                if(!shared) turret.depositRedHigh()
+                else turret.depositRedShared()
             }
             .transition { turret.isAtTarget }
             .build()
-
 }

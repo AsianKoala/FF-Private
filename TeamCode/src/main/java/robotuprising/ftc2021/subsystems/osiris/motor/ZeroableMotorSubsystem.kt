@@ -9,8 +9,6 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
 
     private var zeroedYet = false
 
-    var actualPostZeroed = 0.0
-
     private var offset = 0.0
 
     override fun zero() {
@@ -29,8 +27,7 @@ open class ZeroableMotorSubsystem(config: MotorSubsystemConfig) : MotorSubsystem
             rawPosition = motor.position.d - offset
             rawVelocity = motor.velocity
 
-//            position = ticksToUnits(rawPosition) + config.postZeroedValue
-            position = ticksToUnits(rawPosition) + actualPostZeroed
+            position = ticksToUnits(rawPosition) + config.postZeroedValue
             velocity = ticksToUnits(rawVelocity)
 
         }

@@ -18,7 +18,7 @@ object Constants {
     const val outtakeHomePosition = 0.27
     const val outtakeCockPosition = 0.6
     const val outtakeHighPosition = 0.7
-    const val outtakeSharedPosition = 0.8
+    const val outtakeSharedPosition = 1.0
 
     const val indexerOpenPosition = 0.52
     const val indexerLockedPosition = 0.68
@@ -26,7 +26,7 @@ object Constants {
 
     const val armHomePosition = 0.10
     const val armHighPosition = 0.68
-    const val armSharedPosition = 0.8
+    const val armSharedPosition = 1.0
 
     const val duckSpeed = 0.25
 

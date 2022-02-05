@@ -7,6 +7,7 @@ import robotuprising.ftc2021.statemachines.JustDepositStateMachine
 import robotuprising.ftc2021.statemachines.AllianceReadyDepositStateMachine
 import robotuprising.ftc2021.subsystems.osiris.hardware.Ghost
 import robotuprising.ftc2021.subsystems.osiris.hardware.Odometry
+import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.subsystems.osiris.hardware.vision.BlueWebcam
 import robotuprising.ftc2021.subsystems.osiris.hardware.vision.RedWebcam
 import robotuprising.ftc2021.util.Constants
@@ -19,7 +20,6 @@ import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.varargAdd
 
-@Autonomous
 class OsirisBlueAuto : OsirisOpMode() {
     private val pathPoints = ArrayList<Waypoint>()
     private lateinit var path: PurePursuitPath

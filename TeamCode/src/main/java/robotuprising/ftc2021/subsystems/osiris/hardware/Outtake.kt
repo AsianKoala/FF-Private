@@ -16,4 +16,8 @@ object Outtake: ServoSubsystem(ServoSubsystemConfig("outtake", Constants.outtake
     fun depositHigh() {
         moveServoToPosition(Constants.outtakeHighPosition)
     }
+
+    fun depositShared() {
+        moveServoToPosition(Constants.outtakeSharedPosition)
+    }
 }

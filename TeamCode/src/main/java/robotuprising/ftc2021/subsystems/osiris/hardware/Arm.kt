@@ -12,4 +12,8 @@ object Arm : ServoSubsystem(ServoSubsystemConfig("arm", Constants.armHomePositio
     fun depositHigh() {
         moveServoToPosition(Constants.armHighPosition)
     }
+
+    fun depositShared() {
+        moveServoToPosition(Constants.armSharedPosition)
+    }
 }

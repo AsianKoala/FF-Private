@@ -19,7 +19,7 @@ object Turret : ZeroableMotorSubsystem(
 
                 ticksPerUnit = 5.33333,
 
-                positionEpsilon = 2.0,
+                positionEpsilon = 1.0,
 
                 postZeroedValue = Constants.turretPostZeroValue
         )
