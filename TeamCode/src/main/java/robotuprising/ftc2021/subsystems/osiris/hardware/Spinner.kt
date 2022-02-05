@@ -9,4 +9,6 @@ object Spinner : MotorSubsystem(
         fun setPower(power: Double) {
                 output = power
         }
+
+
 }

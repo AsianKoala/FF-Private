@@ -2,18 +2,14 @@ package robotuprising.ftc2021.opmodes.osiris
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import robotuprising.ftc2021.auto.pp.PurePursuitPath
-import robotuprising.ftc2021.auto.pp.Subroutines
 import robotuprising.ftc2021.manager.SubsystemManager
-import robotuprising.ftc2021.statemachines.AutoAimBlueStateMachine
-import robotuprising.ftc2021.statemachines.IntakeStateMachine
 import robotuprising.ftc2021.statemachines.JustDepositStateMachine
-import robotuprising.ftc2021.statemachines.ReadyForDepositStateMachine
+import robotuprising.ftc2021.statemachines.AllianceReadyDepositStateMachine
 import robotuprising.ftc2021.subsystems.osiris.hardware.Ghost
 import robotuprising.ftc2021.subsystems.osiris.hardware.Odometry
-import robotuprising.ftc2021.subsystems.osiris.hardware.Slides
-import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
 import robotuprising.ftc2021.subsystems.osiris.hardware.vision.BlueWebcam
 import robotuprising.ftc2021.subsystems.osiris.hardware.vision.RedWebcam
+import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
@@ -34,12 +30,15 @@ class OsirisBlueAuto : OsirisOpMode() {
         Odometry.startPose = Pose(Point(8.0, 64.0), Angle(0.0, AngleUnit.RAD))
 
         path = PurePursuitPath(pathPoints)
+        Ghost.disabled = true
         Ghost.currentPath = path
         Ghost.driveState = Ghost.DriveStates.PATH
 
-        Turret.zero()
-        Turret.setTurretLockAngle(245.0)
-        Slides.setSlideInches(0.0)
+//        Turret.zero()
+//        Turret.setTurretLockAngle(245.0)
+//        Slides.setSlideInches(0.0)
+
+        Constants.END_OF_AUTO_TURRET_VALUE = Double.NaN
     }
 
     override fun mLoop() {
@@ -51,7 +50,7 @@ class OsirisBlueAuto : OsirisOpMode() {
         SubsystemManager.deregister(RedWebcam)
         SubsystemManager.deregister(BlueWebcam)
 
-        AutoAimBlueStateMachine.startForTeleop()
+//        AutoAimBlueStateMachine.startForTeleop()
     }
 
     private enum class FDATLSMStates {
@@ -61,9 +60,9 @@ class OsirisBlueAuto : OsirisOpMode() {
 
     private val fullDepositAfterTurretLockedStateMachine = StateMachineBuilder<FDATLSMStates>()
             .state(FDATLSMStates.READY_FOR_DEPOSIT_RUNNING)
-            .onEnter(ReadyForDepositStateMachine::start)
+            .onEnter(AllianceReadyDepositStateMachine::start)
             .loop { OsirisDashboard.addLine("RFDSM AUTO RUNNING") }
-            .transition(ReadyForDepositStateMachine::done)
+            .transition(AllianceReadyDepositStateMachine::done)
 
             .state(FDATLSMStates.DEPOSIT_RUNNING)
             .onEnter(JustDepositStateMachine::start)
@@ -85,10 +84,13 @@ class OsirisBlueAuto : OsirisOpMode() {
    init {
        pathPoints.varargAdd(
                Waypoint(8, 64, 0),
-               Waypoint(8, 64, 0, Subroutines.ArrivalInterruptSubroutine(this::bruh)),
-               Waypoint(24, 64, 8, Subroutines.OnceOffSubroutine(IntakeStateMachine::start)),
-               Waypoint(64, 64, 8, Subroutines.RepeatedSubroutine(IntakeStateMachine::hasIntaked)),
-               Waypoint(24, 64, 8, Subroutines.ArrivalInterruptSubroutine(this::bruh))
+               Waypoint(24+8, 64, 8),
+               Waypoint(24+8, 64+24, 8),
+               Waypoint(24+8+24, 64+24, 8)
+//               Waypoint(8, 64, 0, Subroutines.ArrivalInterruptSubroutine(this::bruh)),
+//               Waypoint(24, 64, 8, Subroutines.OnceOffSubroutine(IntakeStateMachine::start)),
+//               Waypoint(64, 64, 8, Subroutines.RepeatedSubroutine(IntakeStateMachine::hasIntaked)),
+//               Waypoint(24, 64, 8, Subroutines.ArrivalInterruptSubroutine(this::bruh))
        )
    }
 }

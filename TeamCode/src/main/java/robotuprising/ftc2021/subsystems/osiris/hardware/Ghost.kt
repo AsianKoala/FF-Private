@@ -34,12 +34,15 @@ object Ghost : Subsystem(), Loopable {
 
     var acceptableTargetError = 2.0
 
+    var disabled = false
+
     override fun stop() {
         driveState = DriveStates.DISABLED
         powers = Pose(AngleUnit.RAW)
         motors.forEach { it.power = 0.0 }
         currentPath = null
         targetWaypoint = null
+        disabled = false
     }
 
     override fun updateDashboard(debugging: Boolean) {
@@ -104,17 +107,19 @@ object Ghost : Subsystem(), Loopable {
             }
         }
 
-        val fl = powers.y + powers.x + powers.h.angle
-        val bl = powers.y - powers.x + powers.h.angle
-        val fr = powers.y - powers.x - powers.h.angle
-        val br = powers.y + powers.x - powers.h.angle
+        if(!disabled) {
+            val fl = powers.y + powers.x + powers.h.angle
+            val bl = powers.y - powers.x + powers.h.angle
+            val fr = powers.y - powers.x - powers.h.angle
+            val br = powers.y + powers.x - powers.h.angle
 
-        val wheels = listOf(fl, bl, fr, br)
-        val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
-        if (absMax > 1.0) {
-            motors.forEachIndexed { i, it -> it.power = wheels[i] / absMax }
-        } else {
-            motors.forEachIndexed { i, it -> it.power = wheels[i] }
+            val wheels = listOf(fl, bl, fr, br)
+            val absMax = wheels.map { it.absoluteValue }.maxOrNull()!!
+            if (absMax > 1.0) {
+                motors.forEachIndexed { i, it -> it.power = wheels[i] / absMax }
+            } else {
+                motors.forEachIndexed { i, it -> it.power = wheels[i] }
+            }
         }
     }
 

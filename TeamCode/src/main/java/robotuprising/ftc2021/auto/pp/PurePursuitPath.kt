@@ -8,6 +8,7 @@ import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.MathUtil
 import robotuprising.lib.math.Pose
+import robotuprising.lib.opmode.OsirisDashboard
 import kotlin.collections.ArrayList
 
 class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
@@ -20,6 +21,7 @@ class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
     fun update(): Pose {
         val position = Odometry.currentPosition
         val velocity = Odometry.relVelocity
+
 
         if(interrupting) {
             val advance = (waypoints[currPoint].action as Subroutines.ArrivalInterruptSubroutine).runCycle()
@@ -35,6 +37,9 @@ class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
         do {
             jumpToNextSegment = false
             val target = waypoints[currPoint + 1]
+            val curent = waypoints[currPoint]
+            OsirisDashboard["current"] = waypoints[currPoint].toString()
+            OsirisDashboard["target"] = waypoints[currPoint+1].toString()
 
             if(target is StopWaypoint && timeUntilDeadMan.milliseconds() > DEAD_MAN_SWITCH) {
                 jumpToNextSegment = true

@@ -14,7 +14,7 @@ object Turret : ZeroableMotorSubsystem(
                 controlType = MotorControlType.POSITION_PID,
 
                 kP = 0.03, // probably need a kstatic
-                kD = 0.00001,
+                kD = 0.0007,
                 kStatic = 0.01,
 
                 ticksPerUnit = 5.33333,
@@ -38,6 +38,26 @@ object Turret : ZeroableMotorSubsystem(
     override fun init() {
         super.init()
         zero() // TODO ONLY ZERO IN TELEOP
+    }
+
+    fun home() {
+        setTurretLockAngle(Constants.turretHomeValue)
+    }
+
+    fun depositBlueHigh() {
+        setTurretLockAngle(Constants.turretBlueAngle)
+    }
+
+    fun depositBlueShared() {
+        setTurretLockAngle(Constants.turretSharedBlueAngle)
+    }
+
+    fun depositRedHigh() {
+        setTurretLockAngle(Constants.turretRedAngle)
+    }
+
+    fun depositRedShared() {
+        setTurretLockAngle(Constants.turretSharedRedAngle)
     }
 
 }

@@ -4,7 +4,7 @@ import robotuprising.ftc2021.subsystems.osiris.hardware.*
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
 // STATIC TURRET MOVEMENT
-object ReadyForDepositStateMachine : StateMachineI<ReadyForDepositStateMachine.States>() {
+object AllianceReadyDepositStateMachine : StateMachineI<AllianceReadyDepositStateMachine.States>() {
     enum class States {
         EXTEND_SLIDES,
         MOVE_ARM_AND_OUTTAKE,
@@ -12,7 +12,7 @@ object ReadyForDepositStateMachine : StateMachineI<ReadyForDepositStateMachine.S
 
     override val stateMachine = StateMachineBuilder<States>()
             .state(States.EXTEND_SLIDES)
-            .onEnter { Slides.setSlideInches(34.0) }
+            .onEnter(Slides::deposit)
             .transitionTimed(0.5)
 
             .state(States.MOVE_ARM_AND_OUTTAKE)

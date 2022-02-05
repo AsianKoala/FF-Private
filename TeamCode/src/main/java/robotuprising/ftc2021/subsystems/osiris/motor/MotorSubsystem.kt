@@ -63,7 +63,6 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
 
     private var followingPositionPID = false
 
-
     // motion profiling
     private var motionTimer = ElapsedTime()
     private var currentMotionProfile: MotionProfile? = null
@@ -158,7 +157,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
                 val rawOutput = if(disabled) {
                     0.0
                 } else if(!config.homePositionToDisable.isNaN() &&
-                        targetPosition epsilonEquals config.homePositionToDisable &&
+                        (targetPosition - config.homePositionToDisable).absoluteValue < config.positionEpsilon &&
                         (config.homePositionToDisable - position).absoluteValue < config.positionEpsilon) {
                     0.0
                 } else {

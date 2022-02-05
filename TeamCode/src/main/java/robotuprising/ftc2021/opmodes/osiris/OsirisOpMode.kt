@@ -9,29 +9,26 @@ import robotuprising.lib.opmode.AllianceSide
 import robotuprising.lib.system.BaseOpMode
 
 abstract class OsirisOpMode : BaseOpMode() {
-//    private val turretLimitSwitch = TurretLimitSwitch
-//    private val slideLimitSwitch = SlideLimitSwitch
-
-//    private val spinner = Spinner
-//
-//    private val redWebcam = RedWebcam
-//    private val blueWebcam = BlueWebcam
 
     open fun register() {
         SubsystemManager.registerSubsystems(
                 Ghost,
 
-                Intake,
-                LoadingSensor,
+                Odometry,
 
-                Outtake,
-                Indexer,
-                Arm,
-
-                Turret,
-
-                Slides
-
+//                Intake,
+//                LoadingSensor,
+//
+//                Outtake,
+//                Indexer,
+//                Arm,
+//
+//                Turret,
+//                Slides,
+//
+//                Spinner,
+//
+//                IntakeStopper
         )
     }
 

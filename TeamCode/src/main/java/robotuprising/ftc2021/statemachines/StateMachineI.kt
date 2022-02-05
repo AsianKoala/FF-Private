@@ -7,7 +7,7 @@ abstract class StateMachineI<E> {
     protected abstract val stateMachine: StateMachine<E>
 
     private val stateMachineManager = StateMachineManager
-    private var addedToManager = false
+    var addedToManager = false
 
     open fun stop() {
         stateMachine.stop()

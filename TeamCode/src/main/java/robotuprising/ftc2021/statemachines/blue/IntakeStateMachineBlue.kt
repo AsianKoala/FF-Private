@@ -1,10 +1,11 @@
-package robotuprising.ftc2021.statemachines
+package robotuprising.ftc2021.statemachines.blue
 
+import robotuprising.ftc2021.statemachines.StateMachineI
 import robotuprising.ftc2021.subsystems.osiris.hardware.*
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
 
-object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
+object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
     enum class States {
         OUTTAKE_RESET,
         INTAKING,
@@ -21,7 +22,13 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
 
     var hasIntaked = false
 
+    var shared = false
+
     override fun start() {
+        if(!addedToManager) {
+            shared = false
+        }
+
         super.start()
         hasIntaked = false
     }
@@ -49,7 +56,13 @@ object IntakeStateMachine : StateMachineI<IntakeStateMachine.States>() {
             .transitionTimed(0.5)
 
             .state(States.TURN_TURRET)
-            .onEnter { turret.setTurretLockAngle(245.0) }
+            .onEnter {
+                if(!shared) {
+                    turret.depositBlueHigh()
+                } else {
+                    turret.depositBlueShared()
+                }
+            }
             .transition { turret.isAtTarget }
             .build()
 

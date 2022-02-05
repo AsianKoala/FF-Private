@@ -21,8 +21,8 @@ object Slides : ZeroableMotorSubsystem(
                 kP = 0.2,
                 kD = 0.007,
 
-                maxVelocity = 84.0,
-                maxAcceleration = 64.0,
+                maxVelocity = 100.0,
+                maxAcceleration = 84.0,
 
                 positionEpsilon = 1.0,
                 homePositionToDisable = 0.0,
@@ -41,5 +41,17 @@ object Slides : ZeroableMotorSubsystem(
 
     fun setSlideLockTarget(target: Double) {
         setControllerTarget(target)
+    }
+
+    fun deposit() {
+        setSlideInches(Constants.slideDepositInches)
+    }
+
+    fun home() {
+        setSlideInches(Constants.slideHomeValue)
+    }
+
+    fun shared() {
+        setSlideInches(Constants.slideSharedInches)
     }
 }
