@@ -28,7 +28,7 @@ abstract class OsirisOpMode : BaseOpMode() {
 //
                 IntakeStopper,
 
-                BlueWebcam,
+//                BlueWebcam,
 //                RedWebcam
         )
     }
@@ -49,7 +49,7 @@ abstract class OsirisOpMode : BaseOpMode() {
     }
 
     override fun mStart() {
-        SubsystemManager.deregister(BlueWebcam)
+//        SubsystemManager.deregister(BlueWebcam)
         SubsystemManager.startAll()
         IntakeStopper.unlock()
     }

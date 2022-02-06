@@ -22,7 +22,6 @@ import robotuprising.lib.util.GamepadUtil.right_trigger_pressed
 
 @TeleOp
 class OsirisBlueTeleOp : OsirisOpMode() {
-
     override fun mInit() {
         super.mInit()
         Turret.zero()

@@ -2,15 +2,9 @@ package robotuprising.ftc2021.opmodes.osiris.unused
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import robotuprising.ftc2021.auto.pp.PurePursuitPath
-import robotuprising.ftc2021.manager.SubsystemManager
 import robotuprising.ftc2021.opmodes.osiris.OsirisOpMode
 import robotuprising.ftc2021.statemachines.JustDepositStateMachine
-import robotuprising.ftc2021.statemachines.AllianceReadyDepositStateMachine
 import robotuprising.ftc2021.subsystems.osiris.hardware.*
-import robotuprising.ftc2021.subsystems.osiris.hardware.vision.BlueWebcam
-import robotuprising.ftc2021.subsystems.osiris.hardware.vision.Pipeline
-import robotuprising.ftc2021.subsystems.osiris.hardware.vision.RedWebcam
-import robotuprising.ftc2021.util.Constants
 import robotuprising.lib.control.auto.waypoints.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
@@ -18,18 +12,17 @@ import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.system.statemachine.StateMachineBuilder
-import robotuprising.lib.util.Extensions.varargAdd
 
 @Autonomous
 class OsirisBlueAuto : OsirisOpMode() {
     private val pathPoints = ArrayList<Waypoint>()
     private lateinit var path: PurePursuitPath
 
-    var cup_state = Pipeline.CupStates.LEFT
-
     override fun mInit() {
         super.mInit()
         Turret.zero()
+        Turret.disabled = false
+        Turret.setTurretLockAngle(235.0)
     }
 
     override fun mInitLoop() {
@@ -39,7 +32,6 @@ class OsirisBlueAuto : OsirisOpMode() {
     }
 
     override fun mStart() {
-        cup_state = BlueWebcam.pipeline.cupState
         super.mStart()
         Ghost.driveState = Ghost.DriveStates.MANUAL
 
@@ -62,7 +54,6 @@ class OsirisBlueAuto : OsirisOpMode() {
     }
 
     enum class AutoStates {
-        TURRET,
         DEPOSIT,
         RETRACT,
         PARK
@@ -83,79 +74,28 @@ class OsirisBlueAuto : OsirisOpMode() {
                 Outtake.depositHigh()
                 Arm.depositHigh()
             }
-            .transitionTimed(2.0)
-
-            .build()
-
-    enum class DepositMediumStates {
-        EXTEND,
-        ARM
-    }
-
-    val DepositMedSM = StateMachineBuilder<DepositMediumStates>()
-            .state(DepositMediumStates.EXTEND)
-            .onEnter {
-                Slides.maxCap = 0.5
-                Slides.setSlideInches(27.5)
-            }
-            .transition { true }
-
-            .state(DepositMediumStates.ARM)
-            .onEnter {
-                Outtake.moveServoToPosition(1.0)
-                Arm.moveServoToPosition(Constants.armMediumPosition)
-            }
-            .transitionTimed(2.0)
-
+            .transitionTimed(1.0)
 
             .build()
 
 
 
     val AutoStateMachine = StateMachineBuilder<AutoStates>()
-            .state(AutoStates.TURRET)
-            .onEnter { Turret.setTurretLockAngle(237.0) }
-            .transitionTimed(1.0)
-
             .state(AutoStates.DEPOSIT)
             .onEnter {
-                when(cup_state) {
-                    Pipeline.CupStates.LEFT -> {
-                        DepositHighSM.stop()
-                        DepositHighSM.reset()
-                        DepositHighSM.start()
-                    }
-
-                    Pipeline.CupStates.CENTER -> {
-                        DepositMedSM.stop()
-                        DepositMedSM.reset()
-                        DepositMedSM.start()
-                    }
-
-                    Pipeline.CupStates.RIGHT -> {
-                        DepositHighSM.stop()
-                        DepositHighSM.reset()
-                        DepositHighSM.start()
-                    }
-
-                }
+                DepositHighSM.stop()
+                DepositHighSM.reset()
+                DepositHighSM.start()
             }
 
             .loop {
                 OsirisDashboard.addLine("LOOPING DEPOSIT SM")
-
-                if(DepositMedSM.running) {
-                    DepositMedSM.update()
-                }
 
                 if(DepositHighSM.running) {
                     DepositHighSM.update()
                 }
             }
 
-            .onExit {
-                Slides.maxCap = 1.0
-            }
             .transitionTimed(2.0)
 
             .state(AutoStates.RETRACT)
@@ -164,9 +104,9 @@ class OsirisBlueAuto : OsirisOpMode() {
             .transition(JustDepositStateMachine::done)
 
             .state(AutoStates.PARK)
-//            .onEnter { Ghost.powers = Pose(Point(0.0, 0.7), Angle(0.0, AngleUnit.RAW)) }
-//            .onExit { Ghost.powers = Pose(AngleUnit.RAW) }
-            .transitionTimed(0.5)
+            .onEnter { Ghost.powers = Pose(Point(-0.2, 1.0), Angle(0.0, AngleUnit.RAW)) }
+            .onExit { Ghost.powers = Pose(AngleUnit.RAW) }
+            .transitionTimed(0.8)
 
             .build()
 }
