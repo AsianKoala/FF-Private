@@ -8,10 +8,11 @@ import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
 import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.manager.BulkDataManager
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.lib.opmode.OsirisDashboard
 
 open class Webcam(private val name: String) : Subsystem(), Loopable, Initializable {
     private lateinit var webcam: OpenCvCamera
-    private val pipeline = Pipeline()
+    val pipeline = Pipeline()
 
     override fun init() {
         val cameraMonitorViewId = BulkDataManager.hwMap.appContext.
@@ -28,7 +29,7 @@ open class Webcam(private val name: String) : Subsystem(), Loopable, Initializab
             }
 
             override fun onError(errorCode: Int) {
-                throw Exception("webcam errored")
+
             }
         })
     }
@@ -43,6 +44,7 @@ open class Webcam(private val name: String) : Subsystem(), Loopable, Initializab
         } else {
             pipeline.cupState = Pipeline.CupStates.RIGHT
         }
+
     }
 
     override fun stop() {
@@ -50,6 +52,6 @@ open class Webcam(private val name: String) : Subsystem(), Loopable, Initializab
     }
 
     override fun updateDashboard(debugging: Boolean) {
-
+        OsirisDashboard["CUP STATE"] = pipeline.cupState
     }
 }

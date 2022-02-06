@@ -12,7 +12,7 @@ abstract class OsirisOpMode : BaseOpMode() {
 
     open fun register() {
         SubsystemManager.registerSubsystems(
-//                Ghost,
+                Ghost,
 //
                 Intake,
                 LoadingSensor,
@@ -26,7 +26,10 @@ abstract class OsirisOpMode : BaseOpMode() {
 //
                 Spinner,
 //
-                IntakeStopper
+                IntakeStopper,
+
+                BlueWebcam,
+//                RedWebcam
         )
     }
 
@@ -34,7 +37,6 @@ abstract class OsirisOpMode : BaseOpMode() {
         SubsystemManager.clearAll()
         register()
         SubsystemManager.initAll()
-//        Turret.disabled = true
 
         Turret.zero()
         Slides.setSlideInches(0.0)
@@ -47,6 +49,8 @@ abstract class OsirisOpMode : BaseOpMode() {
     }
 
     override fun mStart() {
+        SubsystemManager.deregister(BlueWebcam)
+        SubsystemManager.startAll()
         IntakeStopper.unlock()
     }
 

@@ -7,7 +7,6 @@ import robotuprising.ftc2021.statemachines.JustDepositStateMachine
 import robotuprising.ftc2021.statemachines.SharedReadyDepositStateMachine
 import robotuprising.ftc2021.statemachines.red.DuckRedStateMachine
 import robotuprising.ftc2021.statemachines.red.IntakeStateMachineRed
-import robotuprising.ftc2021.subsystems.osiris.IntakeStopper
 import robotuprising.ftc2021.subsystems.osiris.hardware.Ghost
 import robotuprising.ftc2021.subsystems.osiris.hardware.Intake
 import robotuprising.ftc2021.subsystems.osiris.hardware.Turret
@@ -44,10 +43,10 @@ class OsirisRedTeleOp : OsirisOpMode() {
     private var sharedTimer = ElapsedTime()
     private fun gp1() {
         Ghost.powers = Pose(Point(
-                gamepad1.left_stick_x.d * 0.7,
+                gamepad1.left_stick_x.d,
                 -gamepad1.left_stick_y.d),
                 Angle(
-                        gamepad1.right_stick_x.d * 0.5, AngleUnit.RAW)
+                        gamepad1.right_stick_x.d, AngleUnit.RAW)
         )
 
         if(gamepad1.right_trigger_pressed) IntakeStateMachineRed.start()
@@ -56,26 +55,23 @@ class OsirisRedTeleOp : OsirisOpMode() {
         if(gamepad1.left_trigger_pressed) {
             if(IntakeStateMachineRed.shared)  SharedReadyDepositStateMachine.start()
             else AllianceReadyDepositStateMachine.start()
-
         }
 
         OsirisDashboard["shared"] = IntakeStateMachineRed.shared
     }
 
     private fun gp2() {
-        if(gamepad2.right_bumper) JustDepositStateMachine.start()
+        if(gamepad2.right_bumper) JustDepositStateMachine.start() // deposit
 
-        if(gamepad2.left_trigger_pressed) Intake.turnReverse()
+        if(gamepad2.left_trigger_pressed) Intake.turnReverse() // if jam
 
-        if(gamepad2.right_trigger_pressed) Turret.setTurretLockAngle(180.0)
+        if(gamepad2.right_trigger_pressed) Intake.turnOff()
 
-        if(gamepad2.dpad_up) DuckRedStateMachine.start()
-
-        if(gamepad2.a) Intake.turnOff()
-
-        if(gamepad2.left_bumper && sharedTimer.seconds() > 1.0) {
+        if(gamepad2.left_bumper && sharedTimer.seconds() > 1.0) { // switch to shared
             IntakeStateMachineRed.shared = !IntakeStateMachineRed.shared
             sharedTimer.reset()
         }
+
+        if(gamepad2.dpad_up) DuckRedStateMachine.start()
     }
 }

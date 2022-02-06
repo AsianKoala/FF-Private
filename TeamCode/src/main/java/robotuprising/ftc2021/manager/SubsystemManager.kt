@@ -5,6 +5,8 @@ import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.ftc2021.subsystems.osiris.motor.ServoSubsystem
 import robotuprising.lib.opmode.OsirisDashboard
 
+// todo if we make it to states: Create a fake hardware class (fake servo, fake motor) and in this class
+// todo only if they are enabled, then send power/position to the real motor/subsystem
 object SubsystemManager {
     private val subsystems: ArrayList<Subsystem> = ArrayList()
     private val loopableSubsystems: ArrayList<Loopable> = ArrayList()
@@ -12,9 +14,10 @@ object SubsystemManager {
     private val readableSubsystems: ArrayList<Readable> = ArrayList()
     private val testableSubsystems: ArrayList<Testable> = ArrayList()
     private val initializableSubsystems: ArrayList<Initializable> = ArrayList()
+    private val startableSubsystems: ArrayList<Startable> = ArrayList()
 
     private val managerLists = listOf(subsystems, loopableSubsystems, zeroableSubsystems,
-            readableSubsystems, testableSubsystems, initializableSubsystems)
+            readableSubsystems, testableSubsystems, initializableSubsystems, startableSubsystems)
 
     private var zeroedYet = false
 
@@ -42,6 +45,10 @@ object SubsystemManager {
 
     fun initAll() {
         initializableSubsystems.forEach(Initializable::init)
+    }
+
+    fun startAll() {
+        startableSubsystems.forEach(Startable::start)
     }
 
     fun initServos() {
@@ -88,6 +95,10 @@ object SubsystemManager {
         if (subsystem is Initializable) {
             initializableSubsystems.add(subsystem)
         }
+
+        if(subsystem is Startable) {
+            startableSubsystems.add(subsystem)
+        }
     }
 
     fun deregister(subsystem: Subsystem) {
@@ -113,6 +124,10 @@ object SubsystemManager {
 
         if(subsystem is Initializable && subsystem in initializableSubsystems) {
             initializableSubsystems.remove(subsystem)
+        }
+
+        if(subsystem is Startable && subsystem in startableSubsystems) {
+            startableSubsystems.remove(subsystem)
         }
     }
 

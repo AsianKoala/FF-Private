@@ -18,11 +18,11 @@ object Intake : MotorSubsystem(
         )
 ) {
     fun turnOn() {
-        output = 1.0
+        output = 0.8
     }
 
     fun turnReverse() {
-        output = -1.0
+        output = -0.8
     }
 
     fun turnOff() {

@@ -14,6 +14,7 @@ object Turret : ZeroableMotorSubsystem(
                 controlType = MotorControlType.POSITION_PID,
 
                 kP = 0.03, // probably need a kstatic
+                kI = 0.01,
                 kD = 0.0007,
                 kStatic = 0.01,
 

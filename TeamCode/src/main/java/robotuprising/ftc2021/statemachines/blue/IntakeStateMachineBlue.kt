@@ -10,15 +10,10 @@ object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
         OUTTAKE_RESET,
         INTAKING,
         MINERAL_IN_REVERSE_INTAKING,
+        LOCK,
         COCK,
         TURN_TURRET
     }
-
-    private val intake = Intake
-    private val sensor = LoadingSensor
-    private val indexer = Indexer
-    private val outtake = Outtake
-    private val turret = Turret
 
     var hasIntaked = false
 
@@ -37,34 +32,38 @@ object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
 
     override val stateMachine = StateMachineBuilder<States>()
             .state(States.OUTTAKE_RESET)
-            .onEnter(outtake::home)
+            .onEnter(Outtake::home)
             .onEnter(Indexer::open)
             .transitionTimed(0.2)
 
             .state(States.INTAKING)
-            .onEnter(intake::turnOn)
-            .onExit(indexer::lock)
+            .onEnter(Intake::turnOn)
+//            .onExit(indexer::lock)
             .onExit { hasIntaked = true }
             .loop { OsirisDashboard.addLine("INTAKING") }
-//            .transition(sensor::isMineralIn)
-            .transition { shouldCock }
+            .transition(LoadingSensor::isMineralIn)
+//            .transition { shouldCock }
 
             .state(States.MINERAL_IN_REVERSE_INTAKING)
-            .onEnter(intake::turnReverse)
-            .onExit(intake::turnOff)
+            .onEnter(Intake::turnReverse)
+            .onExit(Intake::turnOff)
             .loop { OsirisDashboard.addLine("REVERSE INTAKING") }
             .transitionTimed(0.5)
 
+            .state(States.LOCK)
+            .onEnter(Indexer::lock)
+            .transitionTimed(0.3)
+
             .state(States.COCK)
-            .onEnter(outtake::cock)
-            .transitionTimed(0.5)
+            .onEnter(Outtake::cock)
+            .transitionTimed(0.3)
 
             .state(States.TURN_TURRET)
             .onEnter {
-                if(!shared) turret.depositBlueHigh()
-                else turret.depositBlueShared()
+                if(!shared) Turret.depositBlueHigh()
+                else Turret.depositBlueShared()
             }
-            .transition { turret.isAtTarget }
+            .transition { Turret.isAtTarget }
             .build()
 
 }

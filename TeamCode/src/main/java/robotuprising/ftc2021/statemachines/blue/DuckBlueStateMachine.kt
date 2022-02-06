@@ -15,6 +15,6 @@ object DuckBlueStateMachine : StateMachineI<DuckBlueStateMachine.States>() {
             .state(States.SPIN)
             .onEnter { Spinner.setPower(Constants.duckSpeed) }
             .onExit { Spinner.setPower(0.0) }
-            .transitionTimed(2.3)
+            .transitionTimed(2.0)
             .build()
 }

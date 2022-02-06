@@ -21,8 +21,8 @@ object Slides : ZeroableMotorSubsystem(
                 kP = 0.2,
                 kD = 0.007,
 
-                maxVelocity = 100.0,
-                maxAcceleration = 84.0,
+                maxVelocity = 160.0,
+                maxAcceleration = 160.0,
 
                 positionEpsilon = 1.0,
                 homePositionToDisable = 0.0,

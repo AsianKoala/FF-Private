@@ -9,11 +9,8 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.acmerobotics.roadrunner.util.epsilonEquals
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
-import robotuprising.ftc2021.hardware.osiris.interfaces.Loopable
-import robotuprising.ftc2021.hardware.osiris.interfaces.Readable
-import robotuprising.ftc2021.hardware.osiris.interfaces.Testable
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
-import robotuprising.ftc2021.hardware.osiris.interfaces.Initializable
+import robotuprising.ftc2021.hardware.osiris.interfaces.*
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import robotuprising.lib.opmode.OsirisDashboard
@@ -22,7 +19,7 @@ import java.lang.Exception
 import kotlin.math.absoluteValue
 
 @Config
-open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initializable, Loopable, Readable, Testable {
+open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initializable, Loopable, Readable, Testable, Startable {
     protected val motor: OsirisMotor by lazy { OsirisMotor(config.motorConfig) }
 
     private val controller: PIDFController by lazy {
@@ -187,11 +184,12 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
     }
 
     override fun init() {
-        disabled = false
+        disabled = true
         hasFinishedProfile = true
         targetPosition = 0.0
         output = 0.0
         controller.reset()
+        controller.targetPosition = position
         motionTimer.reset()
         currentMotionProfile = null
         currentMotionState = null
@@ -200,6 +198,10 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
         position = 0.0
         velocity = 0.0
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+    }
+
+    override fun start() {
+        disabled = false
     }
 }
 
