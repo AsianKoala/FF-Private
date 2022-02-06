@@ -29,11 +29,8 @@ object Constants {
     const val armHomePosition = 0.10
     const val armHighPosition = 0.68
     const val armSharedPosition = 1.0
-    const val armLowPosition = 0.9
-    const val armMediumPosition = 0.8
+    const val armLowPosition = 1.0
+    const val armMediumPosition = 0.95
 
     const val duckSpeed = 0.3
-
-
-    var END_OF_AUTO_TURRET_VALUE = Double.NaN
 }

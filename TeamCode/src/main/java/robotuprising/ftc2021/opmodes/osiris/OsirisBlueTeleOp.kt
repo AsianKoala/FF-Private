@@ -49,30 +49,21 @@ class OsirisBlueTeleOp : OsirisOpMode() {
         )
 
         if(gamepad1.right_trigger_pressed) IntakeStateMachineBlue.start()
-//        if(gamepad1.left_bumper) IntakeStateMachineBlue.shouldCock = true
-        if(gamepad1.left_bumper) Intake.turnReverse()
-
 
         if(gamepad1.left_trigger_pressed) {
             if(IntakeStateMachineBlue.shared) SharedReadyDepositStateMachine.start()
             else AllianceReadyDepositStateMachine.start()
         }
 
+        if(gamepad1.dpad_up) DuckBlueStateMachine.start()
+
         OsirisDashboard["shared"] = IntakeStateMachineBlue.shared
     }
 
     private fun gp2() {
-        if(gamepad1.right_bumper) JustDepositStateMachine.start() // deposit
+        if(gamepad2.right_bumper) JustDepositStateMachine.start() // deposit
 
         if(gamepad2.left_trigger_pressed) Intake.turnReverse() // if jam
 
-        if(gamepad2.right_trigger_pressed) Intake.turnOff()
-
-//        if(gamepad2.left_bumper && sharedTimer.seconds() > 1.0) { // switch to shared
-//            IntakeStateMachineBlue.shared = !IntakeStateMachineBlue.shared
-//            sharedTimer.reset()
-//        }
-
-        if(gamepad2.left_bumper) DuckBlueStateMachine.start()
     }
 }

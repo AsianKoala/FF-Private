@@ -9,9 +9,11 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.acmerobotics.roadrunner.util.epsilonEquals
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.qualcomm.robotcore.util.Range
 import robotuprising.ftc2021.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.hardware.osiris.interfaces.*
 import robotuprising.ftc2021.subsystems.osiris.Subsystem
+import robotuprising.lib.math.MathUtil.clip
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import robotuprising.lib.opmode.OsirisDashboard
 import robotuprising.lib.util.Extensions.d
@@ -121,6 +123,8 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
         }
     }
 
+    var maxCap = 1.0
+
     var simOutput = 0.0
     override fun loop() {
         if(motor.mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
@@ -151,7 +155,7 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
                     }
                 }
 
-                val rawOutput = if(disabled) {
+                var rawOutput = if(disabled) {
                     0.0
                 } else if(!config.homePositionToDisable.isNaN() &&
                         (targetPosition - config.homePositionToDisable).absoluteValue < config.positionEpsilon &&
@@ -161,6 +165,8 @@ open class MotorSubsystem(val config: MotorSubsystemConfig) : Subsystem(), Initi
                     controller.update(position)
                 }
 
+
+                rawOutput = Range.clip(rawOutput, -1.0, maxCap)
 
                 rawOutput
             }

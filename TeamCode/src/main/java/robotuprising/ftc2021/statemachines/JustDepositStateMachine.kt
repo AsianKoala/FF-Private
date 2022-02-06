@@ -18,7 +18,7 @@ object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>()
     override val stateMachine: StateMachine<States> = StateMachineBuilder<States>()
             .state(States.INDEX)
             .onEnter(Indexer::index)
-            .transitionTimed(0.5)
+            .transitionTimed(0.5) // prev 0.5
 
             .state(States.COCK_OUTTAKE_ARM)
             .onEnter { Outtake.moveServoToPosition(Constants.outtakeCockMore) }

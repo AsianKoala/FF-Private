@@ -68,6 +68,25 @@ class OsirisBlueAuto : OsirisOpMode() {
         PARK
     }
 
+    enum class DepositHighStates {
+        EXTEND,
+        ARM
+    }
+
+    val DepositHighSM = StateMachineBuilder<DepositHighStates>()
+            .state(DepositHighStates.EXTEND)
+            .onEnter { Slides.setSlideInches(35.0) }
+            .transitionTimed(0.5)
+
+            .state(DepositHighStates.ARM)
+            .onEnter {
+                Outtake.depositHigh()
+                Arm.depositHigh()
+            }
+            .transitionTimed(2.0)
+
+            .build()
+
     enum class DepositMediumStates {
         EXTEND,
         ARM
@@ -75,12 +94,15 @@ class OsirisBlueAuto : OsirisOpMode() {
 
     val DepositMedSM = StateMachineBuilder<DepositMediumStates>()
             .state(DepositMediumStates.EXTEND)
-            .onEnter { Slides.setSlideInches(30.0) }
-            .transitionTimed(0.5)
+            .onEnter {
+                Slides.maxCap = 0.5
+                Slides.setSlideInches(27.5)
+            }
+            .transition { true }
 
             .state(DepositMediumStates.ARM)
             .onEnter {
-                Outtake.depositHigh()
+                Outtake.moveServoToPosition(1.0)
                 Arm.moveServoToPosition(Constants.armMediumPosition)
             }
             .transitionTimed(2.0)
@@ -88,40 +110,20 @@ class OsirisBlueAuto : OsirisOpMode() {
 
             .build()
 
-    enum class DepositLowStates {
-        EXTEND,
-        ARM
-    }
-
-    val DepositLowSM = StateMachineBuilder<DepositLowStates>()
-            .state(DepositLowStates.EXTEND)
-            .onEnter { Slides.setSlideInches(28.0) }
-            .transitionTimed(0.5)
-
-            .state(DepositLowStates.ARM)
-            .onEnter {
-                Outtake.depositHigh()
-                Arm.moveServoToPosition(Constants.armLowPosition)
-            }
-            .transitionTimed(2.0)
-            .build()
-
-
-
 
 
     val AutoStateMachine = StateMachineBuilder<AutoStates>()
             .state(AutoStates.TURRET)
-            .onEnter { Turret.setTurretLockAngle(245.0) }
-            .transitionTimed(2.0)
+            .onEnter { Turret.setTurretLockAngle(237.0) }
+            .transitionTimed(1.0)
 
             .state(AutoStates.DEPOSIT)
             .onEnter {
                 when(cup_state) {
                     Pipeline.CupStates.LEFT -> {
-                        DepositLowSM.stop()
-                        DepositLowSM.reset()
-                        DepositLowSM.start()
+                        DepositHighSM.stop()
+                        DepositHighSM.reset()
+                        DepositHighSM.start()
                     }
 
                     Pipeline.CupStates.CENTER -> {
@@ -130,31 +132,35 @@ class OsirisBlueAuto : OsirisOpMode() {
                         DepositMedSM.start()
                     }
 
-                    Pipeline.CupStates.RIGHT -> AllianceReadyDepositStateMachine.start()
+                    Pipeline.CupStates.RIGHT -> {
+                        DepositHighSM.stop()
+                        DepositHighSM.reset()
+                        DepositHighSM.start()
+                    }
 
                 }
             }
 
             .loop {
-                if(DepositLowSM.running) {
-                    DepositLowSM.update()
-                }
+                OsirisDashboard.addLine("LOOPING DEPOSIT SM")
 
                 if(DepositMedSM.running) {
                     DepositMedSM.update()
                 }
-            }
 
-            .transition {
-                when(cup_state) {
-                    Pipeline.CupStates.LEFT -> DepositLowSM.running
-                    Pipeline.CupStates.CENTER -> DepositMedSM.running
-                    Pipeline.CupStates.RIGHT -> AllianceReadyDepositStateMachine.done
+                if(DepositHighSM.running) {
+                    DepositHighSM.update()
                 }
             }
 
+            .onExit {
+                Slides.maxCap = 1.0
+            }
+            .transitionTimed(2.0)
+
             .state(AutoStates.RETRACT)
             .onEnter(JustDepositStateMachine::start)
+            .loop { OsirisDashboard.addLine("LOOPING RETRACT SM") }
             .transition(JustDepositStateMachine::done)
 
             .state(AutoStates.PARK)
