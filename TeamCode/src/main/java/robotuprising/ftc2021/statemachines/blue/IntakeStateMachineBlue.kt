@@ -38,11 +38,9 @@ object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
 
             .state(States.INTAKING)
             .onEnter(Intake::turnOn)
-//            .onExit(indexer::lock)
             .onExit { hasIntaked = true }
             .loop { OsirisDashboard.addLine("INTAKING") }
             .transition(LoadingSensor::isMineralIn)
-//            .transition { shouldCock }
 
             .state(States.MINERAL_IN_REVERSE_INTAKING)
             .onEnter(Intake::turnReverse)
@@ -52,7 +50,7 @@ object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
 
             .state(States.LOCK)
             .onEnter(Indexer::lock)
-            .transitionTimed(0.3)
+            .transitionTimed(0.6)
 
             .state(States.COCK)
             .onEnter(Outtake::cock)

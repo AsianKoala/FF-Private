@@ -22,7 +22,7 @@ class OsirisBlueAuto : OsirisOpMode() {
         super.mInit()
         Turret.zero()
         Turret.disabled = false
-        Turret.setTurretLockAngle(235.0)
+        Turret.setTurretLockAngle(240.0)
     }
 
     override fun mInitLoop() {
