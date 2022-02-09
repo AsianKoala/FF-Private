@@ -1,4 +1,4 @@
-
+package ftc2021
 object KotlinTest {
     fun t(j: Long) = System.currentTimeMillis() - j < 5000
 

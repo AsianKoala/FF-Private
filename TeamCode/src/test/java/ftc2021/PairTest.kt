@@ -1,4 +1,4 @@
-
+package ftc2021
 object PairTest {
 
     enum class s {
@@ -15,7 +15,4 @@ object PairTest {
         }
         println(positions)
     }
-}
-class t {
-    var x = 1
 }

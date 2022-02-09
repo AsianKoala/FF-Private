@@ -1,3 +1,5 @@
+package ftc2021
+
 object ClassParamTest {
     @JvmStatic
     fun main(args: Array<String>) {

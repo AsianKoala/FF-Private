@@ -7,6 +7,8 @@ import robotuprising.lib.opmode.OsirisDashboard
 
 // todo if we make it to states: Create a fake hardware class (fake servo, fake motor) and in this class
 // todo only if they are enabled, then send power/position to the real motor/subsystem
+// todo if we do stuff like that, guarantee that we are creating a new motor every time new opmode
+// todo -> shit like what happened at remote wont happen
 object SubsystemManager {
     private val subsystems: ArrayList<Subsystem> = ArrayList()
     private val loopableSubsystems: ArrayList<Loopable> = ArrayList()

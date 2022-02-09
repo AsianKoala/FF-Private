@@ -1,0 +1,4 @@
+package koawalib
+
+object CommandTest {
+}

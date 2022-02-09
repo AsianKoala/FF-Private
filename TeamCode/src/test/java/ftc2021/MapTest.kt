@@ -1,3 +1,5 @@
+package ftc2021
+
 object MapTest {
     @JvmStatic
     fun main(args: Array<String>) {

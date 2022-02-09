@@ -1,3 +1,5 @@
+package ftc2021
+
 import robotuprising.lib.control.auto.path.PurePursuitBuilder
 
 object WaypointTest {

@@ -1,3 +1,5 @@
+package ftc2021
+
 object SciNotTest {
     @JvmStatic
     fun main(args: Array<String>) {

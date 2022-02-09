@@ -1,3 +1,5 @@
+package ftc2021;
+
 public class ClassReferenceTest {
     public static void main(String[] args) {
         Person a = new Person(10);
