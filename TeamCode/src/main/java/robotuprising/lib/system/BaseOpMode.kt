@@ -7,11 +7,11 @@ import robotuprising.lib.opmode.*
 
 // todo fix alliance side maybe idk
 abstract class BaseOpMode : LinearOpMode() {
-    private val opModeStatus: OpModeStatus
+    private val opModeState: OpModeState
         get() = when {
-            isStopRequested -> OpModeStatus.STOP
-            isStarted -> OpModeStatus.LOOP
-            else -> OpModeStatus.INIT_LOOP
+            isStopRequested -> OpModeState.STOP
+            isStarted -> OpModeState.LOOP
+            else -> OpModeState.INIT_LOOP
         }
 
     private var hasStarted = false
@@ -39,12 +39,12 @@ abstract class BaseOpMode : LinearOpMode() {
         mainLoop@ while (true) {
             BulkDataManager.read()
 
-            when (opModeStatus) {
-                OpModeStatus.INIT_LOOP -> {
+            when (opModeState) {
+                OpModeState.INIT_LOOP -> {
                     mInitLoop()
                 }
 
-                OpModeStatus.LOOP -> {
+                OpModeState.LOOP -> {
                     if (hasStarted) {
                         val dt = System.currentTimeMillis() - prevLoopTime
                         telemetry.addData("loop ms", dt)
@@ -56,7 +56,7 @@ abstract class BaseOpMode : LinearOpMode() {
                     prevLoopTime = System.currentTimeMillis()
                 }
 
-                OpModeStatus.STOP -> {
+                OpModeState.STOP -> {
                     break@mainLoop
                 }
             }
