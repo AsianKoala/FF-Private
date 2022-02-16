@@ -3,12 +3,16 @@ package robotuprising.koawalib.command
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.gamepad.CommandGamepad
 import robotuprising.koawalib.manager.KoawaBulkManager
 import robotuprising.koawalib.manager.KoawaDashboard
-import robotuprising.lib.opmode.OpModeState
-import robotuprising.lib.opmode.OsirisDashboard
+import robotuprising.koawalib.util.OpModeState
 
 class CommandOpMode : LinearOpMode() {
+
+    lateinit var driverGamepad: CommandGamepad
+    lateinit var gunnerGamepad: CommandGamepad
+
     val opModeState: OpModeState
         get() = when {
             isStopRequested -> OpModeState.STOP
@@ -28,9 +32,11 @@ class CommandOpMode : LinearOpMode() {
     val opModeRuntime get() = opModeTimer.seconds()
 
     override fun runOpMode() {
-        CommandScheduler.resetScheduler()
+        CommandScheduler.resetScheduler().setOpMode(this)
 
-        OsirisDashboard.init(telemetry, false)
+
+
+        KoawaDashboard.init(telemetry, false)
 
         KoawaBulkManager.init(hardwareMap)
         opModeTimer.reset()

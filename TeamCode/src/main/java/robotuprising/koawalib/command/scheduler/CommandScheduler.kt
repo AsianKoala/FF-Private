@@ -28,12 +28,13 @@ object CommandScheduler {
 
     val opmodeRuntime get() = opMode.runtime
 
-    fun resetScheduler() {
+    fun resetScheduler(): CommandScheduler {
         Command.clear()
         commandMap.clear()
         requirementMap.clear()
         defaultMap.clear()
         registered.clear()
+        return this
     }
 
     fun schedule(command: Command): CommandScheduler =
