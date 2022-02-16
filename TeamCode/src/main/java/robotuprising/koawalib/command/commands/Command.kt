@@ -6,11 +6,8 @@ import robotuprising.koawalib.command.group.ParallelDeadlineGroup
 import robotuprising.koawalib.command.group.ParallelRaceGroup
 import robotuprising.koawalib.command.group.SequentialCommandGroup
 import robotuprising.koawalib.subsystem.Subsystem
-import java.util.function.BooleanSupplier
-import java.util.function.DoubleSupplier
-import java.util.function.Supplier
 
-interface Command : Runnable, Supplier<CommandState> {
+fun interface Command : Runnable {
     companion object {
         private val stateMap: MutableMap<Command, CommandState> = HashMap()
         private val timeMap: MutableMap<Command, ElapsedTime> = HashMap()
@@ -57,12 +54,12 @@ interface Command : Runnable, Supplier<CommandState> {
         return andThen(WaitCommand(sec))
     }
 
-    fun sleep(sec: DoubleSupplier): SequentialCommandGroup {
+    fun sleep(sec: () -> Double): SequentialCommandGroup {
         return andThen(WaitCommand(sec))
     }
 
     // await condition
-    fun waitUntil(condition: BooleanSupplier): SequentialCommandGroup {
+    fun waitUntil(condition: () -> Boolean): SequentialCommandGroup {
         return andThen(ConditionalCommand(condition))
     }
 
@@ -87,7 +84,7 @@ interface Command : Runnable, Supplier<CommandState> {
 
 
 
-    fun asConditional(condition: BooleanSupplier): ConditionalCommand {
+    fun asConditional(condition: () -> Boolean): ConditionalCommand {
         return ConditionalCommand(condition, this)
     }
 
@@ -95,7 +92,7 @@ interface Command : Runnable, Supplier<CommandState> {
         return raceWith(WaitCommand(seconds))
     }
 
-    fun cancelUpon(condition: BooleanSupplier): ParallelRaceGroup {
+    fun cancelUpon(condition: () -> Boolean): ParallelRaceGroup {
         return raceWith(ConditionalCommand(condition))
     }
 
@@ -173,7 +170,7 @@ interface Command : Runnable, Supplier<CommandState> {
         }
     }
 
-    override fun get(): CommandState {
+    fun get(): CommandState {
         return getState()
     }
 }

@@ -13,11 +13,11 @@ class CommandOpMode : LinearOpMode() {
         get() = when {
             isStopRequested -> OpModeState.STOP
             isStarted -> OpModeState.LOOP
-            doneWithInit -> OpModeState.INIT
-            else -> OpModeState.INIT_LOOP
+            hasInitYet -> OpModeState.INIT_LOOP
+            else -> OpModeState.INIT
         }
 
-    private var doneWithInit = false
+    private var hasInitYet = false
     private var hasStarted = false
     private var prevLoopTime = System.currentTimeMillis()
 
@@ -34,13 +34,13 @@ class CommandOpMode : LinearOpMode() {
 
         KoawaBulkManager.init(hardwareMap)
         opModeTimer.reset()
-        
+
 
         mainLoop@ while(true) {
             when(opModeState) {
                 OpModeState.INIT -> {
                     mInit()
-                    doneWithInit = true
+                    hasInitYet = true
                 }
 
                 OpModeState.INIT_LOOP -> {
