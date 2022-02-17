@@ -8,7 +8,7 @@ import robotuprising.koawalib.subsystem.motor.controllers.OpenLoopController
 import robotuprising.koawalib.subsystem.motor.controllers.PIDExController
 import robotuprising.koawalib.util.Extensions.d
 
-class MotorSubsystem(motor: KMotor, private val controller: Controller) : DeviceSubsystem<KMotor>(motor) {
+open class MotorSubsystem(motor: KMotor, private val controller: Controller) : DeviceSubsystem<KMotor>(motor) {
 
     fun setPower(power: Double) {
         if(controller is OpenLoopController) {
