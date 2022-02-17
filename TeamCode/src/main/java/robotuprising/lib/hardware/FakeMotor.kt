@@ -3,7 +3,7 @@ package robotuprising.lib.hardware
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.openftc.revextensions2.ExpansionHubMotor
-import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.ftc2021.v2.manager.BulkDataManager
 
 class FakeMotor(val name: String, val onMaster: Boolean) {
     var builtYet = false

@@ -1,0 +1,55 @@
+package robotuprising.koawalib.subsystem.motor.controllers
+
+import com.acmerobotics.roadrunner.profile.MotionProfile
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator
+import com.acmerobotics.roadrunner.profile.MotionState
+import com.qualcomm.robotcore.util.ElapsedTime
+import java.lang.Exception
+
+class MPController (private val config: MPConfig): PIDExController(config.pidConfig) {
+    private var motionTimer = ElapsedTime()
+    private var currentMotionProfile: MotionProfile? = null
+    private var currentMotionState: MotionState? = null
+
+    private var hasFinishedProfile: Boolean = false
+
+    fun generateAndFollowMotionProfile(startPosition: Double, startV: Double, endPosition: Double, endV: Double) {
+        val startState = MotionState(startPosition, startV)
+        val endState = MotionState(endPosition, endV)
+
+        currentMotionProfile = MotionProfileGenerator.generateSimpleMotionProfile(
+                startState,
+                endState,
+                config.maxVelocity,
+                config.maxAcceleration,
+                config.maxJerk
+        )
+
+        hasFinishedProfile = false
+        controller.reset()
+        motionTimer.reset()
+    }
+
+    override fun process(): Double {
+        when {
+            currentMotionProfile == null -> throw Exception("MUST BE FOLLOWING MOTION PROFILE")
+
+            motionTimer.seconds() > currentMotionProfile!!.duration() -> {
+                hasFinishedProfile = true
+                currentMotionProfile = null
+                currentMotionState = null
+            }
+
+            else -> {
+                currentMotionState = currentMotionProfile!![motionTimer.seconds()]
+                setControllerTargets(
+                        currentMotionState!!.x,
+                        currentMotionState!!.v,
+                        currentMotionState!!.a
+                )
+            }
+        }
+
+        return super.process()
+    }
+}

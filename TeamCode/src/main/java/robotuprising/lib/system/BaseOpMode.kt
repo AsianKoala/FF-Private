@@ -1,7 +1,7 @@
 package robotuprising.lib.system
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import robotuprising.ftc2021.manager.BulkDataManager
+import robotuprising.ftc2021.v2.manager.BulkDataManager
 import robotuprising.lib.debug.Debuggable
 import robotuprising.lib.opmode.*
 

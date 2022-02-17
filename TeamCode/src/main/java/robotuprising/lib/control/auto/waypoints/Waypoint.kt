@@ -1,6 +1,6 @@
 package robotuprising.lib.control.auto.waypoints
 
-import robotuprising.ftc2021.auto.pp.Subroutines
+import robotuprising.ftc2021.v2.auto.pp.Subroutines
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.util.Extensions.d

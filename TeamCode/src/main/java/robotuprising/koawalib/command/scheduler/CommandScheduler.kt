@@ -3,8 +3,8 @@ package robotuprising.koawalib.command.scheduler
 import robotuprising.koawalib.command.CommandOpMode
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.subsystem.Subsystem
+import robotuprising.koawalib.util.OpModeState
 import robotuprising.koawalib.util.Periodic
-import robotuprising.lib.opmode.OpModeState
 import java.util.function.BooleanSupplier
 
 object CommandScheduler {
@@ -86,7 +86,7 @@ object CommandScheduler {
             defaultMap[subsystem] = command
             schedule(command) { getCurrent(subsystem) == command }
         } else {
-            System.err.println("default commands must require their subsystem: " + command::class.java.toString());
+            System.err.println("default commands must require their subsystem: " + command::class.java.toString())
         }
     }
 
@@ -127,7 +127,7 @@ object CommandScheduler {
     }
 
     fun run() {
-        commandMap.forEach { c1, b ->
+        commandMap.forEach { (c1, _) ->
             if (c1.justStarted) {
                 for (subsystem in c1.requirements) {
                     for (c2 in requirementMap[subsystem]!!) {
@@ -139,7 +139,7 @@ object CommandScheduler {
             }
         }
 
-        commandMap.forEach { c1, b ->
+        commandMap.forEach { (c1, b) ->
             if(b.asBoolean || c1.isRunning) {
                 c1.run()
             }
