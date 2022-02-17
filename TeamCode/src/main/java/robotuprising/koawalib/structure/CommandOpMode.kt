@@ -1,4 +1,4 @@
-package robotuprising.koawalib.command
+package robotuprising.koawalib.structure
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
@@ -8,7 +8,7 @@ import robotuprising.koawalib.manager.KoawaBulkManager
 import robotuprising.koawalib.manager.KoawaDashboard
 import robotuprising.koawalib.util.OpModeState
 
-class CommandOpMode : LinearOpMode() {
+open class CommandOpMode(private val controls: KControls) : LinearOpMode() {
 
     lateinit var driverGamepad: CommandGamepad
     lateinit var gunnerGamepad: CommandGamepad
@@ -40,6 +40,9 @@ class CommandOpMode : LinearOpMode() {
 
         driverGamepad = CommandGamepad(gamepad1)
         gunnerGamepad = CommandGamepad(gamepad2)
+
+
+        controls.bindControls(driverGamepad, gunnerGamepad)
 
         opModeTimer.reset()
         mainLoop@ while(true) {
@@ -94,12 +97,12 @@ class CommandOpMode : LinearOpMode() {
     }
 
 
-    fun mInit() {}
-    fun mInitLoop() {}
-    fun mStart() {}
-    fun mLoop() {}
-    fun mStop() {}
-    fun mUniversal() {}
+    open fun mInit() {}
+    open fun mInitLoop() {}
+    open fun mStart() {}
+    open fun mLoop() {}
+    open fun mStop() {}
+    open fun mUniversal() {}
 
 
     fun terminate() {

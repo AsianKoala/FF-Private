@@ -1,6 +1,6 @@
 package robotuprising.koawalib.command.scheduler
 
-import robotuprising.koawalib.command.CommandOpMode
+import robotuprising.koawalib.structure.CommandOpMode
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.subsystem.Subsystem
 import robotuprising.koawalib.util.OpModeState

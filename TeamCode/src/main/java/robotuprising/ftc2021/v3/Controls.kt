@@ -1,23 +1,15 @@
 package robotuprising.ftc2021.v3
 
-import robotuprising.ftc2021.v3.commands.intake.IntakeTurnOffCommand
-import robotuprising.ftc2021.v3.commands.intake.IntakeTurnOnCommand
-import robotuprising.ftc2021.v3.commands.intake.IntakeTurnReverseCommand
+import robotuprising.ftc2021.v3.commands.intake.IntakeSmartCommand
 import robotuprising.koawalib.gamepad.CommandGamepad
+import robotuprising.koawalib.structure.KControls
 
-class Controls (val robot: Robot, val driver: CommandGamepad, val gunner: CommandGamepad) {
-    val intakeOnButton = driver.rightTrigger.getAsButton()
-    val intakeOffButton = driver.leftTrigger.getAsButton()
+class Controls (private val robot: Robot) : KControls() {
+    val intakeButton = driver.rightTrigger.getAsButton()
 
-    val intakeReverseButton = gunner.rightBumper
+    override fun bindControls(driver: CommandGamepad, gunner: CommandGamepad) {
+        super.bindControls(driver, gunner)
 
-    fun bindControls() {
-        bindIntakeControls()
-    }
-
-    fun bindIntakeControls() {
-        intakeOnButton.whilePressedOnce(IntakeTurnOnCommand(robot.intakeSubsystem))
-        intakeOffButton.whilePressedOnce(IntakeTurnOffCommand(robot.intakeSubsystem))
-        intakeReverseButton.whilePressedOnce(IntakeTurnReverseCommand(robot.intakeSubsystem))
+        intakeButton.whenPressed(IntakeSmartCommand(robot.intakeSubsystem))
     }
 }
