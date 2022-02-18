@@ -8,15 +8,10 @@ import robotuprising.koawalib.structure.CommandOpMode
 
 @TeleOp
 class TeleOp : CommandOpMode() {
-
-    private lateinit var hardware: Hardware
-    private lateinit var rin: Rin
-    private lateinit var controls: Controls
-
     override fun mInit() {
-        hardware = Hardware()
-        rin = Rin(hardware)
-        controls = Controls(rin, driverGamepad, gunnerGamepad)
+        val hardware = Hardware()
+        val rin = Rin(hardware)
+        val controls = Controls(rin, driverGamepad, gunnerGamepad)
         controls.bindControls()
     }
 }

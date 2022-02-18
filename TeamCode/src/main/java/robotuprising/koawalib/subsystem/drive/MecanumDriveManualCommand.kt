@@ -18,9 +18,10 @@ class MecanumDriveManualCommand(
         private val xCubic: Double = 1.0,
         private val yCubic: Double = 1.0,
         private val rCubic: Double = 1.0,
+        private val fieldOriented: Boolean = false,
         private val headingLock: Boolean = false,
         private val heading: () -> Double = { Double.NaN },
-        private val headingScalar: Double = 90.0
+        private val headingLockScalar: Double = 90.0
 ) : Command {
 
     override fun execute() {
@@ -32,21 +33,26 @@ class MecanumDriveManualCommand(
         val yScaled = MathUtil.cubicScaling(yCubic, yRaw)
         val rScaled = MathUtil.cubicScaling(rCubic, rRaw)
 
-        val translationVector = Point(xScaled, yScaled)
-        val rotatedTranslation = translationVector.rotate(alliance.decide(90, -90).d.radians)
 
-        val headingInvoked = heading.invoke()
-        val turn = if(headingLock && !headingInvoked.isNaN()) {
-            val stickAtan = rightStick.angle
-            val deltaAngle = (headingInvoked - stickAtan).wrap
-            val rLockScaled = deltaAngle / headingScalar
+        val final = if(fieldOriented) {
+            val translationVector = Point(xScaled, yScaled)
+            val rotatedTranslation = translationVector.rotate(alliance.decide(90, -90).d.radians)
 
-            rLockScaled
+            val headingInvoked = heading.invoke()
+            val turn = if(headingLock && !headingInvoked.isNaN()) {
+                val stickAtan = rightStick.angle
+                val deltaAngle = (headingInvoked - stickAtan).wrap
+                val rLockScaled = deltaAngle / headingLockScalar
+
+                rLockScaled
+            } else {
+                rScaled
+            }
+
+            Pose(rotatedTranslation, turn)
         } else {
-            rScaled
+            Pose(xScaled, yScaled, rScaled)
         }
-
-        val final = Pose(rotatedTranslation, turn)
 
         drive.powers = final
     }

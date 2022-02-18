@@ -12,6 +12,8 @@ class Controls (private val rin: Rin, private val driver: CommandGamepad, privat
         intakeButton.whenPressed(IntakeSmartCommand(rin.intakeSubsystem))
 
         rin.kei.setDefaultCommand(MecanumDriveManualCommand(
-                rin.kei, driver.leftStick, driver.rightStick, Alliance.BLUE))
+                rin.kei, driver.leftStick, driver.rightStick, Alliance.BLUE,
+                0.5, 0.5, 0.5, fieldOriented = true,
+                headingLock = true, { rin.kei.position.h }, 180.0))
     }
 }

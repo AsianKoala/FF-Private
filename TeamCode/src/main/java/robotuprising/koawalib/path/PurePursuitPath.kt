@@ -7,11 +7,10 @@ import robotuprising.koawalib.math.MathUtil
 import robotuprising.koawalib.path.waypoints.StopWaypoint
 import robotuprising.koawalib.path.waypoints.Waypoint
 
-class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {
+class PurePursuitPath(val waypoints: List<Waypoint>) {
     private val DEAD_MAN_SWITCH = 2000
 
     private var currPoint = 0
-    private var interrupting = false
     private val timeUntilDeadMan = ElapsedTime()
 
     fun update(position: Pose, velocity: Pose): Pose {
