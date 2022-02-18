@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.Range
-import robotuprising.koawalib.util.Extensions.clip
+import robotuprising.koawalib.math.MathUtil.clip
 import robotuprising.koawalib.util.KDouble
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import kotlin.math.absoluteValue

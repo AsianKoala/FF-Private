@@ -5,8 +5,8 @@ import robotuprising.ftc2021.v2.auto.pp.PurePursuitPath
 import robotuprising.ftc2021.v2.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.v2.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.v2.subsystems.osiris.Subsystem
-import robotuprising.lib.control.auto.waypoints.StopWaypoint
-import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.koawalib.path.waypoints.StopWaypoint
+import robotuprising.koawalib.path.waypoints.Waypoint
 import robotuprising.lib.math.*
 import robotuprising.lib.opmode.OsirisDashboard
 import kotlin.math.absoluteValue
@@ -81,24 +81,24 @@ object Ghost : Subsystem(), Loopable {
                         is StopWaypoint -> {
                             val stopWaypoint = targetWaypoint as StopWaypoint
 
-                            if(position.p.distance(stopWaypoint.p) < stopWaypoint.allowedPositionError) {
-                                driveState = DriveStates.DISABLED
-                            }
+//                            if(position.p.distance(stopWaypoint.point) < stopWaypoint.allowedPositionError) {
+//                                driveState = DriveStates.DISABLED
+//                            }
                         }
 
                         else -> {
-                            if(position.p.distance(targetWaypoint!!.p) < acceptableTargetError) {
-                                driveState = DriveStates.DISABLED
-                            }
+//                            if(position.p.distance(targetWaypoint!!.point) < acceptableTargetError) {
+//                                driveState = DriveStates.DISABLED
+//                            }
                         }
                     }
 
                     if(driveState != DriveStates.DISABLED) {
-                        powers = MecanumPurePursuitController.goToPosition(
-                                position,
-                                velocity,
-                                targetWaypoint!!
-                        )
+//                        powers = MecanumPurePursuitController.goToPosition(
+//                                position,
+//                                velocity,
+//                                targetWaypoint!!
+//                        )
                     }
                 } else {
                     throw Exception("must have cached point to target!!!!")

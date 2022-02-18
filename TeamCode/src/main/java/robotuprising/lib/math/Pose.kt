@@ -1,7 +1,7 @@
 package robotuprising.lib.math
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.koawalib.path.waypoints.Waypoint
 
 data class Pose(
     val p: Point,
@@ -19,7 +19,7 @@ data class Pose(
     val pose2d get() = Pose2d(p.x, p.y, h.angle)
 
     fun distance(p2: Pose) = p.distance(p2.p)
-    fun distance(p2: Waypoint) = p.distance(p2.p)
+//    fun distance(p2: Waypoint) = p.distance(p2.point)
 
     operator fun plus(other: Pose) = Pose(p + other.p, h + other.h)
     operator fun minus(other: Pose) = Pose(p - other.p, h - other.h)

@@ -1,10 +1,9 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.koawalib.path.waypoints.Waypoint
 import robotuprising.lib.util.Extensions.deepCopy
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.absoluteValue
 
 object PathUtil {
 
@@ -34,12 +33,12 @@ object PathUtil {
         li.add(waypoints[0])
 
         for (i in 1 until waypoints.size - 1) {
-            val backVector = (waypoints[i].p - waypoints[i - 1].p).atan2
-            val forwardVector = (waypoints[i + 1].p - waypoints[i].p).atan2
+            val backVector = (waypoints[i].point - waypoints[i - 1].point).atan2
+            val forwardVector = (waypoints[i + 1].point - waypoints[i].point).atan2
 
-            if ((forwardVector - backVector).abs >= 0.01) {
-                li.add(waypoints[i])
-            }
+//            if ((forwardVector - backVector).abs >= 0.01) {
+//                li.add(waypoints[i])
+//            }
         }
 
         li.add(waypoints[waypoints.size - 1])

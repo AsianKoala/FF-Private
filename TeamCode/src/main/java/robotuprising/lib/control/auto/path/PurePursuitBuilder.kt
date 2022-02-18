@@ -1,10 +1,6 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.lib.control.auto.waypoints.LockedWaypoint
-import robotuprising.lib.control.auto.waypoints.Waypoint
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import kotlin.math.PI
+import robotuprising.koawalib.path.waypoints.Waypoint
 
 class PurePursuitBuilder(val path: ArrayList<Waypoint> = ArrayList()) : PathBuilder() {
     fun addPoint(p: Waypoint): PurePursuitBuilder {

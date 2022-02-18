@@ -1,4 +1,4 @@
-package robotuprising.koawalib.util
+package robotuprising.koawalib.structure
 
 enum class OpModeState {
     INIT, INIT_LOOP, LOOP, STOP;

@@ -7,7 +7,7 @@ import robotuprising.koawalib.subsystem.motor.MotorSubsystem
 import robotuprising.koawalib.subsystem.motor.controllers.OpenLoopController
 import robotuprising.koawalib.subsystem.sensors.KRevColorSensor
 
-class IntakeSubsystem(motor: KMotor, private val loadingSensor: KRevColorSensor) : MotorSubsystem(motor, OpenLoopController()) {
+class Intake(motor: KMotor, private val loadingSensor: KRevColorSensor) : MotorSubsystem(motor, OpenLoopController()) {
     companion object {
         const val THRESHOLD = 20.0
         const val ON_POWER = 1.0

@@ -1,8 +1,8 @@
 package robotuprising.koawalib.gamepad
 
 import com.qualcomm.robotcore.hardware.Gamepad
+import robotuprising.koawalib.math.MathUtil.d
 import robotuprising.koawalib.util.Enableable
-import robotuprising.koawalib.util.Extensions.d
 import robotuprising.koawalib.util.KBoolean
 import robotuprising.koawalib.util.KDouble
 import robotuprising.koawalib.util.Periodic

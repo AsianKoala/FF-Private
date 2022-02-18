@@ -6,9 +6,8 @@ import robotuprising.koawalib.command.scheduler.CommandScheduler
 import robotuprising.koawalib.gamepad.CommandGamepad
 import robotuprising.koawalib.manager.KoawaBulkManager
 import robotuprising.koawalib.manager.KoawaDashboard
-import robotuprising.koawalib.util.OpModeState
 
-open class CommandOpMode(private val controls: KControls) : LinearOpMode() {
+open class CommandOpMode : LinearOpMode() {
 
     lateinit var driverGamepad: CommandGamepad
     lateinit var gunnerGamepad: CommandGamepad
@@ -41,8 +40,6 @@ open class CommandOpMode(private val controls: KControls) : LinearOpMode() {
         driverGamepad = CommandGamepad(gamepad1)
         gunnerGamepad = CommandGamepad(gamepad2)
 
-
-        controls.bindControls(driverGamepad, gunnerGamepad)
 
         opModeTimer.reset()
         mainLoop@ while(true) {

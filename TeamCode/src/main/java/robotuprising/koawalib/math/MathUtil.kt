@@ -1,7 +1,7 @@
-package robotuprising.lib.math
+package robotuprising.koawalib.math
 
 import com.qualcomm.robotcore.util.Range
-import kotlin.math.* // ktlint-disable no-wildcard-imports
+import kotlin.math.*
 
 object MathUtil {
     const val EPSILON = 1e-6
@@ -14,9 +14,9 @@ object MathUtil {
 
     fun Double.clip(a: Double) = Range.clip(this, -a, a)
 
-    fun rotatePoint(p: Point, h: Angle) = Point(
-        h.cos * p.y + h.sin * p.x,
-        h.sin * p.y - h.cos * p.x
+    fun rotatePoint(p: Point, h: Double) = Point(
+            h.cos * p.y + h.sin * p.x,
+            h.sin * p.y - h.cos * p.x
     )
 
     fun clamp(x: Double, a: Double, b: Double): Double {
@@ -27,10 +27,6 @@ object MathUtil {
         }
 
         return x
-    }
-
-    fun angleThresh(a: Angle, b: Angle, c: Angle): Boolean {
-        return (a - b).wrap().angle.absoluteValue < c.angle
     }
 
     // opposite of range
@@ -85,10 +81,10 @@ object MathUtil {
      * @see [https://mathworld.wolfram.com/Circle-LineIntersection.html](https://mathworld.wolfram.com/Circle-LineIntersection.html)
      */
     fun circleLineIntersection(
-        center: Point,
-        startPoint: Point,
-        endPoint: Point,
-        radius: Double
+            center: Point,
+            startPoint: Point,
+            endPoint: Point,
+            radius: Double
     ): Point {
         val start = startPoint - center
         val end = endPoint - center
@@ -121,4 +117,19 @@ object MathUtil {
     }
 
     private fun stupidSign(a: Double): Int = if (a > 0) 1 else -1
+
+
+    val Double.sin get() = sin(this)
+    val Double.cos get() = cos(this)
+
+    val Int.d get() = this.toDouble()
+    val Float.d get() = this.toDouble()
+
+    val Double.wrap: Double
+        get() {
+            var angle = this
+            while(angle > PI) angle -= 2 * PI
+            while(angle < PI) angle += 2 * PI
+            return angle
+        }
 }

@@ -3,7 +3,7 @@ package robotuprising.koawalib.command.scheduler
 import robotuprising.koawalib.structure.CommandOpMode
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.subsystem.Subsystem
-import robotuprising.koawalib.util.OpModeState
+import robotuprising.koawalib.structure.OpModeState
 import robotuprising.koawalib.util.Periodic
 import java.util.function.BooleanSupplier
 

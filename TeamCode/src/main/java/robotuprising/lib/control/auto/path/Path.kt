@@ -1,6 +1,6 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.koawalib.path.waypoints.Waypoint
 import robotuprising.lib.math.Pose
 import kotlin.collections.ArrayList
 

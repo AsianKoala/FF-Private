@@ -1,8 +1,8 @@
 package robotuprising.koawalib.math
 
-import robotuprising.koawalib.util.Extensions.cos
-import robotuprising.koawalib.util.Extensions.d
-import robotuprising.koawalib.util.Extensions.sin
+import robotuprising.koawalib.math.MathUtil.cos
+import robotuprising.koawalib.math.MathUtil.d
+import robotuprising.koawalib.math.MathUtil.sin
 import kotlin.math.atan2
 import kotlin.math.hypot
 

@@ -1,15 +1,15 @@
 package robotuprising.ftc2021.v3.commands.intake
 
-import robotuprising.ftc2021.v3.subsystems.IntakeSubsystem
+import robotuprising.ftc2021.v3.subsystems.Intake
 import robotuprising.koawalib.command.commands.Command
 
-open class IntakeTurnOnCommand(private val intakeSubsystem: IntakeSubsystem): Command {
+open class IntakeTurnOnCommand(private val intake: Intake): Command {
 
     override fun execute() {
-        intakeSubsystem.turnOn()
+        intake.turnOn()
     }
 
     init {
-        addRequirements(intakeSubsystem)
+        addRequirements(intake)
     }
 }

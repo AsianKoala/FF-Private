@@ -1,8 +1,7 @@
 package robotuprising.ftc2021.v3
 
-import robotuprising.ftc2021.v3.subsystems.IntakeSubsystem
-import robotuprising.koawalib.structure.KRobot
+import robotuprising.ftc2021.v3.subsystems.Intake
 
-class Robot(hardware: Hardware) : KRobot() {
-    val intakeSubsystem = IntakeSubsystem(hardware.intakeMotor, hardware.loadingSensor)
+class Robot(hardware: Hardware) {
+    val intakeSubsystem = Intake(hardware.intakeMotor, hardware.loadingSensor)
 }

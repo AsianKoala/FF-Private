@@ -1,12 +1,7 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.lib.control.auto.waypoints.PointTurnWaypoint
-import robotuprising.lib.control.auto.waypoints.StopWaypoint
-import robotuprising.lib.control.auto.waypoints.Waypoint
+import robotuprising.koawalib.path.waypoints.Waypoint
 import robotuprising.lib.math.*
-import robotuprising.lib.math.MathUtil.radians
-import robotuprising.lib.opmode.NakiriDashboard
-import robotuprising.lib.util.Extensions.d
 
 class PurePursuitPath(waypoints: ArrayList<Waypoint>) : Path(waypoints) {
 
