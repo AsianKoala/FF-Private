@@ -11,10 +11,10 @@ open class CommandButton(supplier: (() -> Boolean)?) : ButtonBase(supplier), Com
         return schedule(f.invoke(invokeBoolean()))
     }
 
-    @JvmName("bruh1")
-    fun schedule(f: (Boolean) -> Unit): CommandButton {
-        return schedule(Command { f.invoke(invokeBoolean()) })
-    }
+//    @JvmName("bruh1")
+//    fun schedule(f: (Boolean) -> Unit): CommandButton {
+//        return schedule(Command { f.invoke(invokeBoolean()) })
+//    }
 
     override fun setInverted(invert: Boolean): CommandButton {
         return super.setInverted(invert) as CommandButton
