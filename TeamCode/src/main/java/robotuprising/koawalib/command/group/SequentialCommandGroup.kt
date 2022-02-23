@@ -7,20 +7,20 @@ class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
     private var mCurrentCommandIndex = -1
     private var mRunWhenDisabled = true
     override fun addCommands(vararg commands: Command) {
-        requireUngrouped(commands)
+        requireUngrouped(*commands)
         check(mCurrentCommandIndex == -1) { "Commands cannot be added to a CommandGroup while the group is running" }
-        registerGroupedCommands(commands)
+        registerGroupedCommands(*commands)
         for (command in commands) {
             mCommands.add(command)
-            m_requirements.addAll(command.getRequirements())
-            mRunWhenDisabled = mRunWhenDisabled and command.runsWhenDisabled()
+            mRequirements.addAll(command.getRequirements())
+            mRunWhenDisabled = mRunWhenDisabled and command.runsWhenDisabled
         }
     }
 
     fun initialize() {
         mCurrentCommandIndex = 0
-        if (!mCommands.isEmpty()) {
-            mCommands[0].initialize()
+        if (mCommands.isNotEmpty()) {
+            mCommands[0].init()
         }
     }
 
@@ -30,17 +30,17 @@ class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
         }
         val currentCommand = mCommands[mCurrentCommandIndex]
         currentCommand.execute()
-        if (currentCommand.isFinished()) {
+        if (currentCommand.isFinished) {
             currentCommand.end(false)
             mCurrentCommandIndex++
             if (mCurrentCommandIndex < mCommands.size) {
-                mCommands[mCurrentCommandIndex].initialize()
+                mCommands[mCurrentCommandIndex].init()
             }
         }
     }
 
     override fun end(interrupted: Boolean) {
-        if (interrupted && !mCommands.isEmpty()) {
+        if (interrupted && mCommands.isNotEmpty()) {
             mCommands[mCurrentCommandIndex].end(true)
         }
         mCurrentCommandIndex = -1

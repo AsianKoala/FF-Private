@@ -1,15 +1,22 @@
 package robotuprising.koawalib.command.commands
 
-import java.util.function.DoubleSupplier
+import com.qualcomm.robotcore.util.ElapsedTime
 
-class WaitCommand(private val supplier: DoubleSupplier) : Command {
-    constructor(seconds: Double) : this({ seconds })
+class WaitCommand(private val seconds: Double) : CommandBase() {
+    private val timer = ElapsedTime()
 
-    val seconds get() = supplier.asDouble
+    override fun init() {
+        timer.reset()
+    }
 
     override fun execute() {
 
     }
 
-    override fun isFinished() = supplier.asDouble <= getRuntime().seconds()
+    override fun end(interrupted: Boolean) {
+        timer.reset()
+    }
+
+    override val isFinished: Boolean get() = timer.seconds() > seconds
+    override val runsWhenDisabled: Boolean = false // TODO
 }
