@@ -30,6 +30,8 @@ open class CommandOpMode : LinearOpMode() {
 
     val opModeRuntime get() = opModeTimer.seconds()
 
+    var disabled = false
+
     override fun runOpMode() {
         CommandScheduler.resetScheduler().setOpMode(this)
 

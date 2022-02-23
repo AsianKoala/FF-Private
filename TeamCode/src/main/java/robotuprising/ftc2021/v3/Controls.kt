@@ -9,7 +9,7 @@ class Controls (private val rin: Rin, private val driver: CommandGamepad, privat
     private val intakeButton = driver.rightTrigger.getAsButton()
 
     fun bindControls() {
-        intakeButton.whenPressed(IntakeSmartCommand(rin.intakeSubsystem))
+        intakeButton.whenPressed(IntakeSmartCommand(rin.intake))
 
         rin.kei.setDefaultCommand(MecanumDriveManualCommand(
                 rin.kei, driver.leftStick, driver.rightStick, Alliance.BLUE,

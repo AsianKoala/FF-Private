@@ -1,150 +1,219 @@
 package robotuprising.koawalib.command.scheduler
 
-import robotuprising.koawalib.structure.CommandOpMode
 import robotuprising.koawalib.command.commands.Command
+import robotuprising.koawalib.command.commands.CommandState
+import robotuprising.koawalib.command.group.CommandGroupBase
+import robotuprising.koawalib.structure.CommandOpMode
 import robotuprising.koawalib.subsystem.Subsystem
-import robotuprising.koawalib.structure.OpModeState
-import robotuprising.koawalib.util.Periodic
-import java.util.function.BooleanSupplier
+import java.util.Collections
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 object CommandScheduler {
-    private val commandMap = HashMap<Command, BooleanSupplier>()
-    private val requirementMap = HashMap<Subsystem, MutableSet<Command>>()
-    private val defaultMap = HashMap<Subsystem, Command>()
+    private val mScheduledCommands: MutableMap<Command, CommandState> = LinkedHashMap()
+    private val mRequirements: MutableMap<Subsystem, Command> = LinkedHashMap()
+    private val mSubsystems: MutableMap<Subsystem, Command?> = LinkedHashMap()
 
-    private val registered = LinkedHashSet<Periodic>()
+    private val mInitActions: MutableList<(Command) -> Unit> = ArrayList()
+    private val mExecuteActions: MutableList<(Command) -> Unit> = ArrayList()
+    private val mInterruptActions: MutableList<(Command) -> Unit> = ArrayList()
+    private val mFinishActions: MutableList<(Command) -> Unit> = ArrayList()
 
-    private lateinit var opMode: CommandOpMode
+    private val mToSchedule: MutableMap<Command, Boolean> = LinkedHashMap()
+    private val mToCancel: MutableList<Command> = ArrayList()
 
-    fun setOpMode(c: CommandOpMode): CommandScheduler {
-        opMode = c
-        return this
+    private val allMaps = listOf(mScheduledCommands, mRequirements, mSubsystems, mToSchedule)
+    private val allLists = listOf(mInitActions, mExecuteActions, mInterruptActions, mFinishActions, mToCancel)
+
+    private var mDisabled = false
+    private var mInRunLoop = false
+
+    private lateinit var mOpMode: CommandOpMode
+
+    fun resetScheduler() {
+        allMaps.forEach(MutableMap<*,*>::clear)
+        allLists.forEach(MutableList<*>::clear)
+        mDisabled = false
+        mInRunLoop = false
     }
 
-    fun terminateOpMode(): CommandScheduler {
-        opMode.terminate()
-        return this
+    fun setOpMode(opMode: CommandOpMode) {
+        mOpMode = opMode
     }
 
-    val opmodeRuntime get() = opMode.runtime
-
-    fun resetScheduler(): CommandScheduler {
-        Command.clear()
-        commandMap.clear()
-        requirementMap.clear()
-        defaultMap.clear()
-        registered.clear()
-        return this
+    private fun initCommand(command: Command, interruptible: Boolean, requirements: Set<Subsystem>) {
+        command.init()
+        val scheduledCommand = CommandState(interruptible)
+        mScheduledCommands[command] = scheduledCommand
+        mInitActions.forEach { it.invoke(command) }
+        requirements.forEach { this.mRequirements[it] = command }
     }
 
-    fun schedule(command: Command): CommandScheduler =
-            schedule(command) { true }
-
-    fun scheduleOnce(c: Command): CommandScheduler =
-            schedule(c)
-
-    fun scheduleOnceForState(c: Command, state: OpModeState): CommandScheduler =
-            scheduleForState(c, state)
-
-    fun scheduleInit(c: Command, supplier: BooleanSupplier): CommandScheduler =
-            scheduleForState(c, supplier, OpModeState.INIT)
-
-    fun scheduleInit(c: Command): CommandScheduler =
-            scheduleForState(c, { true }, OpModeState.INIT)
-
-    fun scheduleJoystick(c: Command, supplier: BooleanSupplier): CommandScheduler =
-            scheduleForState(c, supplier, OpModeState.LOOP, OpModeState.STOP)
-
-    fun scheduleJoystick(c: Command): CommandScheduler =
-            scheduleForState(c, OpModeState.LOOP, OpModeState.STOP)
-
-
-    fun scheduleForState(c: Command, vararg states: OpModeState): CommandScheduler =
-            schedule(c.cancelUpon {!opMode.opModeState.isStatus(*states) }) { opMode.opModeState.isStatus(*states) }
-
-    fun scheduleForState(c: Command, supplier: BooleanSupplier, vararg states: OpModeState): CommandScheduler =
-            schedule(c.cancelUpon {!opMode.opModeState.isStatus(*states) }) { supplier.asBoolean && opMode.opModeState.isStatus(*states) }
-
-
-
-    fun scheduleAfterOther(dependency: Command, other: Command): CommandScheduler =
-            schedule(other, dependency::justFinishedNoCancel)
-
-
-    fun scheduleWithOther(dependency: Command, other: Command): CommandScheduler =
-            schedule(other, dependency::justStarted)
-
-
-    fun scheduleAfterOther(dependency: Command, other: Command, additionalCondition: BooleanSupplier): CommandScheduler =
-            schedule(other) { dependency.justFinishedNoCancel && additionalCondition.asBoolean}
-
-    fun scheduleWithOther(dependency: Command, other: Command, additionalCondition: BooleanSupplier): CommandScheduler =
-            schedule(other) { dependency.justStarted && additionalCondition.asBoolean }
-
-    fun scheduleDefault(command: Command, subsystem: Subsystem) {
-        if(command.requirements.contains(subsystem)) {
-            defaultMap[subsystem] = command
-            schedule(command) { getCurrent(subsystem) == command }
-        } else {
-            System.err.println("default commands must require their subsystem: " + command::class.java.toString())
+    private fun schedule(interruptible: Boolean, command: Command) {
+        if(mInRunLoop) {
+            mToSchedule[command] = interruptible
+            return
         }
-    }
 
-    fun register(p: Periodic): CommandScheduler {
-        registered.add(p)
-        return this
-    }
-
-    fun getDefault(s: Subsystem): Command? {
-        return if(opMode.opModeState == OpModeState.LOOP) {
-            defaultMap[s]
-        } else {
-            null
+        if(CommandGroupBase.getGroupedCommands().contains(command)) {
+            throw IllegalArgumentException("A command that is part of a command group cannot be independently scheduled")
         }
-    }
 
-    fun getCurrent(s: Subsystem): Command? {
-        if(requirementMap[s] == null) return null
-        for(c in requirementMap[s]!!) {
-            if(c.isRunning) {
-                return c
+        if(mDisabled || (!command.runsWhenDisabled && mOpMode.disabled) || mScheduledCommands.containsKey(command)) {
+            return
+        }
+
+        val requirements = command.getRequirements()
+
+        if(Collections.disjoint(mRequirements.keys, requirements)) {
+            initCommand(command, interruptible, requirements)
+        } else {
+            requirements.forEach {
+                if(mRequirements.containsKey(it)
+                        && !mScheduledCommands[mRequirements[it]]!!.isInterruptible) {
+                    return
+                }
             }
-        }
 
-        return getDefault(s)
+            requirements.forEach {
+                if(mRequirements.containsKey(it)) {
+                    cancel(mRequirements[it]!!)
+                }
+            }
+
+            initCommand(command, interruptible, requirements)
+        }
     }
 
-    fun schedule(command: Command, supplier: BooleanSupplier): CommandScheduler {
-        commandMap[command] = supplier
+    fun schedule(interruptible: Boolean, vararg commands: Command) {
+        commands.forEach { schedule(interruptible, it) }
+    }
 
-        for(s in command.requirements) {
-            requirementMap.putIfAbsent(s, LinkedHashSet())
-            requirementMap[s]!!.add(command)
-            register(s)
-        }
-
-        return this
+    fun schedule(vararg commands: Command) {
+        schedule(true, *commands)
     }
 
     fun run() {
-        commandMap.forEach { (c1, _) ->
-            if (c1.justStarted) {
-                for (subsystem in c1.requirements) {
-                    for (c2 in requirementMap[subsystem]!!) {
-                        if (c1 != c2) {
-                            c2.cancel()
-                        }
-                    }
-                }
+        if(mDisabled) {
+            return
+        }
+
+        mSubsystems.keys.forEach(Subsystem::periodic)
+
+        mInRunLoop = true
+        val iterator = mScheduledCommands.keys.iterator()
+        while(iterator.hasNext()) {
+            val command = iterator.next()
+
+            if(!command.runsWhenDisabled && mOpMode.disabled) {
+                command.end(true)
+                mInterruptActions.forEach { it.invoke(command) }
+                mRequirements.keys.removeAll(command.getRequirements())
+                iterator.remove()
+                return
+            }
+
+            command.execute()
+            mExecuteActions.forEach { it.invoke(command) }
+
+            if(command.isFinished) {
+                command.end(false)
+                mFinishActions.forEach { it.invoke(command) }
+                iterator.remove()
+                mRequirements.keys.removeAll(command.getRequirements())
             }
         }
 
-        commandMap.forEach { (c1, b) ->
-            if(b.asBoolean || c1.isRunning) {
-                c1.run()
+        mInRunLoop = false
+
+        mToSchedule.forEach { (k, v) -> schedule(v, k) }
+        mToCancel.forEach { cancel(it) }
+
+        mToSchedule.clear()
+        mToCancel.clear()
+
+        mSubsystems.forEach { (k, v) ->
+            if(!mRequirements.containsKey(k) && v != null) {
+                schedule(v)
             }
         }
+    }
 
-        registered.forEach(Periodic::periodic)
+    fun registerSubsystem(vararg subsystems: Subsystem) {
+        subsystems.forEach { mSubsystems[it] = null }
+    }
+
+    fun unregisterSubsystem(vararg subsystems: Subsystem) {
+        mSubsystems.keys.removeAll(subsystems)
+    }
+
+    fun setDefaultCommand(subsystem: Subsystem, command: Command) {
+        if(!command.getRequirements().contains(subsystem)) {
+            throw IllegalArgumentException("Default commands must require subsystem")
+        }
+
+        if(command.isFinished) {
+            throw java.lang.IllegalArgumentException("Default commands should not end")
+        }
+
+        mSubsystems[subsystem] = command
+    }
+
+    fun getDefaultCommand(subsystem: Subsystem): Command {
+        return mSubsystems[subsystem]!!
+    }
+
+    fun cancel(vararg commands: Command) {
+        if(mInRunLoop) {
+            mToCancel.addAll(commands)
+            return
+        }
+
+        commands.forEach {
+            if(!mScheduledCommands.containsKey(it)) {
+                return@forEach
+            }
+
+            it.end(true)
+            mInterruptActions.forEach { action -> action.invoke(it) }
+            mScheduledCommands.remove(it)
+            mRequirements.keys.removeAll(it.getRequirements())
+        }
+    }
+
+    fun cancelAll() {
+        mScheduledCommands.keys.forEach { cancel(it) }
+    }
+
+    fun isScheduled(vararg commands: Command): Boolean {
+        return mScheduledCommands.keys.containsAll(commands.toList())
+    }
+
+    fun requiring(subsystem: Subsystem): Command {
+        return mRequirements[subsystem]!!
+    }
+
+    fun disable() {
+        mDisabled = true
+    }
+
+    fun enable() {
+        mDisabled = false
+    }
+
+    fun onCommandInit(action: (Command) -> Unit) {
+        mInitActions.add(action)
+    }
+
+    fun onCommandExecute(action: (Command) -> Unit) {
+        mExecuteActions.add(action)
+    }
+
+    fun onCommandInterrupt(action: (Command) -> Unit) {
+        mInterruptActions.add(action)
+    }
+
+    fun onCommandFinish(action: (Command) -> Unit) {
+        mFinishActions.add(action)
     }
 }

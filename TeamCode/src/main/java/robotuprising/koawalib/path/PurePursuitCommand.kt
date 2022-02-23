@@ -8,7 +8,7 @@ import robotuprising.koawalib.subsystem.drive.KMecanumOdoDrive
 class PurePursuitCommand(private val drive: KMecanumOdoDrive, vararg waypoints: Waypoint) : Command {
     private val path: PurePursuitPath
 
-    override fun initialize() {
+    override fun init() {
         drive.driveState = DriveStates.PATH
         drive.currentPath = path
     }
