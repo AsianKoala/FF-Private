@@ -4,9 +4,8 @@ import robotuprising.ftc2021.v3.subsystems.Intake
 
 class IntakeSmartCommand(private val intake: Intake) : IntakeTurnOnCommand(intake) {
 
-    override fun isFinished(): Boolean {
-        return intake.isMineralIn
-    }
+    override val isFinished: Boolean
+        get() = intake.isMineralIn
 
     override fun end(cancel: Boolean) {
         intake.turnOff()

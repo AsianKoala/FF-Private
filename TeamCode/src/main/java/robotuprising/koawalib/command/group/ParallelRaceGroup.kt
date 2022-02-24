@@ -7,7 +7,7 @@ import kotlin.collections.HashSet
 class ParallelRaceGroup(vararg commands: Command) : CommandGroupBase() {
     private val commands: MutableSet<Command> = HashSet()
     private var mRunsWhenDisabled = false
-    private var finished = false
+    private var finished = true
 
     override fun addCommands(vararg commands: Command) {
         requireUngrouped(*commands)
@@ -15,6 +15,8 @@ class ParallelRaceGroup(vararg commands: Command) : CommandGroupBase() {
         if(!finished) {
             throw IllegalStateException("Cannot add commands to group while group is running")
         }
+
+        registerGroupedCommands(*commands)
 
         commands.forEach {
             if(!Collections.disjoint(it.getRequirements(), mRequirements)) {

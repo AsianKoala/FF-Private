@@ -21,7 +21,7 @@ abstract class CommandGroupBase : CommandBase(), Command {
         }
 
         fun requireUngrouped(vararg commands: Command) {
-            requireUngrouped(*commands)
+            requireUngrouped(commands.toList())
         }
 
         fun requireUngrouped(commands: Collection<Command>) {

@@ -4,13 +4,15 @@ import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.CommandState
 import robotuprising.koawalib.command.group.CommandGroupBase
 import robotuprising.koawalib.structure.CommandOpMode
+import robotuprising.koawalib.structure.OpModeState
 import robotuprising.koawalib.subsystem.Subsystem
 import java.util.Collections
+import java.util.function.Consumer
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
 object CommandScheduler {
-    private val mScheduledCommands: MutableMap<Command, CommandState> = LinkedHashMap()
+    val mScheduledCommands: MutableMap<Command, CommandState> = LinkedHashMap()
     private val mRequirements: MutableMap<Subsystem, Command> = LinkedHashMap()
     private val mSubsystems: MutableMap<Subsystem, Command?> = LinkedHashMap()
 
@@ -22,6 +24,8 @@ object CommandScheduler {
     private val mToSchedule: MutableMap<Command, Boolean> = LinkedHashMap()
     private val mToCancel: MutableList<Command> = ArrayList()
 
+    private val mButtons: MutableSet<Runnable> = LinkedHashSet()
+
     private val allMaps = listOf(mScheduledCommands, mRequirements, mSubsystems, mToSchedule)
     private val allLists = listOf(mInitActions, mExecuteActions, mInterruptActions, mFinishActions, mToCancel)
 
@@ -30,11 +34,24 @@ object CommandScheduler {
 
     private lateinit var mOpMode: CommandOpMode
 
+    val isOpModeLooping get() = mOpMode.opModeState == OpModeState.LOOP
+    
     fun resetScheduler() {
         allMaps.forEach(MutableMap<*,*>::clear)
         allLists.forEach(MutableList<*>::clear)
+        mButtons.clear()
         mDisabled = false
         mInRunLoop = false
+    }
+
+    fun printTelemetry() {
+        println()
+        println()
+        println("scheduled command size ${mScheduledCommands.size}")
+        println("requirements size ${mRequirements.size}")
+        println("subsystems size ${mSubsystems.size}")
+        println("to schedule size ${mToSchedule.size} ")
+        println("to cancel size ${mToCancel.size}")
     }
 
     fun setOpMode(opMode: CommandOpMode) {
@@ -59,9 +76,9 @@ object CommandScheduler {
             throw IllegalArgumentException("A command that is part of a command group cannot be independently scheduled")
         }
 
-        if(mDisabled || (!command.runsWhenDisabled && mOpMode.disabled) || mScheduledCommands.containsKey(command)) {
-            return
-        }
+//        if(mDisabled || (!command.runsWhenDisabled && mOpMode.disabled) || mScheduledCommands.containsKey(command)) {
+//            return
+//        }
 
         val requirements = command.getRequirements()
 
@@ -93,25 +110,30 @@ object CommandScheduler {
         schedule(true, *commands)
     }
 
+    fun addButton(button: Runnable) {
+        mButtons.add(button)
+    }
+
     fun run() {
         if(mDisabled) {
             return
         }
 
         mSubsystems.keys.forEach(Subsystem::periodic)
+        mButtons.forEach(Runnable::run)
 
         mInRunLoop = true
         val iterator = mScheduledCommands.keys.iterator()
         while(iterator.hasNext()) {
             val command = iterator.next()
 
-            if(!command.runsWhenDisabled && mOpMode.disabled) {
-                command.end(true)
-                mInterruptActions.forEach { it.invoke(command) }
-                mRequirements.keys.removeAll(command.getRequirements())
-                iterator.remove()
-                return
-            }
+//            if(!command.runsWhenDisabled && mOpMode.disabled) {
+//                command.end(true)
+//                mInterruptActions.forEach { it.invoke(command) }
+//                mRequirements.keys.removeAll(command.getRequirements())
+//                iterator.remove()
+//                return
+//            }
 
             command.execute()
             mExecuteActions.forEach { it.invoke(command) }

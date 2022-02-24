@@ -1,5 +1,6 @@
 package robotuprising.koawalib.command.commands
 
+// useful to schedule other commands
 class ScheduleCommand(vararg commands: Command) : CommandBase() {
     private val mToSchedule = HashSet<Command>(commands.toList())
 

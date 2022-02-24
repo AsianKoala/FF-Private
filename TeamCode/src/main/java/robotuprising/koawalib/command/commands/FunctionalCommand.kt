@@ -2,6 +2,7 @@ package robotuprising.koawalib.command.commands
 
 import robotuprising.koawalib.subsystem.Subsystem
 
+// to create inline commands easier
 class FunctionalCommand(
         private val mOnInit: () -> Unit = {},
         private val mOnExecute: () -> Unit = {},

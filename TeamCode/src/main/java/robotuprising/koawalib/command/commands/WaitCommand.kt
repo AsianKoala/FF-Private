@@ -2,6 +2,7 @@ package robotuprising.koawalib.command.commands
 
 import com.qualcomm.robotcore.util.ElapsedTime
 
+// timer command
 class WaitCommand(private val seconds: Double) : CommandBase() {
     private val timer = ElapsedTime()
 
@@ -18,5 +19,5 @@ class WaitCommand(private val seconds: Double) : CommandBase() {
     }
 
     override val isFinished: Boolean get() = timer.seconds() > seconds
-    override val runsWhenDisabled: Boolean = false // TODO
+    override val runsWhenDisabled: Boolean = false
 }

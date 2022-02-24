@@ -2,6 +2,7 @@ package robotuprising.koawalib.command.commands
 
 import android.util.Log
 
+// send message to the android LogCat
 class LogCatCommand(
         tag: String = "KOAWALIB",
         message: String = "",

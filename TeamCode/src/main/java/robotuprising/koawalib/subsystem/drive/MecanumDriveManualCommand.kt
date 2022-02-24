@@ -1,6 +1,7 @@
 package robotuprising.koawalib.subsystem.drive
 
 import robotuprising.koawalib.command.commands.Command
+import robotuprising.koawalib.command.commands.CommandBase
 import robotuprising.koawalib.gamepad.Stick
 import robotuprising.koawalib.math.MathUtil
 import robotuprising.koawalib.math.MathUtil.d
@@ -22,7 +23,7 @@ class MecanumDriveManualCommand(
         private val headingLock: Boolean = false,
         private val heading: () -> Double = { Double.NaN },
         private val headingLockScalar: Double = 90.0
-) : Command {
+) : CommandBase() {
 
     override fun execute() {
         val xRaw = leftStick.xSupplier.invoke()
@@ -57,9 +58,8 @@ class MecanumDriveManualCommand(
         drive.powers = final
     }
 
-    override fun isFinished(): Boolean {
-        return false
-    }
+    override val isFinished: Boolean
+        get() = false
 
     init {
         addRequirements(drive)

@@ -1,7 +1,7 @@
 package robotuprising.koawalib.gamepad
 
 import robotuprising.koawalib.command.commands.Command
-import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.command.commands.watchdog.GamepadWatchdog
 import robotuprising.koawalib.util.KBoolean
 
 
@@ -63,7 +63,7 @@ interface CommandInput<T : ButtonBase> : KBoolean {
      * @return The instance
      */
     fun schedule(condition: () -> Boolean, command: Command): T {
-        CommandScheduler.scheduleJoystick(command, condition)
+        GamepadWatchdog(condition, command).schedule()
         return instance()
     }
 

@@ -33,15 +33,14 @@ open class CommandOpMode : LinearOpMode() {
     var disabled = false
 
     override fun runOpMode() {
-        CommandScheduler.resetScheduler().setOpMode(this)
+        CommandScheduler.resetScheduler()
+        CommandScheduler.setOpMode(this)
 
         KoawaDashboard.init(telemetry, false)
-
         KoawaBulkManager.init(hardwareMap)
 
         driverGamepad = CommandGamepad(gamepad1)
         gunnerGamepad = CommandGamepad(gamepad2)
-
 
         opModeTimer.reset()
         mainLoop@ while(true) {

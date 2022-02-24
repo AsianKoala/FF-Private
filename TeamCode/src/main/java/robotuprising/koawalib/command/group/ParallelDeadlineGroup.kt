@@ -9,12 +9,6 @@ class ParallelDeadlineGroup(private var mDeadline: Command, vararg commands: Com
     private val mCommands: MutableMap<Command, Boolean> = HashMap()
     private var mRunWhenDisabled = true
 
-    /**
-     * Sets the deadline to the given command.  The deadline is added to the group if it is not
-     * already contained.
-     *
-     * @param deadline the command that determines when the group ends
-     */
     fun setDeadline(deadline: Command) {
         if (!mCommands.containsKey(deadline)) {
             addCommands(deadline)
@@ -24,8 +18,11 @@ class ParallelDeadlineGroup(private var mDeadline: Command, vararg commands: Com
 
     override fun addCommands(vararg commands: Command) {
         requireUngrouped(*commands)
+
         check(!mCommands.containsValue(true)) { "Commands cannot be added to a CommandGroup while the group is running" }
+
         registerGroupedCommands(*commands)
+
         for (command in commands) {
             require(Collections.disjoint(command.getRequirements(), mRequirements)) {
                 ("Multiple commands in a parallel group cannot"
@@ -37,7 +34,7 @@ class ParallelDeadlineGroup(private var mDeadline: Command, vararg commands: Com
         }
     }
 
-    fun initialize() {
+    override fun init() {
         for (commandRunning in mCommands.entries) {
             commandRunning.key.init()
             commandRunning.setValue(true)
@@ -70,15 +67,6 @@ class ParallelDeadlineGroup(private var mDeadline: Command, vararg commands: Com
 
     override val runsWhenDisabled: Boolean get() = mRunWhenDisabled
 
-    /**
-     * Creates a new ParallelDeadlineGroup.  The given commands (including the deadline) will be
-     * executed simultaneously.  The CommandGroup will finish when the deadline finishes,
-     * interrupting all other still-running commands.  If the CommandGroup is interrupted, only
-     * the commands still running will be interrupted.
-     *
-     * @param deadline the command that determines when the group ends
-     * @param commands the commands to be executed
-     */
     init {
         addCommands(*commands)
         if (!mCommands.containsKey(mDeadline)) {

@@ -1,5 +1,7 @@
 package robotuprising.koawalib.command.commands
 
+import robotuprising.koawalib.command.group.*
+import robotuprising.koawalib.command.scheduler.CommandScheduler
 import robotuprising.koawalib.subsystem.Subsystem
 
 fun interface Command {
@@ -17,8 +19,60 @@ fun interface Command {
         return getRequirements().contains(requirement)
     }
 
+    // cancels this command based on timeout (seconds)
+    fun withTimeout(time: Double): Command {
+        return ParallelRaceGroup(this, WaitCommand(time))
+    }
+
+    // cancels this command based on a condition
+    fun interruptOn(condition: () -> Boolean): Command {
+        return ParallelRaceGroup(this, WaitUntilCommand(condition))
+    }
+
+    // run an instant command after this command
+    fun whenFinished(action: () -> Unit): Command {
+        return SequentialCommandGroup(this, InstantCommand(action))
+    }
+
+    // run an instant command before this command
+    fun beforeStarting(action: () -> Unit): Command {
+        return SequentialCommandGroup(InstantCommand(action), this)
+    }
+
+
+    // run commands sequentially, in a sequential group
+    fun andThen(vararg next: Command): Command {
+        val group = SequentialCommandGroup(this)
+        group.addCommands(*next)
+        return group
+    }
+
+    // run commands in parallel, ends when the current command, the deadline, ends
+    fun deadlineWith(vararg parallel: Command): Command {
+        return ParallelDeadlineGroup(this, *parallel)
+    }
+
+    // run commands parallel, ending when all the commands have ended
+    fun alongWith(vararg parallel: Command): Command {
+        val group = ParallelCommandGroup(this)
+        group.addCommands(*parallel)
+        return group
+    }
+
+
+    // run commands parallel, ending when one of the commands have ended
+    fun raceWith(vararg parallel: Command): Command {
+        val group = ParallelRaceGroup(this)
+        group.addCommands(*parallel)
+        return group
+    }
+
+    fun cancelUpon(condition: () -> Boolean): Command {
+        return CancelableCommand(condition, this)
+    }
+
     fun schedule(interruptible: Boolean) {
-        TODO()
+        CommandScheduler.schedule(interruptible, this)
     }
 
     fun schedule() {
@@ -26,12 +80,12 @@ fun interface Command {
     }
 
     fun cancel() {
-        TODO()
+        CommandScheduler.cancel(this)
     }
 
-    val isScheduled: Boolean get() = TODO()
+    val isScheduled: Boolean get() = CommandScheduler.isScheduled(this)
 
-    val runsWhenDisabled: Boolean get() = TODO()
+    val runsWhenDisabled: Boolean get() = false
 
     val name: String get() = this.javaClass.simpleName
 }

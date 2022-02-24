@@ -139,6 +139,7 @@ open class KMecanumOdoDrive(
                 if(currentPath != null) {
                     if(currentPath!!.finished) {
                         driveState = DriveStates.DISABLED
+                        currentPath = null
                     } else {
                         powers = currentPath!!.update(position, velocity)
                     }
@@ -155,12 +156,14 @@ open class KMecanumOdoDrive(
 
                             if(position.point.distance(stopWaypoint.point) < stopWaypoint.allowedPositionError) {
                                 driveState = DriveStates.DISABLED
+                                targetWaypoint = null
                             }
                         }
 
                         else -> {
                             if(position.point.distance(targetWaypoint!!.point) < acceptableTargetError) {
                                 driveState = DriveStates.DISABLED
+                                targetWaypoint = null
                             }
                         }
                     }

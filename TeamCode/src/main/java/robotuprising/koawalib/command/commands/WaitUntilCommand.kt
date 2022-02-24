@@ -1,8 +1,9 @@
 package robotuprising.koawalib.command.commands
 
+// used in command groups
 class WaitUntilCommand(private val condition: () -> Boolean) : CommandBase() {
     override fun execute() {
-        TODO("Not yet implemented")
+
     }
 
     override val runsWhenDisabled: Boolean = true

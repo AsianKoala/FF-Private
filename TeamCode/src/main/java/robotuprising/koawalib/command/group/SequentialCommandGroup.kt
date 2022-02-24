@@ -6,6 +6,7 @@ class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
     private val mCommands: MutableList<Command> = ArrayList()
     private var mCurrentCommandIndex = -1
     private var mRunWhenDisabled = true
+
     override fun addCommands(vararg commands: Command) {
         requireUngrouped(*commands)
         check(mCurrentCommandIndex == -1) { "Commands cannot be added to a CommandGroup while the group is running" }
@@ -17,7 +18,7 @@ class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
         }
     }
 
-    fun initialize() {
+    override fun init() {
         mCurrentCommandIndex = 0
         if (mCommands.isNotEmpty()) {
             mCommands[0].init()
@@ -49,16 +50,10 @@ class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
     override val isFinished: Boolean
         get() = mCurrentCommandIndex == mCommands.size
 
-    fun runsWhenDisabled(): Boolean {
-        return mRunWhenDisabled
-    }
+    override val runsWhenDisabled: Boolean
+        get() = mRunWhenDisabled
 
-    /**
-     * Creates a new SequentialCommandGroup.  The given commands will be run sequentially, with
-     * the CommandGroup finishing when the last command finishes.
-     *
-     * @param commands the commands to include in this group.
-     */
+
     init {
         addCommands(*commands)
     }
