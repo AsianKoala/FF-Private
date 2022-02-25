@@ -1,11 +1,9 @@
 package robotuprising.ftc2021.v3.subsystems
 
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import robotuprising.koawalib.hardware.KMotor
 import robotuprising.koawalib.subsystem.motor.MotorSubsystem
 import robotuprising.koawalib.subsystem.motor.controllers.OpenLoopController
-import robotuprising.koawalib.subsystem.sensors.KRevColorSensor
+import robotuprising.koawalib.hardware.sensor.KRevColorSensor
 
 class Intake(motor: KMotor, private val loadingSensor: KRevColorSensor) : MotorSubsystem(motor, OpenLoopController()) {
     companion object {

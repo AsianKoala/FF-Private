@@ -1,7 +1,6 @@
 package robotuprising.lib.math
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import robotuprising.koawalib.path.waypoints.Waypoint
 
 data class Pose(
     val p: Point,

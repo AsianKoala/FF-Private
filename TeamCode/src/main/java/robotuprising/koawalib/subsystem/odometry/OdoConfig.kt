@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.drive
+package robotuprising.koawalib.subsystem.odometry
 
 import robotuprising.koawalib.hardware.KMotor
 

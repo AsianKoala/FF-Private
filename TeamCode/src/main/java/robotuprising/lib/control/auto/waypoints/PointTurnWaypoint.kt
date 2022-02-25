@@ -1,9 +1,5 @@
 package robotuprising.lib.control.auto.waypoints
 
-import robotuprising.lib.math.Angle
-import robotuprising.koawalib.path.waypoints.LockedWaypoint
-import robotuprising.koawalib.path.waypoints.Waypoint
-
 class PointTurnWaypoint
 //(
 //    x: Double,

@@ -1,14 +1,9 @@
 package robotuprising.ftc2021.v2.auto.pp
 
 import com.qualcomm.robotcore.util.ElapsedTime
-import robotuprising.ftc2021.v2.auto.pp.math.Line
-import robotuprising.ftc2021.v2.subsystems.osiris.hardware.Odometry
-import robotuprising.koawalib.path.waypoints.StopWaypoint
-import robotuprising.koawalib.path.waypoints.Waypoint
+import robotuprising.koawalib.path2.Waypoint
 import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.MathUtil
 import robotuprising.lib.math.Pose
-import robotuprising.lib.opmode.OsirisDashboard
 import kotlin.collections.ArrayList
 
 class PurePursuitPath(val waypoints: ArrayList<Waypoint>) {

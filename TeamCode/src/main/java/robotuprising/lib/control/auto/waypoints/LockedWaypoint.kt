@@ -1,10 +1,5 @@
 package robotuprising.lib.control.auto.waypoints
 
-import robotuprising.ftc2021.v2.auto.pp.Subroutines
-import robotuprising.lib.math.Angle
-import robotuprising.lib.util.Extensions.d
-import robotuprising.koawalib.path.waypoints.Waypoint
-
 //open class LockedWaypoint(
 //    x: Double,
 //    y: Double,

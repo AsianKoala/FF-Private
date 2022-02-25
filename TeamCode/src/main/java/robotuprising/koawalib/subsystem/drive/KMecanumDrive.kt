@@ -15,29 +15,28 @@ open class KMecanumDrive(
 
     var powers = Pose()
 
-    var disabled = false
+    private var driveState = DriveStates.DISABLED
 
-    var driveState = DriveStates.DISABLED
-
-    fun stop() {
+    fun disable() {
         driveState = DriveStates.DISABLED
-        powers = Pose()
-        motors.forEach { it.power = 0.0 }
-        disabled = true
     }
 
-    protected fun processPowers() {
-        if(!disabled) {
-            val fl = powers.y + powers.x + powers.heading
-            val bl = powers.y - powers.x + powers.heading
-            val fr = powers.y - powers.x - powers.heading
-            val br = powers.y + powers.x - powers.heading
+    fun enable() {
+        driveState = DriveStates.ENABLED
+    }
 
-            val wheels= listOf(fl, bl, fr, br)
-            val absMax = wheels.maxOf { it.absoluteValue }
-            val scalar = if(absMax > 1.0) absMax else 1.0
-            motors.forEachIndexed { i, it -> it.power = wheels[i] / scalar }
-        }
+    val isEnabled get() = driveState == DriveStates.ENABLED
+
+    private fun processPowers() {
+        val fl = powers.y + powers.x + powers.heading
+        val bl = powers.y - powers.x + powers.heading
+        val fr = powers.y - powers.x - powers.heading
+        val br = powers.y + powers.x - powers.heading
+
+        val wheels= listOf(fl, bl, fr, br)
+        val absMax = wheels.maxOf { it.absoluteValue }
+        val scalar = if(absMax > 1.0) absMax else 1.0
+        motors.forEachIndexed { i, it -> it.power = wheels[i] / scalar }
     }
 
     override fun periodic() {
@@ -46,17 +45,10 @@ open class KMecanumDrive(
                 powers = Pose()
             }
 
-            DriveStates.MANUAL -> {
+            DriveStates.ENABLED -> {
                 // expect manual powers being set externally
             }
-
-            else -> {
-                // assuming drive doesn't have localization
-                driveState = DriveStates.DISABLED
-            }
         }
-
         processPowers()
     }
-
 }

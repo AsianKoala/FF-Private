@@ -2,7 +2,7 @@ package robotuprising.ftc2021.v3
 
 import com.acmerobotics.dashboard.config.Config
 import robotuprising.koawalib.hardware.KMotor
-import robotuprising.koawalib.subsystem.sensors.KRevColorSensor
+import robotuprising.koawalib.hardware.sensor.KRevColorSensor
 
 class Hardware {
     @Config

@@ -2,7 +2,7 @@ package robotuprising.ftc2021.v3
 
 import robotuprising.ftc2021.v3.subsystems.Intake
 import robotuprising.ftc2021.v3.subsystems.Kei
-import robotuprising.koawalib.subsystem.drive.OdoConfig
+import robotuprising.koawalib.subsystem.odometry.OdoConfig
 
 class Rin(hardware: Hardware) {
     val intake = Intake(hardware.intakeMotor, hardware.loadingSensor)

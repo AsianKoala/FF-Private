@@ -8,15 +8,15 @@ import robotuprising.koawalib.math.MathUtil.sin
 import robotuprising.koawalib.math.MathUtil.wrap
 import robotuprising.koawalib.math.Point
 import robotuprising.koawalib.math.Pose
-import kotlin.math.absoluteValue
-import kotlin.math.hypot
+import kotlin.math.*
 
 object PurePursuitController {
 
     fun goToPosition(currPose: Pose, targetPosition: Point, followAngle: Double = 90.0.radians,
                      stop: Boolean = false, maxMoveSpeed: Double = 1.0, maxTurnSpeed: Double = 1.0,
                      isHeadingLocked: Boolean = false, headingLockAngle: Double = 0.0,
-                     slowDownTurnRadians: Double = 60.0.radians, lowestSlowDownFromTurnError: Double = 0.4): Pose {
+                     slowDownTurnRadians: Double = 60.0.radians, lowestSlowDownFromTurnError: Double = 0.4,
+                     onlyTurn: Boolean = false): Pose {
 
         val absoluteDelta = targetPosition - currPose.point
         val distanceToPoint = absoluteDelta.hypot
@@ -66,6 +66,9 @@ object PurePursuitController {
         turnPower *= Range.clip(relativePointAngle.absoluteValue / 3.0.radians, 0.0, 1.0)
 
 
+        if(onlyTurn) {
+            return Pose(0.0, 0.0, turnPower)
+        }
 
 
         // slow down if angle is off
@@ -80,5 +83,162 @@ object PurePursuitController {
 
 
         return Pose(xPower, yPower, turnPower)
+    }
+    
+    
+    fun goToPosition(pose: Pose, followAngle: Double, waypoint: Waypoint): Pose {
+       return goToPosition(
+                pose, waypoint.point, followAngle, waypoint.stop,
+                waypoint.maxMoveSpeed, waypoint.maxTurnSpeed,
+                waypoint.isHeadingLocked, waypoint.headingLockAngle,
+                waypoint.slowDownTurnRadians, waypoint.lowestSlowDownFromTurnError
+        )
+    }
+
+
+
+    fun clipToLine(start: Point, end: Point, robot: Point): Point {
+        var startX = start.y
+        var startY = start.x
+
+        if (start.x == end.x)
+            startX += 0.01
+
+        if (start.y == end.y)
+            startY += 0.01
+
+        val mStart = Point(startX, startY)
+
+
+        val m1 = (end.y - mStart.y) / (end.x - mStart.x)
+        val m2 = -1.0 / m1
+        val xClip = (-m2 * robot.x + robot.y + m1 * mStart.x - mStart.y) / (m1 - m2)
+        val yClip = m1 * (xClip - mStart.x) + mStart.y
+        return Point(xClip, yClip)
+    }
+
+    fun extendLine(firstPoint: Point, secondPoint: Point, distance: Double): Point {
+        val lineAngle = (secondPoint - firstPoint).atan2
+        val length = secondPoint.distance(firstPoint)
+        val extendedLineLength = length + distance
+
+        val extendedX = lineAngle.cos * extendedLineLength + firstPoint.x
+        val extendedY = lineAngle.sin * extendedLineLength + firstPoint.y
+        return Point(extendedX, extendedY)
+    }
+
+    /**
+     * @param center          center point of circle
+     * @param startPoint start point of the line segment
+     * @param endPoint   end point of the line segment
+     * @param radius     radius of the circle
+     * @return intersection point closest to endPoint
+     * @see [https://mathworld.wolfram.com/Circle-LineIntersection.html](https://mathworld.wolfram.com/Circle-LineIntersection.html)
+     */
+    fun lineCircleIntersection(
+            center: Point,
+            startPoint: Point,
+            endPoint: Point,
+            radius: Double
+    ): ArrayList<Point> {
+        val start = startPoint - center
+        val end = endPoint - center
+        val deltas = end - start
+        val d = start.x * end.y - end.x * start.y
+        val discriminant = radius.pow(2) * deltas.hypot.pow(2) - d.pow(2)
+
+        // discriminant = 0 for 1 intersection, >0 for 2
+        val intersections = ArrayList<Point>()
+        val xLeft = d * deltas.y
+        val yLeft = -d * deltas.x
+        val xRight: Double = MathUtil.stupidSign(deltas.y) * deltas.x * sqrt(discriminant)
+        val yRight = deltas.y.absoluteValue * sqrt(discriminant)
+        val div = deltas.hypot.pow(2)
+        if (discriminant == 0.0) {
+            intersections.add(Point(xLeft / div, yLeft / div))
+        } else {
+            // add 2 points, one with positive right side and one with negative right side
+            intersections.add(Point((xLeft + xRight) / div, (yLeft + yRight) / div))
+            intersections.add(Point((xLeft - xRight) / div, (yLeft - yRight) / div))
+        }
+//        var closest = Point(69420.0, -69420.0)
+//        for (p in intersections) { // add circle center offsets
+//            val offsetPoint = Point(p.x + center.x, p.y + center.y)
+//            if (offsetPoint.distance(endPoint) < closest.distance(endPoint)) {
+//                closest = offsetPoint
+//            }
+//        }
+//        return closest
+        return intersections
+    }
+
+
+    /**
+     * This will return which index along the path the robot is. It is the index of the first point
+     * It also returns the point of the clipping
+     */
+    fun clipToPath(waypoints: List<Waypoint>, position: Point): IndexPoint {
+        var closestClippedDistance = 100000.0
+        var closestClippedIndex = 0
+        var clippedToLine = Point()
+
+        for(i in 0 until waypoints.size-1) {
+            val firstPoint = waypoints[i]
+            val secondPoint = waypoints[i+1]
+            val currClippedToLine = clipToLine(firstPoint.point, secondPoint.point, position)
+            val distanceToClip = (position - currClippedToLine).hypot
+            if(distanceToClip < closestClippedDistance) {
+                closestClippedDistance = distanceToClip
+                closestClippedIndex = i
+                clippedToLine = currClippedToLine
+            }
+        }
+
+        return IndexPoint(clippedToLine, closestClippedIndex)
+    }
+
+
+    fun pointTo(heading: Double, angle: Double, speed: Double, deccelAngle: Double): Pair<Double, Double> {
+        val relativePointAngle = (angle - heading).wrap
+
+        var turnSpeed = (relativePointAngle / deccelAngle) * speed
+        turnSpeed = MathUtil.clamp(turnSpeed, -speed, speed)
+
+        turnSpeed *= MathUtil.clamp(relativePointAngle.absoluteValue / 3.0.radians, 0.0, 1.0)
+        return Pair(turnSpeed, relativePointAngle)
+    }
+
+    fun calcLookahead(waypoints: List<Waypoint>, currPose: Pose, followDistance: Double): Waypoint {
+
+        // find what segment we're on
+        val clippedToLine = clipToPath(waypoints, currPose.point)
+        val currFollowIndex = clippedToLine.index
+
+        // extend circle, find intersects with segments, choose closest
+        // to last point (consider heading based instead of waypoint order based)
+        var followMe = waypoints[currFollowIndex].copy
+        followMe = followMe.copy(x = clippedToLine.point.x, y = clippedToLine.point.y)
+
+        for(i in 0 until waypoints.size-1) {
+            val startLine = waypoints[i]
+            val endLine = waypoints[i+1]
+
+            val intersections = lineCircleIntersection(currPose.point, startLine.point, endLine.point, followDistance)
+
+            var closestDistance = 69420.0
+            for(intersection in intersections) {
+                val dist = (intersection - waypoints[waypoints.size-1].point).hypot
+
+                if(dist < closestDistance) {
+                    closestDistance = dist
+                    followMe = followMe.copy(x = clippedToLine.point.x, y = clippedToLine.point.y)
+                }
+
+                println("closestDistance: $closestDistance")
+            }
+        }
+
+
+        return followMe
     }
 }

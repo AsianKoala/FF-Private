@@ -1,15 +1,11 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.koawalib.path.waypoints.LockedWaypoint
-import robotuprising.koawalib.path.waypoints.Waypoint
+import robotuprising.koawalib.path2.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.MathUtil.degrees
 import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
-import robotuprising.lib.opmode.NakiriDashboard
-import kotlin.math.PI
 
 object PurePursuitController {
 

@@ -5,7 +5,7 @@ import robotuprising.ftc2021.v2.auto.pp.PurePursuitPath
 import robotuprising.ftc2021.v2.opmodes.osiris.OsirisOpMode
 import robotuprising.ftc2021.v2.statemachines.JustDepositStateMachine
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.*
-import robotuprising.koawalib.path.waypoints.Waypoint
+import robotuprising.koawalib.path2.Waypoint
 import robotuprising.lib.math.Angle
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point

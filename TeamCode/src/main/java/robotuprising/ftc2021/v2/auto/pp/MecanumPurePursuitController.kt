@@ -1,14 +1,5 @@
 package robotuprising.ftc2021.v2.auto.pp
 
-import robotuprising.koawalib.path.waypoints.LockedWaypoint
-import robotuprising.koawalib.path.waypoints.StopWaypoint
-import robotuprising.koawalib.path.waypoints.Waypoint
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
-import kotlin.math.PI
-
 object MecanumPurePursuitController {
 //    val SLIP_DISTANCES = Pose(Point(0.0, 0.0), Angle(0.0, AngleUnit.RAD))
 //    val UNDERSHOOT_DISTANCE = 6.0

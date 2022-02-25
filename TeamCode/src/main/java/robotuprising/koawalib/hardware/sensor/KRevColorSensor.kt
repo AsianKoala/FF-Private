@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.sensors
+package robotuprising.koawalib.hardware.sensor
 
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
