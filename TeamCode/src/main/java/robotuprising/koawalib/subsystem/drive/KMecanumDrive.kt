@@ -28,10 +28,10 @@ open class KMecanumDrive(
 
     protected fun processPowers() {
         if(!disabled) {
-            val fl = powers.y + powers.x + powers.h
-            val bl = powers.y - powers.x + powers.h
-            val fr = powers.y - powers.x - powers.h
-            val br = powers.y + powers.x - powers.h
+            val fl = powers.y + powers.x + powers.heading
+            val bl = powers.y - powers.x + powers.heading
+            val fr = powers.y - powers.x - powers.heading
+            val br = powers.y + powers.x - powers.heading
 
             val wheels= listOf(fl, bl, fr, br)
             val absMax = wheels.maxOf { it.absoluteValue }

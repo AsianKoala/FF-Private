@@ -116,7 +116,7 @@ object MathUtil {
         return closest
     }
 
-    private fun stupidSign(a: Double): Int = if (a > 0) 1 else -1
+    fun stupidSign(a: Double): Int = if (a > 0) 1 else -1
 
 
     val Double.sin get() = sin(this)
@@ -129,7 +129,7 @@ object MathUtil {
         get() {
             var angle = this
             while(angle > PI) angle -= 2 * PI
-            while(angle < PI) angle += 2 * PI
+            while(angle < -PI) angle += 2 * PI
             return angle
         }
 }

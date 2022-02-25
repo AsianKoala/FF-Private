@@ -41,7 +41,7 @@ open class KMecanumOdoDrive(
             val scalar = (curr.timestamp - old.timestamp).toDouble() / 1000.0
 
             val dirVel = (curr.pose.point - old.pose.point) * (1 / scalar)
-            val angularVel = (curr.pose.h - old.pose.h) * (1 / scalar)
+            val angularVel = (curr.pose.heading - old.pose.heading) * (1 / scalar)
 
             return Pose(dirVel, angularVel.wrap)
         }
@@ -89,8 +89,8 @@ open class KMecanumOdoDrive(
         val leftTotal = actualCurrLeft / config.TICKS_PER_INCH
         val rightTotal = actualCurrRight / config.TICKS_PER_INCH
 
-        val lastAngle = _position.h
-        val newAngle = (((leftTotal - rightTotal) / config.TURN_SCALAR) + startPose.h).wrap
+        val lastAngle = _position.heading
+        val newAngle = (((leftTotal - rightTotal) / config.TURN_SCALAR) + startPose.heading).wrap
 
         val angleIncrement = (lWheelDelta - rWheelDelta) / config.TURN_SCALAR
         val auxPrediction = angleIncrement * config.AUX_TRACKER

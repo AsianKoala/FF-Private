@@ -15,7 +15,7 @@ class Controls (private val rin: Rin, private val driver: CommandGamepad, privat
         rin.kei.setDefaultCommand(MecanumDriveManualCommand(
                 rin.kei, driver.leftStick, driver.rightStick, Alliance.BLUE,
                 0.5, 0.5, 0.5, fieldOriented = true,
-                headingLock = true, { rin.kei.position.h }, 180.0))
+                headingLock = true, { rin.kei.position.heading }, 180.0))
 
 
         driver.scheduleLeftStick { left, right -> Command { println(left + right) } }

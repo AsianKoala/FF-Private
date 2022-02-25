@@ -20,15 +20,15 @@ class Auto : CommandOpMode() {
         val rin = Rin(hardware)
         val startPose = Pose()
 
-//        CommandScheduler.scheduleOnceForState(SequentialCommandGroup(
-//                { rin.kei.startPose = startPose },
-//                PurePursuitCommand(
-//                        rin.kei,
-//                        Waypoint(0, 0, 0),
-//                        Waypoint(0, 16, 8),
-//                        Waypoint(16, 16, 8),
-//                        StopWaypoint(16, 32, 8, 90.0.radians, 2.0)
-//                ).alongWith(IntakeTurnOnCommand(rin.intake))
-//        ).andThen(IntakeTurnOffCommand(rin.intake)), OpModeState.LOOP)
+        SequentialCommandGroup(
+                { rin.kei.startPose = startPose },
+                PurePursuitCommand(
+                        rin.kei,
+                        Waypoint(0, 0, 0),
+                        Waypoint(0, 16, 8),
+                        Waypoint(16, 16, 8),
+                        StopWaypoint(16, 32, 8, 90.0.radians, 2.0)
+                ).alongWith(IntakeTurnOnCommand(rin.intake))
+        ).andThen(IntakeTurnOffCommand(rin.intake)).schedule()
     }
 }

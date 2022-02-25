@@ -19,7 +19,7 @@ object MecanumPurePursuitController {
 
     fun relDistance(curr: Pose, target: Point): Point {
         val d = (curr.point - target).hypot
-        val rh = (target - curr.point).atan2 - curr.h
+        val rh = (target - curr.point).atan2 - curr.heading
         val wrapped = rh.wrap
         return Point(-d * wrapped.sin, d * wrapped.cos)
     }
@@ -30,14 +30,14 @@ object MecanumPurePursuitController {
         val translationalPowers = relPPTarget / 12.0
 
         val angleToTarget = if (target is LockedWaypoint) {
-            (target.h - curr.h).wrap
+            (target.h - curr.heading).wrap
         } else {
             val forward = (target.point - curr.point).atan2
             val back = forward + PI
-            val angleToForward = (forward - curr.h).wrap
-            val angleToBack = (back - curr.h).wrap
+            val angleToForward = (forward - curr.heading).wrap
+            val angleToBack = (back - curr.heading).wrap
             val autoAngle = if (angleToForward.absoluteValue < angleToBack.absoluteValue) forward else back
-            (autoAngle - curr.h).wrap
+            (autoAngle - curr.heading).wrap
         }
 
         val rotationPower = angleToTarget / 90.0
