@@ -1,4 +1,4 @@
-package robotuprising.koawalib.path2
+package robotuprising.koawalib.path
 
 import robotuprising.koawalib.math.Point
 

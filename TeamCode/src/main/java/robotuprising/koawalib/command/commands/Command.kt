@@ -1,7 +1,7 @@
 package robotuprising.koawalib.command.commands
 
 import robotuprising.koawalib.command.group.*
-import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.command.CommandScheduler
 import robotuprising.koawalib.subsystem.Subsystem
 
 fun interface Command {

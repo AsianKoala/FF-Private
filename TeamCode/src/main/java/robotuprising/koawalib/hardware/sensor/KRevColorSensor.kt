@@ -3,7 +3,7 @@ package robotuprising.koawalib.hardware.sensor
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import robotuprising.koawalib.hardware.HardwareDevice
-import robotuprising.koawalib.util.KDouble
+import robotuprising.koawalib.util.interfaces.KDouble
 
 class KRevColorSensor  : HardwareDevice<RevColorSensorV3>, KDouble {
     constructor(device: RevColorSensorV3) : super(device)

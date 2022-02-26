@@ -2,7 +2,7 @@ package robotuprising.koawalib.command.commands.watchdog
 
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.CommandBase
-import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.command.CommandScheduler
 
 class StickWatchdog(
         private val command: Command

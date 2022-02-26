@@ -1,6 +1,5 @@
 package robotuprising.koawalib.subsystem.drive
 
-import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.CommandBase
 import robotuprising.koawalib.gamepad.Stick
 import robotuprising.koawalib.math.MathUtil
@@ -9,9 +8,9 @@ import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.MathUtil.wrap
 import robotuprising.koawalib.math.Point
 import robotuprising.koawalib.math.Pose
-import robotuprising.koawalib.structure.Alliance
+import robotuprising.koawalib.util.Alliance
 
-class MecanumDriveManualCommand(
+class MecanumDriveCommand(
         private val drive: KMecanumDrive,
         private val leftStick: Stick,
         private val rightStick: Stick,

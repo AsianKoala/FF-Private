@@ -1,4 +1,4 @@
-package robotuprising.koawalib.util
+package robotuprising.koawalib.util.interfaces
 
 interface Invertable<T : Invertable<T>?> {
     fun setInverted(invert: Boolean): T

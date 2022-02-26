@@ -1,7 +1,6 @@
 package robotuprising.lib.system.statemachine
 
-import robotuprising.koawalib.statemachine.Action
-import robotuprising.koawalib.statemachine.transition.TransitionCondition
+import robotuprising.lib.system.statemachine.transition.TransitionCondition
 
 data class State<StateEnum>(
         var state: StateEnum,

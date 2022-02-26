@@ -1,4 +1,4 @@
-package robotuprising.koawalib.util
+package robotuprising.koawalib.util.interfaces
 
 interface Enableable<T : Enableable<T>?> {
     fun enable(): T {

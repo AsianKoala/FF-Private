@@ -1,4 +1,4 @@
-package robotuprising.koawalib.util
+package robotuprising.koawalib.util.interfaces
 
 fun interface KDouble {
     fun invokeDouble(): Double

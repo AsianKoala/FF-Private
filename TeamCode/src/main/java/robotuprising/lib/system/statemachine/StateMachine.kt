@@ -1,7 +1,6 @@
 package robotuprising.lib.system.statemachine
 
-import robotuprising.koawalib.statemachine.State
-import robotuprising.koawalib.statemachine.transition.TimedTransition
+import robotuprising.lib.system.statemachine.transition.TimedTransition
 
 class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, private val exitToState: StateEnum?) {
     var running = false

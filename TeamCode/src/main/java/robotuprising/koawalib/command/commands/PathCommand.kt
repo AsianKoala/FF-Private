@@ -1,6 +1,6 @@
 package robotuprising.koawalib.command.commands
 
-import robotuprising.koawalib.path2.Path
+import robotuprising.koawalib.path.Path
 import robotuprising.koawalib.subsystem.drive.KMecanumOdoDrive
 
 class PathCommand(

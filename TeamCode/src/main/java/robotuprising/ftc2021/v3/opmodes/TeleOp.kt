@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import robotuprising.ftc2021.v3.Controls
 import robotuprising.ftc2021.v3.Hardware
 import robotuprising.ftc2021.v3.Rin
-import robotuprising.koawalib.structure.CommandOpMode
+import robotuprising.koawalib.command.CommandOpMode
 
 @TeleOp
 class TeleOp : CommandOpMode() {

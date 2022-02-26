@@ -1,7 +1,5 @@
 package robotuprising.lib.system.statemachine.transition
 
-import robotuprising.koawalib.statemachine.transition.TransitionCondition
-
 class TimedTransition(val time: Double) : TransitionCondition {
     private var startTime = 0L
 

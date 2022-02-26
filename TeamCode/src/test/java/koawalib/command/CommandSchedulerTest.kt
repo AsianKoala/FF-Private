@@ -1,11 +1,7 @@
 package koawalib.command
 
 import robotuprising.koawalib.command.commands.*
-import robotuprising.koawalib.command.group.ParallelCommandGroup
-import robotuprising.koawalib.command.group.ParallelDeadlineGroup
-import robotuprising.koawalib.command.group.ParallelRaceGroup
-import robotuprising.koawalib.command.group.SequentialCommandGroup
-import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.command.CommandScheduler
 
 object CommandSchedulerTest {
 

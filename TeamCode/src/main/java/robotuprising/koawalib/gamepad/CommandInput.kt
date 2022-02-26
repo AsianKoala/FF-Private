@@ -2,7 +2,7 @@ package robotuprising.koawalib.gamepad
 
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.watchdog.GamepadWatchdog
-import robotuprising.koawalib.util.KBoolean
+import robotuprising.koawalib.util.interfaces.KBoolean
 
 
 interface CommandInput<T : ButtonBase> : KBoolean {

@@ -1,10 +1,9 @@
-package robotuprising.koawalib.command.scheduler
+package robotuprising.koawalib.command
 
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.CommandState
 import robotuprising.koawalib.command.commands.InfiniteCommand
 import robotuprising.koawalib.command.group.CommandGroupBase
-import robotuprising.koawalib.structure.CommandOpMode
 import robotuprising.koawalib.subsystem.Subsystem
 import java.util.Collections
 import kotlin.collections.ArrayList
@@ -38,7 +37,7 @@ object CommandScheduler {
         val scheduledCommand = CommandState(interruptible)
         mScheduledCommands[command] = scheduledCommand
         mInitActions.forEach { it.invoke(command) }
-        requirements.forEach { this.mRequirements[it] = command }
+        requirements.forEach { mRequirements[it] = command }
     }
 
     private fun schedule(interruptible: Boolean, command: Command) {

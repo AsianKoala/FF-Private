@@ -1,6 +1,6 @@
 package robotuprising.koawalib.gamepad
 
-import robotuprising.koawalib.util.KBoolean
+import robotuprising.koawalib.util.interfaces.KBoolean
 
 interface Binding<T : KBoolean> : KBoolean {
     /** Button type

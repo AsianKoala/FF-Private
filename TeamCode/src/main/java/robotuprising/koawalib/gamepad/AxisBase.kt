@@ -1,7 +1,7 @@
 package robotuprising.koawalib.gamepad
 
-import robotuprising.koawalib.util.KDouble
-import robotuprising.koawalib.util.Periodic
+import robotuprising.koawalib.util.interfaces.KDouble
+import robotuprising.koawalib.util.interfaces.Periodic
 import kotlin.math.abs
 
 

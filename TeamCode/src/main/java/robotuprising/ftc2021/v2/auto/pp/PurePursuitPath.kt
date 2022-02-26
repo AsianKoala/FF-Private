@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.v2.auto.pp
 
 import com.qualcomm.robotcore.util.ElapsedTime
-import robotuprising.koawalib.path2.Waypoint
+import robotuprising.koawalib.path.Waypoint
 import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Pose
 import kotlin.collections.ArrayList

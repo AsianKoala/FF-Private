@@ -2,15 +2,10 @@ package robotuprising.ftc2021.v3.opmodes
 
 import robotuprising.ftc2021.v3.Hardware
 import robotuprising.ftc2021.v3.Rin
-import robotuprising.ftc2021.v3.commands.intake.IntakeTurnOffCommand
-import robotuprising.ftc2021.v3.commands.intake.IntakeTurnOnCommand
-import robotuprising.koawalib.command.group.SequentialCommandGroup
-import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.Pose
 //import robotuprising.koawalib.path.PurePursuitCommand
 //import robotuprising.koawalib.path.waypoints.StopWaypoint
-import robotuprising.koawalib.path2.Waypoint
-import robotuprising.koawalib.structure.CommandOpMode
+import robotuprising.koawalib.command.CommandOpMode
 
 class Auto : CommandOpMode() {
     override fun mInit() {

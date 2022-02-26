@@ -1,11 +1,7 @@
 package robotuprising.lib.system.statemachine
 
-import robotuprising.koawalib.statemachine.Action
-import robotuprising.koawalib.statemachine.State
-import robotuprising.koawalib.statemachine.StateMachine
-import robotuprising.koawalib.statemachine.StateMachineBuilder
-import robotuprising.koawalib.statemachine.transition.TimedTransition
-import robotuprising.koawalib.statemachine.transition.TransitionCondition
+import robotuprising.lib.system.statemachine.transition.TimedTransition
+import robotuprising.lib.system.statemachine.transition.TransitionCondition
 
 class StateMachineBuilder<StateEnum> {
 

@@ -1,34 +1,27 @@
-package robotuprising.koawalib.structure
+package robotuprising.koawalib.command
 
 import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import robotuprising.koawalib.command.commands.InfiniteCommand
-import robotuprising.koawalib.command.scheduler.CommandScheduler
 import robotuprising.koawalib.gamepad.CommandGamepad
 import robotuprising.koawalib.logger.KoawaDashboard
 import robotuprising.koawalib.statemachine.StateMachineBuilder
+import robotuprising.koawalib.util.OpModeState
 
 open class CommandOpMode : LinearOpMode() {
-    lateinit var driverGamepad: CommandGamepad
-    lateinit var gunnerGamepad: CommandGamepad
+    protected lateinit var driverGamepad: CommandGamepad
+    protected lateinit var gunnerGamepad: CommandGamepad
 
     private var prevLoopTime = System.currentTimeMillis()
-
-    private var terminate = false
-
     private var opModeTimer = ElapsedTime()
-
     private lateinit var hubs: List<LynxModule>
 
     var disabled = false
-
     val isLooping get() = mainStateMachine.state == OpModeState.LOOP
 
     private fun setup() {
         CommandScheduler.resetScheduler()
         CommandScheduler.setOpMode(this)
-
         KoawaDashboard.init(telemetry, false)
 
         hubs = hardwareMap.getAll(LynxModule::class.java)
@@ -36,7 +29,6 @@ open class CommandOpMode : LinearOpMode() {
 
         driverGamepad = CommandGamepad(gamepad1)
         gunnerGamepad = CommandGamepad(gamepad2)
-
         opModeTimer.reset()
     }
 
@@ -89,7 +81,7 @@ open class CommandOpMode : LinearOpMode() {
         mainStateMachine.reset()
         mainStateMachine.start()
 
-        while(mainStateMachine.running && !terminate) {
+        while(mainStateMachine.running) {
             mainStateMachine.update()
         }
     }
@@ -101,9 +93,4 @@ open class CommandOpMode : LinearOpMode() {
     open fun mLoop() {}
     open fun mStop() {}
     open fun mUniversal() {}
-
-
-    fun terminate() {
-        terminate = true
-    }
 }

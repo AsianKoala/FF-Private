@@ -4,10 +4,9 @@ import robotuprising.ftc2021.v2.auto.pp.PurePursuitPath
 import robotuprising.ftc2021.v2.hardware.osiris.interfaces.Loopable
 import robotuprising.ftc2021.v2.hardware.osiris.OsirisMotor
 import robotuprising.ftc2021.v2.subsystems.osiris.Subsystem
-import robotuprising.koawalib.path2.Waypoint
+import robotuprising.koawalib.path.Waypoint
 import robotuprising.lib.math.*
 import robotuprising.lib.opmode.OsirisDashboard
-import kotlin.math.absoluteValue
 
 object Ghost : Subsystem(), Loopable {
     private val fl = OsirisMotor("fl", true).brake.openLoopControl.reverse

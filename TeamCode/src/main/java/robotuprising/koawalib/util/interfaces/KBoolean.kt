@@ -1,4 +1,4 @@
-package robotuprising.koawalib.util
+package robotuprising.koawalib.util.interfaces
 
 fun interface KBoolean {
     fun invokeBoolean(): Boolean

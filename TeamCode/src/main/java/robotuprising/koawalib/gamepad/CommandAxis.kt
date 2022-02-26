@@ -1,7 +1,7 @@
 package robotuprising.koawalib.gamepad
 
 import robotuprising.koawalib.command.commands.Command
-import robotuprising.koawalib.util.KDouble
+import robotuprising.koawalib.util.interfaces.KDouble
 
 class CommandAxis(supplier: () -> Double, threshold: Double = DEFAULT_TRIGGER_THRESHOLD) : AxisBase(supplier, threshold), CommandInput<CommandAxis> {
     override fun instance(): CommandAxis {

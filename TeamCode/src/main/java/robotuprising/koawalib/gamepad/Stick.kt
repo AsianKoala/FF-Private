@@ -1,9 +1,9 @@
 package robotuprising.koawalib.gamepad
 
 import robotuprising.koawalib.math.Point
-import robotuprising.koawalib.util.Enableable
+import robotuprising.koawalib.util.interfaces.Enableable
 
-import robotuprising.koawalib.util.Periodic
+import robotuprising.koawalib.util.interfaces.Periodic
 
 
 interface Stick : Periodic, Enableable<Stick> {

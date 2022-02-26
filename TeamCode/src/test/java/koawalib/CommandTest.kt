@@ -1,8 +1,7 @@
 package koawalib
 
 import robotuprising.koawalib.command.commands.Command
-import robotuprising.koawalib.command.group.SequentialCommandGroup
-import robotuprising.koawalib.command.scheduler.CommandScheduler
+import robotuprising.koawalib.command.CommandScheduler
 
 object CommandTest {
     @JvmStatic

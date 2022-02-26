@@ -3,7 +3,7 @@ package koawalib.path
 import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.Point
 import robotuprising.koawalib.math.Pose
-import robotuprising.koawalib.path2.PurePursuitController
+import robotuprising.koawalib.path.PurePursuitController
 
 object PurePursuitControllerTest {
     @JvmStatic

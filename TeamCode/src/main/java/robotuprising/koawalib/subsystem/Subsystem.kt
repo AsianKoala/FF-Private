@@ -1,8 +1,7 @@
 package robotuprising.koawalib.subsystem
 
 import robotuprising.koawalib.command.commands.Command
-import robotuprising.koawalib.command.scheduler.CommandScheduler
-import robotuprising.koawalib.util.Periodic
+import robotuprising.koawalib.command.CommandScheduler
 
 interface Subsystem {
     fun periodic() {

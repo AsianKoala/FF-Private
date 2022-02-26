@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range
 import robotuprising.koawalib.hardware.HardwareDevice
 import robotuprising.koawalib.math.MathUtil.clip
 import robotuprising.koawalib.math.MathUtil.d
-import robotuprising.koawalib.util.KDouble
+import robotuprising.koawalib.util.interfaces.KDouble
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import kotlin.math.absoluteValue
 

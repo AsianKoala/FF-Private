@@ -1,9 +1,9 @@
 package robotuprising.koawalib.gamepad
 
-import robotuprising.koawalib.util.Enableable
-import robotuprising.koawalib.util.Invertable
-import robotuprising.koawalib.util.KBoolean
-import robotuprising.koawalib.util.Periodic
+import robotuprising.koawalib.util.interfaces.Enableable
+import robotuprising.koawalib.util.interfaces.Invertable
+import robotuprising.koawalib.util.interfaces.KBoolean
+import robotuprising.koawalib.util.interfaces.Periodic
 
 
 open class ButtonBase(protected var booleanSupplier: (() -> Boolean)?) : KBoolean, Periodic, Invertable<ButtonBase>, Enableable<ButtonBase> {

@@ -1,4 +1,4 @@
-package robotuprising.koawalib.path2
+package robotuprising.koawalib.path
 
 import com.qualcomm.robotcore.util.Range
 import robotuprising.koawalib.math.MathUtil

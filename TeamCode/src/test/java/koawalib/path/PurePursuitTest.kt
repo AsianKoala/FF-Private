@@ -2,9 +2,9 @@ package koawalib.path
 
 import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.Pose
-import robotuprising.koawalib.path2.Path
-import robotuprising.koawalib.path2.PurePursuitController
-import robotuprising.koawalib.path2.Waypoint
+import robotuprising.koawalib.path.Path
+import robotuprising.koawalib.path.PurePursuitController
+import robotuprising.koawalib.path.Waypoint
 
 object PurePursuitTest {
 

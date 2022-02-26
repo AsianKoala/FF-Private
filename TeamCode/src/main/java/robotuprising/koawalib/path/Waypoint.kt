@@ -1,10 +1,9 @@
-package robotuprising.koawalib.path2
+package robotuprising.koawalib.path
 
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.math.MathUtil.d
 import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.Point
-import robotuprising.koawalib.math.Pose
 
 data class Waypoint(
         val x: Double = 0.0,

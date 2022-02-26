@@ -1,6 +1,6 @@
 package robotuprising.lib.control.auto.path
 
-import robotuprising.koawalib.path2.Waypoint
+import robotuprising.koawalib.path.Waypoint
 import robotuprising.lib.util.Extensions.deepCopy
 import java.util.*
 import kotlin.collections.ArrayList
