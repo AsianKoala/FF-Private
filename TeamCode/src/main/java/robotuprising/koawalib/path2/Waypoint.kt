@@ -24,7 +24,9 @@ data class Waypoint(
     constructor(x: Int, y: Int, followDistance: Int) : this(x.d, y.d, followDistance.d)
     val point = Point(x, y)
 
-    val copy: Waypoint get() = Waypoint(x, y, followDistance)
+    val copy: Waypoint get() = Waypoint(x, y, followDistance, maxMoveSpeed, maxTurnSpeed,
+            stop, isHeadingLocked, headingLockAngle, slowDownTurnRadians,
+            lowestSlowDownFromTurnError, turnLookaheadDistance, command)
     fun distance(p2: Waypoint) = point.distance(p2.point)
     fun distance(p2: Pose) = point.distance(p2.point)
 }

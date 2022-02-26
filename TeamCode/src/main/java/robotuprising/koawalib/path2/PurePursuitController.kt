@@ -16,7 +16,7 @@ object PurePursuitController {
                      stop: Boolean = false, maxMoveSpeed: Double = 1.0, maxTurnSpeed: Double = 1.0,
                      isHeadingLocked: Boolean = false, headingLockAngle: Double = 0.0,
                      slowDownTurnRadians: Double = 60.0.radians, lowestSlowDownFromTurnError: Double = 0.4,
-                     onlyTurn: Boolean = false): Pose {
+                     noTurn: Boolean = false): Pose {
 
         val absoluteDelta = targetPosition - currPose.point
         val distanceToPoint = absoluteDelta.hypot
@@ -31,9 +31,14 @@ object PurePursuitController {
         var xPower = relativeXToPosition / relativeAbsMagnitude
         var yPower = relativeYToPosition / relativeAbsMagnitude
 
+        println("raw x power $xPower")
+        println("raw y power $yPower")
+
         if(stop) {
             xPower *= relativeXToPosition.absoluteValue / 12.0
             yPower *= relativeYToPosition.absoluteValue / 12.0
+        } else {
+            println("FULL SPEED")
         }
 
         xPower = MathUtil.clamp(xPower, -maxMoveSpeed, maxMoveSpeed)
@@ -66,8 +71,15 @@ object PurePursuitController {
         turnPower *= Range.clip(relativePointAngle.absoluteValue / 3.0.radians, 0.0, 1.0)
 
 
-        if(onlyTurn) {
-            return Pose(0.0, 0.0, turnPower)
+        println("close scalar Y ${Range.clip(relativeYToPosition.absoluteValue / 2.5, 0.0, 1.0)}")
+
+        println("pre turn xPower $xPower")
+        println("pre turn ypower $yPower")
+
+
+
+        if(noTurn) {
+            return Pose(xPower, yPower, 0.0)
         }
 
 
@@ -78,23 +90,24 @@ object PurePursuitController {
             errorTurnSoScaleMovement = 1.0
         }
 
+
+        println("error turn movment scale $errorTurnSoScaleMovement")
+
         xPower *= errorTurnSoScaleMovement
         yPower *= errorTurnSoScaleMovement
 
 
+
+        println("relative X $relativeXToPosition")
+        println("relative Y $relativeYToPosition")
+
+
+        println("final x power goTopos $xPower")
+        println("final y power goToPos $yPower")
+
+
         return Pose(xPower, yPower, turnPower)
     }
-    
-    
-    fun goToPosition(pose: Pose, followAngle: Double, waypoint: Waypoint): Pose {
-       return goToPosition(
-                pose, waypoint.point, followAngle, waypoint.stop,
-                waypoint.maxMoveSpeed, waypoint.maxTurnSpeed,
-                waypoint.isHeadingLocked, waypoint.headingLockAngle,
-                waypoint.slowDownTurnRadians, waypoint.lowestSlowDownFromTurnError
-        )
-    }
-
 
 
     fun clipToLine(start: Point, end: Point, robot: Point): Point {
@@ -102,10 +115,10 @@ object PurePursuitController {
         var startY = start.x
 
         if (start.x == end.x)
-            startX += 0.01
+            startX += 0.001
 
         if (start.y == end.y)
-            startY += 0.01
+            startY += 0.001
 
         val mStart = Point(startX, startY)
 
@@ -140,7 +153,7 @@ object PurePursuitController {
             startPoint: Point,
             endPoint: Point,
             radius: Double
-    ): ArrayList<Point> {
+    ): List<Point> {
         val start = startPoint - center
         val end = endPoint - center
         val deltas = end - start
@@ -169,7 +182,7 @@ object PurePursuitController {
 //            }
 //        }
 //        return closest
-        return intersections
+        return intersections.map { it + center }
     }
 
 
@@ -212,7 +225,7 @@ object PurePursuitController {
 
         // find what segment we're on
         val clippedToLine = clipToPath(waypoints, currPose.point)
-        val currFollowIndex = clippedToLine.index
+        val currFollowIndex = clippedToLine.index + 1
 
         // extend circle, find intersects with segments, choose closest
         // to last point (consider heading based instead of waypoint order based)
@@ -231,13 +244,11 @@ object PurePursuitController {
 
                 if(dist < closestDistance) {
                     closestDistance = dist
-                    followMe = followMe.copy(x = clippedToLine.point.x, y = clippedToLine.point.y)
+//                    followMe = followMe.copy(x = intersection.x, y = intersection.y)
+                    followMe = endLine.copy(x = intersection.x, y = intersection.y)
                 }
-
-                println("closestDistance: $closestDistance")
             }
         }
-
 
         return followMe
     }

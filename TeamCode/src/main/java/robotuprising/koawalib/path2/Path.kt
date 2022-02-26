@@ -28,6 +28,9 @@ class Path(private val waypoints: List<Waypoint>, private val followAngle: Doubl
         val clippedToPath = PurePursuitController.clipToPath(waypoints, pose.point)
         val currFollowIndex = clippedToPath.index + 1
 
+        // NOTE: we start running commands based on CLIPPED position
+        // meaning, if the robot hasn't passed a waypoint, even if following that next waypoint's segment
+        // the robot will not run the next waypoint command until after it has passed it (reflected by currFollowIndex)
         for(waypoint in waypoints.subList(0, currFollowIndex)) {
             if(waypoint.command != null) {
                 if(!waypoint.command.isFinished && !waypoint.command.isScheduled) {
@@ -45,7 +48,6 @@ class Path(private val waypoints: List<Waypoint>, private val followAngle: Doubl
 
 
 
-        // TODO CHECK IF THIS THING WORKS UWU
         extendedPath[waypoints.size-1] = extendedPath[waypoints.size-1].copy(x = last.x, y = last.y)
 
 
@@ -65,7 +67,7 @@ class Path(private val waypoints: List<Waypoint>, private val followAngle: Doubl
                 pose, movementLookahead.point, followAngle, movementLookahead.stop,
                 movementLookahead.maxMoveSpeed, movementLookahead.maxTurnSpeed,
                 movementLookahead.isHeadingLocked, movementLookahead.headingLockAngle,
-                movementLookahead.slowDownTurnRadians, movementLookahead.lowestSlowDownFromTurnError
+                movementLookahead.slowDownTurnRadians, movementLookahead.lowestSlowDownFromTurnError, true
         ).point
 
 
@@ -81,11 +83,13 @@ class Path(private val waypoints: List<Waypoint>, private val followAngle: Doubl
         val finalTurnPower = result.first
         val realRelativeAngle = result.second
 
-        val finalXPower = movePower.x * MathUtil.clamp(
-                realRelativeAngle.absoluteValue / movementLookahead.slowDownTurnRadians, movementLookahead.lowestSlowDownFromTurnError, 1.0)
+        val errorTurnSoScaleMovement = MathUtil.clamp(1.0 - (realRelativeAngle / movementLookahead.slowDownTurnRadians).absoluteValue
+                , movementLookahead.lowestSlowDownFromTurnError, 1.0)
 
-        val finalYPower = movePower.y * MathUtil.clamp(
-                realRelativeAngle.absoluteValue / movementLookahead.slowDownTurnRadians, movementLookahead.lowestSlowDownFromTurnError, 1.0)
+
+
+        val finalXPower = movePower.x * errorTurnSoScaleMovement
+        val finalYPower = movePower.y * errorTurnSoScaleMovement
 
 
 
@@ -102,7 +106,7 @@ class Path(private val waypoints: List<Waypoint>, private val followAngle: Doubl
         println("move lookahead: $movementLookahead")
         println("turn lookahead: $turnLookahead")
         println("clipped distance: $clippedDistanceToEnd")
-        println("relative angle: $realRelativeAngle")
+        println("relative angle: ${realRelativeAngle.degrees}")
         println("x power: $finalXPower")
         println("y power: $finalYPower")
         println("turn power: $finalTurnPower")
