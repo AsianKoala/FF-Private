@@ -1,9 +1,8 @@
-package robotuprising.lib.system.statemachine
+package robotuprising.koawalib.statemachine
 
-import robotuprising.koawalib.statemachine.State
 import robotuprising.koawalib.statemachine.transition.TimedTransition
 
-class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, private val exitToState: StateEnum?) {
+class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, private val exitToState: StateEnum?, private val universals: List<Action>) {
     var running = false
         private set
 
@@ -34,7 +33,8 @@ class StateMachine<StateEnum>(private val stateList: List<State<StateEnum>>, pri
 
         if (!running) return
 
-        currentState.loopActions.forEach { it.run() }
+        currentState.loopActions.forEach(Action::run)
+        universals.forEach(Action::run)
     }
 
     // returns true if change in state

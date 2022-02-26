@@ -6,7 +6,7 @@ import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.system.Subsystem
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 import robotuprising.lib.util.Extensions.pose
 
 class Nakiri : Subsystem {

@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.motor.controllers
+package robotuprising.koawalib.hardware.motor.controllers
 
 data class MPConfig(
         val pidConfig: PIDFConfig,

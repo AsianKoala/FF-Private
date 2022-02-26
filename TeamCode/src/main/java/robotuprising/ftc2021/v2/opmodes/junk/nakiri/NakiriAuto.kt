@@ -6,7 +6,7 @@ import robotuprising.ftc2021.v2.subsystems.nakiri.vision.Webcam
 import robotuprising.ftc2021.v2.util.Globals
 import robotuprising.lib.math.MathUtil.radians
 import robotuprising.lib.opmode.AllianceSide
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 //@Autonomous(preselectTeleOp = "NakiriTeleOp")
 class NakiriAuto : NakiriOpMode() {

@@ -1,6 +1,6 @@
 package robotuprising.koawalib.subsystem.odometry
 
-import robotuprising.koawalib.hardware.KMotor
+import robotuprising.koawalib.hardware.motor.KMotor
 
 data class OdoConfig(
         val TICKS_PER_INCH: Double,

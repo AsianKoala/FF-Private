@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.v2.statemachines
 
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.*
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 // STATIC TURRET MOVEMENT
 object AllianceReadyDepositStateMachine : StateMachineI<AllianceReadyDepositStateMachine.States>() {

@@ -1,15 +1,12 @@
-package robotuprising.lib.system.statemachine
+package robotuprising.koawalib.statemachine
 
-import robotuprising.koawalib.statemachine.Action
-import robotuprising.koawalib.statemachine.State
-import robotuprising.koawalib.statemachine.StateMachine
-import robotuprising.koawalib.statemachine.StateMachineBuilder
 import robotuprising.koawalib.statemachine.transition.TimedTransition
 import robotuprising.koawalib.statemachine.transition.TransitionCondition
 
 class StateMachineBuilder<StateEnum> {
 
     private val stateList = mutableListOf<State<StateEnum>>()
+    private val universals = mutableListOf<Action>()
 
     private var exitToState: StateEnum? = null
 
@@ -65,7 +62,13 @@ class StateMachineBuilder<StateEnum> {
         return this
     }
 
+    fun universal(callback: Action): StateMachineBuilder<StateEnum> {
+        universals.add(callback)
+
+        return this
+    }
+
     fun build(): StateMachine<StateEnum> {
-        return StateMachine(stateList, exitToState)
+        return StateMachine(stateList, exitToState, universals)
     }
 }

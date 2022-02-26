@@ -3,7 +3,7 @@ package robotuprising.ftc2021.v2.statemachines.blue
 import robotuprising.ftc2021.v2.statemachines.StateMachineI
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.*
 import robotuprising.lib.opmode.OsirisDashboard
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 object IntakeStateMachineBlue : StateMachineI<IntakeStateMachineBlue.States>() {
     enum class States {

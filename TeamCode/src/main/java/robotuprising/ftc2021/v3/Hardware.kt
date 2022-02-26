@@ -1,7 +1,8 @@
 package robotuprising.ftc2021.v3
 
 import com.acmerobotics.dashboard.config.Config
-import robotuprising.koawalib.hardware.KMotor
+import robotuprising.koawalib.hardware.motor.KMotor
+import robotuprising.koawalib.hardware.motor.KMotorEx
 import robotuprising.koawalib.hardware.sensor.KRevColorSensor
 
 class Hardware {
@@ -15,7 +16,7 @@ class Hardware {
         const val BR_NAME = "BR"
     }
 
-    val intakeMotor = KMotor(INTAKE_NAME)
+    val intakeMotor = KMotorEx(INTAKE_NAME)
     val loadingSensor = KRevColorSensor(LOADING_SENSOR_NAME)
     val flMotor = KMotor(FL_NAME)
     val blMotor = KMotor(BL_NAME)

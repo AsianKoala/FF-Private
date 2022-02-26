@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.motor.controllers
+package robotuprising.koawalib.hardware.motor.controllers
 
 abstract class Controller {
     protected abstract fun process(): Double
@@ -6,6 +6,7 @@ abstract class Controller {
     var disabled: Boolean = false
 
     var output = 0.0
+        protected set
 
     fun enable() {
         disabled = false

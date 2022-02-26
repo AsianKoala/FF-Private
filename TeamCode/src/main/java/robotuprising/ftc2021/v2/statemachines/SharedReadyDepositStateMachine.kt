@@ -3,8 +3,8 @@ package robotuprising.ftc2021.v2.statemachines
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.Arm
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.Outtake
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.Slides
-import robotuprising.lib.system.statemachine.StateMachine
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachine
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 object SharedReadyDepositStateMachine : StateMachineI<SharedReadyDepositStateMachine.States>() {
     enum class States {

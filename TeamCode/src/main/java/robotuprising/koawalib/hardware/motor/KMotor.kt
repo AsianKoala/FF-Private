@@ -1,19 +1,20 @@
-package robotuprising.koawalib.hardware
+package robotuprising.koawalib.hardware.motor
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.Range
+import robotuprising.koawalib.hardware.HardwareDevice
 import robotuprising.koawalib.math.MathUtil.clip
+import robotuprising.koawalib.math.MathUtil.d
 import robotuprising.koawalib.util.KDouble
 import robotuprising.lib.math.MathUtil.epsilonNotEqual
 import kotlin.math.absoluteValue
 
-class KMotor: HardwareDevice<DcMotorEx>, KDouble {
+open class KMotor: HardwareDevice<DcMotorEx>, KDouble {
     constructor(device: DcMotorEx) : super(device)
     constructor(name: String) : super(name)
 
-    private var invert = false
     private var min = -1.0
     private var max = 1.0
 
@@ -29,8 +30,12 @@ class KMotor: HardwareDevice<DcMotorEx>, KDouble {
         offset = device.currentPosition
     }
 
+    open fun setSpeed(speed: Double) {
+        power = speed
+    }
+
     var power: Double = 0.0
-        set(value) {
+        private set(value) {
             val clipped = Range.clip(value, min, max)
             if(clipped epsilonNotEqual field && (clipped == 0.0 ||clipped.absoluteValue == 1.0 || (clipped - field).absoluteValue > 0.005)) {
                 field = value
@@ -54,7 +59,7 @@ class KMotor: HardwareDevice<DcMotorEx>, KDouble {
             }
         }
 
-    val position get() = device.currentPosition - offset
+    val position get() = (device.currentPosition - offset).d
 
     val velocity get() = device.velocity
 

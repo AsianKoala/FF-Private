@@ -1,6 +1,6 @@
 package robotuprising.ftc2021.v3.subsystems
 
-import robotuprising.koawalib.hardware.KMotor
+import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.subsystem.drive.KMecanumOdoDrive
 import robotuprising.koawalib.subsystem.odometry.OdoConfig
 

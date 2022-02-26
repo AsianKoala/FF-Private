@@ -1,4 +1,4 @@
-package robotuprising.koawalib.manager
+package robotuprising.koawalib.logger
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.canvas.Canvas
@@ -59,4 +59,5 @@ object KoawaDashboard {
         if(isUpdatingDashboard) {
             dashboardAdapter.put(k, v)
         }
-    }}
+    }
+}

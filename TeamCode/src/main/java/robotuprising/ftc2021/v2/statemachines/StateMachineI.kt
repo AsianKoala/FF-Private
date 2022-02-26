@@ -1,7 +1,7 @@
 package robotuprising.ftc2021.v2.statemachines
 
 import robotuprising.ftc2021.v2.manager.StateMachineManager
-import robotuprising.lib.system.statemachine.StateMachine
+import robotuprising.koawalib.statemachine.StateMachine
 
 abstract class StateMachineI<E> {
     protected abstract val stateMachine: StateMachine<E>

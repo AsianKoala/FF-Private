@@ -1,11 +1,10 @@
 package robotuprising.ftc2021.v3.subsystems
 
-import robotuprising.koawalib.hardware.KMotor
-import robotuprising.koawalib.subsystem.motor.MotorSubsystem
-import robotuprising.koawalib.subsystem.motor.controllers.OpenLoopController
+import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.hardware.sensor.KRevColorSensor
+import robotuprising.koawalib.subsystem.Subsystem
 
-class Intake(motor: KMotor, private val loadingSensor: KRevColorSensor) : MotorSubsystem(motor, OpenLoopController()) {
+class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSensor) : Subsystem {
     companion object {
         const val THRESHOLD = 20.0
         const val ON_POWER = 1.0
@@ -14,15 +13,15 @@ class Intake(motor: KMotor, private val loadingSensor: KRevColorSensor) : MotorS
     }
 
     fun turnOn() {
-        setPower(1.0)
+        motor.setSpeed(1.0)
     }
 
     fun turnReverse() {
-        setPower(-1.0)
+        motor.setSpeed(-1.0)
     }
 
     fun turnOff() {
-        setPower(0.0)
+        motor.setSpeed(0.0)
     }
 
 

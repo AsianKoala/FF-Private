@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.motor.controllers
+package robotuprising.koawalib.hardware.motor.controllers
 
 import com.acmerobotics.roadrunner.profile.MotionProfile
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator

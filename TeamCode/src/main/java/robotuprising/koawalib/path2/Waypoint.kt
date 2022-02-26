@@ -6,7 +6,6 @@ import robotuprising.koawalib.math.MathUtil.radians
 import robotuprising.koawalib.math.Point
 import robotuprising.koawalib.math.Pose
 
-// id love for this to be a dataclass but yeah sucks to suck
 data class Waypoint(
         val x: Double = 0.0,
         val y: Double = 0.0,
@@ -27,6 +26,4 @@ data class Waypoint(
     val copy: Waypoint get() = Waypoint(x, y, followDistance, maxMoveSpeed, maxTurnSpeed,
             stop, isHeadingLocked, headingLockAngle, slowDownTurnRadians,
             lowestSlowDownFromTurnError, turnLookaheadDistance, command)
-    fun distance(p2: Waypoint) = point.distance(p2.point)
-    fun distance(p2: Pose) = point.distance(p2.point)
 }

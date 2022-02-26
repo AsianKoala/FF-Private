@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.motor.controllers
+package robotuprising.koawalib.hardware.motor.controllers
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
@@ -13,22 +13,22 @@ open class PIDExController(private val config: PIDFConfig) : Controller() {
             config.kF
     )
 
-    val isAtTarget get() = (currentPosition - targetPosition).absoluteValue < config.positionEpsilon
-    val isHomed get() = !config.homePositionToDisable.isNaN() &&
-            (targetPosition - config.homePositionToDisable).absoluteValue < config.positionEpsilon &&
-            (config.homePositionToDisable - currentPosition).absoluteValue < config.positionEpsilon
-
     var targetPosition = 0.0
         private set
-    var targetVelocity = 0.0
-        private set
-    var targetAcceleration = 0.0
-        private set
+    private var targetVelocity = 0.0
+    private var targetAcceleration = 0.0
 
     var currentPosition: Double = 0.0
         private set
     var currentVelocity: Double? = 0.0
         private set
+
+
+    val isAtTarget get() = (currentPosition - targetPosition).absoluteValue < config.positionEpsilon
+    val isHomed get() = !config.homePositionToDisable.isNaN() &&
+            (targetPosition - config.homePositionToDisable).absoluteValue < config.positionEpsilon &&
+            (config.homePositionToDisable - currentPosition).absoluteValue < config.positionEpsilon
+
 
     fun measure(position: Double, velocity: Double) {
         currentPosition = position
@@ -39,7 +39,7 @@ open class PIDExController(private val config: PIDFConfig) : Controller() {
         controller.reset()
     }
 
-    fun setControllerTargets(targetP: Double, targetV: Double, targetA: Double) {
+    fun setControllerTargets(targetP: Double, targetV: Double = 0.0, targetA: Double = 0.0) {
         controller.targetPosition = targetP
         controller.targetVelocity = targetV
         controller.targetAcceleration = targetA

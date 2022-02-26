@@ -1,4 +1,4 @@
-package robotuprising.koawalib.subsystem.motor.controllers
+package robotuprising.koawalib.hardware.motor.controllers
 
 data class PIDFConfig(
         val kP: Double = 0.0,

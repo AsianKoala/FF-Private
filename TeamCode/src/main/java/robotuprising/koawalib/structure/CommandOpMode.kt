@@ -1,97 +1,97 @@
 package robotuprising.koawalib.structure
 
+import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
+import robotuprising.koawalib.command.commands.InfiniteCommand
 import robotuprising.koawalib.command.scheduler.CommandScheduler
 import robotuprising.koawalib.gamepad.CommandGamepad
-import robotuprising.koawalib.manager.KoawaBulkManager
-import robotuprising.koawalib.manager.KoawaDashboard
+import robotuprising.koawalib.logger.KoawaDashboard
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 open class CommandOpMode : LinearOpMode() {
-
     lateinit var driverGamepad: CommandGamepad
     lateinit var gunnerGamepad: CommandGamepad
 
-    val opModeState: OpModeState
-        get() = when {
-            isStopRequested -> OpModeState.STOP
-            isStarted -> OpModeState.LOOP
-            hasInitYet -> OpModeState.INIT_LOOP
-            else -> OpModeState.INIT
-        }
-
-    private var hasInitYet = false
-    private var hasStarted = false
     private var prevLoopTime = System.currentTimeMillis()
 
     private var terminate = false
 
     private var opModeTimer = ElapsedTime()
 
-    val opModeRuntime get() = opModeTimer.seconds()
+    private lateinit var hubs: List<LynxModule>
 
     var disabled = false
 
-    override fun runOpMode() {
+    val isLooping get() = mainStateMachine.state == OpModeState.LOOP
+
+    private fun setup() {
         CommandScheduler.resetScheduler()
         CommandScheduler.setOpMode(this)
 
         KoawaDashboard.init(telemetry, false)
-        KoawaBulkManager.init(hardwareMap)
+
+        hubs = hardwareMap.getAll(LynxModule::class.java)
+        hubs.forEach { it.bulkCachingMode = LynxModule.BulkCachingMode.MANUAL }
 
         driverGamepad = CommandGamepad(gamepad1)
         gunnerGamepad = CommandGamepad(gamepad2)
 
         opModeTimer.reset()
-        mainLoop@ while(true) {
-            when(opModeState) {
-                OpModeState.INIT -> {
-                    mInit()
-                    hasInitYet = true
-                }
+    }
 
-                OpModeState.INIT_LOOP -> {
-                    mInitLoop()
-                    mUniversal()
-                }
+    private fun schedulePeriodics() {
+        CommandScheduler.addPeriodic { prevLoopTime = System.currentTimeMillis() }
+        CommandScheduler.addPeriodic(driverGamepad::periodic)
+        CommandScheduler.addPeriodic(gunnerGamepad::periodic)
+        CommandScheduler.addPeriodic { hubs.forEach(LynxModule::clearBulkCache) }
+        CommandScheduler.addPeriodic(KoawaDashboard::update)
+    }
 
-                OpModeState.LOOP -> {
-                    if(hasStarted) {
-                        val dt = System.currentTimeMillis() - prevLoopTime
-                        telemetry.addData("loop ms", dt)
-                        mLoop()
-                        mUniversal()
-                    } else {
-                        mStart()
-                        opModeTimer.reset()
-                        hasStarted = true
-                    }
-                }
+    private fun handleLoopMsTelemetry() {
+        val dt = System.currentTimeMillis() - prevLoopTime
+        telemetry.addData("loop ms", dt)
+    }
 
-                OpModeState.STOP -> {
-                    break@mainLoop
-                }
-            }
+    private val mainStateMachine = StateMachineBuilder<OpModeState>()
+            .universal(CommandScheduler::run)
 
-            if(terminate) {
-                break@mainLoop
-            }
+            .state(OpModeState.INIT)
+            .onEnter(::setup)
+            .onEnter(::schedulePeriodics)
+            .onEnter(::mInit)
+            .transition { true }
 
-            prevLoopTime = System.currentTimeMillis()
+            .state(OpModeState.INIT_LOOP)
+            .loop(::mInitLoop)
+            .loop(::mUniversal)
+            .transition(::isStarted)
 
-            CommandScheduler.run()
-            driverGamepad.periodic()
-            gunnerGamepad.periodic()
+            .state(OpModeState.START)
+            .onEnter(::mStart)
+            .onEnter(opModeTimer::reset)
+            .transition { true }
 
-            KoawaBulkManager.clear()
-            KoawaDashboard.update()
+            .state(OpModeState.LOOP)
+            .loop(::mLoop)
+            .loop(::mUniversal)
+            .loop(::handleLoopMsTelemetry)
+            .transition(::isStopRequested)
+
+            .state(OpModeState.STOP)
+            .onEnter(::mStop)
+            .onEnter(CommandScheduler::resetScheduler)
+            .onEnter(opModeTimer::reset)
+            .transition { true }
+            .build()
+
+    override fun runOpMode() {
+        mainStateMachine.reset()
+        mainStateMachine.start()
+
+        while(mainStateMachine.running && !terminate) {
+            mainStateMachine.update()
         }
-
-
-        mStop()
-
-        CommandScheduler.resetScheduler()
-        opModeTimer.reset()
     }
 
 

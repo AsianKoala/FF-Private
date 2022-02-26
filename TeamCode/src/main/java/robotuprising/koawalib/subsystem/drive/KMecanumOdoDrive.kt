@@ -1,7 +1,7 @@
 package robotuprising.koawalib.subsystem.drive
 
 import com.acmerobotics.dashboard.config.Config
-import robotuprising.koawalib.hardware.KMotor
+import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.subsystem.odometry.OdoConfig
 import robotuprising.koawalib.subsystem.odometry.Odometry
 

@@ -2,8 +2,8 @@ package robotuprising.ftc2021.v2.statemachines
 
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.*
 import robotuprising.ftc2021.v2.util.Constants
-import robotuprising.lib.system.statemachine.StateMachine
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachine
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 // assumes everything is in place
 object JustDepositStateMachine : StateMachineI<JustDepositStateMachine.States>() {

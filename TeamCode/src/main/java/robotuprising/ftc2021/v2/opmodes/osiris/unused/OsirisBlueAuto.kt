@@ -11,7 +11,7 @@ import robotuprising.lib.math.AngleUnit
 import robotuprising.lib.math.Point
 import robotuprising.lib.math.Pose
 import robotuprising.lib.opmode.OsirisDashboard
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 @Autonomous
 class OsirisBlueAuto : OsirisOpMode() {

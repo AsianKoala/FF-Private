@@ -1,6 +1,6 @@
 package robotuprising.koawalib.subsystem.drive
 
-import robotuprising.koawalib.hardware.KMotor
+import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.math.Pose
 import robotuprising.koawalib.subsystem.Subsystem
 import kotlin.math.absoluteValue
@@ -36,7 +36,7 @@ open class KMecanumDrive(
         val wheels= listOf(fl, bl, fr, br)
         val absMax = wheels.maxOf { it.absoluteValue }
         val scalar = if(absMax > 1.0) absMax else 1.0
-        motors.forEachIndexed { i, it -> it.power = wheels[i] / scalar }
+        motors.forEachIndexed { i, it -> it.setSpeed(wheels[i] / scalar) }
     }
 
     override fun periodic() {

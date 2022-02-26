@@ -3,8 +3,8 @@ package robotuprising.ftc2021.v2.statemachines.blue
 import robotuprising.ftc2021.v2.statemachines.StateMachineI
 import robotuprising.ftc2021.v2.subsystems.osiris.hardware.Spinner
 import robotuprising.ftc2021.v2.util.Constants
-import robotuprising.lib.system.statemachine.StateMachine
-import robotuprising.lib.system.statemachine.StateMachineBuilder
+import robotuprising.koawalib.statemachine.StateMachine
+import robotuprising.koawalib.statemachine.StateMachineBuilder
 
 object DuckBlueStateMachine : StateMachineI<DuckBlueStateMachine.States>() {
     enum class States {
