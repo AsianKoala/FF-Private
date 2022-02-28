@@ -19,7 +19,7 @@ class Controls (private val otonashi: Otonashi, private val driver: CommandGamep
                         )
         )
 
-        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && otonashi.hub == Hub.ALLIANCE_HIGH && otonashi.intake.isMineralIn },
+        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && otonashi.hubState == HubState.ALLIANCE_HIGH && otonashi.intake.isMineralIn },
                         TurretCommands.AllianceCommand(otonashi.turret)
                                 .alongWith(
                                         PitchCommands.AllianceHighCommand(otonashi.pitch),

@@ -18,13 +18,13 @@ class Otonashi(hardware: Hardware) {
     val indexer = Indexer(hardware.indexerServo)
     val outtake = Outtake(hardware.outtakeServo)
 
-    var hub = Hub.ALLIANCE_HIGH
+    var hubState = HubState.ALLIANCE_HIGH
 
     fun incrementState() {
-        hub = Hub.values()[min(hub.ordinal+1, Hub.values().size-1)]
+        hubState = HubState.values()[min(hubState.ordinal+1, HubState.values().size-1)]
     }
 
     fun decrementState() {
-        hub = Hub.values()[max(hub.ordinal-1, 0)]
+        hubState = HubState.values()[max(hubState.ordinal-1, 0)]
     }
 }
