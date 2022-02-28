@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.qualcomm.robotcore.util.ElapsedTime
 import java.lang.Exception
 
-class MPController (private val config: MPConfig): PIDExController(config.pidConfig) {
+class MotionProfileController (private val config: MotionProfileConfig): PIDExController(config.pidConfig) {
     private var motionTimer = ElapsedTime()
     private var currentMotionProfile: MotionProfile? = null
     private var currentMotionState: MotionState? = null

@@ -1,7 +1,7 @@
 package robotuprising.koawalib.hardware.motor
 
 import robotuprising.koawalib.hardware.motor.controllers.Controller
-import robotuprising.koawalib.hardware.motor.controllers.MPController
+import robotuprising.koawalib.hardware.motor.controllers.MotionProfileController
 import robotuprising.koawalib.hardware.motor.controllers.OpenLoopController
 import robotuprising.koawalib.hardware.motor.controllers.PIDExController
 
@@ -11,7 +11,7 @@ import robotuprising.koawalib.hardware.motor.controllers.PIDExController
  */
 class KMotorEx(
         name: String,
-        private val controller: Controller = OpenLoopController()
+        private val controller: Controller
 ): KMotor(name) {
 
     override fun setSpeed(speed: Double) {
@@ -31,7 +31,7 @@ class KMotorEx(
     }
 
     fun setMotionProfileTarget(targetPosition: Double) {
-        if(controller is MPController) {
+        if(controller is MotionProfileController) {
             controller.generateAndFollowMotionProfile(controller.currentPosition, 0.0, targetPosition, 0.0)
         } else {
             throw IllegalArgumentException("MOTOR IS NOT MOTION PROFILED")
@@ -44,6 +44,14 @@ class KMotorEx(
 
     fun enable() {
         controller.enable()
+    }
+
+    fun isAtTarget(): Boolean {
+        return if(controller is PIDExController) {
+            controller.isAtTarget
+        } else {
+            true
+        }
     }
 
     fun update() {

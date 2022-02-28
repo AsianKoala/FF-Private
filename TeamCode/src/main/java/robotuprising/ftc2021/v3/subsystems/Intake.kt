@@ -1,11 +1,14 @@
 package robotuprising.ftc2021.v3.subsystems
 
+import com.acmerobotics.dashboard.config.Config
 import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.hardware.sensor.KRevColorSensor
+import robotuprising.koawalib.subsystem.DeviceSubsystem
 import robotuprising.koawalib.subsystem.Subsystem
 
-class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSensor) : Subsystem {
-    companion object {
+class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSensor) : DeviceSubsystem() {
+    @Config
+    companion object IntakeConstants {
         const val THRESHOLD = 20.0
         const val ON_POWER = 1.0
         const val OFF_POWER = 0.0
@@ -13,15 +16,15 @@ class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSens
     }
 
     fun turnOn() {
-        motor.setSpeed(1.0)
+        motor.setSpeed(ON_POWER)
     }
 
     fun turnReverse() {
-        motor.setSpeed(-1.0)
+        motor.setSpeed(REVERSE_POWER)
     }
 
     fun turnOff() {
-        motor.setSpeed(0.0)
+        motor.setSpeed(OFF_POWER)
     }
 
 
@@ -31,19 +34,15 @@ class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSens
     var isMineralIn = false
         private set
 
-
     fun startReading() {
         reading = true
     }
 
     fun stopReading() {
         reading = false
-        isMineralIn = false
     }
 
     override fun periodic() {
-        super.periodic()
-
         if(reading) {
             lastRead = loadingSensor.invokeDouble()
             isMineralIn = lastRead < THRESHOLD

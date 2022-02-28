@@ -40,7 +40,11 @@ open class ButtonBase(protected var booleanSupplier: (() -> Boolean)?) : KBoolea
         recentAction = pastState != currentState
         pastState = currentState
         isPressed = currentState
-        isToggled = (recentAction && pastState) != isToggled
+//        isToggled = (recentAction && pastState) != isToggled
+
+        if(recentAction && pastState) {
+            isToggled = !isToggled
+        }
     }
 
     /** Returns if the button is just pressed

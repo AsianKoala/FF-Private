@@ -23,16 +23,19 @@ open class PIDExController(private val config: PIDFConfig) : Controller() {
     var currentVelocity: Double? = 0.0
         private set
 
-
     val isAtTarget get() = (currentPosition - targetPosition).absoluteValue < config.positionEpsilon
     val isHomed get() = !config.homePositionToDisable.isNaN() &&
             (targetPosition - config.homePositionToDisable).absoluteValue < config.positionEpsilon &&
             (config.homePositionToDisable - currentPosition).absoluteValue < config.positionEpsilon
 
 
+    private fun ticksToUnits(ticks: Double): Double {
+        return ticks / config.ticksPerUnit
+    }
+
     fun measure(position: Double, velocity: Double) {
-        currentPosition = position
-        currentVelocity = velocity
+        currentPosition = ticksToUnits(position)
+        currentVelocity = ticksToUnits(position)
     }
 
     fun resetController() {

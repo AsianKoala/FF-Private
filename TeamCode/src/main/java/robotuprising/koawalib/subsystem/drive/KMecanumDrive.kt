@@ -2,6 +2,7 @@ package robotuprising.koawalib.subsystem.drive
 
 import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.math.Pose
+import robotuprising.koawalib.subsystem.DeviceSubsystem
 import robotuprising.koawalib.subsystem.Subsystem
 import kotlin.math.absoluteValue
 
@@ -10,7 +11,7 @@ open class KMecanumDrive(
         bl: KMotor,
         fr: KMotor,
         br: KMotor
-) : Subsystem {
+) : DeviceSubsystem() {
     private val motors = listOf(fl, bl, fr, br)
 
     var powers = Pose()

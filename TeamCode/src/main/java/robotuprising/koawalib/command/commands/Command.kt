@@ -39,12 +39,19 @@ fun interface Command {
         return SequentialCommandGroup(InstantCommand(action), this)
     }
 
+    fun continueIf(condition: () -> Boolean): Command {
+        return SequentialCommandGroup(this, WaitUntilCommand(condition))
+    }
 
     // run commands sequentially, in a sequential group
     fun andThen(vararg next: Command): Command {
         val group = SequentialCommandGroup(this)
         group.addCommands(*next)
         return group
+    }
+
+    fun sleep(seconds: Double): Command {
+        return SequentialCommandGroup(this, WaitCommand(seconds))
     }
 
     // run commands in parallel, ends when the current command, the deadline, ends

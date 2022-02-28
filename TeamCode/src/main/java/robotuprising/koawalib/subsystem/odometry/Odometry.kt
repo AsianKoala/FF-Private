@@ -6,12 +6,13 @@ import robotuprising.koawalib.math.MathUtil.sin
 import robotuprising.koawalib.math.MathUtil.wrap
 import robotuprising.koawalib.math.Point
 import robotuprising.koawalib.math.Pose
+import robotuprising.koawalib.subsystem.DeviceSubsystem
 import robotuprising.koawalib.subsystem.Subsystem
 import robotuprising.lib.util.Extensions.d
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
-class Odometry(@JvmField val config: OdoConfig) : Subsystem, Localized {
+class Odometry(@JvmField val config: OdoConfig) : DeviceSubsystem(), Localized {
     private var _position = Pose()
     override val position: Pose get() = _position
 

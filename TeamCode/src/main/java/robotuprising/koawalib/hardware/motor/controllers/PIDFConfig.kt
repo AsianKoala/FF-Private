@@ -13,4 +13,6 @@ data class PIDFConfig(
         val positionEpsilon: Double = 1.0,
 
         val homePositionToDisable: Double = Double.NaN,
+
+        val ticksPerUnit: Double = 1.0
 )

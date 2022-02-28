@@ -1,9 +1,9 @@
 package robotuprising.koawalib.subsystem
 
-import robotuprising.koawalib.hardware.HardwareDevice
+import robotuprising.koawalib.command.CommandScheduler
 
-abstract class DeviceSubsystem<T : HardwareDevice<*>>(protected val device: T) : Subsystem {
-    fun exposeDevice(): T {
-        return device
+open class DeviceSubsystem : Subsystem {
+    init {
+        CommandScheduler.registerSubsystem(this)
     }
 }

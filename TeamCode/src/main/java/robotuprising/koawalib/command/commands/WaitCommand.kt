@@ -3,7 +3,7 @@ package robotuprising.koawalib.command.commands
 import com.qualcomm.robotcore.util.ElapsedTime
 
 // timer command
-class WaitCommand(private val seconds: Double) : CommandBase() {
+open class WaitCommand(private val seconds: Double) : CommandBase() {
     private val timer = ElapsedTime()
 
     override fun init() {

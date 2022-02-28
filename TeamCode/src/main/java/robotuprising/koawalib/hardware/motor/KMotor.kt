@@ -18,7 +18,7 @@ open class KMotor: HardwareDevice<DcMotorEx>, KDouble {
     private var min = -1.0
     private var max = 1.0
 
-    private var offset = 0
+    private var offset = 0.0
 
     fun setLimits(mi: Double, ma: Double): KMotor {
         min = min.clip(1.0)
@@ -26,8 +26,8 @@ open class KMotor: HardwareDevice<DcMotorEx>, KDouble {
         return this
     }
 
-    fun zero() {
-        offset = device.currentPosition
+    fun zero(newPosition: Double = 0.0) {
+        offset = newPosition - device.currentPosition
     }
 
     open fun setSpeed(speed: Double) {
@@ -59,7 +59,7 @@ open class KMotor: HardwareDevice<DcMotorEx>, KDouble {
             }
         }
 
-    val position get() = (device.currentPosition - offset).d
+    val position get() = device.currentPosition + offset
 
     val velocity get() = device.velocity
 

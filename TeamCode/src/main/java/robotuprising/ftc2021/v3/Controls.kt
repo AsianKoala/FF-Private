@@ -1,23 +1,47 @@
 package robotuprising.ftc2021.v3
 
-import robotuprising.ftc2021.v3.commands.intake.IntakeSmartCommand
-import robotuprising.koawalib.command.commands.Command
+import robotuprising.ftc2021.v3.commands.*
+import robotuprising.koawalib.command.CommandScheduler
+import robotuprising.koawalib.command.commands.InstantCommand
+import robotuprising.koawalib.command.commands.WaitCommand
 import robotuprising.koawalib.gamepad.CommandGamepad
-import robotuprising.koawalib.util.Alliance
 import robotuprising.koawalib.subsystem.drive.MecanumDriveCommand
 
-class Controls (private val rin: Rin, private val driver: CommandGamepad, private val gunner: CommandGamepad) {
-    private val intakeButton = driver.rightTrigger.getAsButton()
-
+class Controls (private val otonashi: Otonashi, private val driver: CommandGamepad, private val gunner: CommandGamepad) {
     fun bindControls() {
-        intakeButton.whenPressed(IntakeSmartCommand(rin.intake))
+        otonashi.drive.setDefaultCommand(MecanumDriveCommand(otonashi.drive, driver.leftStick, driver.rightStick))
 
-        rin.kei.setDefaultCommand(MecanumDriveCommand(
-                rin.kei, driver.leftStick, driver.rightStick, Alliance.BLUE,
-                0.5, 0.5, 0.5, fieldOriented = true,
-                headingLock = true, { rin.kei.position.heading }, 180.0))
+        driver.rightTrigger.whenPressed(
+                IntakeCommands.IntakeSmartCommand(otonashi.intake)
+                        .andThen(
+                                IndexerCommands.Lock(otonashi.indexer)
+                                        .alongWith(OuttakeCommands.Transfer(otonashi.outtake))
+                        )
+        )
 
+        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && otonashi.hub == Hub.ALLIANCE_HIGH && otonashi.intake.isMineralIn },
+                        TurretCommands.AllianceCommand(otonashi.turret)
+                                .alongWith(
+                                        PitchCommands.AllianceHighCommand(otonashi.pitch),
+                                        SlideCommands.AllianceHighCommand(otonashi.slides),
+                                        WaitCommand(0.7).andThen(OuttakeCommands.Deposit(otonashi.outtake))
+                                )
 
-        driver.scheduleLeftStick { left, right -> Command { println(left + right) } }
+                                .continueIf(driver.rightBumper::isPressed)
+
+                                .andThen(
+                                        IndexerCommands.Index(otonashi.indexer).sleep(0.5),
+                                        IndexerCommands.Home(otonashi.indexer),
+                                        OuttakeCommands.Home(otonashi.outtake),
+                                        TurretCommands.HomeCommand(otonashi.turret)
+                                                .alongWith(
+                                                        PitchCommands.HomeCommand(otonashi.pitch),
+                                                        SlideCommands.HomeCommand(otonashi.slides)
+                                                )
+                                )
+        )
+
+        gunner.dpadUp.whenPressed(InstantCommand(otonashi::incrementState))
+        gunner.dpadDown.whenPressed(InstantCommand(otonashi::decrementState))
     }
 }

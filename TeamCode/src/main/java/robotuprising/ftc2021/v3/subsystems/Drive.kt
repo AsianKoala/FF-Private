@@ -4,7 +4,7 @@ import robotuprising.koawalib.hardware.motor.KMotor
 import robotuprising.koawalib.subsystem.drive.KMecanumOdoDrive
 import robotuprising.koawalib.subsystem.odometry.OdoConfig
 
-class Kei(
+class Drive(
         fl: KMotor,
         bl: KMotor,
         fr: KMotor,

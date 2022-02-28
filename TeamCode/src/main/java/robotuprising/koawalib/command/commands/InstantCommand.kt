@@ -4,7 +4,7 @@ import robotuprising.koawalib.subsystem.Subsystem
 
 // instant command: ends immediately after running
 open class InstantCommand(
-        private val action: () -> Unit = {},
+        private val action: () -> Unit,
         vararg requirements: Subsystem
 ): CommandBase() {
 
