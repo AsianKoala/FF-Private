@@ -17,7 +17,7 @@ object TurretCommands {
         }
     }
 
-    class HomeCommand(turret: Turret) :  TurretCommand(turret, Turret.homeAngle)
-    class SharedCommand(turret: Turret) : TurretCommand(turret, Turret.sharedAngle)
-    class AllianceCommand(turret: Turret) : TurretCommand(turret, Turret.allianceAngle)
+    class Home(turret: Turret) :  TurretCommand(turret, Turret.homeAngle)
+    class Shared(turret: Turret) : TurretCommand(turret, Turret.sharedAngle)
+    class Alliance(turret: Turret) : TurretCommand(turret, Turret.allianceAngle)
 }

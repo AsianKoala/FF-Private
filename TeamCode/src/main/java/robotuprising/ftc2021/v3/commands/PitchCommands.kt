@@ -17,9 +17,9 @@ object PitchCommands {
         }
     }
 
-    class HomeCommand(pitch: Pitch) :  PitchCommand(pitch, Pitch.homeAngle)
-    class SharedCommand(pitch: Pitch) : PitchCommand(pitch, Pitch.sharedAngle)
-    class AllianceHighCommand(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceHighAngle)
-    class AllianceMidCommand(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceMidAngle)
-    class AllianceLowCommand(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceLowAngle)
+    class Home(pitch: Pitch) :  PitchCommand(pitch, Pitch.homeAngle)
+    class Shared(pitch: Pitch) : PitchCommand(pitch, Pitch.sharedAngle)
+    class AllianceHigh(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceHighAngle)
+    class AllianceMid(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceMidAngle)
+    class AllianceLow(pitch: Pitch) : PitchCommand(pitch, Pitch.allianceLowAngle)
 }

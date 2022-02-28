@@ -17,10 +17,10 @@ class Controls (private val otonashi: Otonashi, private val driver: CommandGamep
                                 .alongWith(OuttakeCommands.Transfer(otonashi.outtake))
                 )
 
-        val depositSequence = TurretCommands.AllianceCommand(otonashi.turret)
+        val depositSequence = TurretCommands.Alliance(otonashi.turret)
                 .alongWith(
-                        PitchCommands.AllianceHighCommand(otonashi.pitch),
-                        SlideCommands.AllianceHighCommand(otonashi.slides),
+                        PitchCommands.AllianceHigh(otonashi.pitch),
+                        SlideCommands.AllianceHigh(otonashi.slides),
                         WaitCommand(0.7).andThen(OuttakeCommands.Deposit(otonashi.outtake))
                 )
 
@@ -30,10 +30,10 @@ class Controls (private val otonashi: Otonashi, private val driver: CommandGamep
                         IndexerCommands.Index(otonashi.indexer).sleep(0.5),
                         IndexerCommands.Home(otonashi.indexer),
                         OuttakeCommands.Home(otonashi.outtake),
-                        TurretCommands.HomeCommand(otonashi.turret)
+                        TurretCommands.Home(otonashi.turret)
                                 .alongWith(
-                                        PitchCommands.HomeCommand(otonashi.pitch),
-                                        SlideCommands.HomeCommand(otonashi.slides)
+                                        PitchCommands.Home(otonashi.pitch),
+                                        SlideCommands.Home(otonashi.slides)
                                 )
                 )
 

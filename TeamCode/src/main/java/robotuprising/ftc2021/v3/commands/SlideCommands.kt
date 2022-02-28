@@ -17,9 +17,9 @@ object SlideCommands {
         }
     }
 
-    class HomeCommand(slides: Slides) :  SlidesCommand(slides, Slides.homeInches)
-    class SharedCommand(slides: Slides) : SlidesCommand(slides, Slides.sharedInches)
-    class AllianceHighCommand(slides: Slides) : SlidesCommand(slides, Slides.allianceHighInches)
-    class AllianceMidCommand(slides: Slides) : SlidesCommand(slides, Slides.allianceMidInches)
-    class AllianceLowCommand(slides: Slides) : SlidesCommand(slides, Slides.allianceLowInches)
+    class Home(slides: Slides) :  SlidesCommand(slides, Slides.homeInches)
+    class Shared(slides: Slides) : SlidesCommand(slides, Slides.sharedInches)
+    class AllianceHigh(slides: Slides) : SlidesCommand(slides, Slides.allianceHighInches)
+    class AllianceMid(slides: Slides) : SlidesCommand(slides, Slides.allianceMidInches)
+    class AllianceLow(slides: Slides) : SlidesCommand(slides, Slides.allianceLowInches)
 }
