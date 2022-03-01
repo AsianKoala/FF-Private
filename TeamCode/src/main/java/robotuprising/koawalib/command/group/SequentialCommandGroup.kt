@@ -2,12 +2,12 @@ package robotuprising.koawalib.command.group
 
 import robotuprising.koawalib.command.commands.Command
 
-class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
+open class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase() {
     private val mCommands: MutableList<Command> = ArrayList()
     private var mCurrentCommandIndex = -1
     private var mRunWhenDisabled = true
 
-    override fun addCommands(vararg commands: Command) {
+    final override fun addCommands(vararg commands: Command) {
         requireUngrouped(*commands)
         check(mCurrentCommandIndex == -1) { "Commands cannot be added to a CommandGroup while the group is running" }
         registerGroupedCommands(*commands)

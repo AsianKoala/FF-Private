@@ -3,7 +3,7 @@ package robotuprising.koawalib.command.group
 import robotuprising.koawalib.command.commands.Command
 import java.util.*
 
-class ParallelCommandGroup(vararg commands: Command) : CommandGroupBase() {
+open class ParallelCommandGroup(vararg commands: Command) : CommandGroupBase() {
     private val mCommands = HashMap<Command, Boolean>()
     private var mRunsWhenDisabled = false
 

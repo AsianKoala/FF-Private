@@ -1,10 +1,9 @@
-package robotuprising.koawalib.command.commands.watchdog
+package robotuprising.koawalib.command.commands
 
-import robotuprising.koawalib.command.commands.Command
-import robotuprising.koawalib.command.commands.CommandBase
 import robotuprising.koawalib.command.CommandScheduler
 
-class GamepadWatchdog(
+// schedule a watchdog to cont. schedule other commands
+class Watchdog(
         private val condition: () -> Boolean,
         private val toSchedule: Command
 ) : CommandBase() {

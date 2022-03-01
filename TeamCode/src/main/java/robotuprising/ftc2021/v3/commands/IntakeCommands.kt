@@ -1,8 +1,11 @@
 package robotuprising.ftc2021.v3.commands
 
+import robotuprising.ftc2021.v3.subsystems.Indexer
 import robotuprising.ftc2021.v3.subsystems.Intake
+import robotuprising.ftc2021.v3.subsystems.Outtake
 import robotuprising.koawalib.command.commands.CommandBase
 import robotuprising.koawalib.command.commands.InstantCommand
+import robotuprising.koawalib.command.group.SequentialCommandGroup
 
 object IntakeCommands {
     class IntakeSmartCommand(private val intake: Intake) : CommandBase() {
@@ -31,4 +34,14 @@ object IntakeCommands {
     class IntakeOn(private val intake: Intake) : InstantCommand(intake::turnOn, intake)
     class IntakeOff(private val intake: Intake) : InstantCommand(intake::turnOff, intake)
     class IntakeReverse(private val intake: Intake) : InstantCommand(intake::turnReverse, intake)
+
+    class IntakeSequenceCommand(
+            intake: Intake,
+            indexer: Indexer,
+            outtake: Outtake
+    ) : SequentialCommandGroup(
+            IntakeSmartCommand(intake),
+            IndexerCommands.Lock(indexer)
+                    .alongWith(OuttakeCommands.Deposit(outtake))
+    )
 }

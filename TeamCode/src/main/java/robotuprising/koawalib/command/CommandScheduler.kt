@@ -3,7 +3,7 @@ package robotuprising.koawalib.command
 import robotuprising.koawalib.command.commands.Command
 import robotuprising.koawalib.command.commands.CommandState
 import robotuprising.koawalib.command.commands.InfiniteCommand
-import robotuprising.koawalib.command.commands.watchdog.GamepadWatchdog
+import robotuprising.koawalib.command.commands.Watchdog
 import robotuprising.koawalib.command.group.CommandGroupBase
 import robotuprising.koawalib.subsystem.Subsystem
 import java.util.Collections
@@ -228,7 +228,7 @@ object CommandScheduler {
     }
 
     fun scheduleWatchdog(condition: () -> Boolean, command: Command) {
-        schedule(GamepadWatchdog(condition, command))
+        schedule(Watchdog(condition, command))
     }
 
     fun onCommandInit(action: (Command) -> Unit) {

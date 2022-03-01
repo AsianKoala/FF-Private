@@ -50,7 +50,7 @@ fun interface Command {
         return group
     }
 
-    fun sleep(seconds: Double): Command {
+    fun pauseFor(seconds: Double): Command {
         return SequentialCommandGroup(this, WaitCommand(seconds))
     }
 

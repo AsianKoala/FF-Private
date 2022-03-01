@@ -8,7 +8,6 @@ class Outtake(private val servo: KServo) : DeviceSubsystem() {
     @Config
     companion object OuttakeConstants {
         const val HOME_POSITION = 0.0
-        const val TRANSFER_POSITION = 0.0
         const val DEPOSIT_POSITION = 0.0
     }
 

@@ -11,6 +11,5 @@ object OuttakeCommands {
     }
 
     class Home(outtake: Outtake) : OuttakeCommand(outtake, Outtake.HOME_POSITION)
-    class Transfer(outtake: Outtake) : OuttakeCommand(outtake, Outtake.TRANSFER_POSITION)
     class Deposit(outtake: Outtake) : OuttakeCommand(outtake, Outtake.DEPOSIT_POSITION)
 }
