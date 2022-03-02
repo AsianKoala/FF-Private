@@ -1,6 +1,6 @@
 package lib
 
-import robotuprising.lib.util.Extensions.deepCopy
+import neil.lib.util.Extensions.deepCopy
 
 object DeepCopyTest {
     @JvmStatic

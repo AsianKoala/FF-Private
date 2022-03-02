@@ -1,7 +1,6 @@
 package lib
 
-import robotuprising.lib.control.auto.path.PathUtil
-import robotuprising.lib.math.Point
+import neil.lib.math.Point
 
 object PathUtilTest {
     @JvmStatic

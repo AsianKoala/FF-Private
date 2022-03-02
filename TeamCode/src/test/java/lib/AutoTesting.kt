@@ -1,11 +1,11 @@
 package lib
 
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.MathUtil.degrees
-import robotuprising.lib.math.MathUtil.radians
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
+import neil.lib.math.Angle
+import neil.lib.math.AngleUnit
+import neil.lib.math.MathUtil.degrees
+import neil.lib.math.MathUtil.radians
+import neil.lib.math.Point
+import neil.lib.math.Pose
 
 object AutoTesting {
     @JvmStatic

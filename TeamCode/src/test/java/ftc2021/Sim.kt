@@ -1,9 +1,9 @@
 package ftc2021
 
-import robotuprising.lib.math.Angle
-import robotuprising.lib.math.AngleUnit
-import robotuprising.lib.math.Point
-import robotuprising.lib.math.Pose
+import neil.lib.math.Angle
+import neil.lib.math.AngleUnit
+import neil.lib.math.Point
+import neil.lib.math.Pose
 
 object Sim {
 

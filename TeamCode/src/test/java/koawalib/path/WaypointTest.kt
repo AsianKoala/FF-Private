@@ -1,6 +1,6 @@
 package koawalib.path
 
-import robotuprising.koawalib.path.Waypoint
+import neil.koawalib.path.Waypoint
 
 object WaypointTest {
     @JvmStatic

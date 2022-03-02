@@ -1,6 +1,6 @@
 package lib
 
-import robotuprising.lib.control.odometry.OdometryPacket
+import neil.lib.control.odometry.OdometryPacket
 
 class OdometryPacketImpl : OdometryPacket() {
     override var currLeftEncoder: Int = 1

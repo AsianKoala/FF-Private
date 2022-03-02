@@ -1,7 +1,7 @@
 package lib
 
-import robotuprising.koawalib.statemachine.StateMachine
-import robotuprising.koawalib.statemachine.StateMachineBuilder
+import neil.koawalib.statemachine.StateMachine
+import neil.koawalib.statemachine.StateMachineBuilder
 
 object StateMachineTest {
     var conditionTest = false

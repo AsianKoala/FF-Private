@@ -1,6 +1,6 @@
 package lib
 
-import robotuprising.lib.util.AkemiList
+import neil.lib.util.AkemiList
 
 object AkemiListTest {
     @JvmStatic

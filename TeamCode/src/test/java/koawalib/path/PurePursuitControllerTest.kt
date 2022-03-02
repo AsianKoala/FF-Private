@@ -1,9 +1,9 @@
 package koawalib.path
 
-import robotuprising.koawalib.math.MathUtil.radians
-import robotuprising.koawalib.math.Point
-import robotuprising.koawalib.math.Pose
-import robotuprising.koawalib.path.PurePursuitController
+import neil.koawalib.math.MathUtil.radians
+import neil.koawalib.math.Point
+import neil.koawalib.math.Pose
+import neil.koawalib.path.PurePursuitController
 
 object PurePursuitControllerTest {
     @JvmStatic
