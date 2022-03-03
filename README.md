@@ -1,7 +1,8 @@
 # FTC 14607 [![twitter](./res/fixeddarktwitterlogo.png)](https://twitter.com/asiank0ala)
 
 <div align=center>
-  code for our 2021-22 robot Osiris
+  code for our 2021-22 robot Osiris. Uses <a href=https://github.com/AsianKoala/koawalib>koawalib</a>
+  
 </div>
 
 <div align=center>
