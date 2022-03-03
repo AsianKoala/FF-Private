@@ -1,6 +1,6 @@
 package ftc2021
 
-import neil.lib.control.auto.path.PurePursuitBuilder
+import asiankoala.ftc21.v2.lib.control.auto.path.PurePursuitBuilder
 
 object WaypointTest {
     @JvmStatic

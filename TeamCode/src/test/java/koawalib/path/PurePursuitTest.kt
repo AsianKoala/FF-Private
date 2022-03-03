@@ -1,10 +1,10 @@
 package koawalib.path
 
-import neil.koawalib.math.MathUtil.radians
-import neil.koawalib.math.Pose
-import neil.koawalib.path.Path
-import neil.koawalib.path.PurePursuitController
-import neil.koawalib.path.Waypoint
+import asiankoala.koawalib.math.MathUtil.radians
+import asiankoala.koawalib.math.Pose
+import asiankoala.koawalib.path.Path
+import asiankoala.koawalib.path.PurePursuitController
+import asiankoala.koawalib.path.Waypoint
 
 object PurePursuitTest {
 

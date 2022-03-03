@@ -1,9 +1,9 @@
 package ftc2021
 
-import neil.lib.math.Angle
-import neil.lib.math.AngleUnit
-import neil.lib.math.Point
-import neil.lib.math.Pose
+import asiankoala.ftc21.v2.lib.math.Angle
+import asiankoala.ftc21.v2.lib.math.AngleUnit
+import asiankoala.ftc21.v2.lib.math.Point
+import asiankoala.ftc21.v2.lib.math.Pose
 
 object Sim {
 

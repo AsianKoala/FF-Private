@@ -1,6 +1,6 @@
 package koawalib
 
-import neil.koawalib.math.Point
+import asiankoala.koawalib.math.Point
 
 object PointCopyTest {
     @JvmStatic

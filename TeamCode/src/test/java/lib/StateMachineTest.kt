@@ -1,7 +1,7 @@
 package lib
 
-import neil.koawalib.statemachine.StateMachine
-import neil.koawalib.statemachine.StateMachineBuilder
+import asiankoala.koawalib.statemachine.StateMachine
+import asiankoala.koawalib.statemachine.StateMachineBuilder
 
 object StateMachineTest {
     var conditionTest = false

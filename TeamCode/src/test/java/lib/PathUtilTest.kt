@@ -1,6 +1,6 @@
 package lib
 
-import neil.lib.math.Point
+import asiankoala.ftc21.v2.lib.math.Point
 
 object PathUtilTest {
     @JvmStatic

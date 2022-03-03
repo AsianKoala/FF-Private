@@ -1,7 +1,7 @@
 package koawalib.command
 
-import neil.koawalib.command.commands.*
-import neil.koawalib.command.CommandScheduler
+import asiankoala.koawalib.command.commands.*
+import asiankoala.koawalib.command.CommandScheduler
 
 object CommandSchedulerTest {
 

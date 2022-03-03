@@ -1,9 +1,9 @@
 package koawalib.path
 
-import neil.koawalib.math.MathUtil.radians
-import neil.koawalib.math.Point
-import neil.koawalib.math.Pose
-import neil.koawalib.path.PurePursuitController
+import asiankoala.koawalib.math.MathUtil.radians
+import asiankoala.koawalib.math.Point
+import asiankoala.koawalib.math.Pose
+import asiankoala.koawalib.path.PurePursuitController
 
 object PurePursuitControllerTest {
     @JvmStatic
