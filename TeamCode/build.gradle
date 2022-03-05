@@ -28,7 +28,7 @@ repositories{
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    resolutionStrategy.cacheDynamicVersionsFor 10, 'minutes'
+    resolutionStrategy.cacheDynamicVersionsFor 5, 'minutes'
 }
 
 dependencies {

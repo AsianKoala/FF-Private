@@ -22,8 +22,6 @@ class Arm(private val motor: KMotorEx) : DeviceSubsystem() {
         const val ticksPerDegree = 184.0 / 90
     }
 
-    private var targetAngle = 0.0
-
     fun moveArmToDegree(degrees: Double) {
         motor.setPIDTarget(degrees)
     }

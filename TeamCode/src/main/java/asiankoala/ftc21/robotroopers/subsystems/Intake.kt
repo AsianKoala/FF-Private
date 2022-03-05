@@ -4,7 +4,6 @@ import com.asiankoala.koawalib.hardware.motor.KMotorEx
 import com.asiankoala.koawalib.hardware.sensor.KRev2mDistanceSensor
 import com.asiankoala.koawalib.subsystem.DeviceSubsystem
 
-
 class Intake(private val motor: KMotorEx, private val distanceSensor: KRev2mDistanceSensor) : DeviceSubsystem() {
     companion object IntakeConstants {
         const val threshold = 76.2

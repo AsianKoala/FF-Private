@@ -1,6 +1,6 @@
 package asiankoala.ftc21.v3
 
-enum class HubState {
+enum class Hub {
     SHARED,
     ALLIANCE_HIGH,
     ALLIANCE_MID,
