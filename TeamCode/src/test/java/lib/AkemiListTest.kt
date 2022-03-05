@@ -1,6 +1,6 @@
 package lib
 
-import asiankoala.ftc21.v2.lib.util.AkemiList
+import asiankoala.junk.v2.lib.util.AkemiList
 
 object AkemiListTest {
     @JvmStatic

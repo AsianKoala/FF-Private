@@ -1,7 +1,7 @@
 package koawalib
 
-import asiankoala.koawalib.command.commands.Command
 import asiankoala.koawalib.command.CommandScheduler
+import asiankoala.koawalib.command.commands.Command
 
 object CommandTest {
     @JvmStatic

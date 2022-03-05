@@ -10,10 +10,10 @@ object PIDFControllerTest {
 //
 //        repeat(iters) {
 //            var position = 0.0
-////            val controller = dep(dep2(0.d, 0.d, 0.d))
+// //            val controller = dep(dep2(0.d, 0.d, 0.d))
 //
-////            controller.setTargets(target, 0.0, 0.0)
-////            controller.setBounds(1.0, -1.0)
+// //            controller.setTargets(target, 0.0, 0.0)
+// //            controller.setBounds(1.0, -1.0)
 //
 //            val timestarted = System.currentTimeMillis()
 //            var lastupdate = timestarted

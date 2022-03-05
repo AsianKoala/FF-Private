@@ -1,11 +1,11 @@
 package lib
 
-import asiankoala.ftc21.v2.lib.math.Angle
-import asiankoala.ftc21.v2.lib.math.AngleUnit
-import asiankoala.ftc21.v2.lib.math.MathUtil.degrees
-import asiankoala.ftc21.v2.lib.math.MathUtil.radians
-import asiankoala.ftc21.v2.lib.math.Point
-import asiankoala.ftc21.v2.lib.math.Pose
+import asiankoala.junk.v2.lib.math.Angle
+import asiankoala.junk.v2.lib.math.AngleUnit
+import asiankoala.junk.v2.lib.math.MathUtil.degrees
+import asiankoala.junk.v2.lib.math.MathUtil.radians
+import asiankoala.junk.v2.lib.math.Point
+import asiankoala.junk.v2.lib.math.Pose
 
 object AutoTesting {
     @JvmStatic
@@ -41,10 +41,10 @@ object AutoTesting {
 
     fun setVectorPowers(powers: Pose): List<Double> {
         return mutableListOf(
-                powers.y + powers.x + powers.h.angle,
-                powers.y - powers.x + powers.h.angle,
-                powers.y - powers.x - powers.h.angle,
-                powers.y + powers.x - powers.h.angle
+            powers.y + powers.x + powers.h.angle,
+            powers.y - powers.x + powers.h.angle,
+            powers.y - powers.x - powers.h.angle,
+            powers.y + powers.x - powers.h.angle
         )
     }
 }

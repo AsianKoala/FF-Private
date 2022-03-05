@@ -1,6 +1,6 @@
 package ftc2021
 
-import asiankoala.ftc21.v2.lib.math.Point
+import asiankoala.junk.v2.lib.math.Point
 
 object ReferenceTest {
     @JvmStatic

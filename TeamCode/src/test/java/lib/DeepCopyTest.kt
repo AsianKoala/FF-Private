@@ -1,6 +1,6 @@
 package lib
 
-import asiankoala.ftc21.v2.lib.util.Extensions.deepCopy
+import asiankoala.junk.v2.lib.util.Extensions.deepCopy
 
 object DeepCopyTest {
     @JvmStatic

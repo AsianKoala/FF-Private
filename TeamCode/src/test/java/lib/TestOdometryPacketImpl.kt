@@ -1,6 +1,6 @@
 package lib
 
-import asiankoala.ftc21.v2.lib.control.odometry.OdometryPacket
+import asiankoala.junk.v2.lib.control.odometry.OdometryPacket
 
 class OdometryPacketImpl : OdometryPacket() {
     override var currLeftEncoder: Int = 1

@@ -14,15 +14,15 @@ object PurePursuitTest {
     }
 
     val waypoints = listOf(
-            Waypoint(),
-            Waypoint(30.0, 10.0, 10.0),
-            Waypoint(50.0, 50.0, 10.0, stop = false)
+        Waypoint(),
+        Waypoint(30.0, 10.0, 10.0),
+        Waypoint(50.0, 50.0, 10.0, stop = false)
     )
 
     val position = Pose(23.0, 12.0, 18.0.radians)
 
     fun testCalcLookahead() {
-        val lookahead = PurePursuitController.calcLookahead(waypoints, position,10.0)
+        val lookahead = PurePursuitController.calcLookahead(waypoints, position, 10.0)
     }
 
     fun testPurePursuit() {
