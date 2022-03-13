@@ -29,28 +29,25 @@ class HutaoTeleOp : CommandOpMode() {
     }
 
     private fun bindDeposit() {
-        CommandScheduler.scheduleWatchdog(
-            {
+        CommandScheduler.scheduleWatchdog({
                 driver.leftTrigger.isJustPressed && hutao.hub == Hub.ALLIANCE_HIGH && hutao.intake.isMineralIn
-            },
+        },
             DepositCommands.DepositHigh(
                 driver.leftTrigger::isJustPressed, hutao.intake, hutao.turret, hutao.pitch, hutao.slides, hutao.outtake, hutao.indexer
             )
         )
 
-        CommandScheduler.scheduleWatchdog(
-            {
-                driver.leftTrigger.isJustPressed && hutao.hub == Hub.ALLIANCE_MID && hutao.intake.isMineralIn
-            },
+        CommandScheduler.scheduleWatchdog({
+            driver.leftTrigger.isJustPressed && hutao.hub == Hub.ALLIANCE_MID && hutao.intake.isMineralIn
+        },
             DepositCommands.DepositMid(
                 driver.leftTrigger::isJustPressed, hutao.intake, hutao.turret, hutao.pitch, hutao.slides, hutao.outtake, hutao.indexer
             )
         )
 
-        CommandScheduler.scheduleWatchdog(
-            {
-                driver.leftTrigger.isJustPressed && hutao.hub == Hub.ALLIANCE_LOW && hutao.intake.isMineralIn
-            },
+        CommandScheduler.scheduleWatchdog({
+            driver.leftTrigger.isJustPressed && hutao.hub == Hub.ALLIANCE_LOW && hutao.intake.isMineralIn
+        },
             DepositCommands.DepositLow(
                 driver.leftTrigger::isJustPressed, hutao.intake, hutao.turret, hutao.pitch, hutao.slides, hutao.outtake, hutao.indexer
             )

@@ -7,8 +7,9 @@ import com.asiankoala.koawalib.control.OpenLoopController
 import com.asiankoala.koawalib.hardware.KServo
 import com.asiankoala.koawalib.hardware.motor.KMotor
 import com.asiankoala.koawalib.hardware.motor.KMotorEx
+import com.asiankoala.koawalib.hardware.sensor.KDistanceSensor
 import com.asiankoala.koawalib.hardware.sensor.KLimitSwitch
-import com.asiankoala.koawalib.hardware.sensor.KRevColorSensor
+import com.asiankoala.koawalib.subsystem.intake.IntakeConfig
 import com.asiankoala.koawalib.subsystem.odometry.OdoConfig
 import kotlin.math.max
 import kotlin.math.min
@@ -51,7 +52,7 @@ class Hutao {
     private val indexerServo = KServo(INDEXER_NAME).startAt(INDEXER_START_POSITION)
     private val outtakeServo = KServo(OUTTAKE_NAME).startAt(OUTTAKE_START_POSITION)
 
-    private val loadingSensor = KRevColorSensor(LOADING_SENSOR_NAME)
+    private val loadingSensor = KDistanceSensor(LOADING_SENSOR_NAME)
     private val turretLimitSwitch = KLimitSwitch(TURRET_LIMIT_SWITCH_NAME)
     private val pitchLimitSwitch = KLimitSwitch(PITCH_LIMIT_SWITCH_NAME)
 
@@ -63,7 +64,7 @@ class Hutao {
         )
     )
 
-    val intake = Intake(intakeMotor, loadingSensor)
+    val intake = Intake(intakeMotor, loadingSensor, IntakeConfig(), 10.0)
     val turret = Turret(turretMotor, turretLimitSwitch)
     val pitch = Pitch(pitchMotor, pitchLimitSwitch)
     val slides = Slides(slideMotor)
