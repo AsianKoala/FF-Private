@@ -1,17 +1,34 @@
 package asiankoala.ftc2021.subsystems
 
-import com.acmerobotics.dashboard.config.Config
-import com.asiankoala.koawalib.hardware.KServo
+import com.asiankoala.koawalib.hardware.servo.KServo
 import com.asiankoala.koawalib.subsystem.DeviceSubsystem
 
 class Outtake(private val servo: KServo) : DeviceSubsystem() {
-    @Config
     companion object OuttakeConstants {
-        const val HOME_POSITION = 0.0
-        const val DEPOSIT_POSITION = 0.0
+        const val outtakeHomePosition = 0.25
+        const val outtakeCockMore = 0.63
+        const val outtakeCockPosition = 0.6
+        const val outtakeHighPosition = 0.7
+        const val outtakeSharedPosition = 1.0
     }
 
-    fun setPosition(position: Double) {
-        servo.position = position
+    fun home() {
+        servo.position = outtakeHomePosition
+    }
+
+    fun cock() {
+        servo.position = outtakeCockPosition
+    }
+
+    fun cockMore() {
+        servo.position = outtakeCockMore
+    }
+
+    fun depositHigh() {
+        servo.position = outtakeHighPosition
+    }
+
+    fun depositShared() {
+        servo.position = outtakeSharedPosition
     }
 }

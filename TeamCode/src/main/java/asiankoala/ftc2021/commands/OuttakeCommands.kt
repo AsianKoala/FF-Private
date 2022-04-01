@@ -4,12 +4,9 @@ import asiankoala.ftc2021.subsystems.Outtake
 import com.asiankoala.koawalib.command.commands.InstantCommand
 
 object OuttakeCommands {
-    open class OuttakeCommand(outtake: Outtake, position: Double) : InstantCommand({ outtake.setPosition(position) }) {
-        init {
-            addRequirements(outtake)
-        }
-    }
-
-    class Home(outtake: Outtake) : OuttakeCommand(outtake, Outtake.HOME_POSITION)
-    class Deposit(outtake: Outtake) : OuttakeCommand(outtake, Outtake.DEPOSIT_POSITION)
+    class OuttakeHomeCommand(outtake: Outtake) : InstantCommand(outtake::home, outtake)
+    class OuttakeCockCommand(outtake: Outtake) : InstantCommand(outtake::cock, outtake)
+    class OuttakeCockMoreCommand(outtake: Outtake) : InstantCommand(outtake::cockMore, outtake)
+    class OuttakeDepositHighCommand(outtake: Outtake) : InstantCommand(outtake::depositHigh, outtake)
+    class OuttakeDepositSharedCommand(outtake: Outtake) : InstantCommand(outtake::depositShared, outtake)
 }

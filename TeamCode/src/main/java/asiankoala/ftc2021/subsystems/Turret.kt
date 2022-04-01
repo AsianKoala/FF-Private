@@ -1,27 +1,16 @@
 package asiankoala.ftc2021.subsystems
 
-import com.acmerobotics.dashboard.config.Config
-import com.asiankoala.koawalib.control.MotionProfileConfig
-import com.asiankoala.koawalib.hardware.motor.KMotorEx
-import com.asiankoala.koawalib.hardware.sensor.KLimitSwitch
-import com.asiankoala.koawalib.subsystem.ZeroableDeviceSubsystem
+import com.asiankoala.koawalib.subsystem.old.MotorSubsystem
+import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
 
-class Turret(motor: KMotorEx, limitSwitch: KLimitSwitch) : ZeroableDeviceSubsystem(motor, limitSwitch) {
-    @Config
+class Turret(config: MotorSubsystemConfig) : MotorSubsystem(config) {
     companion object TurretConstants {
-        @JvmField val config = MotionProfileConfig()
-        const val zeroPosition = 0.0
-        const val homeAngle = 0.0
-        const val allianceAngle = 0.0
-        const val sharedAngle = 0.0
+        private const val turretDepositDiff = 60.0
+        const val turretPostZeroValue = 180.0
+        const val turretHomeValue = 180.0
+        const val turretBlueAngle = turretHomeValue + turretDepositDiff
+        const val turretRedAngle = turretHomeValue - turretDepositDiff
+        const val turretSharedBlueAngle = 90.0
+        const val turretSharedRedAngle = 270.0
     }
-
-    val isAtTarget get() = motor.isAtTarget()
-
-    fun setTurretAngle(angle: Double) {
-        motor.setMotionProfileTarget(angle)
-    }
-
-    override val zeroPosition: Double
-        get() = TurretConstants.zeroPosition
 }

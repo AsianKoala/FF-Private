@@ -1,18 +1,24 @@
 package asiankoala.ftc2021.subsystems
 
-import com.acmerobotics.dashboard.config.Config
-import com.asiankoala.koawalib.hardware.KServo
+import com.asiankoala.koawalib.hardware.servo.KServo
 import com.asiankoala.koawalib.subsystem.DeviceSubsystem
 
 class Indexer(private val servo: KServo) : DeviceSubsystem() {
-    @Config
     companion object IndexerConstants {
-        const val HOME_POSITION = 0.0
-        const val LOCK_POSITION = 0.0
-        const val INDEX_POSITION = 0.0
+        const val indexerOpenPosition = 0.62
+        const val indexerLockedPosition = 0.72
+        const val indexerIndexingPosition = 0.93
     }
 
-    fun setPosition(position: Double) {
-        servo.position = position
+    fun open() {
+        servo.position = indexerOpenPosition
+    }
+
+    fun lock() {
+        servo.position = indexerLockedPosition
+    }
+
+    fun index() {
+        servo.position = indexerIndexingPosition
     }
 }

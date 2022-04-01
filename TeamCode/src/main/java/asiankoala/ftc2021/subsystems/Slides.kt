@@ -1,25 +1,12 @@
 package asiankoala.ftc2021.subsystems
 
-import com.acmerobotics.dashboard.config.Config
-import com.asiankoala.koawalib.control.MotionProfileConfig
-import com.asiankoala.koawalib.hardware.motor.KMotorEx
-import com.asiankoala.koawalib.subsystem.DeviceSubsystem
+import com.asiankoala.koawalib.subsystem.old.MotorSubsystem
+import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
 
-class Slides(private val motor: KMotorEx) : DeviceSubsystem() {
-    @Config
+class Slides(config: MotorSubsystemConfig) : MotorSubsystem(config) {
     companion object SlideConstants {
-        @JvmField val config = MotionProfileConfig()
-
-        const val homeInches = 0.0
-        const val allianceHighInches = 0.0
-        const val allianceMidInches = 0.0
-        const val allianceLowInches = 0.0
-        const val sharedInches = 0.0
-    }
-
-    val isAtTarget get() = motor.isAtTarget()
-
-    fun setSlideInches(inches: Double) {
-        motor.setMotionProfileTarget(inches)
+        const val slideHomeValue = 0.0
+        const val slideDepositInches = 33.5
+        const val slideSharedInches = 0.0
     }
 }

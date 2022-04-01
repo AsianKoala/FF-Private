@@ -1,53 +1,32 @@
 package asiankoala.ftc2021.subsystems
 
-import com.acmerobotics.dashboard.config.Config
 import com.asiankoala.koawalib.hardware.motor.KMotor
-import com.asiankoala.koawalib.hardware.sensor.KRevColorSensor
-import com.asiankoala.koawalib.subsystem.DeviceSubsystem
+import com.asiankoala.koawalib.hardware.sensor.KDistanceSensor
+import com.asiankoala.koawalib.subsystem.intake.IntakeConfig
+import com.asiankoala.koawalib.subsystem.intake.KIntake
 
-class Intake(private val motor: KMotor, private val loadingSensor: KRevColorSensor) : DeviceSubsystem() {
-    @Config
+class Intake(motor: KMotor, private val sensor: KDistanceSensor) : KIntake(motor, IntakeConfig(1.0)) {
     companion object IntakeConstants {
-        const val THRESHOLD = 20.0
-        const val ON_POWER = 1.0
-        const val OFF_POWER = 0.0
-        const val REVERSE_POWER = -1.0
+        const val SENSOR_THRESHOLD = 20.0
     }
-
-    fun turnOn() {
-        motor.setSpeed(ON_POWER)
-    }
-
-    fun turnReverse() {
-        motor.setSpeed(REVERSE_POWER)
-    }
-
-    fun turnOff() {
-        motor.setSpeed(OFF_POWER)
-    }
-
-    fun removeMineral() {
-        isMineralIn = false
-    }
-
-    private var lastRead = Double.NaN
-    private var reading = false
-
-    var isMineralIn = false
-        private set
+    private var isReadingSensor = false
+    private var lastRead = Double.POSITIVE_INFINITY
 
     fun startReading() {
-        reading = true
+        isReadingSensor = true
+        lastRead = Double.POSITIVE_INFINITY
     }
 
     fun stopReading() {
-        reading = false
+        isReadingSensor = false
+        lastRead = Double.POSITIVE_INFINITY
     }
 
+    val hasMineral get() = sensor.lastRead < SENSOR_THRESHOLD
+
     override fun periodic() {
-        if (reading) {
-            lastRead = loadingSensor.invokeDouble()
-            isMineralIn = lastRead < THRESHOLD
+        if(isReadingSensor) {
+            lastRead = sensor.invokeDouble()
         }
     }
 }
