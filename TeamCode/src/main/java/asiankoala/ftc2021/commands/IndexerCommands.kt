@@ -6,5 +6,4 @@ import com.asiankoala.koawalib.command.commands.InstantCommand
 object IndexerCommands {
     class IndexerOpenCommand(indexer: Indexer) : InstantCommand(indexer::open, indexer)
     class IndexerLockCommand(indexer: Indexer) : InstantCommand(indexer::lock)
-    class IndexerIndexCommand(indexer: Indexer) : InstantCommand(indexer::index)
 }

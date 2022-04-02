@@ -7,7 +7,6 @@ class Indexer(private val servo: KServo) : DeviceSubsystem() {
     companion object IndexerConstants {
         const val indexerOpenPosition = 0.62
         const val indexerLockedPosition = 0.72
-        const val indexerIndexingPosition = 0.93
     }
 
     fun open() {
@@ -16,9 +15,5 @@ class Indexer(private val servo: KServo) : DeviceSubsystem() {
 
     fun lock() {
         servo.position = indexerLockedPosition
-    }
-
-    fun index() {
-        servo.position = indexerIndexingPosition
     }
 }

@@ -14,8 +14,8 @@ import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 
 class Hutao {
-    private val flMotor = KMotor("fl").brake.reverse
-    private val blMotor = KMotor("bl").brake.reverse
+    private val flMotor = KMotor("fl").reverse.brake
+    private val blMotor = KMotor("bl").reverse.brake
     private val brMotor = KMotor("br").brake
     private val frMotor = KMotor("fr").brake
     private val intakeMotor = KMotor("intake").reverse
@@ -23,19 +23,19 @@ class Hutao {
     private val slideMotor = KMotor("slides").float.reverse
     private val armServo = KServo("arm").startAt(Arm.armHomePosition)
     private val indexerServo = KServo("indexer").startAt(Indexer.indexerOpenPosition)
-    private val outtakeServo = KServo("outtake").startAt(Outtake.outtakeHomePosition)
+    private val outtakeServo = KServo("outtake").startAt(Outtake.outtakeCockPosition)
     private val distanceSensor = KDistanceSensor("loadingSensor")
 
-    private val turretEncoder = Encoder(turretMotor, 5.33333)
-    private val slideEncoder = Encoder(slideMotor, 20.8333)
+    val turretEncoder = Encoder(turretMotor, 5.33333).zero(Turret.turretHomeValue)
+    val slideEncoder = Encoder(slideMotor, 20.8333).reversed.zero()
 
     private val ticksPerUnit = 1892.3724
-    private val leftEncoder = Encoder(flMotor, ticksPerUnit, true)
-    private val perpEncoder = Encoder(brMotor, ticksPerUnit, true)
-    private val imu = KIMU("imu", AxesOrder.XYZ, AxesSigns.NPN)
+    val leftEncoder = Encoder(frMotor, ticksPerUnit, true).zero()
+    val perpEncoder = Encoder(brMotor, ticksPerUnit, true).zero()
+    val imu = KIMU("imu", AxesOrder.XYZ, AxesSigns.NPN)
     private val odo = TwoWheelOdometry(imu, leftEncoder, perpEncoder, 8.690685, 7.641969)
 
-    val drive = KMecanumOdoDrive(flMotor, blMotor, frMotor, brMotor, odo, false)
+    val drive = KMecanumOdoDrive(flMotor, blMotor, frMotor, brMotor, odo, true)
     val intake = Intake(intakeMotor, distanceSensor)
     val arm = Arm(armServo)
     val indexer = Indexer(indexerServo)
@@ -53,7 +53,7 @@ class Hutao {
     val slides = Slides(MotorSubsystemConfig(
             slideMotor,
             slideEncoder,
-            controlType = MotorControlType.POSITION_PID,
+            controlType = MotorControlType.MOTION_PROFILE,
             kP = 0.2,
             kD = 0.007,
             kStatic = 0.03,

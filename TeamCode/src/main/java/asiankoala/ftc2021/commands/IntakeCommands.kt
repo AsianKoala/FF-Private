@@ -1,6 +1,6 @@
 package asiankoala.ftc2021.commands
 
-import asiankoala.ftc2021.subsystems.Intake
+import asiankoala.ftc2021.subsystems.*
 import com.asiankoala.koawalib.command.commands.InstantCommand
 
 object IntakeCommands {
