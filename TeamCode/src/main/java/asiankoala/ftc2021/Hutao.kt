@@ -8,7 +8,7 @@ import com.asiankoala.koawalib.hardware.sensor.KIMU
 import com.asiankoala.koawalib.hardware.servo.KServo
 import com.asiankoala.koawalib.subsystem.drive.KMecanumOdoDrive
 import com.asiankoala.koawalib.subsystem.odometry.Encoder
-import com.asiankoala.koawalib.subsystem.odometry.TwoWheelOdometry
+import com.asiankoala.koawalib.subsystem.odometry.ThreeWheelOdometry
 import com.asiankoala.koawalib.subsystem.old.MotorControlType
 import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
@@ -31,9 +31,10 @@ class Hutao {
 
     private val ticksPerUnit = 1892.3724
     val leftEncoder = Encoder(frMotor, ticksPerUnit, true).zero()
-    val perpEncoder = Encoder(brMotor, ticksPerUnit, true).zero()
+    val rightEncoder = Encoder(flMotor, ticksPerUnit, true).zero()
+    val auxEncoder = Encoder(brMotor, ticksPerUnit, true).zero()
     val imu = KIMU("imu", AxesOrder.XYZ, AxesSigns.NPN)
-    private val odo = TwoWheelOdometry(imu, leftEncoder, perpEncoder, 8.690685, 7.641969)
+    val odo = BetterThreeWheelOdometry(leftEncoder, rightEncoder, auxEncoder,8.690685, 7.641969)
 
     val drive = KMecanumOdoDrive(flMotor, blMotor, frMotor, brMotor, odo, true)
     val intake = Intake(intakeMotor, distanceSensor)
@@ -45,10 +46,10 @@ class Hutao {
             turretEncoder,
             controlType = MotorControlType.POSITION_PID,
             kP = 0.03,
-            kI = 0.01,
+            kI = 0.03,
             kD = 0.0007,
-            kStatic = 0.01,
-            positionEpsilon = 2.0
+            kStatic = 0.03,
+            positionEpsilon = 1.0
     ))
     val slides = Slides(MotorSubsystemConfig(
             slideMotor,
@@ -57,8 +58,8 @@ class Hutao {
             kP = 0.2,
             kD = 0.007,
             kStatic = 0.03,
-            maxVelocity = 120.0,
-            maxAcceleration = 120.0,
+            maxVelocity = 160.0,
+            maxAcceleration = 160.0,
             positionEpsilon = 1.0,
             homePositionToDisable = 0.0,
     ))

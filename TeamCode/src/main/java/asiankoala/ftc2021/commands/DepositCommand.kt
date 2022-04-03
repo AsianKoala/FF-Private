@@ -9,6 +9,7 @@ import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 
 class DepositCommand(slides: Slides, indexer: Indexer, continueDeposit: () -> Boolean) : SequentialCommandGroup(
         InstantCommand({slides.generateAndFollowMotionProfile(Slides.slideDepositInches)}, slides),
+        WaitCommand(0.5),
         WaitUntilCommand(continueDeposit),
         IndexerCommands.IndexerOpenCommand(indexer)
 )

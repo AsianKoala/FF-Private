@@ -13,8 +13,9 @@ class IntakeSequenceCommand(intake: Intake, outtake: Outtake, indexer: Indexer, 
         IntakeCommands.IntakeTurnOnCommand(intake)
                 .alongWith(InstantCommand(intake::startReading)),
         WaitUntilCommand(intake::hasMineral),
-        IntakeCommands.IntakeTurnReverseCommand(intake)
-                .alongWith(IndexerCommands.IndexerLockCommand(indexer)),
+        IntakeCommands.IntakeTurnReverseCommand(intake),
+        WaitCommand(0.3),
+        IndexerCommands.IndexerLockCommand(indexer),
         WaitCommand(0.5),
         OuttakeCommands.OuttakeCockCommand(outtake)
                 .alongWith(IntakeCommands.IntakeTurnOffCommand(intake)),
