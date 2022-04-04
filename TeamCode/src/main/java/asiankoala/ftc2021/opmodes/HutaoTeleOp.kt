@@ -7,12 +7,13 @@ import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
 import com.asiankoala.koawalib.command.commands.GoToPointCommand
 import com.asiankoala.koawalib.command.commands.InstantCommand
+import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.hardware.motor.KMotor
 import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
-import com.asiankoala.koawalib.subsystem.drive.MecanumDriveCommand
+import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.Logger
 import com.asiankoala.koawalib.util.LoggerConfig
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -24,7 +25,6 @@ class HutaoTeleOp : CommandOpMode() {
     override fun mInit() {
         Logger.config = LoggerConfig(isLogging = true, isPrinting = false, isLoggingTelemetry = false, isDebugging = false, maxErrorCount = 1)
         hutao = Hutao()
-        hutao.odo.shouldRead = true
         hutao.drive.setStartPose(Pose(0.0, 0.0, heading = 90.0.radians))
         hutao.drive.setDefaultCommand(MecanumDriveCommand(
                 hutao.drive,
@@ -54,25 +54,19 @@ class HutaoTeleOp : CommandOpMode() {
                         true,
                         0.8,
                         0.8,
-                        shouldTelemetry = true
+                        shouldTelemetry = false
                 )
         )
 
-        val motor = KMotor("duckSpinner").brake
-        driver.a.onPress(InstantCommand({motor.setSpeed(0.3)}))
-        driver.y.onPress(InstantCommand({motor.setSpeed(0.0)}))
+        driver.rightBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, Alliance.BLUE))
     }
 
     override fun mStart() {
-        hutao.turret.disabled = false
-        hutao.slides.disabled = false
         hutao.turret.setPIDTarget(180.0)
         hutao.slides.setPIDTarget(0.0)
-        hutao.odo.shouldRead = true
     }
 
     override fun mLoop() {
-        hutao.imu.periodic()
         Logger.addTelemetryData("power", hutao.drive.powers)
         Logger.addTelemetryData("position", hutao.drive.position)
         Logger.addTelemetryData("turret angle", hutao.turretEncoder.position)
