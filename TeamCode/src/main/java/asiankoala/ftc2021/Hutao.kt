@@ -5,6 +5,7 @@ import com.asiankoala.koawalib.hardware.sensor.AxesSigns
 import com.asiankoala.koawalib.hardware.sensor.KIMU
 import com.asiankoala.koawalib.subsystem.drive.KMecanumOdoDrive
 import com.asiankoala.koawalib.subsystem.odometry.KThreeWheelOdometry
+import com.asiankoala.koawalib.subsystem.odometry.KTwoWheelOdometry
 import com.asiankoala.koawalib.subsystem.old.FeedforwardConstants
 import com.asiankoala.koawalib.subsystem.old.MotorControlType
 import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
@@ -15,10 +16,7 @@ class Hutao {
     private val hardware = Hardware()
     val encoders = Encoders(hardware)
 
-    private val imu = KIMU("imu", AxesOrder.XYZ, AxesSigns.NPN)
-    private val odo = KThreeWheelOdometry(encoders.leftEncoder, encoders.rightEncoder, encoders.auxEncoder,8.690685, 7.641969, imu)
-
-    val drive = KMecanumOdoDrive(hardware.flMotor, hardware.blMotor, hardware.brMotor, hardware.frMotor, odo, false)
+    val drive = KMecanumOdoDrive(hardware.flMotor, hardware.blMotor, hardware.brMotor, hardware.frMotor, encoders.odo, false)
     val intake = Intake(hardware.intakeMotor, hardware.distanceSensor)
     val arm = Arm(hardware.armServo)
     val indexer = Indexer(hardware.indexerServo)
