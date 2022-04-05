@@ -11,5 +11,5 @@ class DepositCommand(slides: Slides, indexer: Indexer, continueDeposit: () -> Bo
         InstantCommand({slides.generateAndFollowMotionProfile(Slides.slideDepositInches)}, slides),
         WaitCommand(0.5),
         WaitUntilCommand(continueDeposit),
-        IndexerCommands.IndexerOpenCommand(indexer)
+        IndexerCommands.IndexerIndexCommand(indexer)
 )

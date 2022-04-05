@@ -5,15 +5,11 @@ import asiankoala.ftc2021.commands.*
 import asiankoala.ftc2021.subsystems.Turret
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
-import com.asiankoala.koawalib.command.commands.GoToPointCommand
-import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
-import com.asiankoala.koawalib.hardware.motor.KMotor
 import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
-import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.Logger
 import com.asiankoala.koawalib.util.LoggerConfig
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -34,9 +30,10 @@ class HutaoTeleOp : CommandOpMode() {
                 xScalar = 0.7, yScalar = 0.7, rScalar = 0.7
         ))
 
-        driver.rightTrigger.onPress(IntakeSequenceCommand(hutao.intake,
-                hutao.outtake, hutao.indexer, hutao.turret, Turret.turretBlueAngle, hutao.arm))
+        val intakeSequence = IntakeSequenceCommand(hutao.intake,
+                hutao.outtake, hutao.indexer, hutao.turret, Turret.turretBlueAngle, hutao.arm) { driver.rightTrigger.invokeBoolean() }
 
+        CommandScheduler.scheduleWatchdog({ driver.rightTrigger.isJustPressed && !intakeSequence.isScheduled}, intakeSequence)
         val depositSequence = SequentialCommandGroup(
                 DepositCommand(hutao.slides, hutao.indexer) { driver.leftTrigger.invokeBoolean() },
                 WaitCommand(0.5),
@@ -45,31 +42,28 @@ class HutaoTeleOp : CommandOpMode() {
 
         CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositSequence.isScheduled}, depositSequence)
 
-        driver.rightBumper.onPress(
-                GoToPointCommand(
-                        hutao.drive,
-                        Pose(24.0, 24.0, 45.0.radians),
-                        2.0,
-                        2.0.radians,
-                        true,
-                        0.8,
-                        0.8,
-                        shouldTelemetry = false
-                )
-        )
-
-        driver.rightBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, Alliance.BLUE))
-    }
-
-    override fun mStart() {
+//        driver.rightBumper.onPress(
+//                GoToPointCommand(
+//                        hutao.drive,
+//                        Pose(24.0, 24.0, 45.0.radians),
+//                        2.0,
+//                        2.0.radians,
+//                        true,
+//                        0.8,
+//                        0.8,
+//                        shouldTelemetry = false
+//                )
+//        )
         hutao.turret.setPIDTarget(180.0)
         hutao.slides.setPIDTarget(0.0)
+        hutao.turret.disabled = false
+        hutao.slides.disabled = false
     }
 
     override fun mLoop() {
         Logger.addTelemetryData("power", hutao.drive.powers)
         Logger.addTelemetryData("position", hutao.drive.position)
-        Logger.addTelemetryData("turret angle", hutao.turretEncoder.position)
-        Logger.addTelemetryData("slides inches", hutao.slideEncoder.position)
+        Logger.addTelemetryData("turret angle", hutao.encoders.turretEncoder.position)
+        Logger.addTelemetryData("slides inches", hutao.encoders.slideEncoder.position)
     }
 }
