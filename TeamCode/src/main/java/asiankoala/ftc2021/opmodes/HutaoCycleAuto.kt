@@ -5,6 +5,7 @@ import asiankoala.ftc2021.commands.sequences.auto.AutoDepositSequence
 import asiankoala.ftc2021.commands.sequences.auto.AutoInitSequence
 import asiankoala.ftc2021.commands.sequences.auto.CycleSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
+import asiankoala.ftc2021.commands.subsystem.IntakeStopperCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.Command
 import com.asiankoala.koawalib.command.commands.WaitUntilCommand
@@ -15,8 +16,9 @@ import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.OpModeState
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
-open class HutaoAuto(private val alliance: Alliance) : CommandOpMode() {
+open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
     private val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
     private lateinit var hutao: Hutao
     private lateinit var mainCommand: Command
@@ -45,8 +47,9 @@ open class HutaoAuto(private val alliance: Alliance) : CommandOpMode() {
 
         mainCommand = SequentialCommandGroup(
                 AutoInitSequence(alliance, driver.rightTrigger, hutao.outtake,
-                        hutao.arm, hutao.turret, hutao.indexer),
+                        hutao.arm, hutao.turret, hutao.indexer, hutao.intakeStopper),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
+                IntakeStopperCommands.IntakeStopperUnlockCommand(hutao.intakeStopper),
                 AutoDepositSequence(hutao.slides, hutao.indexer),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer,
                         hutao.arm, hutao.encoders.slideEncoder),
@@ -71,8 +74,3 @@ open class HutaoAuto(private val alliance: Alliance) : CommandOpMode() {
     }
 }
 
-@Autonomous
-class AllianceBlue : HutaoAuto(Alliance.BLUE)
-
-@Autonomous
-class AllianceRed : HutaoAuto(Alliance.RED)

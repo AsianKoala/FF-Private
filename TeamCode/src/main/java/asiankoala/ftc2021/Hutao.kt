@@ -18,6 +18,7 @@ class Hutao(startPose: Pose) {
     val arm = Arm(hardware.armServo)
     val indexer = Indexer(hardware.indexerServo)
     val outtake = Outtake(hardware.outtakeServo)
+    val intakeStopper = IntakeStopper(hardware.intakeStopperServo)
     val duck = Duck(hardware.duckMotor)
     val turret = Turret(MotorSubsystemConfig(
             hardware.turretMotor,

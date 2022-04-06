@@ -5,7 +5,7 @@ import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.Command
 import com.asiankoala.koawalib.math.Pose
 
-class DuckBlue : CommandOpMode() {
+class HutaoDuckBlueAuto : CommandOpMode() {
     private val startPose = Pose()
     private lateinit var hutao: Hutao
     private lateinit var mainCommand: Command

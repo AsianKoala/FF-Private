@@ -8,7 +8,7 @@ class Outtake(private val servo: KServo) : DeviceSubsystem() {
         const val outtakeHomePosition = 0.24
         const val outtakeCockPosition = 0.75
         const val outtakeHighPosition = 0.84
-        const val outtakeSharedPosition = 0.87
+        const val outtakeSharedPosition = 0.92
     }
 
     fun home() {

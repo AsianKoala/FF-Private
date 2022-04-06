@@ -5,7 +5,9 @@ import asiankoala.ftc2021.Strategy
 import asiankoala.ftc2021.commands.sequences.teleop.DepositSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
+import asiankoala.ftc2021.commands.subsystem.ArmCommands
 import asiankoala.ftc2021.commands.subsystem.DuckCommands
+import asiankoala.ftc2021.commands.subsystem.OuttakeCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
 import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
@@ -14,18 +16,24 @@ import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.Logger
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
-@TeleOp
-class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
+open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     private lateinit var hutao: Hutao
     private var strategy = alliance.decide(Strategy.ALLIANCE_BLUE, Strategy.ALLIANCE_RED)
 
     override fun mInit() {
         hutao = Hutao(Pose(heading = 90.0.radians))
         bindDrive()
-        bindDuck()
-        bindCycling()
+        driver.rightTrigger.onPress(
+                SequentialCommandGroup(
+                        ArmCommands.ArmDepositSharedCommand(hutao.arm),
+                        OuttakeCommands.OuttakeDepositSharedCommand(hutao.outtake),
+                )
+        )
+//        bindDuck()
+//        bindCycling()
     }
 
     private fun bindDrive() {
@@ -41,7 +49,7 @@ class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     }
 
     private fun bindDuck() {
-        driver.leftBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, Alliance.BLUE))
+        driver.leftBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, alliance))
     }
 
     private fun bindCycling() {
@@ -67,3 +75,4 @@ class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
         Logger.addTelemetryData("slides inches", hutao.encoders.slideEncoder.position)
     }
 }
+

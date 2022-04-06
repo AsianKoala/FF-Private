@@ -20,6 +20,7 @@ class Hardware {
     val armServo = KServo("arm").startAt(Arm.armHomePosition)
     val indexerServo = KServo("indexer").startAt(Indexer.indexerOpenPosition)
     val outtakeServo = KServo("outtake").startAt(Outtake.outtakeCockPosition)
+    val intakeStopperServo = KServo("intakeStopper")
 
     val distanceSensor = KDistanceSensor("loadingSensor")
 }
