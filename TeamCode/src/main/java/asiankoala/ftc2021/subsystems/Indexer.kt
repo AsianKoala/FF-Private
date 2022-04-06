@@ -5,9 +5,9 @@ import com.asiankoala.koawalib.subsystem.DeviceSubsystem
 
 class Indexer(private val servo: KServo) : DeviceSubsystem() {
     companion object IndexerConstants {
-        const val indexerOpenPosition = 0.5
-        const val indexerLockedPosition = 0.3
-        const val indexerIndexPosition = 0.05
+        const val indexerOpenPosition = 0.50
+        const val indexerLockedPosition = 0.66
+        const val indexerIndexPosition = 1.0
     }
 
     fun open() {

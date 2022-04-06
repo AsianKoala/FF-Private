@@ -1,11 +1,10 @@
-package asiankoala.ftc2021.commands
+package asiankoala.ftc2021.commands.subsystem
 
 import asiankoala.ftc2021.subsystems.Duck
 import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.util.Alliance
-import kotlin.math.sign
 
 object DuckCommands {
     class DuckSetSpeedCommand(duck: Duck, speed: Double) : InstantCommand({duck.setSpeed(speed)}, duck)

@@ -27,12 +27,12 @@ class Hutao {
             encoders.turretEncoder,
             controlType = MotorControlType.POSITION_PID,
             pid = PIDConstants(
-                    0.03,
-                    0.03,
+                    0.05,
+                    0.035,
                     0.0007
             ),
             ff = FeedforwardConstants(
-                    kStatic = 0.03
+                    kStatic = 0.042
             ),
             positionEpsilon = 1.0
     ))
@@ -47,9 +47,9 @@ class Hutao {
             ff = FeedforwardConstants(
                     kStatic = 0.03
             ),
-            maxVelocity = 160.0,
+            maxVelocity = 180.0,
             maxAcceleration = 160.0,
             positionEpsilon = 1.0,
-            homePositionToDisable = 0.0,
+            homePositionToDisable = -0.5,
     ))
 }

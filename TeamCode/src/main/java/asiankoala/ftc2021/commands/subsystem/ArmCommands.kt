@@ -1,4 +1,4 @@
-package asiankoala.ftc2021.commands
+package asiankoala.ftc2021.commands.subsystem
 
 import asiankoala.ftc2021.subsystems.Arm
 import com.asiankoala.koawalib.command.commands.InstantCommand
