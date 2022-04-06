@@ -8,7 +8,7 @@ import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 
 class AutoDepositSequence(slides: Slides, indexer: Indexer) : SequentialCommandGroup(
-        InstantCommand({slides.generateAndFollowMotionProfile(Slides.slideDepositInches)}, slides),
+        InstantCommand({slides.generateAndFollowMotionProfile(Slides.depositHighInches)}, slides),
         WaitCommand( 1.0),
         IndexerCommands.IndexerIndexCommand(indexer),
         WaitCommand(0.5)

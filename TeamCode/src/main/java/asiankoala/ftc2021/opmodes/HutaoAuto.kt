@@ -16,7 +16,8 @@ import com.asiankoala.koawalib.util.LoggerConfig
 import com.asiankoala.koawalib.util.OpModeState
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 
-abstract class HutaoAuto(private val alliance: Alliance, private val startPose: Pose) : CommandOpMode() {
+open class HutaoAuto(private val alliance: Alliance) : CommandOpMode() {
+    private val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
     private lateinit var hutao: Hutao
     private lateinit var mainCommand: Command
 
@@ -73,7 +74,7 @@ abstract class HutaoAuto(private val alliance: Alliance, private val startPose: 
 }
 
 @Autonomous
-class HutaoBlueAuto : HutaoAuto(Alliance.BLUE, Pose(16.0, 64.0, 0.0))
+class AllianceBlue : HutaoAuto(Alliance.BLUE)
 
 @Autonomous
-class HutaoRedAuto : HutaoAuto(Alliance.RED, Pose(16.0, -64.0, 0.0))
+class AllianceRed : HutaoAuto(Alliance.RED)
