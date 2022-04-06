@@ -27,8 +27,4 @@ class IntakeSequence(intake: Intake, outtake: Outtake, indexer: Indexer, turret:
         WaitCommand(0.3),
         InstantCommand({ turret.setPIDTarget(turretAngle) }, turret)
                 .alongWith(IntakeCommands.IntakeTurnOffCommand(intake))
-) {
-    init {
-        addRequirements(intake, outtake, indexer, turret, arm)
-    }
-}
+)

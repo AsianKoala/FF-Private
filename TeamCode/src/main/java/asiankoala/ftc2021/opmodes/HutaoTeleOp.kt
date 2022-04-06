@@ -10,7 +10,6 @@ import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
 import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
 import com.asiankoala.koawalib.command.commands.PathCommand
-import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
@@ -27,17 +26,15 @@ class HutaoTeleOp : CommandOpMode() {
 
     override fun mInit() {
         Logger.config = LoggerConfig(isLogging = true, isPrinting = false, isLoggingTelemetry = false, isDebugging = false, maxErrorCount = 1)
-        hutao = Hutao()
+        hutao = Hutao(Pose(heading = 90.0.radians))
         bindDrive()
         bindIntake()
         bindDeposit()
         bindDuck()
         bindPath()
-        ready()
     }
 
     private fun bindDrive() {
-        hutao.drive.setStartPose(Pose(0.0, 0.0, heading = 90.0.radians))
         hutao.drive.setDefaultCommand(MecanumDriveCommand(
                 hutao.drive,
                 driver.leftStick,
@@ -49,13 +46,12 @@ class HutaoTeleOp : CommandOpMode() {
 
     private fun bindIntake() {
         driver.rightTrigger.onPress(IntakeSequence(hutao.intake,
-                hutao.outtake, hutao.indexer, hutao.turret, Turret.turretBlueAngle, hutao.arm))
+                hutao.outtake, hutao.indexer, hutao.turret, Turret.blueAngle, hutao.arm))
     }
 
     private fun bindDeposit() {
         val depositSequence = SequentialCommandGroup(
                 DepositSequence(hutao.slides, hutao.indexer) { driver.leftTrigger.invokeBoolean() },
-                WaitCommand(0.5),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.encoders.slideEncoder)
         )
 
@@ -76,13 +72,6 @@ class HutaoTeleOp : CommandOpMode() {
         )
         val path = Path(waypoints)
         driver.rightBumper.onPress(PathCommand(hutao.drive, path, 2.0))
-    }
-
-    private fun ready() {
-        hutao.turret.setPIDTarget(180.0)
-        hutao.slides.setPIDTarget(0.0)
-        hutao.turret.disabled = false
-        hutao.slides.disabled = false
     }
 
     override fun mLoop() {

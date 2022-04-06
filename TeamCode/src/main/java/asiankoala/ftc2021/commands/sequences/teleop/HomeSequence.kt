@@ -25,8 +25,4 @@ class HomeSequence(turret: Turret, slides: Slides, outtake: Outtake, indexer: In
         WaitUntilCommand { slideEncoder.position.absoluteValue < 2.0},
         OuttakeCommands.OuttakeHomeCommand(outtake)
                 .alongWith(IndexerCommands.IndexerOpenCommand(indexer))
-) {
-    init {
-        addRequirements(turret, slides, outtake, indexer, arm)
-    }
-}
+)

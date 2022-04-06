@@ -12,5 +12,6 @@ class DepositSequence(slides: Slides, indexer: Indexer, continueDeposit: () -> B
         InstantCommand({slides.generateAndFollowMotionProfile(Slides.slideDepositInches)}, slides),
         WaitCommand( 0.5),
         WaitUntilCommand(continueDeposit),
-        IndexerCommands.IndexerIndexCommand(indexer)
+        IndexerCommands.IndexerIndexCommand(indexer),
+        WaitCommand(0.5)
 )
