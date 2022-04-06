@@ -1,7 +1,9 @@
 package asiankoala.ftc2021.opmodes
 
 import asiankoala.ftc2021.Hutao
-import asiankoala.ftc2021.commands.sequences.auto.*
+import asiankoala.ftc2021.commands.sequences.auto.AutoDepositSequence
+import asiankoala.ftc2021.commands.sequences.auto.AutoInitSequence
+import asiankoala.ftc2021.commands.sequences.auto.CycleSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.Command
@@ -11,8 +13,6 @@ import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.util.Alliance
-import com.asiankoala.koawalib.util.Logger
-import com.asiankoala.koawalib.util.LoggerConfig
 import com.asiankoala.koawalib.util.OpModeState
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 
@@ -22,8 +22,6 @@ open class HutaoAuto(private val alliance: Alliance) : CommandOpMode() {
     private lateinit var mainCommand: Command
 
     override fun mInit() {
-        Logger.config = LoggerConfig(isLogging = true, isPrinting = false,
-                isLoggingTelemetry = false, isDebugging = false, maxErrorCount = 1)
         hutao = Hutao(startPose)
 
         val initialIntakeX = 64.0

@@ -3,7 +3,6 @@ package asiankoala.ftc2021.opmodes
 import asiankoala.ftc2021.Hutao
 import asiankoala.ftc2021.Strategy
 import asiankoala.ftc2021.commands.sequences.teleop.DepositSequence
-import asiankoala.ftc2021.commands.sequences.teleop.DepositSharedSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
 import asiankoala.ftc2021.commands.subsystem.DuckCommands
@@ -15,7 +14,6 @@ import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.Logger
-import com.asiankoala.koawalib.util.LoggerConfig
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 @TeleOp
@@ -24,7 +22,6 @@ class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     private var strategy = alliance.decide(Strategy.ALLIANCE_BLUE, Strategy.ALLIANCE_RED)
 
     override fun mInit() {
-        Logger.config = LoggerConfig(isLogging = true, isPrinting = false, isLoggingTelemetry = false, isDebugging = false, maxErrorCount = 1)
         hutao = Hutao(Pose(heading = 90.0.radians))
         bindDrive()
         bindDuck()

@@ -26,24 +26,24 @@ repositories{
     maven { url 'https://jitpack.io' }
 }
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    resolutionStrategy.cacheDynamicVersionsFor 5, 'minutes'
-}
+//configurations.all {
+//    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//    resolutionStrategy.cacheDynamicVersionsFor 5, 'minutes'
+//}
 
 dependencies {
     implementation project(':FtcRobotController')
+    implementation project(path: ':koawalib')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'org.openftc:easyopencv:1.5.1'
     implementation 'org.openftc:rev-extensions-2:1.2'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.apache.commons:commons-text:1.6'
-    implementation 'com.acmerobotics.roadrunner:core:0.5.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'com.github.NoahBres:MeepMeep:2.0.0'
-    implementation 'com.github.AsianKoala:koawalib:-SNAPSHOT'
+//    implementation 'com.github.AsianKoala:koawalib:-SNAPSHOT'
 
 
     ktlint("com.pinterest:ktlint:0.42.1") {

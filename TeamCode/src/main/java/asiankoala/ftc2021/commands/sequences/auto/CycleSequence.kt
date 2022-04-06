@@ -2,9 +2,9 @@ package asiankoala.ftc2021.commands.sequences.auto
 
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.subsystems.*
-import asiankoala.port.Path
-import asiankoala.port.PathCommand
+import com.asiankoala.koawalib.command.commands.PathCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
+import com.asiankoala.koawalib.path.Path
 import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.subsystem.drive.KMecanumOdoDrive
 import com.asiankoala.koawalib.subsystem.odometry.KEncoder

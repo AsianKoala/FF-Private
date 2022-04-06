@@ -7,7 +7,6 @@ import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
-import com.asiankoala.koawalib.util.Alliance
 
 class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm) : SequentialCommandGroup(
         OuttakeCommands.OuttakeHomeCommand(outtake)
