@@ -9,8 +9,9 @@ import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
+import com.asiankoala.koawalib.util.Alliance
 
-class IntakeSequence(intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, turretAngle: Double, arm: Arm) : SequentialCommandGroup(
+class IntakeSequence(alliance: Alliance, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm) : SequentialCommandGroup(
         OuttakeCommands.OuttakeHomeCommand(outtake)
                 .alongWith(IndexerCommands.IndexerOpenCommand(indexer)),
         WaitCommand(0.2),
@@ -25,6 +26,6 @@ class IntakeSequence(intake: Intake, outtake: Outtake, indexer: Indexer, turret:
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
         WaitCommand(0.3),
-        InstantCommand({ turret.setPIDTarget(turretAngle) }, turret)
+        InstantCommand({ turret.setPIDTarget(alliance.decide(Turret.blueAngle, Turret.redAngle)) }, turret)
                 .alongWith(IntakeCommands.IntakeTurnOffCommand(intake))
 )

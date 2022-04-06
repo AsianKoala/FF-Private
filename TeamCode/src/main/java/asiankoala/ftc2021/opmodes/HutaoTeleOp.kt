@@ -1,7 +1,8 @@
 package asiankoala.ftc2021.opmodes
 
 import asiankoala.ftc2021.Hutao
-import asiankoala.ftc2021.commands.sequences.teleop.DepositSequence
+import asiankoala.ftc2021.commands.sequences.teleop.DepositAllianceSequence
+import asiankoala.ftc2021.commands.sequences.teleop.DepositSharedSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
 import asiankoala.ftc2021.commands.subsystem.DuckCommands
@@ -21,7 +22,7 @@ import com.asiankoala.koawalib.util.LoggerConfig
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 @TeleOp
-class HutaoTeleOp : CommandOpMode() {
+class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     private lateinit var hutao: Hutao
 
     override fun mInit() {
@@ -31,7 +32,6 @@ class HutaoTeleOp : CommandOpMode() {
         bindIntake()
         bindDeposit()
         bindDuck()
-        bindPath()
     }
 
     private fun bindDrive() {
@@ -45,33 +45,25 @@ class HutaoTeleOp : CommandOpMode() {
     }
 
     private fun bindIntake() {
-        driver.rightTrigger.onPress(IntakeSequence(hutao.intake,
-                hutao.outtake, hutao.indexer, hutao.turret, Turret.blueAngle, hutao.arm))
+        driver.rightTrigger.onPress(IntakeSequence(alliance, hutao.intake,
+                hutao.outtake, hutao.indexer, hutao.turret, hutao.arm))
     }
 
     private fun bindDeposit() {
-        val depositSequence = SequentialCommandGroup(
-                DepositSequence(hutao.slides, hutao.indexer) { driver.leftTrigger.invokeBoolean() },
+        val depositAlliance = SequentialCommandGroup(
+                DepositAllianceSequence(hutao.slides, hutao.indexer) { driver.leftTrigger.invokeBoolean() },
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.encoders.slideEncoder)
         )
 
-        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositSequence.isScheduled}, depositSequence)
+        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositAlliance.isScheduled}, depositAlliance)
+
+        val sharedCommand = DepositSharedSequence(alliance, hutao.turret, hutao.arm, hutao.indexer,
+                hutao.slides, driver.rightBumper, hutao.intake, hutao.outtake, hutao.encoders.slideEncoder)
+        CommandScheduler.scheduleWatchdog({ driver.rightBumper.isJustPressed && hutao.intake.hasMineral && !sharedCommand.isScheduled }, sharedCommand)
     }
 
     private fun bindDuck() {
         driver.leftBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, Alliance.BLUE))
-    }
-
-    private fun bindPath() {
-        val waypoints = listOf(
-                Waypoint(0.0, 0.0, 0.0),
-                Waypoint(12.0, 30.0, 16.0, deccelAngle = 40.0.radians),
-                Waypoint(24.0, 36.0, 16.0, deccelAngle = 40.0.radians),
-                Waypoint(52.0, 36.0, 12.0, headingLockAngle = 0.0,
-                        lowestSlowDownFromHeadingError = 0.2, minAllowedHeadingError = 20.0.radians, deccelAngle = 40.0.radians)
-        )
-        val path = Path(waypoints)
-        driver.rightBumper.onPress(PathCommand(hutao.drive, path, 2.0))
     }
 
     override fun mLoop() {
