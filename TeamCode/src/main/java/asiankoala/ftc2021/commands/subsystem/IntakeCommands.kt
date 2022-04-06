@@ -1,6 +1,6 @@
 package asiankoala.ftc2021.commands.subsystem
 
-import asiankoala.ftc2021.subsystems.*
+import asiankoala.ftc2021.subsystems.Intake
 import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 

@@ -12,7 +12,6 @@ import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.gamepad.functionality.Button
 import com.asiankoala.koawalib.util.Alliance
-import com.asiankoala.koawalib.util.Logger
 
 /**
  * this runs in init to ready the robot for auto

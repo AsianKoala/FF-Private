@@ -5,7 +5,6 @@ import asiankoala.ftc2021.subsystems.*
 import com.asiankoala.koawalib.command.commands.WaitCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.util.Alliance
-import com.asiankoala.koawalib.command.group.ParallelCommandGroup
 
 class AutoCockSequence(alliance: Alliance, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm) : SequentialCommandGroup(
         IndexerCommands.IndexerLockCommand(indexer),
