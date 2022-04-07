@@ -14,13 +14,14 @@ data class Waypoint(
     val stop: Boolean = true,
     val minAllowedHeadingError: Double = 60.0.radians,
     val lowestSlowDownFromHeadingError: Double = 0.4,
-//    val command: Command? = null
+    val minAllowedXError: Double = 1.0,
+    val lowestSlowDownFromXError: Double = 0.4,
 ) {
     val point = Point(x, y)
 
     val copy: Waypoint
         get() = Waypoint(
             x, y, followDistance, headingLockAngle, maxMoveSpeed, maxTurnSpeed, deccelAngle,
-            stop, minAllowedHeadingError, lowestSlowDownFromHeadingError/*, command*/
+            stop, minAllowedHeadingError, lowestSlowDownFromHeadingError, minAllowedXError, lowestSlowDownFromXError
         )
 }

@@ -19,20 +19,6 @@ class Path(private val waypoints: List<Waypoint>) {
         val clippedToPath = PurePursuitController.clipToPath(waypoints, pose.point)
         val currFollowIndex = clippedToPath.index + 1
 
-        // NOTE: we start running commands based on CLIPPED position
-        // meaning, if the robot hasn't passed a waypoint, even if following that next waypoint's segment
-        // the robot will not run the next waypoint command until after it has passed it (reflected by currFollowIndex)
-//        for (waypoint in waypoints.subList(0, currFollowIndex)) {
-//            Logger.addTelemetryLine("attempting to run waypoint commands in interval [0,$currFollowIndex]")
-//            if (waypoint.command != null) {
-//                // TODO: WAS PREIVOUSLY !waypoint.command.isFinished && !waypoint.command.isScheduled, CHECK IF WORKS
-//                if (!waypoint.command.isScheduled) {
-//                    Logger.addTelemetryLine("scheduled waypoint $waypoint command ${waypoint.command}")
-//                    waypoint.command.schedule()
-//                }
-//            }
-//        }
-
         var movementLookahead = PurePursuitController.calcLookahead(
             waypoints,
             pose,
@@ -74,6 +60,7 @@ class Path(private val waypoints: List<Waypoint>) {
             movementLookahead.lowestSlowDownFromHeadingError,
         ).point
 
+
         val absolutePointAngle = turnLookahead.headingLockAngle ?: (turnLookahead.point - pose).atan2
 
         val turnResult = PurePursuitController.pointTo(
@@ -91,7 +78,7 @@ class Path(private val waypoints: List<Waypoint>) {
             1.0
         )
 
-        val finalXPower = movePower.x * errorTurnSoScaleMovement
+        val finalXPower = movePower.x/* * errorTurnSoScaleMovement*/
         val finalYPower = movePower.y * errorTurnSoScaleMovement
 
         if (clippedDistanceToEnd < tol) {
@@ -106,7 +93,6 @@ class Path(private val waypoints: List<Waypoint>) {
         Logger.logInfo("clipped distance: $clippedDistanceToEnd")
         Logger.logInfo("relative angle: ${realRelativeAngle.degrees}")
         Logger.logInfo("pure pursuit debug ended")
-
 
         return Pair(Pose(finalXPower, finalYPower, finalTurnPower), absolutePointAngle)
     }

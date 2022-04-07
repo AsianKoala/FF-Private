@@ -20,7 +20,9 @@ object PurePursuitController {
         headingLockAngle: Double? = null,
         minAllowedHeadingError: Double = 60.0.radians,
         lowestSlowDownFromHeadingError: Double = 0.4,
-    ): Pose {
+        minAllowedXError: Double = 1.0,
+        lowestSlowDownFromXError: Double = 0.4,
+        ): Pose {
         val absoluteDelta = targetPosition - currPose.point
         val distanceToPoint = absoluteDelta.hypot
 
@@ -35,7 +37,7 @@ object PurePursuitController {
         var yPower = relativeYToPosition / relativeAbsMagnitude
 
         if (stop) {
-            xPower *= relativeXToPosition.absoluteValue / 12.0
+//            xPower *= relativeXToPosition.absoluteValue / 12.0
             yPower *= relativeYToPosition.absoluteValue / 12.0
         } else {
             Logger.addTelemetryLine("FULL SPEED")
@@ -50,7 +52,7 @@ object PurePursuitController {
         var turnPower = pointRes.first
         val relativePointAngle = pointRes.second.angleWrap
 
-        if (distanceToPoint < 4.0) {
+        if (distanceToPoint < 1.5) { // 4.0
             turnPower = 0.0
         }
 
@@ -62,7 +64,7 @@ object PurePursuitController {
         yPower = powers[1]
         turnPower = powers[2]
 
-        xPower *= Range.clip(relativeXToPosition.absoluteValue / 2.5, 0.0, 1.0)
+//        xPower *= Range.clip(relativeXToPosition.absoluteValue / 2.5, 0.0, 1.0)
         yPower *= Range.clip(relativeYToPosition.absoluteValue / 2.5, 0.0, 1.0)
 
         // slow down if angle is off
@@ -76,8 +78,20 @@ object PurePursuitController {
             errorTurnSoScaleMovement = 1.0
         }
 
+        val xError = (currPose.x - targetPosition.x)
+
+        val xErrorMoveScale = clamp(
+                1.0 - (xError / minAllowedXError).absoluteValue,
+                lowestSlowDownFromXError,
+                1.0
+        )
+
         xPower *= errorTurnSoScaleMovement
         yPower *= errorTurnSoScaleMovement
+        yPower *= xErrorMoveScale
+
+        Logger.logInfo("xPower",xPower)
+        Logger.logInfo("xError", xError)
 
         return Pose(xPower, yPower, turnPower)
     }
