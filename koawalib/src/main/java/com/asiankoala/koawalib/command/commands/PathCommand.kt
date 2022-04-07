@@ -8,7 +8,6 @@ class PathCommand(
     private val drive: KMecanumOdoDrive,
     private val path: Path,
     private val tol: Double,
-    private val xPower: Double
 ) : CommandBase() {
 
     override fun initialize() {
@@ -16,9 +15,7 @@ class PathCommand(
     }
 
     override fun execute() {
-        var powers = path.update(drive.position, tol).first
-        powers = Pose(powers.x + xPower, powers.y, powers.heading)
-        drive.powers = powers
+        drive.powers = path.update(drive.position, tol).first
     }
 
     override fun end(interrupted: Boolean) {

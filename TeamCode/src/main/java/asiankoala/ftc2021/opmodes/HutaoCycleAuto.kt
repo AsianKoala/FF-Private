@@ -28,21 +28,53 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
 
         val initialIntakeX = 64.0
         val intakeWaypoints = listOf(
-                Waypoint(startPose.x, startPose.y+1.0, 8.0,
-                        0.0, stop = true, maxMoveSpeed = 0.8,
-                        deccelAngle = 30.0.radians, minAllowedHeadingError = 10.0.radians, lowestSlowDownFromHeadingError = 0.2),
-                Waypoint(initialIntakeX, startPose.y+1.0, 8.0,
-                        0.0, stop = true, maxMoveSpeed = 0.8,
-                        deccelAngle = 30.0.radians, minAllowedHeadingError = 10.0.radians, lowestSlowDownFromHeadingError = 0.2)
+                Waypoint(startPose.x,
+                        startPose.y+1.0,
+                        8.0,
+                        0.0,
+                        stop = true,
+                        deccelAngle = 30.0.radians,
+                        minAllowedHeadingError = 10.0.radians,
+                        lowestSlowDownFromHeadingError = 0.2,
+                        minAllowedXError = 2.0,
+                        lowestSlowDownFromXError = 0.2
+                ),
+                Waypoint(initialIntakeX,
+                        startPose.y+1.0,
+                        8.0,
+                        0.0,
+                        stop = true,
+                        deccelAngle = 30.0.radians,
+                        minAllowedHeadingError = 10.0.radians,
+                        lowestSlowDownFromHeadingError = 0.2,
+                        minAllowedXError = 2.0,
+                        lowestSlowDownFromXError = 0.2
+                )
         )
 
         val depositWaypoints = listOf(
-                Waypoint(initialIntakeX, startPose.y+1.0, 8.0,
-                        0.0, stop = true, maxMoveSpeed = 0.8,
-                        deccelAngle = 30.0.radians, minAllowedHeadingError = 10.0.radians, lowestSlowDownFromHeadingError = 0.2),
-                Waypoint(startPose.x, startPose.y+1.0, 8.0,
-                        0.0, stop = true, maxMoveSpeed = 0.8,
-                        deccelAngle = 30.0.radians, minAllowedHeadingError = 10.0.radians, lowestSlowDownFromHeadingError = 0.2)
+                Waypoint(initialIntakeX,
+                        startPose.y+1.0,
+                        8.0,
+                        0.0,
+                        stop = true,
+                        deccelAngle = 30.0.radians,
+                        minAllowedHeadingError = 10.0.radians,
+                        lowestSlowDownFromHeadingError = 0.2,
+                        minAllowedXError = 2.0,
+                        lowestSlowDownFromXError = 0.2
+                ),
+                Waypoint(startPose.x,
+                        startPose.y+1.0,
+                        8.0,
+                        0.0,
+                        stop = true,
+                        deccelAngle = 30.0.radians,
+                        minAllowedHeadingError = 10.0.radians,
+                        lowestSlowDownFromHeadingError = 0.2,
+                        minAllowedXError = 2.0,
+                        lowestSlowDownFromXError = 0.2
+                )
         )
 
         mainCommand = SequentialCommandGroup(
@@ -78,6 +110,20 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                         hutao.arm,
                         hutao.slides,
                 ),
+
+                CycleSequence(
+                        alliance,
+                        intakeWaypoints,
+                        depositWaypoints,
+                        hutao.drive,
+                        hutao.intake,
+                        hutao.outtake,
+                        hutao.indexer,
+                        hutao.turret,
+                        hutao.arm,
+                        hutao.slides,
+                ),
+
 
 
                 ).withName("main command")
