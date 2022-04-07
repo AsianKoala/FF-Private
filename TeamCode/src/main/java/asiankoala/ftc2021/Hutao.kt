@@ -13,7 +13,7 @@ class Hutao(startPose: Pose) {
     private val hardware = Hardware()
     val encoders = Encoders(hardware)
 
-    val drive = KMecanumOdoDrive(hardware.flMotor, hardware.blMotor, hardware.brMotor, hardware.frMotor, encoders.odo, false)
+    val drive = KMecanumOdoDrive(hardware.flMotor, hardware.blMotor, hardware.brMotor, hardware.frMotor, encoders.odo, true)
     val intake = Intake(hardware.intakeMotor, hardware.distanceSensor)
     val arm = Arm(hardware.armServo)
     val indexer = Indexer(hardware.indexerServo)

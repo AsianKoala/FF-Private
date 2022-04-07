@@ -28,7 +28,7 @@ class CycleSequence(alliance: Alliance,
         ).raceWith(AutoIntakeSequence(intake)),
 
         AutoCockSequence(alliance, intake, outtake, indexer, turret, arm)
-            .alongWith(PathCommand(drive, Path(depositWaypoints), 2.0)),
+            .alongWith(PathCommand(drive, Path(depositWaypoints), 1.5)),
 
         AutoDepositSequence(slides, indexer),
         HomeSequence(turret, slides, outtake, indexer, arm)

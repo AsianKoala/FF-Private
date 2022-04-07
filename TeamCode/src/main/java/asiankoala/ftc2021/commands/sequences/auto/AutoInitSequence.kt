@@ -22,5 +22,5 @@ class AutoInitSequence(alliance: Alliance, readyButton: Button, outtake: Outtake
 //        IntakeStopperCommands.IntakeStopperLockCommand(intakeStopper),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
-        InstantCommand({ turret.setPIDTarget(alliance.decide(Turret.blueAngle, Turret.redAngle))}),
+        InstantCommand({ turret.setPIDTarget(alliance.decide(Turret.blueAngle-3.0, Turret.redAngle))}),
 )

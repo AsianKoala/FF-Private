@@ -37,7 +37,7 @@ object PurePursuitController {
         var yPower = relativeYToPosition / relativeAbsMagnitude
 
         if (stop) {
-//            xPower *= relativeXToPosition.absoluteValue / 12.0
+            xPower *= relativeXToPosition.absoluteValue / 12.0
             yPower *= relativeYToPosition.absoluteValue / 12.0
         } else {
             Logger.addTelemetryLine("FULL SPEED")
@@ -78,20 +78,18 @@ object PurePursuitController {
             errorTurnSoScaleMovement = 1.0
         }
 
-        val xError = (currPose.x - targetPosition.x)
-
         val xErrorMoveScale = clamp(
-                1.0 - (xError / minAllowedXError).absoluteValue,
+                1.0 - (relativeXToPosition / minAllowedXError).absoluteValue,
                 lowestSlowDownFromXError,
                 1.0
         )
 
-        xPower *= errorTurnSoScaleMovement
+//        xPower *= errorTurnSoScaleMovement
         yPower *= errorTurnSoScaleMovement
         yPower *= xErrorMoveScale
 
         Logger.logInfo("xPower",xPower)
-        Logger.logInfo("xError", xError)
+        Logger.logInfo("xError", relativeXToPosition)
 
         return Pose(xPower, yPower, turnPower)
     }

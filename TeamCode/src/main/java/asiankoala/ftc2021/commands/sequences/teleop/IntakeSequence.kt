@@ -21,7 +21,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
                 .alongWith(InstantCommand(intake::stopReading)),
         WaitCommand(0.3),
         IntakeCommands.IntakeTurnReverseCommand(intake),
-        WaitCommand(0.5),
+        WaitCommand(0.8),
         InstantCommand({
             val strat = strategy.invoke()
             val pos = if(strat == Strategy.SHARED_BLUE || strat == Strategy.SHARED_RED) {

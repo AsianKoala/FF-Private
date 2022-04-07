@@ -8,6 +8,7 @@ import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.subsystem.IntakeStopperCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.Command
+import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.math.Pose
@@ -15,8 +16,6 @@ import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.OpModeState
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
     private val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
@@ -26,53 +25,40 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
     override fun mInit() {
         hutao = Hutao(startPose)
 
+        val yOffset = alliance.decide(0.0, 0.0)
         val initialIntakeX = 64.0
         val intakeWaypoints = listOf(
                 Waypoint(startPose.x,
-                        startPose.y+1.0,
+                        startPose.y + yOffset,
                         8.0,
                         0.0,
-                        stop = true,
-                        deccelAngle = 30.0.radians,
-                        minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromHeadingError = 0.2,
-                        minAllowedXError = 2.0,
-                        lowestSlowDownFromXError = 0.2
                 ),
                 Waypoint(initialIntakeX,
-                        startPose.y+1.0,
+                        startPose.y + yOffset,
                         8.0,
                         0.0,
-                        stop = true,
-                        deccelAngle = 30.0.radians,
+                        stop = false,
+                        deccelAngle = 20.0.radians,
                         minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromHeadingError = 0.2,
-                        minAllowedXError = 2.0,
+                        minAllowedXError = 2.5,
                         lowestSlowDownFromXError = 0.2
                 )
         )
 
         val depositWaypoints = listOf(
                 Waypoint(initialIntakeX,
-                        startPose.y+1.0,
+                        startPose.y + yOffset,
                         8.0,
                         0.0,
-                        stop = true,
-                        deccelAngle = 30.0.radians,
-                        minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromHeadingError = 0.2,
-                        minAllowedXError = 2.0,
-                        lowestSlowDownFromXError = 0.2
                 ),
-                Waypoint(startPose.x,
-                        startPose.y+1.0,
+                Waypoint(startPose.x - 2.0,
+                        startPose.y + yOffset,
                         8.0,
                         0.0,
                         stop = true,
-                        deccelAngle = 30.0.radians,
+                        deccelAngle = 20.0.radians,
                         minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromHeadingError = 0.2,
-                        minAllowedXError = 2.0,
+                        minAllowedXError = 2.5,
                         lowestSlowDownFromXError = 0.2
                 )
         )
@@ -111,6 +97,8 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                         hutao.slides,
                 ),
 
+                InstantCommand(hutao.encoders.odo::reset),
+
                 CycleSequence(
                         alliance,
                         intakeWaypoints,
@@ -124,7 +112,33 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                         hutao.slides,
                 ),
 
+                CycleSequence(
+                        alliance,
+                        intakeWaypoints,
+                        depositWaypoints,
+                        hutao.drive,
+                        hutao.intake,
+                        hutao.outtake,
+                        hutao.indexer,
+                        hutao.turret,
+                        hutao.arm,
+                        hutao.slides,
+                ),
 
+                InstantCommand(hutao.encoders.odo::reset),
+
+                CycleSequence(
+                        alliance,
+                        intakeWaypoints,
+                        depositWaypoints,
+                        hutao.drive,
+                        hutao.intake,
+                        hutao.outtake,
+                        hutao.indexer,
+                        hutao.turret,
+                        hutao.arm,
+                        hutao.slides,
+                ),
 
                 ).withName("main command")
 
