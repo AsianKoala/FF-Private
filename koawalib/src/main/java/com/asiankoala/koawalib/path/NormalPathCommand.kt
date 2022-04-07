@@ -12,7 +12,7 @@ class NormalPathCommand(
     override fun initialize() {
         drive.powers = Pose()
     }
-    
+
     override fun execute() {
         drive.powers = path.update(drive.position, tol).first
     }

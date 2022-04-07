@@ -9,13 +9,13 @@ import com.asiankoala.koawalib.util.Alliance
 
 class AutoCockSequence(alliance: Alliance, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm) : SequentialCommandGroup(
         IndexerCommands.IndexerLockCommand(indexer),
-//        WaitCommand(0.3),
+        WaitCommand(0.3),
         InstantCommand(intake::turnReverse),
         WaitCommand(0.8),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
         InstantCommand({
-            val angle = alliance.decide(Turret.blueAngle, Turret.redAngle)
+            val angle = alliance.decide(Turret.autoBlueAngle, Turret.autoRedAngle)
             turret.setPIDTarget(angle)
         }, turret).alongWith(IntakeCommands.IntakeTurnOffCommand(intake))
 )

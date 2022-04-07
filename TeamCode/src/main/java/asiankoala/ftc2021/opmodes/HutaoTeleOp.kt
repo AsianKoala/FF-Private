@@ -53,7 +53,7 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
 
         val depositCommand = SequentialCommandGroup(
             DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
-            HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm)
+            HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake)
         )
         CommandScheduler.scheduleWatchdog({
             if(strategy.isAlliance || strategy.isAttackingOtherCrater) {

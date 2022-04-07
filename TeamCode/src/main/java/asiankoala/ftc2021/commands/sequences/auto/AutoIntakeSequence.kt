@@ -7,7 +7,7 @@ import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 
 class AutoIntakeSequence(intake: Intake) : SequentialCommandGroup(
         IntakeCommands.IntakeStartReadingCommand(intake),
-        InstantCommand(intake::turnOn),
+        InstantCommand({intake.setIntakeSpeed(Intake.intakeSpeed)}),
         IntakeCommands.IntakeHasMineralCommand(intake),
         InstantCommand(intake::stopReading)
 )

@@ -8,10 +8,9 @@ import asiankoala.ftc2021.commands.sequences.auto.CycleSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.subsystem.IntakeStopperCommands
 import com.asiankoala.koawalib.command.CommandOpMode
-import com.asiankoala.koawalib.command.commands.Command
-import com.asiankoala.koawalib.command.commands.InstantCommand
-import com.asiankoala.koawalib.command.commands.PathCommand
-import com.asiankoala.koawalib.command.commands.WaitUntilCommand
+import com.asiankoala.koawalib.command.commands.*
+import com.asiankoala.koawalib.command.group.ParallelCommandGroup
+import com.asiankoala.koawalib.command.group.ParallelRaceGroup
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
@@ -27,7 +26,7 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
     override fun mInit() {
         val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
         val depositY = startPose.y
-        val depositX = 16.0
+        val depositX = 25.0
         val resetPose = Pose(depositX-2, depositY, 0.0)
 
         hutao = Hutao(startPose)
@@ -42,11 +41,12 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                 ),
                 Waypoint(initialIntakeX,
                         depositY,
-                        14.0,
+                        12.0,
                         0.0,
                         stop = false,
                         deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
+                        maxMoveSpeed = 0.7,
                         lowestSlowDownFromXError = 0.8,
                         lowestSlowDownFromHeadingError = 0.8
                 )
@@ -60,12 +60,12 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                 ),
                 Waypoint(depositX,
                         depositY,
-                        8.0,
+                        10.0,
                         0.0,
                         stop = false,
                         deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromXError = 0.8,
+                        lowestSlowDownFromXError = 0.5,
                         lowestSlowDownFromHeadingError = 0.8
                 )
         )
@@ -78,23 +78,23 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                 ),
                 Waypoint(depositX+3.0,
                         depositY,
-                        8.0,
+                        10.0,
                         0.0,
                         stop = false,
                         deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
-                        lowestSlowDownFromXError = 0.8,
+                        lowestSlowDownFromXError = 0.5,
                         lowestSlowDownFromHeadingError = 0.8
                 )
         )
 
-        mainCommand = SequentialCommandGroup(
+        val seq = SequentialCommandGroup(
                 AutoInitSequence(alliance, driver.rightTrigger, hutao.outtake,
                         hutao.arm, hutao.turret, hutao.indexer),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
                 AutoDepositSequence(hutao.slides, hutao.indexer),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer,
-                        hutao.arm),
+                        hutao.arm, hutao.intake),
 
                 CycleSequence(
                         alliance,
@@ -159,7 +159,19 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
 
                 PathCommand(hutao.drive, Path(intakeWaypoints), 2.0)
 
-                ).withName("main command")
+                ).withName("seq")
+
+        mainCommand = SequentialCommandGroup(
+                ParallelRaceGroup(
+                        WaitUntilCommand { opmodeState == OpModeState.LOOP }
+                                .andThen(WaitCommand(27.0)),
+                        seq
+                ),
+                ParallelCommandGroup(
+                        PathCommand(hutao.drive, Path(intakeWaypoints), 5.0),
+                        HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake)
+                )
+        )
 
         mainCommand.schedule()
     }

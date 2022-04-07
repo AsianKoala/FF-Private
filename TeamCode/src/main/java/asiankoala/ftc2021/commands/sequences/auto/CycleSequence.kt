@@ -37,6 +37,6 @@ class CycleSequence(alliance: Alliance,
             .alongWith(PathCommand(drive, Path(depositWaypoints), 2.0)),
 
         AutoDepositSequence(slides, indexer),
-        HomeSequence(turret, slides, outtake, indexer, arm),
+        HomeSequence(turret, slides, outtake, indexer, arm, intake),
         ResetPoseCommand(odo, pose),
 )
