@@ -13,13 +13,15 @@ import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.*
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.OpModeState
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 
+@Autonomous
 class HutaoDuckBlue : CommandOpMode() {
     private lateinit var hutao: Hutao
     private lateinit var mainCommand: Command
 
     override fun mInit() {
-        val startPose = Pose(-32.0, 64.0, 180.0.radians.angleWrap)
+        val startPose = Pose(-32.0, 64.0, 180.0.radians)
         hutao = Hutao(startPose)
 
         mainCommand = SequentialCommandGroup(
@@ -44,8 +46,8 @@ class HutaoDuckBlue : CommandOpMode() {
                                         ),
 
                                         NormalWaypoint(
-                                                -60.0,
                                                 -50.0,
+                                                50.0,
                                                 10.0,
                                                 180.0.radians,
                                                 maxMoveSpeed = 0.7,
@@ -65,14 +67,14 @@ class HutaoDuckBlue : CommandOpMode() {
                         NormalPath(
                                 listOf(
                                         NormalWaypoint(
-                                                -60.0,
                                                 -50.0,
+                                                50.0,
                                                 10.0
                                         ),
 
                                         NormalWaypoint(
-                                                -30.0,
-                                                -60.0,
+                                                -64.0,
+                                                30.0,
                                                 10.0,
                                                 180.0.radians
                                         )

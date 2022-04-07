@@ -5,6 +5,7 @@ import com.asiankoala.koawalib.math.Pose
 import kotlin.math.absoluteValue
 
 class NormalPath(private val waypoints: List<NormalWaypoint>) {
+    constructor(vararg waypoints: NormalWaypoint) : this(waypoints.toList())
     var isFinished = false
         private set
 
