@@ -26,6 +26,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
             outtake.setPosition(strategy.invoke().getOuttakePosition())
         }, outtake)
                 .alongWith(InstantCommand({arm.setPosition(strategy.invoke().getArmPosition())}, arm)),
+        WaitCommand(0.2),
         InstantCommand({
             val strat = strategy.invoke()
             val angle = strat.getTurretAngle()

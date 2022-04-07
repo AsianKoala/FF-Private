@@ -9,6 +9,7 @@ import kotlin.math.absoluteValue
  * rather the path should be adapted to the commands.
  */
 class Path(private val waypoints: List<Waypoint>) {
+    constructor(vararg waypoints: Waypoint) : this(waypoints.toList())
 
     var isFinished = false
         private set
