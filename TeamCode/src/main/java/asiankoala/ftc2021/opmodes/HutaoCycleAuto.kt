@@ -52,7 +52,7 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                 IntakeStopperCommands.IntakeStopperUnlockCommand(hutao.intakeStopper),
                 AutoDepositSequence(hutao.slides, hutao.indexer),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer,
-                        hutao.arm, hutao.encoders.slideEncoder),
+                        hutao.armn ),
 
                 CycleSequence(
                         alliance,

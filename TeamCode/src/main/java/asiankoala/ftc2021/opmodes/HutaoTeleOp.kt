@@ -44,11 +44,12 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     }
 
     private fun bindCycling() {
-        driver.rightTrigger.onPress(IntakeSequence(::strategy, hutao.intake, hutao.outtake, hutao.indexer, hutao.turret, hutao.arm))
+        driver.rightTrigger.onPress(IntakeSequence(::strategy, hutao.intake, hutao.outtake,
+                hutao.indexer, hutao.turret, hutao.arm, hutao.slides))
 
         val depositCommand = SequentialCommandGroup(
             DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
-            HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.encoders.slideEncoder)
+            HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm)
         )
         CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositCommand.isScheduled }, depositCommand)
 

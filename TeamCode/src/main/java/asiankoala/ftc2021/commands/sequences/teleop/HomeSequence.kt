@@ -11,7 +11,7 @@ import com.asiankoala.koawalib.command.group.ParallelCommandGroup
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.subsystem.odometry.KEncoder
 
-class HomeSequence(turret: Turret, slides: Slides, outtake: Outtake, indexer: Indexer, arm: Arm, slideEncoder: KEncoder) : SequentialCommandGroup(
+class HomeSequence(turret: Turret, slides: Slides, outtake: Outtake, indexer: Indexer, arm: Arm) : SequentialCommandGroup(
         ParallelCommandGroup(
                 IndexerCommands.IndexerLockCommand(indexer),
                 OuttakeCommands.OuttakeCockCommand(outtake),

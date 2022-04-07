@@ -22,5 +22,5 @@ class DepositSharedSequence(alliance: Alliance, turret: Turret, arm: Arm, indexe
         WaitUntilCommand(depositButton::isJustPressed),
         IndexerCommands.IndexerIndexCommand(indexer),
         WaitCommand(0.5),
-        HomeSequence(turret, slides, outtake, indexer, arm, encoder)
+        HomeSequence(turret, slides, outtake, indexer, arm)
 )

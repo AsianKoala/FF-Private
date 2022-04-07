@@ -5,13 +5,13 @@ import com.asiankoala.koawalib.subsystem.DeviceSubsystem
 
 class Outtake(private val servo: KServo) : DeviceSubsystem() {
     companion object OuttakeConstants {
-        const val outtakeHomePosition = 0.26
+        const val outtakeHomePosition = 0.235
         const val outtakeCockPosition = 0.75
         const val outtakeHighPosition = 0.84
         const val outtakeSharedPosition = 0.92
     }
 
-    fun bruh(thing: Double) {
+    fun setPosition(thing: Double) {
         servo.position = thing
     }
 

@@ -38,5 +38,5 @@ class CycleSequence(alliance: Alliance,
         ),
 
         AutoDepositSequence(slides, indexer),
-        HomeSequence(turret, slides, outtake, indexer, arm, slideEncoder)
+        HomeSequence(turret, slides, outtake, indexer, arm)
 )
