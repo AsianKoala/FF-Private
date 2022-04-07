@@ -21,7 +21,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
                 .alongWith(InstantCommand(intake::stopReading)),
         WaitCommand(0.3),
         IntakeCommands.IntakeTurnReverseCommand(intake),
-        WaitCommand(0.3),
+        WaitCommand(0.5),
         InstantCommand({
             val strat = strategy.invoke()
             val pos = if(strat == Strategy.SHARED_BLUE || strat == Strategy.SHARED_RED) {
@@ -32,12 +32,9 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
             outtake.setPosition(pos)
         }, outtake)
                 .alongWith(InstantCommand({arm.setPosition(strategy.invoke().getArmPosition())}, arm)),
-//        WaitCommand(0.3),
         InstantCommand({
             val strat = strategy.invoke()
             val angle = strat.getTurretAngle()
-            Logger.logInfo("TARGET ANGLE BRUFAFKF", angle)
-            Logger.logInfo("CURRENT STRATEGY", strat)
             turret.setPIDTarget(angle)
         }, turret).alongWith(
                 IntakeCommands.IntakeTurnOffCommand(intake),

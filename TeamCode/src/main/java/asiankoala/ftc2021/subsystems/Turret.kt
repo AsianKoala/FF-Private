@@ -5,7 +5,7 @@ import com.asiankoala.koawalib.subsystem.old.MotorSubsystemConfig
 
 class Turret(config: MotorSubsystemConfig) : MotorSubsystem(config) {
     companion object TurretConstants {
-        private const val allianceDiff = 69.0
+        private const val allianceDiff = 60.0//69.0
 
         const val zeroAngle = 183.0
         const val homeAngle = 183.0

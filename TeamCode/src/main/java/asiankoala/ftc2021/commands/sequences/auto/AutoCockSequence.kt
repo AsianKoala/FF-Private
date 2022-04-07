@@ -14,7 +14,6 @@ class AutoCockSequence(alliance: Alliance, intake: Intake, outtake: Outtake, ind
         WaitCommand(0.5),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
-        WaitCommand(0.3),
         InstantCommand({
             val angle = alliance.decide(Turret.blueAngle, Turret.redAngle)
             turret.setPIDTarget(angle)
