@@ -8,5 +8,6 @@ class Slides(config: MotorSubsystemConfig) : MotorSubsystem(config) {
         const val slideHomeValue = -0.5
         const val depositHighInches = 33.5
         const val sharedInches = 7.5
+        const val sharedExtInches = 10.5
     }
 }

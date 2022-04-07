@@ -26,5 +26,5 @@ class DepositSequence(strategy: () -> Strategy, slides: Slides, indexer: Indexer
         WaitCommand( 0.5),
         WaitUntilCommand(continueDeposit),
         IndexerCommands.IndexerIndexCommand(indexer),
-        WaitCommand(0.8)
+        WaitCommand(0.4)
 )

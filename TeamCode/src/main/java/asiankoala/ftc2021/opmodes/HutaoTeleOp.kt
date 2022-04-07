@@ -19,6 +19,7 @@ import com.asiankoala.koawalib.util.Logger
 open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     private lateinit var hutao: Hutao
     private var strategy = alliance.decide(Strategy.ALLIANCE_BLUE, Strategy.ALLIANCE_RED)
+    private var shouldExtendFarther = true
 
     override fun mInit() {
         hutao = Hutao(Pose(heading = 90.0.radians))
@@ -35,7 +36,7 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
                 driver.leftStick,
                 driver.rightStick,
                 1.0, 1.0, 1.0,
-                xScalar = 0.7, yScalar = 0.7, rScalar = 0.7
+//                xScalar = 0.7, yScalar = 0.7, rScalar = 0.7
             )
         )
     }
@@ -49,7 +50,7 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
 
     private fun bindCycling() {
         driver.rightTrigger.onPress(IntakeSequence(::strategy, hutao.intake, hutao.outtake,
-                hutao.indexer, hutao.turret, hutao.arm, hutao.slides))
+                hutao.indexer, hutao.turret, hutao.arm, hutao.slides, ::shouldExtendFarther))
 
         val depositCommand = SequentialCommandGroup(
             DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
@@ -61,18 +62,20 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
             } else {
                 true
             }  && !depositCommand.isScheduled }, depositCommand)
-
     }
 
     private fun bindStrategy() {
-        driver.leftBumper.onPress { strategy = Strategy.ALLIANCE_BLUE }
-        driver.rightBumper.onPress { strategy = Strategy.SHARED_BLUE }
-        driver.x.onPress { strategy = Strategy.ALLIANCE_RED }
-        driver.b.onPress { strategy = Strategy.SHARED_RED }
+        driver.leftBumper.onPress(InstantCommand( { strategy = Strategy.ALLIANCE_BLUE }))
+        driver.rightBumper.onPress(InstantCommand( { strategy = Strategy.SHARED_BLUE }))
+        driver.x.onPress(InstantCommand( { strategy = Strategy.ALLIANCE_RED }))
+        driver.b.onPress(InstantCommand( { strategy = Strategy.SHARED_RED }))
+        driver.a.onPress(InstantCommand({shouldExtendFarther = false}))
+        driver.y.onPress(InstantCommand({shouldExtendFarther = true}))
     }
 
     override fun mLoop() {
         Logger.addTelemetryData("strategy", strategy)
+        Logger.addTelemetryData("should extend farther", shouldExtendFarther)
         Logger.addTelemetryData("target angle", strategy.getTurretAngle())
         Logger.addTelemetryData("target inches", strategy.getSlideInches())
         Logger.addTelemetryData("position", hutao.drive.position)

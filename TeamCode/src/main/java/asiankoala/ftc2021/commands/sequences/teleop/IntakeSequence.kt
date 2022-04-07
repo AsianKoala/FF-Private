@@ -10,7 +10,7 @@ import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.util.Logger
 
-class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm, slides: Slides) : SequentialCommandGroup(
+class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm, slides: Slides, extendShared: () -> Boolean) : SequentialCommandGroup(
         OuttakeCommands.OuttakeHomeCommand(outtake)
                 .alongWith(IndexerCommands.IndexerOpenCommand(indexer)),
         WaitCommand(0.3),
@@ -42,13 +42,20 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
         }, turret).alongWith(
                 IntakeCommands.IntakeTurnOffCommand(intake),
                 ConditionalCommand(
-                        InstantCommand({
-                            slides.generateAndFollowMotionProfile(Slides.sharedInches)
-                        }, slides),
+                            InstantCommand({
+                                val shouldExtendFarther = extendShared.invoke()
+                                slides.generateAndFollowMotionProfile(
+                                        if(shouldExtendFarther) {
+                                            Slides.sharedExtInches
+                                        } else {
+                                            Slides.sharedInches
+                                        }
+                                )
+                            }),
                         InstantCommand({})
                 ) {
                     val strat = strategy.invoke()
                     strat == Strategy.SHARED_RED || strat == Strategy.SHARED_BLUE
                 }
-        ),
+        )
 )
