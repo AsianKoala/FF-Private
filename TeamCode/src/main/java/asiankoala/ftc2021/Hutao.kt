@@ -23,16 +23,18 @@ class Hutao(startPose: Pose) {
     val turret = Turret(MotorSubsystemConfig(
             hardware.turretMotor,
             encoders.turretEncoder,
-            controlType = MotorControlType.POSITION_PID,
+            controlType = MotorControlType.MOTION_PROFILE,
             pid = PIDConstants(
                     0.05,
-                    0.035,
+//                    0.041,
                     0.0007
             ),
             ff = FeedforwardConstants(
-                    kStatic = 0.042
+                    kStatic = 0.01
             ),
-            positionEpsilon = 1.0
+            positionEpsilon = 1.0,
+            maxVelocity = 90.0,
+            maxAcceleration = 90.0
     ))
     val slides = Slides(MotorSubsystemConfig(
             hardware.slideMotor,
@@ -43,12 +45,12 @@ class Hutao(startPose: Pose) {
                     kD = 0.007,
             ),
             ff = FeedforwardConstants(
-                    kStatic = 0.03
+                    kStatic = 0.01
             ),
             maxVelocity = 180.0,
             maxAcceleration = 160.0,
             positionEpsilon = 1.0,
-            homePositionToDisable = -0.5,
+            homePositionToDisable = 0.0,
     ))
 
     fun log() {
@@ -61,7 +63,7 @@ class Hutao(startPose: Pose) {
     init {
         drive.setStartPose(startPose)
         slides.setPIDTarget(0.0)
-        turret.setPIDTarget(180.0)
+        turret.setPIDTarget(Turret.homeAngle)
         slides.disabled = false
         turret.disabled = false
     }

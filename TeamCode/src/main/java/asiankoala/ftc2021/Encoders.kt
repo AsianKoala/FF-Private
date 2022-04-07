@@ -1,5 +1,6 @@
 package asiankoala.ftc2021
 
+import asiankoala.ftc2021.subsystems.Slides
 import asiankoala.ftc2021.subsystems.Turret
 import com.asiankoala.koawalib.subsystem.odometry.KEncoder
 import com.asiankoala.koawalib.subsystem.odometry.KThreeWheelOdometry
@@ -7,8 +8,8 @@ import com.asiankoala.koawalib.subsystem.odometry.KThreeWheelOdometry
 class Encoders(hardware: Hardware) {
     private val ticksPerUnit = 1892.3724
 
-    val turretEncoder = KEncoder(hardware.turretMotor, 5.33333).zero(Turret.turretHomeValue)
-    val slideEncoder = KEncoder(hardware.slideMotor, 20.8333).zero().reversed
+    val turretEncoder = KEncoder(hardware.turretMotor, 5.33333).zero(Turret.zeroAngle)
+    val slideEncoder = KEncoder(hardware.slideMotor, 20.8333).zero(Slides.slideHomeValue).reversed
     private val leftEncoder = KEncoder(hardware.frMotor, ticksPerUnit, true).zero()
     private val rightEncoder = KEncoder(hardware.flMotor, ticksPerUnit, true).zero()
     private val auxEncoder = KEncoder(hardware.brMotor, ticksPerUnit, true).zero()

@@ -1,5 +1,6 @@
 package asiankoala.ftc2021
 
+import asiankoala.ftc2021.subsystems.Arm
 import asiankoala.ftc2021.subsystems.Slides
 import asiankoala.ftc2021.subsystems.Turret
 
@@ -24,6 +25,15 @@ enum class Strategy {
             ALLIANCE_RED -> Slides.depositHighInches
             SHARED_BLUE -> Slides.sharedInches
             SHARED_RED -> Slides.sharedInches
+        }
+    }
+
+    fun getArmPosition(): Double {
+        return when(this) {
+            ALLIANCE_BLUE -> Arm.armHighPosition
+            ALLIANCE_RED -> Arm.armHighPosition
+            SHARED_BLUE -> Arm.armSharedPosition
+            SHARED_RED -> Arm.armSharedPosition
         }
     }
 }

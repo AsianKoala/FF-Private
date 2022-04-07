@@ -5,9 +5,7 @@ import asiankoala.ftc2021.Strategy
 import asiankoala.ftc2021.commands.sequences.teleop.DepositSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
-import asiankoala.ftc2021.commands.subsystem.ArmCommands
 import asiankoala.ftc2021.commands.subsystem.DuckCommands
-import asiankoala.ftc2021.commands.subsystem.OuttakeCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
 import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
@@ -16,8 +14,6 @@ import com.asiankoala.koawalib.math.Pose
 import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.Logger
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     private lateinit var hutao: Hutao
@@ -26,14 +22,9 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     override fun mInit() {
         hutao = Hutao(Pose(heading = 90.0.radians))
         bindDrive()
-        driver.rightTrigger.onPress(
-                SequentialCommandGroup(
-                        ArmCommands.ArmDepositSharedCommand(hutao.arm),
-                        OuttakeCommands.OuttakeDepositSharedCommand(hutao.outtake),
-                )
-        )
-//        bindDuck()
-//        bindCycling()
+        bindDuck()
+        bindCycling()
+        bindStrategy()
     }
 
     private fun bindDrive() {
@@ -49,18 +40,21 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     }
 
     private fun bindDuck() {
-        driver.leftBumper.onPress(DuckCommands.DuckSpinSequence(hutao.duck, alliance))
+        driver.dpadUp.onPress(DuckCommands.DuckSpinSequence(hutao.duck, alliance))
     }
 
     private fun bindCycling() {
-        driver.rightTrigger.onPress(IntakeSequence({ strategy }, hutao.intake, hutao.outtake, hutao.indexer, hutao.turret, hutao.arm))
+        driver.rightTrigger.onPress(IntakeSequence(::strategy, hutao.intake, hutao.outtake, hutao.indexer, hutao.turret, hutao.arm))
 
         val depositCommand = SequentialCommandGroup(
-            DepositSequence({ strategy }, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
+            DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
             HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.encoders.slideEncoder)
         )
         CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositCommand.isScheduled }, depositCommand)
 
+    }
+
+    private fun bindStrategy() {
         driver.leftBumper.onPress { strategy = Strategy.ALLIANCE_BLUE }
         driver.rightBumper.onPress { strategy = Strategy.SHARED_BLUE }
         driver.x.onPress { strategy = Strategy.ALLIANCE_RED }
@@ -69,6 +63,8 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
 
     override fun mLoop() {
         Logger.addTelemetryData("strategy", strategy)
+        Logger.addTelemetryData("target angle", strategy.getTurretAngle())
+        Logger.addTelemetryData("target inches", strategy.getSlideInches())
         Logger.addTelemetryData("position", hutao.drive.position)
         Logger.addTelemetryData("power", hutao.drive.powers.rawString())
         Logger.addTelemetryData("turret angle", hutao.encoders.turretEncoder.position)

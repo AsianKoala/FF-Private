@@ -10,7 +10,6 @@ import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.ParallelCommandGroup
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.subsystem.odometry.KEncoder
-import kotlin.math.absoluteValue
 
 class HomeSequence(turret: Turret, slides: Slides, outtake: Outtake, indexer: Indexer, arm: Arm, slideEncoder: KEncoder) : SequentialCommandGroup(
         ParallelCommandGroup(
@@ -21,8 +20,8 @@ class HomeSequence(turret: Turret, slides: Slides, outtake: Outtake, indexer: In
         WaitCommand(0.2),
         InstantCommand({slides.generateAndFollowMotionProfile(Slides.slideHomeValue)}),
         WaitCommand(0.5),
-        InstantCommand({turret.setPIDTarget(Turret.turretHomeValue)}),
-        WaitUntilCommand { slideEncoder.position.absoluteValue < 2.0},
-        OuttakeCommands.OuttakeHomeCommand(outtake)
-                .alongWith(IndexerCommands.IndexerOpenCommand(indexer))
+        InstantCommand({turret.setPIDTarget(Turret.homeAngle)}),
+        WaitUntilCommand { slides.isAtTarget && turret.isAtTarget},
+        OuttakeCommands.OuttakeHomeCommand(outtake),
+        IndexerCommands.IndexerOpenCommand(indexer)
 )
