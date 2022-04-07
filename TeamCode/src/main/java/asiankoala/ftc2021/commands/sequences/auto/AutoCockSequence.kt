@@ -11,7 +11,7 @@ class AutoCockSequence(alliance: Alliance, intake: Intake, outtake: Outtake, ind
         IndexerCommands.IndexerLockCommand(indexer),
         WaitCommand(0.3),
         InstantCommand(intake::turnReverse),
-        WaitCommand(0.8),
+        WaitCommand(0.4),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
         InstantCommand({

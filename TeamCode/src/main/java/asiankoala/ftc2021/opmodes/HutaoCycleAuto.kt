@@ -7,6 +7,7 @@ import asiankoala.ftc2021.commands.sequences.auto.AutoInitSequence
 import asiankoala.ftc2021.commands.sequences.auto.CycleSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.subsystem.IntakeStopperCommands
+import asiankoala.ftc2021.subsystems.Turret
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.*
 import com.asiankoala.koawalib.command.group.ParallelCommandGroup
@@ -27,28 +28,30 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
         val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
         val depositY = startPose.y
         val depositX = 25.0
+        val initialIntakeX = 76.0
         val resetPose = Pose(depositX-2, depositY, 0.0)
+
 
         hutao = Hutao(startPose)
 
 
-        val initialIntakeX = 76.0
         val intakeWaypoints = listOf(
                 Waypoint(startPose.x,
                         depositY,
                         12.0,
                         0.0,
                 ),
+
                 Waypoint(initialIntakeX,
                         depositY,
-                        12.0,
+                        8.0,
                         0.0,
                         stop = false,
                         deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
                         maxMoveSpeed = 0.7,
-                        lowestSlowDownFromXError = 0.8,
-                        lowestSlowDownFromHeadingError = 0.8
+                        lowestSlowDownFromHeadingError = 0.8,
+                        lowestSlowDownFromXError = 0.8
                 )
         )
 
@@ -92,6 +95,8 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                 AutoInitSequence(alliance, driver.rightTrigger, hutao.outtake,
                         hutao.arm, hutao.turret, hutao.indexer),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
+                InstantCommand({hutao.turret.setPIDTarget(alliance.decide(Turret.autoBlueAngle, Turret.autoRedAngle))}),
+                WaitCommand(0.3),
                 AutoDepositSequence(hutao.slides, hutao.indexer),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer,
                         hutao.arm, hutao.intake),
@@ -164,7 +169,7 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
         mainCommand = SequentialCommandGroup(
                 ParallelRaceGroup(
                         WaitUntilCommand { opmodeState == OpModeState.LOOP }
-                                .andThen(WaitCommand(27.0)),
+                                .andThen(WaitCommand(28.0)),
                         seq
                 ),
                 ParallelCommandGroup(

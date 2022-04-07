@@ -21,7 +21,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
                 .alongWith(InstantCommand(intake::stopReading)),
         WaitCommand(0.3),
         IntakeCommands.IntakeTurnReverseCommand(intake),
-        WaitCommand(0.8),
+        WaitCommand(0.4),
         InstantCommand({
             outtake.setPosition(strategy.invoke().getOuttakePosition())
         }, outtake)

@@ -30,7 +30,7 @@ class Turret(turretMotor: KMotor, turretEncoder: KEncoder) : MotorSubsystem(Moto
         const val sharedBlueAngle = 90.0
         const val sharedRedAngle = 270.0
 
-        private const val autoDiff = 60.0
+        private const val autoDiff = 64.0
         const val autoBlueAngle = 180 + autoDiff - 10.0 // blueAngle
         const val autoRedAngle = 180 - autoDiff + 10.0 // redAngle
     }

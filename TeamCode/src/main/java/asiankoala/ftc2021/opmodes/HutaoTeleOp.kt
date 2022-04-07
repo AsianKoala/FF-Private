@@ -36,13 +36,13 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
                 driver.leftStick,
                 driver.rightStick,
                 1.0, 1.0, 1.0,
-                xScalar = 0.7, yScalar = 0.7, rScalar = 0.7
+//                xScalar = 0.7, yScalar = 0.7, rScalar = 0.7
             )
         )
     }
 
     private fun bindDuck() {
-        driver.dpadUp.onPress(InstantCommand({hutao.duck.setSpeed(0.25 * alliance.decide(1.0, -1.0))}, hutao.duck))
+        driver.dpadUp.onPress(InstantCommand({hutao.duck.setSpeed(0.3 * alliance.decide(1.0, -1.0))}, hutao.duck))
         driver.dpadRight.onPress(InstantCommand({hutao.duck.setSpeed(1.0 * alliance.decide(1.0, -1.0))}, hutao.duck))
         driver.dpadDown.onPress(InstantCommand({hutao.duck.setSpeed(0.0)}, hutao.duck))
     }

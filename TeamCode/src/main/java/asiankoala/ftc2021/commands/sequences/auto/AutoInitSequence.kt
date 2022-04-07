@@ -19,8 +19,7 @@ import com.asiankoala.koawalib.util.Alliance
 class AutoInitSequence(alliance: Alliance, readyButton: Button, outtake: Outtake, arm: Arm, turret: Turret, indexer: Indexer) : SequentialCommandGroup(
         IndexerCommands.IndexerLockCommand(indexer),
         WaitUntilCommand(readyButton::isJustPressed),
-//        IntakeStopperCommands.IntakeStopperLockCommand(intakeStopper),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)
                 .alongWith(ArmCommands.ArmDepositHighCommand(arm)),
-        InstantCommand({ turret.setPIDTarget(alliance.decide(Turret.blueAngle-3.0, Turret.redAngle))}),
+        InstantCommand({ turret.setPIDTarget(alliance.decide(Turret.sharedRedAngle, Turret.sharedBlueAngle))}),
 )
