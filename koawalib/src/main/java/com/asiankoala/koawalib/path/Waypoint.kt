@@ -14,7 +14,7 @@ data class Waypoint(
     val stop: Boolean = true,
     val minAllowedHeadingError: Double = 60.0.radians,
     val lowestSlowDownFromHeadingError: Double = 0.4,
-    val minAllowedXError: Double = 1.0,
+    val minAllowedXError: Double = 3.0,
     val lowestSlowDownFromXError: Double = 0.4,
 ) {
     val point = Point(x, y)

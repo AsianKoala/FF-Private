@@ -13,7 +13,6 @@ abstract class Odometry : DeviceSubsystem() {
     private var robotRelativeMovement: Pose = Pose()
     var shouldReset = true
     var pose = Pose()
-        protected set
 
     var startPose: Pose = Pose()
         set(value) {

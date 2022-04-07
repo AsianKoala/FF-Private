@@ -24,6 +24,6 @@ class Slides(slideMotor: KMotor, slideEncoder: KEncoder) : MotorSubsystem(MotorS
         const val slideHomeValue = 0.0
         const val depositHighInches = 33.5
         const val sharedInches = 7.5
-        const val sharedExtInches = 10.5
+        const val sharedExtInches = 12.0
     }
 }

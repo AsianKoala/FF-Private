@@ -29,7 +29,7 @@ class KThreeWheelOdometry(
     }
 
     override fun reset() {
-        encoders.forEach(KEncoder::zero)
+        shouldReset = true
     }
 
     override fun periodic() {

@@ -10,7 +10,7 @@ import com.asiankoala.koawalib.command.commands.WaitUntilCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.util.Logger
 
-class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm, slides: Slides, extendShared: () -> Boolean) : SequentialCommandGroup(
+class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake, indexer: Indexer, turret: Turret, arm: Arm, slides: Slides) : SequentialCommandGroup(
         OuttakeCommands.OuttakeHomeCommand(outtake)
                 .alongWith(IndexerCommands.IndexerOpenCommand(indexer)),
         WaitCommand(0.3),
@@ -23,13 +23,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
         IntakeCommands.IntakeTurnReverseCommand(intake),
         WaitCommand(0.8),
         InstantCommand({
-            val strat = strategy.invoke()
-            val pos = if(strat == Strategy.SHARED_BLUE || strat == Strategy.SHARED_RED) {
-                Outtake.outtakeSharedPosition
-            } else {
-                Outtake.outtakeHighPosition
-            }
-            outtake.setPosition(pos)
+            outtake.setPosition(strategy.invoke().getOuttakePosition())
         }, outtake)
                 .alongWith(InstantCommand({arm.setPosition(strategy.invoke().getArmPosition())}, arm)),
         InstantCommand({
@@ -40,19 +34,11 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
                 IntakeCommands.IntakeTurnOffCommand(intake),
                 ConditionalCommand(
                             InstantCommand({
-                                val shouldExtendFarther = extendShared.invoke()
-                                slides.generateAndFollowMotionProfile(
-                                        if(shouldExtendFarther) {
-                                            Slides.sharedExtInches
-                                        } else {
-                                            Slides.sharedInches
-                                        }
-                                )
+                                slides.generateAndFollowMotionProfile(strategy.invoke().getSlideInches())
                             }),
                         InstantCommand({})
                 ) {
-                    val strat = strategy.invoke()
-                    strat == Strategy.SHARED_RED || strat == Strategy.SHARED_BLUE
+                    strategy.invoke().isExtendingImmediately
                 }
         )
 )

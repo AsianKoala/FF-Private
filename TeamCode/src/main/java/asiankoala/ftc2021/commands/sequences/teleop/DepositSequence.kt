@@ -15,13 +15,10 @@ class DepositSequence(strategy: () -> Strategy, slides: Slides, indexer: Indexer
         ConditionalCommand(
                 InstantCommand({}),
                 InstantCommand({
-                    val strat = strategy.invoke()
-                    val inches = strat.getSlideInches()
-                    slides.generateAndFollowMotionProfile(inches)
+                    slides.generateAndFollowMotionProfile(strategy.invoke().getSlideInches())
                 }, slides)
         ) {
-            val strat = strategy.invoke()
-            strat == Strategy.SHARED_RED || strat == Strategy.SHARED_BLUE
+            strategy.invoke().isExtendingImmediately
         },
         WaitCommand( 0.5),
         WaitUntilCommand(continueDeposit),

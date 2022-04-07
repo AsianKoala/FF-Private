@@ -58,6 +58,8 @@ class Path(private val waypoints: List<Waypoint>) {
             movementLookahead.headingLockAngle,
             movementLookahead.minAllowedHeadingError,
             movementLookahead.lowestSlowDownFromHeadingError,
+                movementLookahead.minAllowedXError,
+                movementLookahead.lowestSlowDownFromXError
         ).point
 
 

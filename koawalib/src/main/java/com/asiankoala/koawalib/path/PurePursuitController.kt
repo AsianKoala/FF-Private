@@ -14,14 +14,14 @@ object PurePursuitController {
         currPose: Pose,
         targetPosition: Point,
         stop: Boolean = false,
-        maxMoveSpeed: Double = 1.0,
-        maxTurnSpeed: Double = 1.0,
-        deccelAngle: Double = 60.0.radians,
-        headingLockAngle: Double? = null,
-        minAllowedHeadingError: Double = 60.0.radians,
-        lowestSlowDownFromHeadingError: Double = 0.4,
-        minAllowedXError: Double = 1.0,
-        lowestSlowDownFromXError: Double = 0.4,
+        maxMoveSpeed: Double,
+        maxTurnSpeed: Double,
+        deccelAngle: Double,
+        headingLockAngle: Double?,
+        minAllowedHeadingError: Double,
+        lowestSlowDownFromHeadingError: Double,
+        minAllowedXError: Double,
+        lowestSlowDownFromXError: Double,
         ): Pose {
         val absoluteDelta = targetPosition - currPose.point
         val distanceToPoint = absoluteDelta.hypot
@@ -37,7 +37,7 @@ object PurePursuitController {
         var yPower = relativeYToPosition / relativeAbsMagnitude
 
         if (stop) {
-            xPower *= relativeXToPosition.absoluteValue / 12.0
+//            xPower *= relativeXToPosition.absoluteValue / 12.0
             yPower *= relativeYToPosition.absoluteValue / 12.0
         } else {
             Logger.addTelemetryLine("FULL SPEED")
@@ -87,6 +87,10 @@ object PurePursuitController {
 //        xPower *= errorTurnSoScaleMovement
         yPower *= errorTurnSoScaleMovement
         yPower *= xErrorMoveScale
+
+//        if(yPower.absoluteValue < 0.7 && relativeYToPosition.absoluteValue > 10.0) {
+//            yPower = yPower.sign * 0.8
+//        }
 
         Logger.logInfo("xPower",xPower)
         Logger.logInfo("xError", relativeXToPosition)

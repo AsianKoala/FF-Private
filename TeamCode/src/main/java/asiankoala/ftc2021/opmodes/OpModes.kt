@@ -10,8 +10,8 @@ class HutaoBlueTeleOp : HutaoTeleOp(Alliance.BLUE)
 @TeleOp(name="Red")
 class HutaoRedTeleOp : HutaoTeleOp(Alliance.RED)
 
-@Autonomous(name="♻️😈💀 Blue Cycle Auto", preselectTeleOp = "Blue")
+@Autonomous(name="🥶 Blue Cycle Auto", preselectTeleOp = "Blue")
 class HutaoBlueCycleAuto : HutaoCycleAuto(Alliance.BLUE)
 
-@Autonomous(name="♻️😈💀 Red Cycle Auto", preselectTeleOp = "Red")
+@Autonomous(name="🥵 Red Cycle Auto", preselectTeleOp = "Red")
 class HutaoRedCycleAuto : HutaoCycleAuto(Alliance.RED)
