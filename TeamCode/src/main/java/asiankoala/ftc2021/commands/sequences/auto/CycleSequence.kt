@@ -20,7 +20,6 @@ class CycleSequence(alliance: Alliance,
                     turret: Turret,
                     arm: Arm,
                     slides: Slides,
-                    slideEncoder: KEncoder
 ) : SequentialCommandGroup(
         PathCommand(
                 drive,

@@ -1,6 +1,7 @@
 package com.asiankoala.koawalib.path
 
 import com.asiankoala.koawalib.math.*
+import com.asiankoala.koawalib.util.Logger
 import kotlin.math.absoluteValue
 
 /**
@@ -97,21 +98,16 @@ class Path(private val waypoints: List<Waypoint>) {
             isFinished = true
         }
 
+        Logger.logInfo("pure pursuit debug started")
+        Logger.logInfo("pose: $pose")
+        Logger.logInfo("curr follow index: $currFollowIndex")
+        Logger.logInfo("absolute point angle: ${absolutePointAngle.degrees}")
+        Logger.logInfo("lookahead: ${movementLookahead.point}")
+        Logger.logInfo("clipped distance: $clippedDistanceToEnd")
+        Logger.logInfo("relative angle: ${realRelativeAngle.degrees}")
+        Logger.logInfo("pure pursuit debug ended")
+
+
         return Pair(Pose(finalXPower, finalYPower, finalTurnPower), absolutePointAngle)
-    }
-
-    fun inverted(): Path {
-        val newWaypoints = ArrayList<Waypoint>()
-
-        for (waypoint in waypoints) {
-            newWaypoints.add(
-                waypoint.copy(
-                    y = -waypoint.y,
-                headingLockAngle = if(waypoint.headingLockAngle == null) null else (waypoint.headingLockAngle + 180.0.radians).angleWrap
-                )
-            )
-        }
-
-        return Path(newWaypoints)
     }
 }

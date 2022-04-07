@@ -15,9 +15,3 @@ class HutaoBlueCycleAuto : HutaoCycleAuto(Alliance.BLUE)
 
 @Autonomous(name="♻️😈💀 Red Cycle Auto", preselectTeleOp = "Red")
 class HutaoRedCycleAuto : HutaoCycleAuto(Alliance.RED)
-
-@Autonomous
-class VisionBlue : HutaoVisionTest(Alliance.BLUE)
-
-@Autonomous
-class VisionRed : HutaoVisionTest(Alliance.RED)

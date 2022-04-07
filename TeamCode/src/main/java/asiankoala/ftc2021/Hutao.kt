@@ -18,40 +18,10 @@ class Hutao(startPose: Pose) {
     val arm = Arm(hardware.armServo)
     val indexer = Indexer(hardware.indexerServo)
     val outtake = Outtake(hardware.outtakeServo)
-    val intakeStopper = IntakeStopper(hardware.intakeStopperServo)
+//    val intakeStopper = IntakeStopper(hardware.intakeStopperServo)
     val duck = Duck(hardware.duckMotor)
-    val turret = Turret(MotorSubsystemConfig(
-            hardware.turretMotor,
-            encoders.turretEncoder,
-            controlType = MotorControlType.MOTION_PROFILE,
-            pid = PIDConstants(
-                    0.05,
-//                    0.041,
-                    0.0007
-            ),
-            ff = FeedforwardConstants(
-                    kStatic = 0.01
-            ),
-            positionEpsilon = 1.0,
-            maxVelocity = 90.0,
-            maxAcceleration = 90.0
-    ))
-    val slides = Slides(MotorSubsystemConfig(
-            hardware.slideMotor,
-            encoders.slideEncoder,
-            controlType = MotorControlType.MOTION_PROFILE,
-            pid = PIDConstants(
-                    kP = 0.2,
-                    kD = 0.007,
-            ),
-            ff = FeedforwardConstants(
-                    kStatic = 0.01
-            ),
-            maxVelocity = 180.0,
-            maxAcceleration = 160.0,
-            positionEpsilon = 1.0,
-            homePositionToDisable = 0.0,
-    ))
+    val turret = Turret(hardware.turretMotor, encoders.turretEncoder)
+    val slides = Slides(hardware.slideMotor, encoders.slideEncoder)
 
     fun log() {
         Logger.addTelemetryData("power", drive.powers.rawString())
