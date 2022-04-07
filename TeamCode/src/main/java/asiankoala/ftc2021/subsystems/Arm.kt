@@ -7,7 +7,7 @@ class Arm(private var servo: KServo) : DeviceSubsystem() {
     companion object ArmConstants {
         const val armHomePosition = 0.10
         const val armHighPosition = 0.73
-        const val armSharedPosition = 0.9
+        const val armSharedPosition = 0.95
     }
     
     fun home() {

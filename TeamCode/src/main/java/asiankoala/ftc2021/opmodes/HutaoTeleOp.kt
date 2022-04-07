@@ -8,6 +8,7 @@ import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
 import asiankoala.ftc2021.commands.subsystem.DuckCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
+import com.asiankoala.koawalib.command.commands.InstantCommand
 import com.asiankoala.koawalib.command.commands.MecanumDriveCommand
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.math.Pose
@@ -40,7 +41,10 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
     }
 
     private fun bindDuck() {
-        driver.dpadUp.onPress(DuckCommands.DuckSpinSequence(hutao.duck, alliance))
+        driver.dpadUp.onPress(InstantCommand({hutao.duck.setSpeed(0.25 * alliance.decide(1.0, -1.0))}, hutao.duck))
+        driver.dpadRight.onPress(InstantCommand({hutao.duck.setSpeed(1.0 * alliance.decide(1.0, -1.0))}, hutao.duck))
+        driver.dpadDown.onPress(InstantCommand({hutao.duck.setSpeed(0.0)}, hutao.duck))
+//        driver.dpadUp.onPress(DuckCommands.DuckSpinSequence(hutao.duck, alliance))
     }
 
     private fun bindCycling() {
@@ -51,7 +55,12 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
             DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
             HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm)
         )
-        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositCommand.isScheduled }, depositCommand)
+        CommandScheduler.scheduleWatchdog({
+            if(strategy == Strategy.ALLIANCE_BLUE || strategy == Strategy.ALLIANCE_RED) {
+                driver.leftTrigger.isJustPressed
+            } else {
+                true
+            }  && !depositCommand.isScheduled }, depositCommand)
 
     }
 
