@@ -7,7 +7,7 @@ import com.asiankoala.koawalib.subsystem.old.*
 class Turret(turretMotor: KMotor, turretEncoder: KEncoder) : MotorSubsystem(MotorSubsystemConfig(
         turretMotor,
         turretEncoder,
-        controlType = MotorControlType.MOTION_PROFILE,
+        controlType = MotorControlType.POSITION_PID,
         pid = PIDConstants(
                 0.05,
 //                    0.041,
@@ -17,8 +17,6 @@ class Turret(turretMotor: KMotor, turretEncoder: KEncoder) : MotorSubsystem(Moto
                 kStatic = 0.01
         ),
         positionEpsilon = 1.0,
-        maxVelocity = 90.0,
-        maxAcceleration = 90.0
 )) {
     companion object TurretConstants {
         private const val allianceDiff = 69.0
@@ -33,6 +31,6 @@ class Turret(turretMotor: KMotor, turretEncoder: KEncoder) : MotorSubsystem(Moto
 
         private const val autoDiff = 64.0
         const val autoBlueAngle = 180 + autoDiff - 10.0 // blueAngle
-        const val autoRedAngle = 180 - autoDiff - 20.0 // redAngle
+        const val autoRedAngle = 180 - autoDiff - 10.0// redAngle
     }
 }
