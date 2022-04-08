@@ -22,7 +22,8 @@ class Slides(slideMotor: KMotor, slideEncoder: KEncoder) : MotorSubsystem(MotorS
 )) {
     companion object SlideConstants {
         const val slideHomeValue = 0.0
-        const val depositHighInches = 33.5
+        const val blueDepositInches = 33.5
+        const val redDepositInches = 35.0
         const val sharedInches = 7.5
         const val sharedExtInches = 12.0
         const val autoInches = 36.5 // 33.5

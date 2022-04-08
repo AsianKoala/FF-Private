@@ -15,6 +15,7 @@ import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.NormalPath
 import com.asiankoala.koawalib.path.NormalPathCommand
 import com.asiankoala.koawalib.path.NormalWaypoint
+import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.OpModeState
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -26,12 +27,14 @@ class HutaoDuckRed : CommandOpMode() {
 
     override fun mInit() {
         val startPose = Pose(-32.0, -64.0, 180.0.radians)
+        val interPose = Pose(-46.0, -40.0)
+        val duckPose = Pose(-60.0, -56.0, 225.0.radians)
         hutao = Hutao(startPose)
 
         mainCommand = SequentialCommandGroup(
                 AutoInitSequence(Alliance.BLUE, driver.rightTrigger, hutao.outtake, hutao.arm, hutao.turret, hutao.indexer),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
-                InstantCommand({hutao.turret.setPIDTarget(210.0)}),
+                InstantCommand({hutao.turret.setPIDTarget(230.0)}),
                 WaitCommand(0.3),
                 InstantCommand({hutao.slides.generateAndFollowMotionProfile(35.0)}),
                 WaitCommand(1.5),
@@ -45,21 +48,51 @@ class HutaoDuckRed : CommandOpMode() {
                                 NormalWaypoint(
                                         startPose.x,
                                         startPose.y,
-                                        10.0
+                                        8.0
                                 ),
 
                                 NormalWaypoint(
-                                        -45.0,
-                                        -50.0,
-                                        10.0
+                                        interPose.x,
+                                        interPose.y,
+                                        8.0,
+                                        stop = true,
+                                        maxMoveSpeed = 0.6,
                                 ),
+
+                                NormalWaypoint(
+                                        duckPose.x,
+                                        duckPose.y,
+                                        8.0,
+                                        stop = true,
+                                        maxMoveSpeed = 0.3,
+                                )
                         ),
 
                         2.0
                 ),
 
                 InstantCommand({hutao.duck.setSpeed(0.3)}),
-                WaitCommand(4.0)
+                WaitCommand(4.0),
+                InstantCommand({hutao.duck.setSpeed(0.0)}),
+                NormalPathCommand(
+                        hutao.drive,
+                        NormalPath(
+                                NormalWaypoint(
+                                        duckPose.x,
+                                        duckPose.y,
+                                        8.0
+                                ),
+
+                                NormalWaypoint(
+                                        -64.0,
+                                        -40.0,
+                                        8.0,
+                                        270.0.radians,
+                                        stop = true
+                                )
+                        ),
+                        2.0
+                )
         )
 
         mainCommand.schedule()

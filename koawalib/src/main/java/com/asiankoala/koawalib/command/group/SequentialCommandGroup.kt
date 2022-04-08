@@ -44,7 +44,7 @@ open class SequentialCommandGroup(vararg commands: Command) : CommandGroupBase()
 
         val currentCommand = mCommands[mCurrentCommandIndex]
         currentCommand.execute()
-        Logger.logInfo("command ${currentCommand.name} of group $name executed")
+//        Logger.logInfo("command ${currentCommand.name} of group $name executed")
         if (currentCommand.isFinished) {
             currentCommand.end(false)
             mCurrentCommandIndex++

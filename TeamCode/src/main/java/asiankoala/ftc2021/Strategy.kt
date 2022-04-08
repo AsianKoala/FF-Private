@@ -40,7 +40,8 @@ class Strategy(val alliance: Alliance = Alliance.BLUE) {
     
     fun getSlideInches(): Double {
         return when {
-            isAlliance -> Slides.depositHighInches
+            strat == Strats.ALLIANCE_BLUE -> Slides.blueDepositInches
+            strat == Strats.ALLIANCE_RED -> Slides.redDepositInches
             shouldExtendFurther && !isAlliance -> Slides.sharedExtInches
             else -> Slides.sharedInches
         }
