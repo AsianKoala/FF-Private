@@ -6,6 +6,7 @@ import asiankoala.ftc2021.Strats
 import asiankoala.ftc2021.commands.sequences.teleop.DepositSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
 import asiankoala.ftc2021.commands.sequences.teleop.IntakeSequence
+import asiankoala.ftc2021.subsystems.Slides
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.CommandScheduler
 import com.asiankoala.koawalib.command.commands.InstantCommand
@@ -55,12 +56,7 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
             DepositSequence(::strategy, hutao.slides, hutao.indexer, driver.leftTrigger::isJustPressed),
             HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake)
         )
-        CommandScheduler.scheduleWatchdog({
-            if(strategy.isAlliance || strategy.isAttackingOtherCrater) {
-                driver.leftTrigger.isJustPressed
-            } else {
-                true
-            }  && !depositCommand.isScheduled }, depositCommand)
+        CommandScheduler.scheduleWatchdog({ driver.leftTrigger.isJustPressed && !depositCommand.isScheduled }, depositCommand)
     }
 
     private fun bindStrategy() {
@@ -68,8 +64,15 @@ open class HutaoTeleOp(private val alliance: Alliance) : CommandOpMode() {
         driver.rightBumper.onPress(InstantCommand( { strategy.strat = Strats.SHARED_BLUE }))
         driver.x.onPress(InstantCommand( { strategy.strat = Strats.ALLIANCE_RED }))
         driver.b.onPress(InstantCommand( { strategy.strat = Strats.SHARED_RED }))
-        driver.a.onPress(InstantCommand({strategy.shouldExtendFurther = false}))
-        driver.y.onPress(InstantCommand({strategy.shouldExtendFurther= true}))
+        driver.y.onPress(InstantCommand({
+            Slides.movingShared += 1.0
+            hutao.slides.generateAndFollowMotionProfile(Slides.movingShared)
+        }))
+
+        driver.a.onPress(InstantCommand({
+            Slides.movingShared -= 1.0
+            hutao.slides.generateAndFollowMotionProfile(Slides.movingShared)
+        }))
     }
 
     override fun mLoop() {

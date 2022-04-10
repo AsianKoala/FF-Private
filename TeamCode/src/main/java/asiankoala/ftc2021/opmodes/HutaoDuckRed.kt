@@ -27,20 +27,23 @@ class HutaoDuckRed : CommandOpMode() {
 
     override fun mInit() {
         val startPose = Pose(-32.0, -64.0, 180.0.radians)
-        val duckPose = Pose(-63.0, -55.0, 270.0.radians)
+        val duckPose = Pose(-63.0, -59.0, 270.0.radians)
         hutao = Hutao(startPose)
 
         mainCommand = SequentialCommandGroup(
-                AutoInitSequence(Alliance.BLUE, driver.rightTrigger, hutao.outtake, hutao.arm, hutao.turret, hutao.indexer),
+//                AutoInitSequence(Alliance.BLUE, driver.rightTrigger, hutao.outtake, hutao.arm, hutao.turret, hutao.indexer, hutao.intakeStopper),
+                IndexerCommands.IndexerLockCommand(hutao.indexer),
+
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
-                InstantCommand({hutao.turret.setPIDTarget(240.0)}),
-                WaitCommand(0.3),
-                InstantCommand({hutao.slides.generateAndFollowMotionProfile(35.0)}),
-                WaitCommand(1.5),
-                IndexerCommands.IndexerIndexCommand(hutao.indexer),
-                WaitCommand(0.5),
-                HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake),
-                WaitCommand(0.5),
+                InstantCommand(hutao.intakeStopper::unlock),
+//                InstantCommand({hutao.turret.setPIDTarget(240.0)}),
+//                WaitCommand(0.3),
+//                InstantCommand({hutao.slides.generateAndFollowMotionProfile(35.0)}),
+//                WaitCommand(1.5),
+//                IndexerCommands.IndexerIndexCommand(hutao.indexer),
+//                WaitCommand(0.5),
+//                HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake),
+//                WaitCommand(0.5),
                 NormalPathCommand(
                         hutao.drive,
                         NormalPath(
@@ -70,8 +73,8 @@ class HutaoDuckRed : CommandOpMode() {
                         3.0
                 ),
 
-                InstantCommand({hutao.duck.setSpeed(-0.3)}),
-                WaitCommand(4.0),
+                InstantCommand({hutao.duck.setSpeed(-0.22)}),
+                WaitCommand(5.0),
                 InstantCommand({hutao.duck.setSpeed(0.0)}),
                 NormalPathCommand(
                         hutao.drive,
@@ -84,7 +87,7 @@ class HutaoDuckRed : CommandOpMode() {
 
                                 NormalWaypoint(
                                         -64.0,
-                                        -35.0,
+                                        -40.0,
                                         8.0,
                                         270.0.radians,
                                         stop = true

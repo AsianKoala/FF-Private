@@ -2,18 +2,16 @@ package asiankoala.ftc2021.opmodes
 
 import asiankoala.ftc2021.Hutao
 import asiankoala.ftc2021.commands.sequences.auto.AutoInitSequence
-import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
-import asiankoala.ftc2021.commands.subsystem.IndexerCommands
 import com.asiankoala.koawalib.command.CommandOpMode
 import com.asiankoala.koawalib.command.commands.*
 import com.asiankoala.koawalib.command.group.SequentialCommandGroup
 import com.asiankoala.koawalib.math.Pose
-import com.asiankoala.koawalib.math.angleWrap
 import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.*
 import com.asiankoala.koawalib.util.Alliance
 import com.asiankoala.koawalib.util.OpModeState
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+
 
 @Autonomous
 class HutaoDuckBlue : CommandOpMode() {
@@ -23,19 +21,20 @@ class HutaoDuckBlue : CommandOpMode() {
     override fun mInit() {
         val startPose = Pose(-32.0, 64.0, 180.0.radians)
         hutao = Hutao(startPose)
-        val duckSpinPose = Pose(-60.0, 56.0, 180.0.radians)
+        val duckSpinPose = Pose(-58.0, 54.0, 180.0.radians)
 
         mainCommand = SequentialCommandGroup(
-                AutoInitSequence(Alliance.RED, driver.rightTrigger, hutao.outtake, hutao.arm, hutao.turret, hutao.indexer),
+                AutoInitSequence(Alliance.RED, driver.rightTrigger, hutao.outtake, hutao.arm, hutao.turret, hutao.indexer, hutao.intakeStopper),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
-                InstantCommand({hutao.turret.setPIDTarget(115.0)}),
-                WaitCommand(0.3),
-                InstantCommand({hutao.slides.generateAndFollowMotionProfile(35.0)}),
-                WaitCommand(1.5),
-                IndexerCommands.IndexerIndexCommand(hutao.indexer),
-                WaitCommand(0.5),
-                HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake),
-                WaitCommand(0.5),
+                InstantCommand(hutao.intakeStopper::unlock),
+//                InstantCommand({hutao.turret.setPIDTarget(115.0)}),
+//                WaitCommand(0.3),
+//                InstantCommand({hutao.slides.generateAndFollowMotionProfile(35.0)}),
+//                WaitCommand(1.5),
+//                IndexerCommands.IndexerIndexCommand(hutao.indexer),
+//                WaitCommand(1.5),
+//                HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer, hutao.arm, hutao.intake),
+//                WaitCommand(0.5),
                 NormalPathCommand(
                         hutao.drive,
                         NormalPath(
@@ -61,7 +60,7 @@ class HutaoDuckBlue : CommandOpMode() {
                         2.0
                 ),
                 InstantCommand({hutao.duck.setSpeed(0.25)}),
-                WaitCommand(4.0),
+                WaitCommand(5.0),
                 InstantCommand({hutao.duck.setSpeed(0.0)}),
                 NormalPathCommand(
                         hutao.drive,
@@ -75,7 +74,7 @@ class HutaoDuckBlue : CommandOpMode() {
 
                                         NormalWaypoint(
                                                 -64.0,
-                                                40.0,
+                                                37.0,
                                                 8.0,
                                                 270.0.radians,
                                                 stop = true

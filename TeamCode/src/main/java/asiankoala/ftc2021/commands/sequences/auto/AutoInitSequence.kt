@@ -16,7 +16,7 @@ import com.asiankoala.koawalib.util.Alliance
  * assume the preload has been placed, and the turret is zeroed.
  * the outtake goes to cock, indexer is locked, arm is
  */
-class AutoInitSequence(alliance: Alliance, readyButton: Button, outtake: Outtake, arm: Arm, turret: Turret, indexer: Indexer) : SequentialCommandGroup(
+class AutoInitSequence(alliance: Alliance, readyButton: Button, outtake: Outtake, arm: Arm, turret: Turret, indexer: Indexer, intakeStopper: IntakeStopper) : SequentialCommandGroup(
         IndexerCommands.IndexerLockCommand(indexer),
         WaitUntilCommand(readyButton::isJustPressed),
         OuttakeCommands.OuttakeDepositHighCommand(outtake)

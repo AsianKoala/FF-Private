@@ -4,6 +4,7 @@ import com.asiankoala.koawalib.hardware.KDevice
 import com.asiankoala.koawalib.math.d
 import com.asiankoala.koawalib.math.epsilonNotEqual
 import com.asiankoala.koawalib.util.KDouble
+import com.asiankoala.koawalib.util.Logger
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -22,11 +23,24 @@ open class KMotor(name: String) : KDevice<DcMotorEx>(name), KDouble {
 
     private var power: Double = 0.0
         private set(value) {
+            if(deviceName == "intake") {
+                Logger.logInfo("REQUESTED INTAKE SPEED", value)
+
+            }
             val clipped = Range.clip(value, -1.0, 1.0) * powerMultiplier
-            if (clipped epsilonNotEqual field && (clipped == 0.0 || clipped.absoluteValue == 1.0 || (clipped - field).absoluteValue > 0.005)) {
+            if (clipped epsilonNotEqual field && (clipped == 0.0 || clipped.absoluteValue == 1.0 || (clipped - device.power).absoluteValue > 0.005)) {
                 field = clipped
                 device.power = clipped
+                if(deviceName == "intake") {
+                    Logger.logInfo("SET INTAKE SPEED", value)
+
+                }
             }
+//            if(clipped epsilonNotEqual device.power) {
+//                field = clipped
+//                device.power = clipped
+//            }
+//            field = value
         }
 
     private var zeroPowerBehavior: DcMotor.ZeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT

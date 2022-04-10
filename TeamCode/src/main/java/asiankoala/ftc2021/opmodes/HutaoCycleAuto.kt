@@ -6,6 +6,7 @@ import asiankoala.ftc2021.commands.sequences.auto.AutoDepositSequence
 import asiankoala.ftc2021.commands.sequences.auto.AutoInitSequence
 import asiankoala.ftc2021.commands.sequences.auto.CycleSequence
 import asiankoala.ftc2021.commands.sequences.teleop.HomeSequence
+import asiankoala.ftc2021.commands.subsystem.IntakeCommands
 import asiankoala.ftc2021.commands.subsystem.IntakeStopperCommands
 import asiankoala.ftc2021.subsystems.Turret
 import com.asiankoala.koawalib.command.CommandOpMode
@@ -18,6 +19,7 @@ import com.asiankoala.koawalib.math.radians
 import com.asiankoala.koawalib.path.Path
 import com.asiankoala.koawalib.path.Waypoint
 import com.asiankoala.koawalib.util.Alliance
+import com.asiankoala.koawalib.util.Logger
 import com.asiankoala.koawalib.util.OpModeState
 
 open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
@@ -27,39 +29,45 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
     override fun mInit() {
         val startPose = Pose(16.0, alliance.decide(64.0, -64.0), 0.0)
         val depositY = startPose.y
-        val depositX = alliance.decide(25.0, 22.0)
-        val initialIntakeX = 60.0
-        val resetPose = Pose(depositX-alliance.decide(2, 0), depositY, 0.0)
+        val depositX = 25.0
+        val initialIntakeX = 76.0
+        val resetPose = Pose(depositX-2, depositY, 0.0)
 
 
         hutao = Hutao(startPose)
 
-
         val intakeWaypoints = listOf(
-                Waypoint(startPose.x, depositY,12.0),
+                Waypoint(startPose.x,
+                        depositY,
+                        12.0,
+                        0.0,
+                ),
 
                 Waypoint(initialIntakeX,
-                        depositY + alliance.decide(0, -1),
+                        depositY,
                         8.0,
-                        headingLockAngle = alliance.decide(0.0, (-5.0).radians),
+                        0.0,
                         stop = false,
-                        deccelAngle = 5.0.radians,
+                        deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
-                        maxMoveSpeed = 0.8,
+                        maxMoveSpeed = 0.7,
                         lowestSlowDownFromHeadingError = 0.8,
                         lowestSlowDownFromXError = 0.8
                 )
         )
 
         val depositWaypoints = listOf(
-                Waypoint(initialIntakeX, depositY, 12.0),
-
+                Waypoint(initialIntakeX,
+                        depositY,
+                        12.0,
+                        0.0,
+                ),
                 Waypoint(depositX,
                         depositY,
                         10.0,
                         0.0,
                         stop = false,
-                        deccelAngle = 5.0.radians,
+                        deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
                         lowestSlowDownFromXError = 0.5,
                         lowestSlowDownFromHeadingError = 0.8
@@ -67,14 +75,17 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
         )
 
         val lateDepositWaypoints = listOf(
-                Waypoint(initialIntakeX, depositY,12.0),
-
+                Waypoint(initialIntakeX,
+                        depositY,
+                        12.0,
+                        0.0,
+                ),
                 Waypoint(depositX+3.0,
                         depositY,
                         10.0,
                         0.0,
                         stop = false,
-                        deccelAngle = 5.0.radians,
+                        deccelAngle = 15.0.radians,
                         minAllowedHeadingError = 10.0.radians,
                         lowestSlowDownFromXError = 0.5,
                         lowestSlowDownFromHeadingError = 0.8
@@ -83,13 +94,15 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
 
         val seq = SequentialCommandGroup(
                 AutoInitSequence(alliance, driver.rightTrigger, hutao.outtake,
-                        hutao.arm, hutao.turret, hutao.indexer),
+                        hutao.arm, hutao.turret, hutao.indexer, hutao.intakeStopper),
                 WaitUntilCommand { opmodeState == OpModeState.LOOP },
                 InstantCommand({hutao.turret.setPIDTarget(alliance.decide(Turret.autoBlueAngle, Turret.autoRedAngle))}),
+                InstantCommand(hutao.intakeStopper::unlock),
                 WaitCommand(0.3),
                 AutoDepositSequence(hutao.slides, hutao.indexer),
                 HomeSequence(hutao.turret, hutao.slides, hutao.outtake, hutao.indexer,
                         hutao.arm, hutao.intake),
+
 
                 CycleSequence(
                         alliance,
@@ -106,55 +119,55 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
                         resetPose
                 ),
 
-                CycleSequence(
-                        alliance,
-                        intakeWaypoints,
-                        lateDepositWaypoints,
-                        hutao.drive,
-                        hutao.intake,
-                        hutao.outtake,
-                        hutao.indexer,
-                        hutao.turret,
-                        hutao.arm,
-                        hutao.slides,
-                        hutao.encoders.odo,
-                        resetPose
-                ),
+//                CycleSequence(
+//                        alliance,
+//                        intakeWaypoints,
+//                        lateDepositWaypoints,
+//                        hutao.drive,
+//                        hutao.intake,
+//                        hutao.outtake,
+//                        hutao.indexer,
+//                        hutao.turret,
+//                        hutao.arm,
+//                        hutao.slides,
+//                        hutao.encoders.odo,
+//                        resetPose
+//                ),
+//
+//
+//                CycleSequence(
+//                        alliance,
+//                        intakeWaypoints,
+//                        lateDepositWaypoints,
+//                        hutao.drive,
+//                        hutao.intake,
+//                        hutao.outtake,
+//                        hutao.indexer,
+//                        hutao.turret,
+//                        hutao.arm,
+//                        hutao.slides,
+//                        hutao.encoders.odo,
+//                        resetPose
+//                ),
+//
+//                CycleSequence(
+//                        alliance,
+//                        intakeWaypoints,
+//                        lateDepositWaypoints,
+//                        hutao.drive,
+//                        hutao.intake,
+//                        hutao.outtake,
+//                        hutao.indexer,
+//                        hutao.turret,
+//                        hutao.arm,
+//                        hutao.slides,
+//                        hutao.encoders.odo,
+//                        resetPose
+//                ),
 
+//                PathCommand(hutao.drive, Path(intakeWaypoints), 2.0)
 
-                CycleSequence(
-                        alliance,
-                        intakeWaypoints,
-                        lateDepositWaypoints,
-                        hutao.drive,
-                        hutao.intake,
-                        hutao.outtake,
-                        hutao.indexer,
-                        hutao.turret,
-                        hutao.arm,
-                        hutao.slides,
-                        hutao.encoders.odo,
-                        resetPose
-                ),
-
-                CycleSequence(
-                        alliance,
-                        intakeWaypoints,
-                        lateDepositWaypoints,
-                        hutao.drive,
-                        hutao.intake,
-                        hutao.outtake,
-                        hutao.indexer,
-                        hutao.turret,
-                        hutao.arm,
-                        hutao.slides,
-                        hutao.encoders.odo,
-                        resetPose
-                ),
-
-                PathCommand(hutao.drive, Path(intakeWaypoints), 2.0)
-
-                ).withName("seq")
+        ).withName("seq")
 
         mainCommand = SequentialCommandGroup(
                 ParallelRaceGroup(
@@ -171,4 +184,3 @@ open class HutaoCycleAuto(private val alliance: Alliance) : CommandOpMode() {
         mainCommand.schedule()
     }
 }
-

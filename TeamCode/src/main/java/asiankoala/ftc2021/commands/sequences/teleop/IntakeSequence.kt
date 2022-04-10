@@ -19,7 +19,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
         WaitUntilCommand(intake::hasMineral),
         IndexerCommands.IndexerLockCommand(indexer)
                 .alongWith(InstantCommand(intake::stopReading)),
-        WaitCommand(0.3),
+        WaitCommand(0.5),
         IntakeCommands.IntakeTurnReverseCommand(intake),
         WaitCommand(0.4),
         InstantCommand({
@@ -39,7 +39,7 @@ class IntakeSequence(strategy: () -> Strategy, intake: Intake, outtake: Outtake,
                             }),
                         InstantCommand({})
                 ) {
-                    strategy.invoke().isExtendingImmediately
+                    false
                 }
         )
 )

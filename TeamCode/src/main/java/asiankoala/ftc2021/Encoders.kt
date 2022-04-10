@@ -11,7 +11,7 @@ class Encoders(hardware: Hardware) {
     val turretEncoder = KEncoder(hardware.turretMotor, 5.33333).zero(Turret.zeroAngle)
     val slideEncoder = KEncoder(hardware.slideMotor, 20.8333).zero(Slides.slideHomeValue).reversed
     private val leftEncoder = KEncoder(hardware.frMotor, ticksPerUnit, true).zero()
-    private val rightEncoder = KEncoder(hardware.flMotor, ticksPerUnit * (1.0/0.96923076923), true).zero()
+    private val rightEncoder = KEncoder(hardware.flMotor, ticksPerUnit, true).zero()
     private val auxEncoder = KEncoder(hardware.brMotor, ticksPerUnit, true).zero()
 
     private val trackWidth = 8.690685
